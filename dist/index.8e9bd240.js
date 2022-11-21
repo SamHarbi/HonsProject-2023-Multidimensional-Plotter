@@ -541,22 +541,27 @@ var _fragmentGlslDefault = parcelHelpers.interopDefault(_fragmentGlsl);
 // @ts-ignore
 var _vertexGlsl = require("./shaders/vertex.glsl");
 var _vertexGlslDefault = parcelHelpers.interopDefault(_vertexGlsl);
+let gl;
+let canvas;
+let program;
+let positionBuffer;
+let positionAttributeID;
 function main() {
-    //Get canvas and initalise it 
-    const canvas = document.querySelector("#glCanvas");
-    const gl = canvas.getContext("webgl");
-    // Only continue if WebGL is available and working
-    if (gl === null) {
-        alert("Unable to initialize WebGL. Your browser or machine may not support it.");
+    //gl has already been checked so cannot be undefined 
+    gl = init();
+    // Create a buffer and ensure it is valid
+    var temp_positionBuffer = gl.createBuffer();
+    if (temp_positionBuffer === null) {
+        alert("An Error Occured while rendering, Please try reloading the page");
         return;
-    }
-    //Create, compile and link shaders
-    let vertex = createShader(gl, gl.VERTEX_SHADER, (0, _vertexGlslDefault.default));
-    let fragment = createShader(gl, gl.FRAGMENT_SHADER, (0, _fragmentGlslDefault.default));
-    var program = createProgram(gl, vertex, fragment);
-    var positionAttributeLocation = gl.getAttribLocation(program, "a_position");
-    // Create a buffer and put three 2d clip space points in it
-    var positionBuffer = gl.createBuffer();
+    } else positionBuffer = temp_positionBuffer;
+    //Start render loop 
+    window.requestAnimationFrame(render);
+}
+function render(timestamp) {
+    //****************** */
+    // RENDER LOOP STARTS
+    //****************** */
     // Bind it to ARRAY_BUFFER 
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     var positions = [
@@ -568,16 +573,13 @@ function main() {
         0, 
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-    //****************** */
-    // RENDER LOOP STARTS
-    //****************** */
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     // Set clear color to black, fully opaque
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     // Clear the color buffer with specified clear color
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.useProgram(program);
-    gl.enableVertexAttribArray(positionAttributeLocation);
+    gl.enableVertexAttribArray(positionAttributeID);
     // Bind the position buffer.
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
@@ -586,11 +588,31 @@ function main() {
     var normalize = false; // don't normalize the data
     var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
     var offset = 0; // start at the beginning of the buffer
-    gl.vertexAttribPointer(positionAttributeLocation, size, type, normalize, stride, offset);
+    gl.vertexAttribPointer(positionAttributeID, size, type, normalize, stride, offset);
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
     var count = 3;
     gl.drawArrays(primitiveType, offset, count);
+    //Repeat
+    window.requestAnimationFrame(render);
+}
+/*
+    Initialise WebGL Context and setup everything before render loop
+*/ function init() {
+    //Get canvas and initalise it 
+    canvas = document.querySelector("#glCanvas");
+    const temp_gl = canvas.getContext("webgl");
+    // Only continue if WebGL is available and working
+    if (temp_gl === null) {
+        alert("Unable to initialize WebGL. Your browser or machine may not support it.");
+        return;
+    }
+    //Create, compile and link shaders
+    let vertex = createShader(temp_gl, temp_gl.VERTEX_SHADER, (0, _vertexGlslDefault.default));
+    let fragment = createShader(temp_gl, temp_gl.FRAGMENT_SHADER, (0, _fragmentGlslDefault.default));
+    program = createProgram(temp_gl, vertex, fragment);
+    var positionAttributeID = temp_gl.getAttribLocation(program, "a_position");
+    return temp_gl;
 }
 function createShader(gl, type, source) {
     var shader = gl.createShader(type);
