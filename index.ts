@@ -5,6 +5,8 @@ import fragmentSource from './shaders/fragment.glsl'
 // @ts-ignore
 import vertexSource from './shaders/vertex.glsl'
 
+import { load_OBJ, Model } from './Model';
+
 let gl: WebGLRenderingContext;
 let canvas: HTMLCanvasElement;
 
@@ -14,7 +16,12 @@ let positionBuffer: WebGLBuffer;
 
 let positionAttributeID: GLint;
 
-function main() {
+let modelAttributeID: GLint;
+let viewAttributeID: GLint;
+
+let Cube;
+
+async function main() {
 
     //gl has already been checked so cannot be undefined 
     gl = <WebGLRenderingContext>init();
@@ -29,26 +36,19 @@ function main() {
         positionBuffer = <WebGLBuffer>temp_positionBuffer;
     }
 
+    let cubeData = await load_OBJ("./models/Cube.obj");
+    Cube = new Model(positionAttributeID);
+    Cube.init(cubeData, gl);
+
     //Start render loop 
     window.requestAnimationFrame(render);
 
 }
 
+/*
+    Render Loop 
+*/
 function render(timestamp) {
-
-    //****************** */
-    // RENDER LOOP STARTS
-    //****************** */
-
-    // Bind it to ARRAY_BUFFER 
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-
-    var positions = [
-        0, 0,
-        0, 0.5,
-        0.7, 0,
-    ];
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
@@ -60,23 +60,7 @@ function render(timestamp) {
     gl.useProgram(program);
     gl.enableVertexAttribArray(positionAttributeID);
 
-    // Bind the position buffer.
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-
-    // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-    var size = 2;          // 2 components per iteration
-    var type = gl.FLOAT;   // the data is 32bit floats
-    var normalize = false; // don't normalize the data
-    var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
-    var offset = 0;        // start at the beginning of the buffer
-    gl.vertexAttribPointer(
-        positionAttributeID, size, type, normalize, stride, offset)
-
-
-    var primitiveType = gl.TRIANGLES;
-    var offset = 0;
-    var count = 3;
-    gl.drawArrays(primitiveType, offset, count);
+    Cube.render();
 
     //Repeat
     window.requestAnimationFrame(render);
