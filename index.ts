@@ -5,7 +5,9 @@ import fragmentSource from './shaders/fragment.glsl'
 // @ts-ignore
 import vertexSource from './shaders/vertex.glsl'
 
-import { load_OBJ, Model } from './Model';
+import { Model } from './Model';
+import { load_OBJ } from './Loader';
+import * as glmath from 'gl-matrix';
 
 let gl: WebGLRenderingContext;
 let canvas: HTMLCanvasElement;
@@ -16,8 +18,12 @@ let positionBuffer: WebGLBuffer;
 
 let positionAttributeID: GLint;
 
-let modelAttributeID: GLint;
+let modelLocation: WebGLUniformLocation;
 let viewAttributeID: GLint;
+
+let colourUniformID: WebGLUniformLocation;
+
+let iter = 0
 
 let Cube;
 
@@ -36,9 +42,13 @@ async function main() {
         positionBuffer = <WebGLBuffer>temp_positionBuffer;
     }
 
-    let cubeData = await load_OBJ("./models/Cube.obj");
+    modelLocation = <WebGLUniformLocation>gl.getUniformLocation(program, "model");
+    colourUniformID = <WebGLUniformLocation>gl.getUniformLocation(program, "colour");
+    gl.uniform4fv(colourUniformID, [1, 1, 0, 0]);
+
+    let cubeData = await load_OBJ("./models/Cube2.obj");
     Cube = new Model(positionAttributeID);
-    Cube.init(cubeData, gl);
+    Cube.init(cubeData[0], cubeData[1], gl);
 
     //Start render loop 
     window.requestAnimationFrame(render);
@@ -52,6 +62,11 @@ function render(timestamp) {
 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
+    iter = iter + 0.01;
+    if (iter > 100) {
+        iter = 0;
+    }
+
     // Set clear color to black, fully opaque
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     // Clear the color buffer with specified clear color
@@ -59,6 +74,11 @@ function render(timestamp) {
 
     gl.useProgram(program);
     gl.enableVertexAttribArray(positionAttributeID);
+
+    let model = glmath.mat4.create();
+    glmath.mat4.rotate(model, model, iter, [0, 1, 0]);
+    glmath.mat4.scale(model, model, [0.3, 0.5, 0.3]);
+    gl.uniformMatrix4fv(modelLocation, false, model);
 
     Cube.render();
 
