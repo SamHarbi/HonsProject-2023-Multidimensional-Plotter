@@ -15,17 +15,14 @@ let canvas: HTMLCanvasElement;
 let program: WebGLProgram;
 
 let positionBuffer: WebGLBuffer;
-
 let positionAttributeID: GLint;
-
 let modelLocation: WebGLUniformLocation;
 let viewAttributeID: GLint;
 
-let colourUniformID: WebGLUniformLocation;
-
-let iter = 0
+let iter = 0; //For a simple movment demo
 
 let Cube;
+let Axis;
 
 async function main() {
 
@@ -43,12 +40,17 @@ async function main() {
     }
 
     modelLocation = <WebGLUniformLocation>gl.getUniformLocation(program, "model");
-    colourUniformID = <WebGLUniformLocation>gl.getUniformLocation(program, "colour");
-    gl.uniform4fv(colourUniformID, [1, 1, 0, 0]);
 
-    let cubeData = await load_OBJ("./models/Cube2.obj");
-    Cube = new Model(positionAttributeID);
+    let axisData = await load_OBJ("Axis");
+    Axis = new Model(positionAttributeID, gl.LINES);
+    Axis.init(axisData[0], axisData[1], gl);
+
+    let cubeData = await load_OBJ("Monkey");
+    Cube = new Model(positionAttributeID, gl.TRIANGLES);
     Cube.init(cubeData[0], cubeData[1], gl);
+
+    gl.enable(gl.CULL_FACE);
+    gl.cullFace(gl.BACK);
 
     //Start render loop 
     window.requestAnimationFrame(render);
@@ -76,11 +78,15 @@ function render(timestamp) {
     gl.enableVertexAttribArray(positionAttributeID);
 
     let model = glmath.mat4.create();
-    glmath.mat4.rotate(model, model, iter, [0, 1, 0]);
-    glmath.mat4.scale(model, model, [0.3, 0.5, 0.3]);
+    glmath.mat4.rotate(model, model, iter, [0.2, 1, 0]);
+    glmath.mat4.scale(model, model, [1, 1, 1]);
     gl.uniformMatrix4fv(modelLocation, false, model);
+    Axis.render();
 
+    glmath.mat4.scale(model, model, [0.1, 0.1, 0.1]);
+    gl.uniformMatrix4fv(modelLocation, false, model);
     Cube.render();
+
 
     //Repeat
     window.requestAnimationFrame(render);

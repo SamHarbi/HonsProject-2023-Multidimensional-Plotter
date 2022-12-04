@@ -7,6 +7,5 @@
   void main() {
     // gl_FragColor is a special variable a fragment shader
     // is responsible for setting
-    vec4 col = vec4(abs(colour.x), 1, 1 ,1);
-    gl_FragColor = colour; 
+    gl_FragColor = vec4(abs(colour.x), abs(colour.y), abs(colour.w), 1);
   }

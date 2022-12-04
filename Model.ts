@@ -8,9 +8,12 @@ export class Model {
     numVertices: GLint;
     numIndices: GLint;
     gl: WebGLRenderingContext;
+    drawmode: number;
 
-    constructor(posAttributeID: GLint) {
-        this.positionAttributeID = posAttributeID;
+
+    constructor(newPositionAttributeID: GLint, newDrawMode: number) {
+        this.positionAttributeID = newPositionAttributeID;
+        this.drawmode = newDrawMode;
     }
 
     init(vertexData: number[], indexData: number[], glRef: WebGLRenderingContext) {
@@ -68,7 +71,7 @@ export class Model {
         //Bind the index buffer
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
 
-        var primitiveType = this.gl.TRIANGLES;
+        var primitiveType = this.drawmode;
         var offset = 0;
         var count = this.numIndices;
         var indexType = this.gl.UNSIGNED_SHORT;

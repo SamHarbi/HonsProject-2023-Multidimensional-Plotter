@@ -9,7 +9,7 @@
  
     // gl_Position is a special variable a vertex shader
     // is responsible for setting
-    gl_Position = model * vec4(a_position, 1.0);
+    gl_Position = (model * vec4(a_position, 1.0));
     colour = vec4(0.5 * a_position.x, 0.5 * a_position.y, 0.5 * a_position.z, 1.0);
   }
 

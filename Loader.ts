@@ -8,9 +8,9 @@ import fs from "fs";
 // @ts-ignore
 import path from "path";
 
-export async function load_OBJ(location: string) {
+export async function load_OBJ(model: string) {
 
-    let raw = await ReadFile(location); //The the file at location
+    let raw = await ReadFile(model); //The Model to load
     const lines = raw.split('\n');
 
     let Vertices: number[];
@@ -40,14 +40,20 @@ export async function load_OBJ(location: string) {
             }
         }
 
+        //Extract Face Values
         if (line.startsWith('f ')) {
 
             let points = line.split(' ');
 
             for (let i = 1; i < points.length; i++) {
                 let indicies = points[i].split('/');
+                // @ts-ignore
                 Indicies.push(Number(indicies[0] - 1));
             }
+        }
+
+        if (line.startsWith('vn')) {
+
         }
     }
 
@@ -60,7 +66,24 @@ export async function load_OBJ(location: string) {
 }
 
 //Read a file 
-async function ReadFile(location: string) {
-    var raw = fs.readFileSync("./models/Monkey.obj", "utf8");
-    return raw;
+async function ReadFile(model: string) {
+
+    if (model === "Monkey") {
+        var raw = fs.readFileSync(path.join(__dirname, "./models/Monkey.obj"), "utf8");
+        return raw;
+    }
+    else if (model === "Triangle") {
+        var raw = fs.readFileSync(path.join(__dirname, "./models/Triangle.obj"), "utf8");
+        return raw;
+    }
+    else if (model == "Axis") {
+        var raw = fs.readFileSync(path.join(__dirname, "./models/Axis.obj"), "utf8");
+        return raw;
+    }
+    else {
+        var raw = fs.readFileSync(path.join(__dirname, "./models/Cube2.obj"), "utf8");
+        return raw;
+    }
+
+
 }
