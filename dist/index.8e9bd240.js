@@ -549,6 +549,7 @@ let canvas;
 let program;
 let positionBuffer;
 let positionAttributeID;
+let normalAttributeID;
 let modelLocation;
 let viewAttributeID;
 let iter = 0; //For a simple movment demo
@@ -565,13 +566,16 @@ async function main() {
     } else positionBuffer = temp_positionBuffer;
     modelLocation = gl.getUniformLocation(program, "model");
     let axisData = await (0, _loader.load_OBJ)("Axis");
-    Axis = new (0, _model.Model)(positionAttributeID, gl.LINES);
-    Axis.init(axisData[0], axisData[1], gl);
+    Axis = new (0, _model.Model)(positionAttributeID, normalAttributeID, gl.LINES);
+    Axis.init(axisData[0], axisData[1], axisData[2], gl);
     let cubeData = await (0, _loader.load_OBJ)("Monkey");
-    Cube = new (0, _model.Model)(positionAttributeID, gl.TRIANGLES);
-    Cube.init(cubeData[0], cubeData[1], gl);
+    Cube = new (0, _model.Model)(positionAttributeID, normalAttributeID, gl.TRIANGLES);
+    Cube.init(cubeData[0], cubeData[1], cubeData[2], gl);
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.BACK);
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LESS);
+    gl.frontFace(gl.CW);
     //Start render loop 
     window.requestAnimationFrame(render);
 }
@@ -587,6 +591,7 @@ async function main() {
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.useProgram(program);
     gl.enableVertexAttribArray(positionAttributeID);
+    gl.enableVertexAttribArray(normalAttributeID);
     let model = _glMatrix.mat4.create();
     _glMatrix.mat4.rotate(model, model, iter, [
         0.2,
@@ -599,11 +604,11 @@ async function main() {
         1
     ]);
     gl.uniformMatrix4fv(modelLocation, false, model);
-    Axis.render();
+    //Axis.render();
     _glMatrix.mat4.scale(model, model, [
-        0.1,
-        0.1,
-        0.1
+        0.3,
+        0.3,
+        0.3
     ]);
     gl.uniformMatrix4fv(modelLocation, false, model);
     Cube.render();
@@ -625,7 +630,8 @@ async function main() {
     let vertex = createShader(temp_gl, temp_gl.VERTEX_SHADER, (0, _vertexGlslDefault.default));
     let fragment = createShader(temp_gl, temp_gl.FRAGMENT_SHADER, (0, _fragmentGlslDefault.default));
     program = createProgram(temp_gl, vertex, fragment);
-    var positionAttributeID = temp_gl.getAttribLocation(program, "a_position");
+    positionAttributeID = temp_gl.getAttribLocation(program, "a_position");
+    normalAttributeID = temp_gl.getAttribLocation(program, "a_normal");
     return temp_gl;
 }
 function createShader(gl, type, source) {
@@ -650,10 +656,10 @@ function createProgram(gl, vertexShader, fragmentShader) {
 window.onload = main;
 
 },{"./shaders/fragment.glsl":"6yofB","./shaders/vertex.glsl":"fWka7","./Model":"10WY5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","gl-matrix":"1mBhM","./Loader":"blLsM"}],"6yofB":[function(require,module,exports) {
-module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  varying vec4 colour;\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n    gl_FragColor = vec4(abs(colour.x), abs(colour.y), abs(colour.w), 1);\n  }";
+module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    gl_FragColor = vec4(colour.x, colour.y, colour.z, 1);\n    gl_FragColor.rgb *= light;\n  }";
 
 },{}],"fWka7":[function(require,module,exports) {
-module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n\n  uniform mat4 model;\n  varying vec4 colour;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = (model * vec4(a_position, 1.0));\n    colour = vec4(0.5 * a_position.x, 0.5 * a_position.y, 0.5 * a_position.z, 1.0);\n  }\n\n";
+module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n\n  uniform mat4 model;\n  varying vec4 colour;\n  varying vec3 v_normal;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = (model * vec4(a_position, 1));\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n  }\n\n";
 
 },{}],"10WY5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -662,11 +668,12 @@ parcelHelpers.defineInteropFlag(exports);
     This is a class definition for a Model Object, Which act's as a store and renderer for a 3D object
 */ parcelHelpers.export(exports, "Model", ()=>Model);
 class Model {
-    constructor(newPositionAttributeID, newDrawMode){
+    constructor(newPositionAttributeID, newNormalAttributeID, newDrawMode){
         this.positionAttributeID = newPositionAttributeID;
+        this.normalAttributeID = newNormalAttributeID;
         this.drawmode = newDrawMode;
     }
-    init(vertexData, indexData, glRef) {
+    init(vertexData, indexData, normalData, glRef) {
         this.gl = glRef;
         this.numIndices = indexData.length;
         // Create a Vertex buffer and ensure it is valid
@@ -681,6 +688,12 @@ class Model {
             alert("An Error Occured while rendering (Index Buffer Undefined), Please try reloading the page");
             return;
         } else this.indexBuffer = temp_indexBuffer;
+        // Create a Normal buffer and ensure it is valid
+        var temp_normalBuffer = this.gl.createBuffer();
+        if (temp_normalBuffer === null) {
+            alert("An Error Occured while rendering (Normal Buffer Undefined), Please try reloading the page");
+            return;
+        } else this.normalBuffer = temp_normalBuffer;
         //Bind Vertex Data to an array buffer
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(vertexData), this.gl.STATIC_DRAW);
@@ -689,6 +702,10 @@ class Model {
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
         this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexData), this.gl.STATIC_DRAW);
         console.log(new Uint16Array(indexData));
+        //Bind Normal Data to an array buffer
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(normalData), this.gl.STATIC_DRAW);
+        console.log(new Float32Array(normalData));
     }
     render() {
         // Bind the position buffer.
@@ -708,6 +725,15 @@ class Model {
         var indexType = this.gl.UNSIGNED_SHORT;
         //this.gl.drawArrays(primitiveType, offset, count);
         this.gl.drawElements(primitiveType, count, indexType, offset);
+        // Bind the normal buffer.
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuffer);
+        // Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
+        var size = 3; // 3 components per iteration
+        var type = this.gl.FLOAT; // the data is 32bit floating point values
+        var normalize = false; // normalize the data (convert from 0-255 to 0-1)
+        var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
+        var offset = 0; // start at the beginning of the buffer
+        this.gl.vertexAttribPointer(this.normalAttributeID, size, type, normalize, stride, offset);
     }
 }
 
@@ -6769,10 +6795,13 @@ async function load_OBJ(model) {
     const lines = raw.split("\n");
     let Vertices;
     let Indicies;
+    let Normals;
     let Combined;
     Vertices = [];
     Indicies = [];
+    Normals = [];
     Combined = [
+        [],
         [],
         []
     ];
@@ -6794,10 +6823,15 @@ async function load_OBJ(model) {
                 Indicies.push(Number(indicies[0] - 1));
             }
         }
-        line.startsWith("vn");
+        //Extract Vertex Normal Values
+        if (line.startsWith("vn ")) {
+            let normals = line.split(" ");
+            for(let i2 = 1; i2 < normals.length; i2++)Normals.push(Number(normals[i2]));
+        }
     }
     Combined[0] = Combined[0].concat(Vertices);
     Combined[1] = Combined[1].concat(Indicies);
+    Combined[2] = Combined[2].concat(Normals);
     console.log(Combined);
     return Combined;
 }
@@ -6810,7 +6844,7 @@ async function ReadFile(model) {
         var raw = "v 0.500000 0.500000 -1.000000\r\nv -0.500000 -0.500000 1.000000\r\nv 0.500000 -0.500000 -1.000000\r\nf 1/1/1 2/2/2 3/3/3";
         return raw;
     } else if (model == "Axis") {
-        var raw = "v -10 0 0\r\nv 10 0 0\r\nv 0 10 0\r\nv 0 -10 0\r\nv 0 0 10\r\nv 0 0 -10\r\nf 1/1/1 2/2/2 1/1/1\r\nf 3/3/3 4/4/4 3/3/3\r\nf 5/5/5 6/6/6 5/5/5";
+        var raw = "v -10 0 0\r\nv 10 0 0\r\nv 0 10 0\r\nv 0 -10 0\r\nv 0 0 10\r\nv 0 0 -10\r\nf 1/1/1 2/2/2 1/1/1\r\nf 3/3/3 4/4/4 3/3/3\r\nf 5/5/5 6/6/6 5/5/5\r\nvn 0 1 0 \r\nvn 0 1 0 \r\nvn 0 1 0 \r\nvn 0 1 0 \r\nvn 0 1 0 \r\nvn 0 1 0 ";
         return raw;
     } else {
         var raw = "# Blender v2.82 (sub 7) OBJ File: ''\n# www.blender.org\nmtllib Cube2.mtl\no Cube\nv 1.000000 1.000000 -1.000000\nv 1.000000 -1.000000 -1.000000\nv 1.000000 1.000000 1.000000\nv 1.000000 -1.000000 1.000000\nv -1.000000 1.000000 -1.000000\nv -1.000000 -1.000000 -1.000000\nv -1.000000 1.000000 1.000000\nv -1.000000 -1.000000 1.000000\nvt 0.875000 0.500000\nvt 0.625000 0.750000\nvt 0.625000 0.500000\nvt 0.375000 1.000000\nvt 0.375000 0.750000\nvt 0.625000 0.000000\nvt 0.375000 0.250000\nvt 0.375000 0.000000\nvt 0.375000 0.500000\nvt 0.125000 0.750000\nvt 0.125000 0.500000\nvt 0.625000 0.250000\nvt 0.875000 0.750000\nvt 0.625000 1.000000\nvn 0.0000 1.0000 0.0000\nvn 0.0000 0.0000 1.0000\nvn -1.0000 0.0000 0.0000\nvn 0.0000 -1.0000 0.0000\nvn 1.0000 0.0000 0.0000\nvn 0.0000 0.0000 -1.0000\nusemtl Material\ns off\nf 5/1/1 3/2/1 1/3/1\nf 3/2/2 8/4/2 4/5/2\nf 7/6/3 6/7/3 8/8/3\nf 2/9/4 8/10/4 6/11/4\nf 1/3/5 4/5/5 2/9/5\nf 5/12/6 2/9/6 6/7/6\nf 5/1/1 7/13/1 3/2/1\nf 3/2/2 7/14/2 8/4/2\nf 7/6/3 5/12/3 6/7/3\nf 2/9/4 4/5/4 8/10/4\nf 1/3/5 3/2/5 4/5/5\nf 5/12/6 1/3/6 2/9/6\n\n";

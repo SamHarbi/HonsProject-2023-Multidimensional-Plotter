@@ -16,6 +16,7 @@ let program: WebGLProgram;
 
 let positionBuffer: WebGLBuffer;
 let positionAttributeID: GLint;
+let normalAttributeID: GLint;
 let modelLocation: WebGLUniformLocation;
 let viewAttributeID: GLint;
 
@@ -42,15 +43,21 @@ async function main() {
     modelLocation = <WebGLUniformLocation>gl.getUniformLocation(program, "model");
 
     let axisData = await load_OBJ("Axis");
-    Axis = new Model(positionAttributeID, gl.LINES);
-    Axis.init(axisData[0], axisData[1], gl);
+    Axis = new Model(positionAttributeID, normalAttributeID, gl.LINES);
+    Axis.init(axisData[0], axisData[1], axisData[2], gl);
 
     let cubeData = await load_OBJ("Monkey");
-    Cube = new Model(positionAttributeID, gl.TRIANGLES);
-    Cube.init(cubeData[0], cubeData[1], gl);
+    Cube = new Model(positionAttributeID, normalAttributeID, gl.TRIANGLES);
+    Cube.init(cubeData[0], cubeData[1], cubeData[2], gl);
 
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.BACK);
+
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LESS);
+
+    gl.frontFace(gl.CW);
+
 
     //Start render loop 
     window.requestAnimationFrame(render);
@@ -76,17 +83,17 @@ function render(timestamp) {
 
     gl.useProgram(program);
     gl.enableVertexAttribArray(positionAttributeID);
+    gl.enableVertexAttribArray(normalAttributeID);
 
     let model = glmath.mat4.create();
     glmath.mat4.rotate(model, model, iter, [0.2, 1, 0]);
     glmath.mat4.scale(model, model, [1, 1, 1]);
     gl.uniformMatrix4fv(modelLocation, false, model);
-    Axis.render();
+    //Axis.render();
 
-    glmath.mat4.scale(model, model, [0.1, 0.1, 0.1]);
+    glmath.mat4.scale(model, model, [0.3, 0.3, 0.3]);
     gl.uniformMatrix4fv(modelLocation, false, model);
     Cube.render();
-
 
     //Repeat
     window.requestAnimationFrame(render);
@@ -112,7 +119,8 @@ function init() {
     let fragment = createShader(temp_gl, temp_gl.FRAGMENT_SHADER, fragmentSource);
     program = createProgram(temp_gl, vertex, fragment);
 
-    var positionAttributeID = temp_gl.getAttribLocation(program, "a_position");
+    positionAttributeID = temp_gl.getAttribLocation(program, "a_position");
+    normalAttributeID = temp_gl.getAttribLocation(program, "a_normal")
 
     return temp_gl;
 

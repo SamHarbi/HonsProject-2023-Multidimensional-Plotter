@@ -15,11 +15,13 @@ export async function load_OBJ(model: string) {
 
     let Vertices: number[];
     let Indicies: number[];
-    let Combined: number[][];
+    let Normals: number[];
+    let Combined: number[][][];
 
     Vertices = [];
     Indicies = [];
-    Combined = [[], []];
+    Normals = [];
+    Combined = [[], [], []];
 
     for (let i = 0; i < lines.length; i++) {
 
@@ -52,13 +54,22 @@ export async function load_OBJ(model: string) {
             }
         }
 
-        if (line.startsWith('vn')) {
+        //Extract Vertex Normal Values
+        if (line.startsWith('vn ')) {
+
+            let normals = line.split(' ');
+
+            for (let i = 1; i < normals.length; i++) {
+                Normals.push(Number(normals[i]));
+            }
+
 
         }
     }
 
     Combined[0] = Combined[0].concat(Vertices);
     Combined[1] = Combined[1].concat(Indicies);
+    Combined[2] = Combined[2].concat(Normals);
     console.log(Combined);
 
     return Combined;
