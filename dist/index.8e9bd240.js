@@ -547,24 +547,20 @@ var _glMatrix = require("gl-matrix");
 let gl;
 let canvas;
 let program;
-let positionBuffer;
+let modelUniformID;
+let viewUniformID;
+let projectionUniformID;
 let positionAttributeID;
 let normalAttributeID;
-let modelLocation;
-let viewAttributeID;
 let iter = 0; //For a simple movment demo
 let Cube;
 let Axis;
 async function main() {
-    //gl has already been checked so cannot be undefined 
+    //gl has already been checked so cannot be undefined- safe to cast
     gl = init();
-    // Create a buffer and ensure it is valid
-    var temp_positionBuffer = gl.createBuffer();
-    if (temp_positionBuffer === null) {
-        alert("An Error Occured while rendering, Please try reloading the page");
-        return;
-    } else positionBuffer = temp_positionBuffer;
-    modelLocation = gl.getUniformLocation(program, "model");
+    modelUniformID = gl.getUniformLocation(program, "model");
+    viewUniformID = gl.getUniformLocation(program, "view");
+    projectionUniformID = gl.getUniformLocation(program, "projection");
     let axisData = await (0, _loader.load_OBJ)("Axis");
     Axis = new (0, _model.Model)(positionAttributeID, normalAttributeID, gl.LINES);
     Axis.init(axisData[0], axisData[1], axisData[2], gl);
@@ -572,7 +568,7 @@ async function main() {
     Cube = new (0, _model.Model)(positionAttributeID, normalAttributeID, gl.TRIANGLES);
     Cube.init(cubeData[0], cubeData[1], cubeData[2], gl);
     gl.enable(gl.CULL_FACE);
-    gl.cullFace(gl.BACK);
+    gl.cullFace(gl.FRONT);
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LESS);
     gl.frontFace(gl.CW);
@@ -592,25 +588,34 @@ async function main() {
     gl.useProgram(program);
     gl.enableVertexAttribArray(positionAttributeID);
     gl.enableVertexAttribArray(normalAttributeID);
+    let projection = _glMatrix.mat4.create();
+    projection = _glMatrix.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
+    gl.uniformMatrix4fv(projectionUniformID, false, projection);
+    let view = _glMatrix.mat4.create();
+    let viewPos = _glMatrix.vec3.create();
+    let viewRotation = _glMatrix.vec3.create();
+    let viewUp = _glMatrix.vec3.create();
+    _glMatrix.mat4.lookAt(view, _glMatrix.vec3.set(viewPos, 0.5, 0, 3), _glMatrix.vec3.set(viewRotation, 0, 0, 0), _glMatrix.vec3.set(viewUp, 0, 1, 0));
+    gl.uniformMatrix4fv(viewUniformID, false, view);
     let model = _glMatrix.mat4.create();
-    _glMatrix.mat4.rotate(model, model, iter, [
-        0.2,
-        1,
-        0
-    ]);
     _glMatrix.mat4.scale(model, model, [
         1,
         1,
         1
     ]);
-    gl.uniformMatrix4fv(modelLocation, false, model);
-    //Axis.render();
+    gl.uniformMatrix4fv(modelUniformID, false, model);
+    Axis.render();
     _glMatrix.mat4.scale(model, model, [
-        0.3,
-        0.3,
-        0.3
+        0.1,
+        0.1,
+        0.1
     ]);
-    gl.uniformMatrix4fv(modelLocation, false, model);
+    _glMatrix.mat4.rotate(model, model, iter, [
+        0.2,
+        1,
+        0
+    ]);
+    gl.uniformMatrix4fv(modelUniformID, false, model);
     Cube.render();
     //Repeat
     window.requestAnimationFrame(render);
@@ -659,7 +664,7 @@ window.onload = main;
 module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    gl_FragColor = vec4(colour.x, colour.y, colour.z, 1);\n    gl_FragColor.rgb *= light;\n  }";
 
 },{}],"fWka7":[function(require,module,exports) {
-module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n\n  uniform mat4 model;\n  varying vec4 colour;\n  varying vec3 v_normal;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = (model * vec4(a_position, 1));\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n  }\n\n";
+module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n\n  uniform mat4 model, projection, view;\n  varying vec4 colour;\n  varying vec3 v_normal;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n  }\n\n";
 
 },{}],"10WY5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -724,7 +729,6 @@ class Model {
         var count = this.numIndices;
         var indexType = this.gl.UNSIGNED_SHORT;
         //this.gl.drawArrays(primitiveType, offset, count);
-        this.gl.drawElements(primitiveType, count, indexType, offset);
         // Bind the normal buffer.
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuffer);
         // Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
@@ -734,6 +738,7 @@ class Model {
         var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
         var offset = 0; // start at the beginning of the buffer
         this.gl.vertexAttribPointer(this.normalAttributeID, size, type, normalize, stride, offset);
+        this.gl.drawElements(primitiveType, count, indexType, offset);
     }
 }
 
