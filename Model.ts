@@ -88,12 +88,6 @@ export class Model {
         //Bind the index buffer
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
 
-        var primitiveType = this.drawmode;
-        var offset = 0;
-        var count = this.numIndices;
-        var indexType = this.gl.UNSIGNED_SHORT;
-        //this.gl.drawArrays(primitiveType, offset, count);
-
         // Bind the normal buffer.
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuffer);
 
@@ -105,6 +99,12 @@ export class Model {
         var offset = 0;        // start at the beginning of the buffer
         this.gl.vertexAttribPointer(
             this.normalAttributeID, size, type, normalize, stride, offset)
+
+        var primitiveType = this.drawmode;
+        var offset = 0;
+        var count = this.numIndices;
+        var indexType = this.gl.UNSIGNED_SHORT;
+        //this.gl.drawArrays(primitiveType, offset, count);
 
         this.gl.drawElements(primitiveType, count, indexType, offset);
 

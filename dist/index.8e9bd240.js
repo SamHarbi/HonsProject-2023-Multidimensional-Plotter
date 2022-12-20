@@ -550,9 +550,11 @@ let program;
 let modelUniformID;
 let viewUniformID;
 let projectionUniformID;
+let lightToggleUniformID;
 let positionAttributeID;
 let normalAttributeID;
 let iter = 0; //For a simple movment demo
+let Monkey;
 let Cube;
 let Axis;
 async function main() {
@@ -561,17 +563,22 @@ async function main() {
     modelUniformID = gl.getUniformLocation(program, "model");
     viewUniformID = gl.getUniformLocation(program, "view");
     projectionUniformID = gl.getUniformLocation(program, "projection");
+    lightToggleUniformID = gl.getUniformLocation(program, "light_toggle");
     let axisData = await (0, _loader.load_OBJ)("Axis");
     Axis = new (0, _model.Model)(positionAttributeID, normalAttributeID, gl.LINES);
     Axis.init(axisData[0], axisData[1], axisData[2], gl);
-    let cubeData = await (0, _loader.load_OBJ)("Monkey");
+    let MonkeyData = await (0, _loader.load_OBJ)("Monkey");
+    Monkey = new (0, _model.Model)(positionAttributeID, normalAttributeID, gl.TRIANGLES);
+    Monkey.init(MonkeyData[0], MonkeyData[1], MonkeyData[2], gl);
+    let CubeData = await (0, _loader.load_OBJ)("Cube3");
     Cube = new (0, _model.Model)(positionAttributeID, normalAttributeID, gl.TRIANGLES);
-    Cube.init(cubeData[0], cubeData[1], cubeData[2], gl);
+    Cube.init(CubeData[0], CubeData[1], CubeData[2], gl);
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.FRONT);
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LESS);
     gl.frontFace(gl.CW);
+    gl.enable(gl.STENCIL_TEST);
     //Start render loop 
     window.requestAnimationFrame(render);
 }
@@ -588,6 +595,7 @@ async function main() {
     gl.useProgram(program);
     gl.enableVertexAttribArray(positionAttributeID);
     gl.enableVertexAttribArray(normalAttributeID);
+    gl.uniform1i(lightToggleUniformID, 1);
     let projection = _glMatrix.mat4.create();
     projection = _glMatrix.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
     gl.uniformMatrix4fv(projectionUniformID, false, projection);
@@ -595,28 +603,53 @@ async function main() {
     let viewPos = _glMatrix.vec3.create();
     let viewRotation = _glMatrix.vec3.create();
     let viewUp = _glMatrix.vec3.create();
-    _glMatrix.mat4.lookAt(view, _glMatrix.vec3.set(viewPos, 0.5, 0, 3), _glMatrix.vec3.set(viewRotation, 0, 0, 0), _glMatrix.vec3.set(viewUp, 0, 1, 0));
+    _glMatrix.mat4.lookAt(view, _glMatrix.vec3.set(viewPos, 1, 1, 3), _glMatrix.vec3.set(viewRotation, 0, 0, 0), _glMatrix.vec3.set(viewUp, 0, 1, 0));
     gl.uniformMatrix4fv(viewUniformID, false, view);
-    let model = _glMatrix.mat4.create();
-    _glMatrix.mat4.scale(model, model, [
+    // DRAWING POLYGONS START
+    gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
+    gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
+    gl.uniform1i(lightToggleUniformID, 0);
+    //Bounding Cube
+    let cubeModel = _glMatrix.mat4.create();
+    _glMatrix.mat4.scale(cubeModel, cubeModel, [
+        0.5,
+        0.5,
+        0.5
+    ]);
+    gl.uniformMatrix4fv(modelUniformID, false, cubeModel);
+    gl.cullFace(gl.BACK);
+    Cube.render();
+    gl.cullFace(gl.FRONT);
+    gl.stencilFunc(gl.EQUAL, 1, 0xFF);
+    gl.stencilOp(gl.REPLACE, gl.KEEP, gl.REPLACE);
+    //ALL OTHER POLYGONS WITHIN BOUNDING CUBE START
+    gl.uniform1i(lightToggleUniformID, 1);
+    let Axismodel = _glMatrix.mat4.create();
+    _glMatrix.mat4.scale(Axismodel, Axismodel, [
         1,
         1,
         1
     ]);
-    gl.uniformMatrix4fv(modelUniformID, false, model);
-    Axis.render();
-    _glMatrix.mat4.scale(model, model, [
-        0.1,
-        0.1,
-        0.1
+    _glMatrix.mat4.rotate(Axismodel, Axismodel, 0.2, [
+        0.2,
+        0,
+        0
     ]);
-    _glMatrix.mat4.rotate(model, model, iter, [
+    gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
+    Axis.render();
+    let Monkeymodel = _glMatrix.mat4.create();
+    _glMatrix.mat4.scale(Monkeymodel, Monkeymodel, [
+        0.2,
+        0.2,
+        0.2
+    ]);
+    _glMatrix.mat4.rotate(Monkeymodel, Monkeymodel, iter, [
         0.2,
         1,
         0
     ]);
-    gl.uniformMatrix4fv(modelUniformID, false, model);
-    Cube.render();
+    gl.uniformMatrix4fv(modelUniformID, false, Monkeymodel);
+    Monkey.render();
     //Repeat
     window.requestAnimationFrame(render);
 }
@@ -625,7 +658,9 @@ async function main() {
 */ function init() {
     //Get canvas and initalise it 
     canvas = document.querySelector("#glCanvas");
-    const temp_gl = canvas.getContext("webgl");
+    const temp_gl = canvas.getContext("webgl", {
+        stencil: true
+    });
     // Only continue if WebGL is available and working
     if (temp_gl === null) {
         alert("Unable to initialize WebGL. Your browser or machine may not support it.");
@@ -661,10 +696,10 @@ function createProgram(gl, vertexShader, fragmentShader) {
 window.onload = main;
 
 },{"./shaders/fragment.glsl":"6yofB","./shaders/vertex.glsl":"fWka7","./Model":"10WY5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","gl-matrix":"1mBhM","./Loader":"blLsM"}],"6yofB":[function(require,module,exports) {
-module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    gl_FragColor = vec4(colour.x, colour.y, colour.z, 1);\n    gl_FragColor.rgb *= light;\n  }";
+module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    \n    if(light_toggle == 1)\n    {\n          gl_FragColor = vec4(colour.x, colour.y, colour.z, 1);\n          gl_FragColor.rgb *= light;\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
 
 },{}],"fWka7":[function(require,module,exports) {
-module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n\n  uniform mat4 model, projection, view;\n  varying vec4 colour;\n  varying vec3 v_normal;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n  }\n\n";
+module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n\n  uniform mat4 model, projection, view;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n  }\n\n";
 
 },{}],"10WY5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -724,11 +759,6 @@ class Model {
         this.gl.vertexAttribPointer(this.positionAttributeID, size, type, normalize, stride, offset);
         //Bind the index buffer
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
-        var primitiveType = this.drawmode;
-        var offset = 0;
-        var count = this.numIndices;
-        var indexType = this.gl.UNSIGNED_SHORT;
-        //this.gl.drawArrays(primitiveType, offset, count);
         // Bind the normal buffer.
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuffer);
         // Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
@@ -738,6 +768,11 @@ class Model {
         var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
         var offset = 0; // start at the beginning of the buffer
         this.gl.vertexAttribPointer(this.normalAttributeID, size, type, normalize, stride, offset);
+        var primitiveType = this.drawmode;
+        var offset = 0;
+        var count = this.numIndices;
+        var indexType = this.gl.UNSIGNED_SHORT;
+        //this.gl.drawArrays(primitiveType, offset, count);
         this.gl.drawElements(primitiveType, count, indexType, offset);
     }
 }
