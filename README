@@ -1,3 +1,5 @@
-This is a simple test that draws a traingle using the technology stack mentioned in the documentation 
+# Development Branch
 
-Download TypeScript and Parcel dependancies then run with ``` npx parcel index.html ```
+This is the "first stop" for written code. In-Progress code and non-working code is pushed here mainly to keep a backup of the work 
+being actively done to complete a task / user story. Once a user story is considered complete- A Pull request is activated to merge the branch with
+the Refactor branch for refactoring. 
