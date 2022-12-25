@@ -88,7 +88,7 @@ async function ReadFile(model: string) {
         return raw;
     }
     else if (model == "Axis") {
-        var raw = fs.readFileSync(path.join(__dirname, "./models/Axis.obj"), "utf8");
+        var raw = fs.readFileSync(path.join(__dirname, "./models/AxisLine.obj"), "utf8");
         return raw;
     }
     else {

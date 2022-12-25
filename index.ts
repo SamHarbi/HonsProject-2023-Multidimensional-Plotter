@@ -7,6 +7,9 @@ import vertexSource from './shaders/vertex.glsl'
 
 import { Model } from './Model';
 import { load_OBJ } from './Loader';
+import { Text } from './Text';
+import { Font } from './Font';
+
 import * as glmath from 'gl-matrix';
 
 let gl: WebGLRenderingContext;
@@ -27,6 +30,12 @@ let iter = 0; //For a simple movment demo
 let Monkey;
 let Cube;
 let Axis;
+
+let label;
+let label2;
+let AxisLabels: Text[];
+
+let f: Font;
 
 async function main() {
 
@@ -50,6 +59,15 @@ async function main() {
     Cube = new Model(positionAttributeID, normalAttributeID, gl.TRIANGLES);
     Cube.init(CubeData[0], CubeData[1], CubeData[2], gl);
 
+    label = new Text("aa", gl.canvas.width, gl.canvas.height);
+    label2 = new Text("bb", gl.canvas.width, gl.canvas.height);
+
+    AxisLabels = [];
+    for(let i=0; i<33; i++)
+    {
+        AxisLabels.push(new Text("div", gl.canvas.width, gl.canvas.height));
+    }
+
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.FRONT);
 
@@ -59,6 +77,9 @@ async function main() {
     gl.frontFace(gl.CW);
 
     gl.enable(gl.STENCIL_TEST);
+
+    f = new Font();
+    f.make("IBMPlexSans-Regular");
 
 
     //Start render loop 
@@ -100,56 +121,105 @@ function render(timestamp) {
     glmath.mat4.lookAt(view, glmath.vec3.set(viewPos, 1, 1, 3), glmath.vec3.set(viewRotation, 0, 0, 0), glmath.vec3.set(viewUp, 0, 1, 0));
     gl.uniformMatrix4fv(viewUniformID, false, view);
 
-    // DRAWING POLYGONS START
+    // +++ DRAWING POLYGONS START +++
 
-    gl.stencilFunc(
-        gl.ALWAYS,    // the test
-        1,            // reference value
-        0xFF,         // mask
-    );
+    // DRAW STENCIL CUBE
+    gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
+    gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
 
-    gl.stencilOp(
-        gl.KEEP,     // what to do if the stencil test fails
-        gl.KEEP,     // what to do if the depth test fails
-        gl.REPLACE,  // what to do if both tests pass
-    );
+    gl.uniform1i(lightToggleUniformID, 0); // Don't Use Light
 
-    gl.uniform1i(lightToggleUniformID, 0);
-
-    //Bounding Cube
+    // Bounding Cube
     let cubeModel = glmath.mat4.create();
     glmath.mat4.scale(cubeModel, cubeModel, [0.5, 0.5, 0.5]);
+    glmath.mat4.translate(cubeModel, cubeModel, [0, 0, 0]);
     gl.uniformMatrix4fv(modelUniformID, false, cubeModel);
     gl.cullFace(gl.BACK);
     Cube.render();
     gl.cullFace(gl.FRONT);
 
-    gl.stencilFunc(
-        gl.EQUAL,     // the test
-        1,            // reference value
-        0xFF,         // mask
-    );
-    gl.stencilOp(
-        gl.REPLACE,     // what to do if the stencil test fails
-        gl.KEEP,     // what to do if the depth test fails
-        gl.REPLACE,     // what to do if both tests pass
-    );
+    gl.stencilFunc(gl.EQUAL, 1, 0xFF);
+    gl.stencilOp(gl.REPLACE, gl.KEEP, gl.REPLACE);
 
-    //ALL OTHER POLYGONS WITHIN BOUNDING CUBE START
+    // ALL OTHER POLYGONS WITHIN BOUNDING CUBE START
 
-    gl.uniform1i(lightToggleUniformID, 1);
+    gl.uniform1i(lightToggleUniformID, 1); // Use Light
 
     let Axismodel = glmath.mat4.create();
-    glmath.mat4.scale(Axismodel, Axismodel, [1, 1, 1]);
-    glmath.mat4.rotate(Axismodel, Axismodel, 0.2, [0.2, 0, 0]);
-    gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
-    Axis.render();
+    let globalAxisModel = glmath.mat4.create();
+    glmath.mat4.scale(globalAxisModel, globalAxisModel, [0.9, 0.9, 0.9]);
+    glmath.mat4.translate(globalAxisModel, globalAxisModel, [-0.42, -0.42, -0.25]);
+    
+    for(let i=0; i<11; i++)
+    {
+        Axismodel = glmath.mat4.create();
+        glmath.mat4.copy(Axismodel, globalAxisModel);
+        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i/10)]);
+        glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
+        gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
+        Axis.render();
+        
 
+        glmath.mat4.copy(Axismodel, globalAxisModel);
+        glmath.mat4.rotate(Axismodel, Axismodel, 1.5708, [0, 1, 0]);
+        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i/10)]);
+        glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 0]);
+        gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
+        Axis.render();
+    }
+    
+    glmath.mat4.rotate(globalAxisModel, globalAxisModel, 1.5708, [1, 0, 0]);
+    glmath.mat4.translate(globalAxisModel, globalAxisModel, [0, 0, -1]);
+
+    for(let i=0; i<11; i++)
+    {
+        glmath.mat4.copy(Axismodel, globalAxisModel);
+        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i/10)]);
+        glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
+        gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
+
+        Axis.render();
+
+        glmath.mat4.copy(Axismodel, globalAxisModel);
+        glmath.mat4.rotate(Axismodel, Axismodel, 1.5708, [0, 1, 0]);
+        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i/10)]);
+        glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 0]);
+        gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
+        
+        Axis.render();
+    }
+
+    glmath.mat4.rotate(globalAxisModel, globalAxisModel, 1.5708, [0, 0, 1]);
+    glmath.mat4.translate(globalAxisModel, globalAxisModel, [0, 0, 0]);
+
+    for(let i=0; i<11; i++)
+    {
+        glmath.mat4.copy(Axismodel, globalAxisModel);
+        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i/10)]);
+        glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
+        gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
+
+        Axis.render();
+
+        glmath.mat4.copy(Axismodel, globalAxisModel);
+        glmath.mat4.rotate(Axismodel, Axismodel, 1.5708, [0, 1, 0]);
+        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i/10)]);
+        glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 0]);
+        gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
+        
+        Axis.render();
+    }
+
+    
     let Monkeymodel = glmath.mat4.create();
     glmath.mat4.scale(Monkeymodel, Monkeymodel, [0.2, 0.2, 0.2]);
     glmath.mat4.rotate(Monkeymodel, Monkeymodel, iter, [0.2, 1, 0]);
     gl.uniformMatrix4fv(modelUniformID, false, Monkeymodel);
     Monkey.render();
+
+    let point = glmath.vec4.create();
+    point = glmath.vec4.clone([-0.5, -0.500000, -0.390625, 1]);
+    label.render(point, Monkeymodel, projection, view, "label");
 
     //Repeat
     window.requestAnimationFrame(render);
