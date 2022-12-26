@@ -78,8 +78,8 @@ async function main() {
 
     gl.enable(gl.STENCIL_TEST);
 
-    f = new Font();
-    f.make("IBMPlexSans-Regular");
+    //f = new Font();
+    //f.make("IBMPlexSans-Regular");
 
 
     //Start render loop 
