@@ -10,6 +10,9 @@
 import Arial from './fonts/Atlas/Arial.json'
 import Arial_Bold from './fonts/Atlas/Arial-Bold.json'
 
+// @ts-ignore
+import Arial_Atlas from "./fonts/Atlas/Arial.png"
+
 export class Font {
 
     font_option: string;

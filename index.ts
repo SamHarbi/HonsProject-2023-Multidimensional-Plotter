@@ -49,15 +49,15 @@ async function main() {
 
     let axisData = await load_OBJ("Axis");
     Axis = new Model(positionAttributeID, normalAttributeID, textureAttributeID, gl.LINES);
-    Axis.init(axisData[0], axisData[1], axisData[2], gl);
+    Axis.init(axisData[0], axisData[1], axisData[2], axisData[3], gl);
 
     let MonkeyData = await load_OBJ("Monkey");
     Monkey = new Model(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
-    Monkey.init(MonkeyData[0], MonkeyData[1], MonkeyData[2], gl);
+    Monkey.init(MonkeyData[0], MonkeyData[1], MonkeyData[2], MonkeyData[3], gl);
 
     let CubeData = await load_OBJ("Cube3");
     Cube = new Model(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
-    Cube.init(CubeData[0], CubeData[1], CubeData[2], gl);
+    Cube.init(CubeData[0], CubeData[1], CubeData[2], MonkeyData[3], gl);
 
     label = new Text("aa", gl.canvas.width, gl.canvas.height);
     label2 = new Text("bb", gl.canvas.width, gl.canvas.height);

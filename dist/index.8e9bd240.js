@@ -571,13 +571,13 @@ async function main() {
     lightToggleUniformID = gl.getUniformLocation(program, "light_toggle");
     let axisData = await (0, _loader.load_OBJ)("Axis");
     Axis = new (0, _model.Model)(positionAttributeID, normalAttributeID, textureAttributeID, gl.LINES);
-    Axis.init(axisData[0], axisData[1], axisData[2], gl);
+    Axis.init(axisData[0], axisData[1], axisData[2], axisData[3], gl);
     let MonkeyData = await (0, _loader.load_OBJ)("Monkey");
     Monkey = new (0, _model.Model)(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
-    Monkey.init(MonkeyData[0], MonkeyData[1], MonkeyData[2], gl);
+    Monkey.init(MonkeyData[0], MonkeyData[1], MonkeyData[2], MonkeyData[3], gl);
     let CubeData = await (0, _loader.load_OBJ)("Cube3");
     Cube = new (0, _model.Model)(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
-    Cube.init(CubeData[0], CubeData[1], CubeData[2], gl);
+    Cube.init(CubeData[0], CubeData[1], CubeData[2], MonkeyData[3], gl);
     label = new (0, _text.Text)("aa", gl.canvas.width, gl.canvas.height);
     label2 = new (0, _text.Text)("bb", gl.canvas.width, gl.canvas.height);
     //f = [];
@@ -845,7 +845,7 @@ function createProgram(gl, vertexShader, fragmentShader) {
 window.onload = main;
 
 },{"./shaders/fragment.glsl":"6yofB","./shaders/vertex.glsl":"fWka7","./Model":"10WY5","./Loader":"blLsM","gl-matrix":"1mBhM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./Text":"eAFEk"}],"6yofB":[function(require,module,exports) {
-module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          gl_FragColor = vec4(colour.x, colour.y, colour.z, 1) * texture2D(u_texture, v_texcoord);\n          gl_FragColor.rgb *= light;\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
+module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          //gl_FragColor = vec4(colour.x, colour.y, colour.z, 1) * texture2D(u_texture, v_texcoord);\n          //gl_FragColor.rgb *= light;\n          gl_FragColor = texture2D(u_texture, v_texcoord);\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
 
 },{}],"fWka7":[function(require,module,exports) {
 module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
@@ -855,8 +855,8 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Model", ()=>Model);
 // @ts-ignore
-var _arialPng = require("./fonts/Atlas/Arial.png");
-var _arialPngDefault = parcelHelpers.interopDefault(_arialPng);
+var _woodTexturePng = require("./fonts/Atlas/wood_texture.png");
+var _woodTexturePngDefault = parcelHelpers.interopDefault(_woodTexturePng);
 class Model {
     constructor(newPositionAttributeID, newNormalAttributeID, newTextureAttributeID, newDrawMode){
         this.positionAttributeID = newPositionAttributeID;
@@ -864,7 +864,7 @@ class Model {
         this.drawmode = newDrawMode;
         this.textureAttributeID = newTextureAttributeID;
     }
-    init(vertexData, indexData, normalData, glRef) {
+    init(vertexData, indexData, normalData, textureCord, glRef) {
         this.gl = glRef;
         this.numIndices = indexData.length;
         // Create a Vertex buffer and ensure it is valid
@@ -900,12 +900,12 @@ class Model {
             255
         ]));
         this.image = new Image();
-        this.image.src = (0, _arialPngDefault.default); //Refactor
+        this.image.src = (0, _woodTexturePngDefault.default); //Refactor
         this.image.addEventListener("load", this.textureLoaded.bind(null, this.gl, this.image), false);
         // Create a texture buffer and ensure it is valid 
         var temp_textureBuffer = this.gl.createBuffer();
         if (temp_textureBuffer === null) {
-            alert("An Error Occured while rendering (Normal Buffer Undefined), Please try reloading the page");
+            alert("An Error Occured while rendering (Texture Buffer Undefined), Please try reloading the page");
             return;
         } else this.textureBuffer = temp_textureBuffer;
         //Bind Vertex Data to an array buffer
@@ -922,10 +922,12 @@ class Model {
         //console.log(new Float32Array(normalData));
         //Bind Texture buffer
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(vertexData), this.gl.STATIC_DRAW);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(textureCord), this.gl.STATIC_DRAW);
+        console.log(textureCord);
     }
     textureLoaded(gl, image) {
         gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
@@ -956,7 +958,7 @@ class Model {
         var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
         var offset = 0; // start at the beginning of the buffer
         this.gl.vertexAttribPointer(this.normalAttributeID, size, type, normalize, stride, offset);
-        this.gl.vertexAttribPointer(this.textureAttributeID, size, type, normalize, stride, offset);
+        this.gl.vertexAttribPointer(this.textureAttributeID, 2, type, false, stride, offset);
         var primitiveType = this.drawmode;
         var offset = 0;
         var count = this.numIndices;
@@ -966,7 +968,7 @@ class Model {
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./fonts/Atlas/Arial.png":"4axCz"}],"gkKU3":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./fonts/Atlas/wood_texture.png":"3m06u"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -996,8 +998,8 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"4axCz":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("ao0Rz") + "Arial.5339cec6.png" + "?" + Date.now();
+},{}],"3m06u":[function(require,module,exports) {
+module.exports = require("./helpers/bundle-url").getBundleURL("ao0Rz") + "wood_texture.faf3d41a.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
 "use strict";
@@ -1052,11 +1054,14 @@ async function load_OBJ(model) {
     let Vertices;
     let Indicies;
     let Normals;
+    let Textures;
     let Combined;
     Vertices = [];
     Indicies = [];
     Normals = [];
+    Textures = [];
     Combined = [
+        [],
         [],
         [],
         []
@@ -1084,10 +1089,16 @@ async function load_OBJ(model) {
             let normals = line.split(" ");
             for(let i2 = 1; i2 < normals.length; i2++)Normals.push(Number(normals[i2]));
         }
+        //Extract Texture Values
+        if (line.startsWith("vt ")) {
+            let textures = line.split(" ");
+            for(let i3 = 1; i3 < textures.length; i3++)Textures.push(Number(textures[i3]));
+        }
     }
     Combined[0] = Combined[0].concat(Vertices);
     Combined[1] = Combined[1].concat(Indicies);
     Combined[2] = Combined[2].concat(Normals);
+    Combined[3] = Combined[3].concat(Textures);
     console.log(Combined);
     return Combined;
 }

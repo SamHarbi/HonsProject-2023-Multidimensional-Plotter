@@ -16,12 +16,14 @@ export async function load_OBJ(model: string) {
     let Vertices: number[];
     let Indicies: number[];
     let Normals: number[];
-    let Combined: number[][][];
+    let Textures: number[];
+    let Combined: number[][];
 
     Vertices = [];
     Indicies = [];
     Normals = [];
-    Combined = [[], [], []];
+    Textures = [];
+    Combined = [[], [], [], []];
 
     for (let i = 0; i < lines.length; i++) {
 
@@ -62,7 +64,16 @@ export async function load_OBJ(model: string) {
             for (let i = 1; i < normals.length; i++) {
                 Normals.push(Number(normals[i]));
             }
+        }
 
+        //Extract Texture Values
+        if (line.startsWith('vt ')) {
+
+            let textures = line.split(' ');
+
+            for (let i = 1; i < textures.length; i++) {
+                Textures.push(Number(textures[i]));
+            }
 
         }
     }
@@ -70,6 +81,7 @@ export async function load_OBJ(model: string) {
     Combined[0] = Combined[0].concat(Vertices);
     Combined[1] = Combined[1].concat(Indicies);
     Combined[2] = Combined[2].concat(Normals);
+    Combined[3] = Combined[3].concat(Textures);
     console.log(Combined);
 
     return Combined;

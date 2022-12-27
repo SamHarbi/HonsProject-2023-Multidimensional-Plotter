@@ -4,7 +4,7 @@
 
 import Arial from './fonts/Atlas/Arial.json' //Needs refactoring for sure
 // @ts-ignore
-import Arial_Atlas from "./fonts/Atlas/Arial.png"
+import Arial_Atlas from "./fonts/Atlas/wood_texture.png"
 
 export class Model {
 
@@ -30,7 +30,7 @@ export class Model {
         this.textureAttributeID = newTextureAttributeID;
     }
 
-    init(vertexData: number[], indexData: number[], normalData: number[], glRef: WebGLRenderingContext) {
+    init(vertexData: number[], indexData: number[], normalData: number[], textureCord: number[], glRef: WebGLRenderingContext) {
 
         this.gl = glRef;
 
@@ -92,7 +92,7 @@ export class Model {
         // Create a texture buffer and ensure it is valid 
         var temp_textureBuffer = this.gl.createBuffer();
         if (temp_textureBuffer === null) {
-            alert("An Error Occured while rendering (Normal Buffer Undefined), Please try reloading the page");
+            alert("An Error Occured while rendering (Texture Buffer Undefined), Please try reloading the page");
             return;
         }
         else {
@@ -116,11 +116,13 @@ export class Model {
 
         //Bind Texture buffer
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(vertexData), this.gl.STATIC_DRAW);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(textureCord), this.gl.STATIC_DRAW);
+        console.log(textureCord);
     }
 
     textureLoaded(gl, image) {
         gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, (image as TexImageSource));
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
@@ -162,7 +164,7 @@ export class Model {
             this.normalAttributeID, size, type, normalize, stride, offset)
 
         this.gl.vertexAttribPointer(
-            this.textureAttributeID, size, type, normalize, stride, offset)
+            this.textureAttributeID, 2, type, false, stride, offset)
 
         var primitiveType = this.drawmode;
         var offset = 0;
