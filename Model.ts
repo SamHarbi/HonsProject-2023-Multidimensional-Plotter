@@ -4,7 +4,7 @@
 
 import Arial from './fonts/Atlas/Arial.json' //Needs refactoring for sure
 // @ts-ignore
-import Arial_Atlas from "./fonts/Atlas/wood_texture.png"
+import Arial_Atlas from "./fonts/Atlas/Arial.png"
 
 export class Model {
 
@@ -130,7 +130,7 @@ export class Model {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     }
 
-    render() {
+    render(textureBuffer?: WebGLBuffer, texture?: WebGLTexture) {
 
         // Bind the position buffer.
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
@@ -150,10 +150,20 @@ export class Model {
         // Bind the normal buffer.
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuffer);
 
-        // Bind texture
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
-        this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
-
+        if(textureBuffer === undefined)
+        {
+            // Bind predefined texture
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+            this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+        }
+        else
+        {
+            // Bind Passed in texture values 
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, <WebGLBuffer>textureBuffer);
+            this.gl.bindTexture(this.gl.TEXTURE_2D, <WebGLTexture>this.indexBuffer);
+        }
+        
+        
         // Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
         var size = 3;          // 3 components per iteration
         var type = this.gl.FLOAT;   // the data is 32bit floating point values
@@ -164,7 +174,7 @@ export class Model {
             this.normalAttributeID, size, type, normalize, stride, offset)
 
         this.gl.vertexAttribPointer(
-            this.textureAttributeID, 2, type, false, stride, offset)
+            this.textureAttributeID, 2, type, true, stride, offset)
 
         var primitiveType = this.drawmode;
         var offset = 0;

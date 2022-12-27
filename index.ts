@@ -35,7 +35,9 @@ let Axis;
 let label;
 let label2;
 
-let f: Font[];
+let f: Font;
+let testTextData;
+let testText;
 
 async function main() {
 
@@ -59,6 +61,12 @@ async function main() {
     Cube = new Model(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
     Cube.init(CubeData[0], CubeData[1], CubeData[2], MonkeyData[3], gl);
 
+    testTextData = await load_OBJ("Glyph");
+    testText = new Model(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
+    testText.init(testTextData[0], testTextData[1], testTextData[2], testTextData[3], gl);
+    f = new Font(0, gl);
+    //f.init("H");
+
     label = new Text("aa", gl.canvas.width, gl.canvas.height);
     label2 = new Text("bb", gl.canvas.width, gl.canvas.height);
 
@@ -77,9 +85,7 @@ async function main() {
     gl.frontFace(gl.CW);
 
     gl.enable(gl.STENCIL_TEST);
-
-    //f = new Font();
-    //f.make("IBMPlexSans-Regular");
+    
 
 
     //Start render loop 
@@ -136,7 +142,7 @@ function render(timestamp) {
     glmath.mat4.translate(cubeModel, cubeModel, [0, 0, 0]);
     gl.uniformMatrix4fv(modelUniformID, false, cubeModel);
     gl.cullFace(gl.BACK);
-    Cube.render();
+    Cube.render(undefined, undefined);
     gl.cullFace(gl.FRONT);
 
     gl.stencilFunc(gl.EQUAL, 1, 0xFF);
@@ -158,7 +164,7 @@ function render(timestamp) {
         glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i/10)]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
         gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
-        Axis.render();
+        Axis.render(undefined, undefined);
         
 
         glmath.mat4.copy(Axismodel, globalAxisModel);
@@ -166,7 +172,7 @@ function render(timestamp) {
         glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i/10)]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 0]);
         gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
-        Axis.render();
+        Axis.render(undefined, undefined);
     }
     
     glmath.mat4.rotate(globalAxisModel, globalAxisModel, 1.5708, [1, 0, 0]);
@@ -179,7 +185,7 @@ function render(timestamp) {
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
         gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
 
-        Axis.render();
+        Axis.render(undefined, undefined);
 
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.rotate(Axismodel, Axismodel, 1.5708, [0, 1, 0]);
@@ -187,7 +193,7 @@ function render(timestamp) {
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 0]);
         gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
         
-        Axis.render();
+        Axis.render(undefined, undefined);
     }
 
     glmath.mat4.rotate(globalAxisModel, globalAxisModel, 1.5708, [0, 0, 1]);
@@ -200,7 +206,7 @@ function render(timestamp) {
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
         gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
 
-        Axis.render();
+        Axis.render(undefined, undefined);
 
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.rotate(Axismodel, Axismodel, 1.5708, [0, 1, 0]);
@@ -208,19 +214,22 @@ function render(timestamp) {
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 0]);
         gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
         
-        Axis.render();
+        Axis.render(undefined, undefined);
     }
 
     
     let Monkeymodel = glmath.mat4.create();
     glmath.mat4.scale(Monkeymodel, Monkeymodel, [0.2, 0.2, 0.2]);
-    glmath.mat4.rotate(Monkeymodel, Monkeymodel, iter, [0.2, 1, 0]);
+    glmath.mat4.rotate(Monkeymodel, Monkeymodel, 0, [0.2, 1, 0]);
     gl.uniformMatrix4fv(modelUniformID, false, Monkeymodel);
-    Monkey.render();
+    //Monkey.render();
 
     let point = glmath.vec4.create();
     point = glmath.vec4.clone([-0.5, -0.500000, -0.390625, 1]);
-    label.render(point, Monkeymodel, projection, view, "label");
+    //label.render(point, Monkeymodel, projection, view, "label");
+
+    gl.uniformMatrix4fv(modelUniformID, false, Monkeymodel);
+    testText.render(f.getTextureBuffer(), f.getTextureID());
 
     //Repeat
     window.requestAnimationFrame(render);

@@ -544,6 +544,7 @@ var _vertexGlslDefault = parcelHelpers.interopDefault(_vertexGlsl);
 var _model = require("./Model");
 var _loader = require("./Loader");
 var _text = require("./Text");
+var _font = require("./Font");
 var _glMatrix = require("gl-matrix");
 let gl;
 let canvas;
@@ -562,6 +563,8 @@ let Axis;
 let label;
 let label2;
 let f;
+let testTextData;
+let testText;
 async function main() {
     //gl has already been checked so cannot be undefined- safe to cast
     gl = init();
@@ -578,6 +581,11 @@ async function main() {
     let CubeData = await (0, _loader.load_OBJ)("Cube3");
     Cube = new (0, _model.Model)(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
     Cube.init(CubeData[0], CubeData[1], CubeData[2], MonkeyData[3], gl);
+    testTextData = await (0, _loader.load_OBJ)("Glyph");
+    testText = new (0, _model.Model)(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
+    testText.init(testTextData[0], testTextData[1], testTextData[2], testTextData[3], gl);
+    f = new (0, _font.Font)(0, gl);
+    //f.init("H");
     label = new (0, _text.Text)("aa", gl.canvas.width, gl.canvas.height);
     label2 = new (0, _text.Text)("bb", gl.canvas.width, gl.canvas.height);
     //f = [];
@@ -591,8 +599,6 @@ async function main() {
     gl.depthFunc(gl.LESS);
     gl.frontFace(gl.CW);
     gl.enable(gl.STENCIL_TEST);
-    //f = new Font();
-    //f.make("IBMPlexSans-Regular");
     //Start render loop 
     window.requestAnimationFrame(render);
 }
@@ -639,7 +645,7 @@ async function main() {
     ]);
     gl.uniformMatrix4fv(modelUniformID, false, cubeModel);
     gl.cullFace(gl.BACK);
-    Cube.render();
+    Cube.render(undefined, undefined);
     gl.cullFace(gl.FRONT);
     gl.stencilFunc(gl.EQUAL, 1, 0xFF);
     gl.stencilOp(gl.REPLACE, gl.KEEP, gl.REPLACE);
@@ -671,7 +677,7 @@ async function main() {
             1
         ]);
         gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
-        Axis.render();
+        Axis.render(undefined, undefined);
         _glMatrix.mat4.copy(Axismodel, globalAxisModel);
         _glMatrix.mat4.rotate(Axismodel, Axismodel, 1.5708, [
             0,
@@ -689,7 +695,7 @@ async function main() {
             0
         ]);
         gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
-        Axis.render();
+        Axis.render(undefined, undefined);
     }
     _glMatrix.mat4.rotate(globalAxisModel, globalAxisModel, 1.5708, [
         1,
@@ -714,7 +720,7 @@ async function main() {
             1
         ]);
         gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
-        Axis.render();
+        Axis.render(undefined, undefined);
         _glMatrix.mat4.copy(Axismodel, globalAxisModel);
         _glMatrix.mat4.rotate(Axismodel, Axismodel, 1.5708, [
             0,
@@ -732,7 +738,7 @@ async function main() {
             0
         ]);
         gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
-        Axis.render();
+        Axis.render(undefined, undefined);
     }
     _glMatrix.mat4.rotate(globalAxisModel, globalAxisModel, 1.5708, [
         0,
@@ -757,7 +763,7 @@ async function main() {
             1
         ]);
         gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
-        Axis.render();
+        Axis.render(undefined, undefined);
         _glMatrix.mat4.copy(Axismodel, globalAxisModel);
         _glMatrix.mat4.rotate(Axismodel, Axismodel, 1.5708, [
             0,
@@ -775,7 +781,7 @@ async function main() {
             0
         ]);
         gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
-        Axis.render();
+        Axis.render(undefined, undefined);
     }
     let Monkeymodel = _glMatrix.mat4.create();
     _glMatrix.mat4.scale(Monkeymodel, Monkeymodel, [
@@ -783,13 +789,13 @@ async function main() {
         0.2,
         0.2
     ]);
-    _glMatrix.mat4.rotate(Monkeymodel, Monkeymodel, iter, [
+    _glMatrix.mat4.rotate(Monkeymodel, Monkeymodel, 0, [
         0.2,
         1,
         0
     ]);
     gl.uniformMatrix4fv(modelUniformID, false, Monkeymodel);
-    Monkey.render();
+    //Monkey.render();
     let point = _glMatrix.vec4.create();
     point = _glMatrix.vec4.clone([
         -0.5,
@@ -797,7 +803,9 @@ async function main() {
         -0.390625,
         1
     ]);
-    label.render(point, Monkeymodel, projection, view, "label");
+    //label.render(point, Monkeymodel, projection, view, "label");
+    gl.uniformMatrix4fv(modelUniformID, false, Monkeymodel);
+    testText.render(f.getTextureBuffer(), f.getTextureID());
     //Repeat
     window.requestAnimationFrame(render);
 }
@@ -844,7 +852,7 @@ function createProgram(gl, vertexShader, fragmentShader) {
 }
 window.onload = main;
 
-},{"./shaders/fragment.glsl":"6yofB","./shaders/vertex.glsl":"fWka7","./Model":"10WY5","./Loader":"blLsM","gl-matrix":"1mBhM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./Text":"eAFEk"}],"6yofB":[function(require,module,exports) {
+},{"./shaders/fragment.glsl":"6yofB","./shaders/vertex.glsl":"fWka7","./Model":"10WY5","./Loader":"blLsM","gl-matrix":"1mBhM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./Text":"eAFEk","./Font":"kj6Xh"}],"6yofB":[function(require,module,exports) {
 module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          //gl_FragColor = vec4(colour.x, colour.y, colour.z, 1) * texture2D(u_texture, v_texcoord);\n          //gl_FragColor.rgb *= light;\n          gl_FragColor = texture2D(u_texture, v_texcoord);\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
 
 },{}],"fWka7":[function(require,module,exports) {
@@ -855,8 +863,8 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Model", ()=>Model);
 // @ts-ignore
-var _woodTexturePng = require("./fonts/Atlas/wood_texture.png");
-var _woodTexturePngDefault = parcelHelpers.interopDefault(_woodTexturePng);
+var _arialPng = require("./fonts/Atlas/Arial.png");
+var _arialPngDefault = parcelHelpers.interopDefault(_arialPng);
 class Model {
     constructor(newPositionAttributeID, newNormalAttributeID, newTextureAttributeID, newDrawMode){
         this.positionAttributeID = newPositionAttributeID;
@@ -900,7 +908,7 @@ class Model {
             255
         ]));
         this.image = new Image();
-        this.image.src = (0, _woodTexturePngDefault.default); //Refactor
+        this.image.src = (0, _arialPngDefault.default); //Refactor
         this.image.addEventListener("load", this.textureLoaded.bind(null, this.gl, this.image), false);
         // Create a texture buffer and ensure it is valid 
         var temp_textureBuffer = this.gl.createBuffer();
@@ -934,7 +942,7 @@ class Model {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     }
-    render() {
+    render(textureBuffer, texture) {
         // Bind the position buffer.
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
         // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
@@ -948,9 +956,15 @@ class Model {
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
         // Bind the normal buffer.
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuffer);
-        // Bind texture
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
-        this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+        if (textureBuffer === undefined) {
+            // Bind predefined texture
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+            this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+        } else {
+            // Bind Passed in texture values 
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, textureBuffer);
+            this.gl.bindTexture(this.gl.TEXTURE_2D, this.indexBuffer);
+        }
         // Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
         var size = 3; // 3 components per iteration
         var type = this.gl.FLOAT; // the data is 32bit floating point values
@@ -958,7 +972,7 @@ class Model {
         var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
         var offset = 0; // start at the beginning of the buffer
         this.gl.vertexAttribPointer(this.normalAttributeID, size, type, normalize, stride, offset);
-        this.gl.vertexAttribPointer(this.textureAttributeID, 2, type, false, stride, offset);
+        this.gl.vertexAttribPointer(this.textureAttributeID, 2, type, true, stride, offset);
         var primitiveType = this.drawmode;
         var offset = 0;
         var count = this.numIndices;
@@ -968,7 +982,7 @@ class Model {
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./fonts/Atlas/wood_texture.png":"3m06u"}],"gkKU3":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./fonts/Atlas/Arial.png":"4axCz"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -998,8 +1012,8 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"3m06u":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("ao0Rz") + "wood_texture.faf3d41a.png" + "?" + Date.now();
+},{}],"4axCz":[function(require,module,exports) {
+module.exports = require("./helpers/bundle-url").getBundleURL("ao0Rz") + "Arial.5339cec6.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
 "use strict";
@@ -7742,6 +7756,104 @@ class Text {
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","gl-matrix":"1mBhM"}]},["cWaoa","1jwFz"], "1jwFz", "parcelRequirec478")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","gl-matrix":"1mBhM"}],"kj6Xh":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Font", ()=>Font);
+/*
+    This is a class definition that handles WebGL Text using glyph textures
+        x----x
+        |    |    +   texture of a single letter
+        |    |
+        x----x
+    A Single letter consists of a 2 triangle rect geometery with the glyph texture applied
+*/ var _arialJson = require("./fonts/Atlas/Arial.json");
+var _arialJsonDefault = parcelHelpers.interopDefault(_arialJson);
+var _arialBoldJson = require("./fonts/Atlas/Arial-Bold.json");
+var _arialBoldJsonDefault = parcelHelpers.interopDefault(_arialBoldJson);
+// @ts-ignore
+var _arialPng = require("./fonts/Atlas/Arial.png");
+var _arialPngDefault = parcelHelpers.interopDefault(_arialPng);
+class Font {
+    constructor(set_font_option, set_gl){
+        this.font_pointers = [
+            (0, _arialPngDefault.default),
+            (0, _arialBoldJsonDefault.default)
+        ];
+        this.font_data_pointers = [
+            (0, _arialJsonDefault.default),
+            (0, _arialBoldJsonDefault.default)
+        ];
+        this.font_option = set_font_option;
+        this.gl = set_gl;
+        this.textureCord = [];
+        this.image = new Image();
+        this.image.src = this.font_pointers[this.font_option];
+    }
+    init(text) {
+        // Create a Texture and ensure it is valid
+        var temp_texture = this.gl.createTexture();
+        if (temp_texture === null) {
+            alert("An Error Occured while rendering (Texture Undefined), Please try reloading the page");
+            return;
+        } else this.textureID = temp_texture;
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.textureID);
+        // Temp data while waiting for image to load 
+        this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, 0, 1, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, new Uint8Array([
+            0,
+            0,
+            255,
+            255
+        ]));
+        // Create a texture buffer and ensure it is valid 
+        var temp_textureBuffer = this.gl.createBuffer();
+        if (temp_textureBuffer === null) {
+            alert("An Error Occured while rendering (Texture Buffer Undefined), Please try reloading the page");
+            return;
+        } else this.textureBuffer = temp_textureBuffer;
+        let x = this.font_data_pointers[this.font_option].characters["a"].x;
+        let y = this.font_data_pointers[this.font_option].characters["a"].y;
+        let width = this.font_data_pointers[this.font_option].characters["a"].width;
+        let height = this.font_data_pointers[this.font_option].characters["a"].height;
+        //Single Letter consists of 4 vertex points -> thus 4 texture cord pairs
+        this.textureCord.push(x);
+        this.textureCord.push(y);
+        this.textureCord.push(x);
+        this.textureCord.push(y - height);
+        this.textureCord.push(x + width);
+        this.textureCord.push(y - height);
+        this.textureCord.push(x + width);
+        this.textureCord.push(y);
+        //Bind Texture buffer
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.textureCord), this.gl.STATIC_DRAW);
+        this.image.src = this.font_pointers[this.font_option];
+        this.image.addEventListener("load", this.textureLoaded.bind(null, this.gl, this.image), false);
+        return this.textureBuffer;
+    }
+    textureLoaded(gl, image) {
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    }
+    getTextureID() {
+        return this.textureID;
+    }
+    getTextureBuffer() {
+        return this.textureBuffer;
+    }
+}
+
+},{"./fonts/Atlas/Arial.json":"bzou9","./fonts/Atlas/Arial-Bold.json":"hKcF4","./fonts/Atlas/Arial.png":"4axCz","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bzou9":[function(require,module,exports) {
+module.exports = JSON.parse('{"name":"Arial","size":32,"bold":false,"italic":false,"width":341,"height":125,"characters":{"0":{"x":59,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"1":{"x":87,"y":81,"width":11,"height":25,"originX":-2,"originY":24,"advance":18},"2":{"x":239,"y":56,"width":17,"height":25,"originX":0,"originY":24,"advance":18},"3":{"x":77,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"4":{"x":40,"y":56,"width":19,"height":25,"originX":1,"originY":24,"advance":18},"5":{"x":95,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"6":{"x":113,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"7":{"x":131,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"8":{"x":149,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"9":{"x":167,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18}," ":{"x":237,"y":106,"width":3,"height":3,"originX":1,"originY":1,"advance":9},"!":{"x":120,"y":81,"width":7,"height":25,"originX":-1,"originY":24,"advance":9},"\\"":{"x":148,"y":106,"width":11,"height":10,"originX":0,"originY":24,"advance":11},"#":{"x":284,"y":31,"width":20,"height":25,"originX":1,"originY":24,"advance":18},"$":{"x":108,"y":0,"width":18,"height":29,"originX":0,"originY":25,"advance":18},"%":{"x":183,"y":0,"width":28,"height":25,"originX":0,"originY":24,"advance":28},"&":{"x":92,"y":31,"width":22,"height":25,"originX":0,"originY":24,"advance":21},"\'":{"x":159,"y":106,"width":6,"height":10,"originX":0,"originY":24,"advance":6},"(":{"x":56,"y":0,"width":10,"height":31,"originX":-1,"originY":24,"advance":11},")":{"x":66,"y":0,"width":10,"height":31,"originX":-1,"originY":24,"advance":11},"*":{"x":135,"y":106,"width":13,"height":12,"originX":0,"originY":24,"advance":12},"+":{"x":84,"y":106,"width":18,"height":17,"originX":0,"originY":20,"advance":19},",":{"x":165,"y":106,"width":6,"height":10,"originX":-1,"originY":4,"advance":9},"-":{"x":199,"y":106,"width":11,"height":5,"originX":0,"originY":11,"advance":11},".":{"x":210,"y":106,"width":5,"height":5,"originX":-2,"originY":4,"advance":9},"/":{"x":76,"y":81,"width":11,"height":25,"originX":1,"originY":24,"advance":9},":":{"x":43,"y":106,"width":5,"height":19,"originX":-2,"originY":18,"advance":9},";":{"x":142,"y":81,"width":6,"height":24,"originX":-1,"originY":18,"advance":9},"<":{"x":48,"y":106,"width":18,"height":18,"originX":0,"originY":20,"advance":19},"=":{"x":117,"y":106,"width":18,"height":12,"originX":0,"originY":17,"advance":19},">":{"x":66,"y":106,"width":18,"height":18,"originX":0,"originY":20,"advance":19},"?":{"x":185,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"@":{"x":0,"y":0,"width":33,"height":31,"originX":0,"originY":24,"advance":32},"A":{"x":261,"y":0,"width":24,"height":25,"originX":1,"originY":24,"advance":21},"B":{"x":304,"y":31,"width":20,"height":25,"originX":-1,"originY":24,"advance":21},"C":{"x":309,"y":0,"width":23,"height":25,"originX":0,"originY":24,"advance":23},"D":{"x":114,"y":31,"width":22,"height":25,"originX":-1,"originY":24,"advance":23},"E":{"x":0,"y":56,"width":20,"height":25,"originX":-1,"originY":24,"advance":21},"F":{"x":203,"y":56,"width":18,"height":25,"originX":-1,"originY":24,"advance":20},"G":{"x":285,"y":0,"width":24,"height":25,"originX":0,"originY":24,"advance":25},"H":{"x":158,"y":31,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"I":{"x":127,"y":81,"width":5,"height":25,"originX":-2,"originY":24,"advance":9},"J":{"x":49,"y":81,"width":15,"height":25,"originX":0,"originY":24,"advance":16},"K":{"x":136,"y":31,"width":22,"height":25,"originX":-1,"originY":24,"advance":21},"L":{"x":256,"y":56,"width":17,"height":25,"originX":-1,"originY":24,"advance":18},"M":{"x":211,"y":0,"width":25,"height":25,"originX":-1,"originY":24,"advance":27},"N":{"x":179,"y":31,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"O":{"x":236,"y":0,"width":25,"height":25,"originX":0,"originY":24,"advance":25},"P":{"x":20,"y":56,"width":20,"height":25,"originX":-1,"originY":24,"advance":21},"Q":{"x":126,"y":0,"width":25,"height":26,"originX":0,"originY":24,"advance":25},"R":{"x":0,"y":31,"width":23,"height":25,"originX":-1,"originY":24,"advance":23},"S":{"x":200,"y":31,"width":21,"height":25,"originX":0,"originY":24,"advance":21},"T":{"x":221,"y":31,"width":21,"height":25,"originX":1,"originY":24,"advance":20},"U":{"x":242,"y":31,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"V":{"x":23,"y":31,"width":23,"height":25,"originX":1,"originY":24,"advance":21},"W":{"x":151,"y":0,"width":32,"height":25,"originX":1,"originY":24,"advance":30},"X":{"x":46,"y":31,"width":23,"height":25,"originX":1,"originY":24,"advance":21},"Y":{"x":69,"y":31,"width":23,"height":25,"originX":1,"originY":24,"advance":21},"Z":{"x":263,"y":31,"width":21,"height":25,"originX":1,"originY":24,"advance":20},"[":{"x":76,"y":0,"width":9,"height":31,"originX":-1,"originY":24,"advance":9},"\\\\":{"x":98,"y":81,"width":11,"height":25,"originX":1,"originY":24,"advance":9},"]":{"x":85,"y":0,"width":9,"height":31,"originX":1,"originY":24,"advance":9},"^":{"x":102,"y":106,"width":15,"height":15,"originX":0,"originY":24,"advance":15},"_":{"x":215,"y":106,"width":22,"height":4,"originX":2,"originY":-3,"advance":18},"`":{"x":190,"y":106,"width":9,"height":6,"originX":0,"originY":24,"advance":11},"a":{"x":198,"y":81,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"b":{"x":273,"y":56,"width":17,"height":25,"originX":-1,"originY":24,"advance":18},"c":{"x":306,"y":81,"width":17,"height":19,"originX":0,"originY":18,"advance":16},"d":{"x":290,"y":56,"width":17,"height":25,"originX":0,"originY":24,"advance":18},"e":{"x":216,"y":81,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"f":{"x":64,"y":81,"width":12,"height":25,"originX":1,"originY":24,"advance":9},"g":{"x":307,"y":56,"width":17,"height":25,"originX":0,"originY":18,"advance":18},"h":{"x":17,"y":81,"width":16,"height":25,"originX":-1,"originY":24,"advance":18},"i":{"x":132,"y":81,"width":5,"height":25,"originX":-1,"originY":24,"advance":7},"j":{"x":94,"y":0,"width":9,"height":31,"originX":3,"originY":24,"advance":7},"k":{"x":33,"y":81,"width":16,"height":25,"originX":-1,"originY":24,"advance":16},"l":{"x":137,"y":81,"width":5,"height":25,"originX":-1,"originY":24,"advance":7},"m":{"x":148,"y":81,"width":25,"height":19,"originX":-1,"originY":18,"advance":27},"n":{"x":323,"y":81,"width":16,"height":19,"originX":-1,"originY":18,"advance":18},"o":{"x":234,"y":81,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"p":{"x":324,"y":56,"width":17,"height":25,"originX":-1,"originY":18,"advance":18},"q":{"x":0,"y":81,"width":17,"height":25,"originX":0,"originY":18,"advance":18},"r":{"x":32,"y":106,"width":11,"height":19,"originX":-1,"originY":18,"advance":11},"s":{"x":0,"y":106,"width":16,"height":19,"originX":0,"originY":18,"advance":16},"t":{"x":109,"y":81,"width":11,"height":25,"originX":1,"originY":24,"advance":9},"u":{"x":16,"y":106,"width":16,"height":19,"originX":-1,"originY":18,"advance":18},"v":{"x":252,"y":81,"width":18,"height":19,"originX":1,"originY":18,"advance":16},"w":{"x":173,"y":81,"width":25,"height":19,"originX":1,"originY":18,"advance":23},"x":{"x":270,"y":81,"width":18,"height":19,"originX":1,"originY":18,"advance":16},"y":{"x":221,"y":56,"width":18,"height":25,"originX":1,"originY":18,"advance":16},"z":{"x":288,"y":81,"width":18,"height":19,"originX":1,"originY":18,"advance":16},"{":{"x":45,"y":0,"width":11,"height":31,"originX":0,"originY":24,"advance":11},"|":{"x":103,"y":0,"width":5,"height":31,"originX":-2,"originY":24,"advance":8},"}":{"x":33,"y":0,"width":12,"height":31,"originX":1,"originY":24,"advance":11},"~":{"x":171,"y":106,"width":19,"height":7,"originX":0,"originY":15,"advance":19}}}');
+
+},{}],"hKcF4":[function(require,module,exports) {
+module.exports = JSON.parse('{"name":"Arial","size":32,"bold":true,"italic":false,"width":351,"height":126,"characters":{"0":{"x":211,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"1":{"x":86,"y":82,"width":13,"height":25,"originX":-1,"originY":24,"advance":18},"2":{"x":40,"y":57,"width":19,"height":25,"originX":1,"originY":24,"advance":18},"3":{"x":229,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"4":{"x":59,"y":57,"width":19,"height":25,"originX":1,"originY":24,"advance":18},"5":{"x":247,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"6":{"x":265,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"7":{"x":283,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"8":{"x":301,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"9":{"x":319,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18}," ":{"x":298,"y":107,"width":3,"height":3,"originX":1,"originY":1,"advance":9},"!":{"x":134,"y":82,"width":8,"height":25,"originX":-1,"originY":24,"advance":11},"\\"":{"x":206,"y":107,"width":15,"height":10,"originX":0,"originY":24,"advance":15},"#":{"x":311,"y":32,"width":20,"height":25,"originX":1,"originY":24,"advance":18},"$":{"x":120,"y":0,"width":18,"height":30,"originX":0,"originY":26,"advance":18},"%":{"x":164,"y":0,"width":28,"height":26,"originX":0,"originY":24,"advance":28},"&":{"x":300,"y":0,"width":24,"height":25,"originX":0,"originY":24,"advance":23},"\'":{"x":221,"y":107,"width":8,"height":10,"originX":0,"originY":24,"advance":8},"(":{"x":65,"y":0,"width":11,"height":31,"originX":0,"originY":24,"advance":11},")":{"x":76,"y":0,"width":11,"height":31,"originX":0,"originY":24,"advance":11},"*":{"x":184,"y":107,"width":14,"height":12,"originX":1,"originY":24,"advance":12},"+":{"x":128,"y":107,"width":19,"height":18,"originX":0,"originY":20,"advance":19},",":{"x":198,"y":107,"width":8,"height":11,"originX":0,"originY":5,"advance":9},"-":{"x":258,"y":107,"width":12,"height":6,"originX":0,"originY":11,"advance":11},".":{"x":270,"y":107,"width":7,"height":6,"originX":-1,"originY":5,"advance":9},"/":{"x":112,"y":82,"width":11,"height":25,"originX":1,"originY":24,"advance":9},":":{"x":121,"y":107,"width":7,"height":19,"originX":-2,"originY":18,"advance":11},";":{"x":163,"y":82,"width":8,"height":24,"originX":-1,"originY":18,"advance":11},"<":{"x":306,"y":82,"width":18,"height":19,"originX":0,"originY":21,"advance":19},"=":{"x":165,"y":107,"width":19,"height":13,"originX":0,"originY":18,"advance":19},">":{"x":324,"y":82,"width":18,"height":19,"originX":0,"originY":21,"advance":19},"?":{"x":331,"y":32,"width":20,"height":25,"originX":0,"originY":24,"advance":20},"@":{"x":0,"y":0,"width":32,"height":32,"originX":0,"originY":24,"advance":31},"A":{"x":225,"y":0,"width":25,"height":25,"originX":1,"originY":24,"advance":23},"B":{"x":141,"y":32,"width":22,"height":25,"originX":-1,"originY":24,"advance":23},"C":{"x":72,"y":32,"width":23,"height":25,"originX":0,"originY":24,"advance":23},"D":{"x":163,"y":32,"width":22,"height":25,"originX":-1,"originY":24,"advance":23},"E":{"x":0,"y":57,"width":20,"height":25,"originX":-1,"originY":24,"advance":21},"F":{"x":0,"y":82,"width":18,"height":25,"originX":-1,"originY":24,"advance":20},"G":{"x":324,"y":0,"width":24,"height":25,"originX":0,"originY":24,"advance":25},"H":{"x":185,"y":32,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"I":{"x":142,"y":82,"width":7,"height":25,"originX":-1,"originY":24,"advance":9},"J":{"x":18,"y":82,"width":18,"height":25,"originX":1,"originY":24,"advance":18},"K":{"x":95,"y":32,"width":23,"height":25,"originX":-1,"originY":24,"advance":23},"L":{"x":78,"y":57,"width":19,"height":25,"originX":-1,"originY":24,"advance":20},"M":{"x":250,"y":0,"width":25,"height":25,"originX":-1,"originY":24,"advance":27},"N":{"x":206,"y":32,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"O":{"x":275,"y":0,"width":25,"height":25,"originX":0,"originY":24,"advance":25},"P":{"x":20,"y":57,"width":20,"height":25,"originX":-1,"originY":24,"advance":21},"Q":{"x":138,"y":0,"width":26,"height":27,"originX":0,"originY":24,"advance":25},"R":{"x":118,"y":32,"width":23,"height":25,"originX":-1,"originY":24,"advance":23},"S":{"x":227,"y":32,"width":21,"height":25,"originX":0,"originY":24,"advance":21},"T":{"x":248,"y":32,"width":21,"height":25,"originX":0,"originY":24,"advance":20},"U":{"x":269,"y":32,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"V":{"x":0,"y":32,"width":24,"height":25,"originX":1,"originY":24,"advance":21},"W":{"x":192,"y":0,"width":33,"height":25,"originX":1,"originY":24,"advance":30},"X":{"x":24,"y":32,"width":24,"height":25,"originX":1,"originY":24,"advance":21},"Y":{"x":48,"y":32,"width":24,"height":25,"originX":1,"originY":24,"advance":21},"Z":{"x":290,"y":32,"width":21,"height":25,"originX":1,"originY":24,"advance":20},"[":{"x":87,"y":0,"width":11,"height":31,"originX":-1,"originY":24,"advance":11},"\\\\":{"x":123,"y":82,"width":11,"height":25,"originX":1,"originY":24,"advance":9},"]":{"x":98,"y":0,"width":11,"height":31,"originX":1,"originY":24,"advance":11},"^":{"x":147,"y":107,"width":18,"height":14,"originX":0,"originY":24,"advance":19},"_":{"x":277,"y":107,"width":21,"height":5,"originX":2,"originY":-2,"advance":18},"`":{"x":248,"y":107,"width":10,"height":7,"originX":1,"originY":24,"advance":11},"a":{"x":0,"y":107,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"b":{"x":97,"y":57,"width":19,"height":25,"originX":-1,"originY":24,"advance":20},"c":{"x":18,"y":107,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"d":{"x":116,"y":57,"width":19,"height":25,"originX":0,"originY":24,"advance":20},"e":{"x":36,"y":107,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"f":{"x":72,"y":82,"width":14,"height":25,"originX":1,"originY":24,"advance":11},"g":{"x":135,"y":57,"width":19,"height":25,"originX":0,"originY":18,"advance":20},"h":{"x":36,"y":82,"width":18,"height":25,"originX":-1,"originY":24,"advance":20},"i":{"x":149,"y":82,"width":7,"height":25,"originX":-1,"originY":24,"advance":9},"j":{"x":109,"y":0,"width":11,"height":31,"originX":3,"originY":24,"advance":9},"k":{"x":54,"y":82,"width":18,"height":25,"originX":-1,"originY":24,"advance":18},"l":{"x":156,"y":82,"width":7,"height":25,"originX":-1,"originY":24,"advance":9},"m":{"x":171,"y":82,"width":28,"height":19,"originX":0,"originY":18,"advance":28},"n":{"x":54,"y":107,"width":18,"height":19,"originX":-1,"originY":18,"advance":20},"o":{"x":227,"y":82,"width":20,"height":19,"originX":0,"originY":18,"advance":20},"p":{"x":154,"y":57,"width":19,"height":25,"originX":-1,"originY":18,"advance":20},"q":{"x":173,"y":57,"width":19,"height":25,"originX":0,"originY":18,"advance":20},"r":{"x":108,"y":107,"width":13,"height":19,"originX":-1,"originY":18,"advance":12},"s":{"x":287,"y":82,"width":19,"height":19,"originX":1,"originY":18,"advance":18},"t":{"x":99,"y":82,"width":13,"height":25,"originX":1,"originY":24,"advance":11},"u":{"x":72,"y":107,"width":18,"height":19,"originX":-1,"originY":18,"advance":20},"v":{"x":247,"y":82,"width":20,"height":19,"originX":1,"originY":18,"advance":18},"w":{"x":199,"y":82,"width":28,"height":19,"originX":1,"originY":18,"advance":25},"x":{"x":267,"y":82,"width":20,"height":19,"originX":1,"originY":18,"advance":18},"y":{"x":192,"y":57,"width":19,"height":25,"originX":1,"originY":18,"advance":18},"z":{"x":90,"y":107,"width":18,"height":19,"originX":1,"originY":18,"advance":16},"{":{"x":39,"y":0,"width":13,"height":31,"originX":0,"originY":24,"advance":12},"|":{"x":32,"y":0,"width":7,"height":32,"originX":-1,"originY":24,"advance":9},"}":{"x":52,"y":0,"width":13,"height":31,"originX":0,"originY":24,"advance":12},"~":{"x":229,"y":107,"width":19,"height":8,"originX":0,"originY":15,"advance":19}}}');
+
+},{}]},["cWaoa","1jwFz"], "1jwFz", "parcelRequirec478")
 
 //# sourceMappingURL=index.8e9bd240.js.map
