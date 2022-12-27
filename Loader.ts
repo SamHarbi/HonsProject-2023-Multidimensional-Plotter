@@ -91,6 +91,11 @@ async function ReadFile(model: string) {
         var raw = fs.readFileSync(path.join(__dirname, "./models/AxisLine.obj"), "utf8");
         return raw;
     }
+    else if(model == "Glyph")
+    {
+        var raw = fs.readFileSync(path.join(__dirname, "./models/Glyph.obj"), "utf-8");
+        return raw;
+    }
     else {
         var raw = fs.readFileSync(path.join(__dirname, "./models/Cube2.obj"), "utf8");
         return raw;

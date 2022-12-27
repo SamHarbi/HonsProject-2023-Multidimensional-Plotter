@@ -1,5 +1,10 @@
 /*
-    This is a class definition that handles WebGL Text using glyph textures  
+    This is a class definition that handles WebGL Text using glyph textures
+        x----x
+        |    |    +   texture of a single letter
+        |    |
+        x----x
+    A Single letter consists of a 2 triangle rect geometery with the glyph texture applied
 */
 
 import Arial from './fonts/Atlas/Arial.json'
@@ -9,6 +14,7 @@ export class Font {
 
     font_option: string;
     Atlas: HTMLImageElement;
+    glyph: WebGLTexture; 
 
     constructor(set_font_option:string)
     {
@@ -18,7 +24,7 @@ export class Font {
     
     init(gl:WebGLRenderingContext)
     {
-        let glyph = gl.createTexture;
+        this.glyph = gl.createTexture;
         
         gl.texImage2D(
             gl.TEXTURE_2D, 0, gl.RGBA, 0, 
@@ -27,7 +33,7 @@ export class Font {
         ));
 
         this.Atlas.src = require("./fonts/Atlas/Arial.png");
-        this.Atlas.addEventListener('load', function() {
+        this.Atlas.addEventListener('load', function(glyph) {
         gl.bindTexture(gl.TEXTURE_2D, glyph);
         gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, (this as TexImageSource));
@@ -36,7 +42,8 @@ export class Font {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
         });
-        
+
+        Arial.characters['a'].x
     }
 
 }

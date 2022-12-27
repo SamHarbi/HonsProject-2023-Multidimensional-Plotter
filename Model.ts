@@ -1,22 +1,33 @@
 /*
     This is a class definition for a Model Object, Which act's as a store and renderer for a 3D object
 */
+
+import Arial from './fonts/Atlas/Arial.json' //Needs refactoring for sure
+// @ts-ignore
+import Arial_Atlas from "./fonts/Atlas/Arial.png"
+
 export class Model {
+
     positionAttributeID: GLint;
     normalAttributeID: GLint;
+    textureAttributeID: GLint;
     positionBuffer: WebGLBuffer;
     normalBuffer: WebGLBuffer;
     indexBuffer: WebGLBuffer;
+    textureBuffer: WebGLBuffer;
     numVertices: GLint;
     numIndices: GLint;
+    texture: WebGLTexture;
+    image: HTMLImageElement;
     gl: WebGLRenderingContext;
     drawmode: number;
 
 
-    constructor(newPositionAttributeID: GLint, newNormalAttributeID: GLint, newDrawMode: number) {
+    constructor(newPositionAttributeID: GLint, newNormalAttributeID: GLint, newTextureAttributeID: GLint, newDrawMode: number) {
         this.positionAttributeID = newPositionAttributeID;
         this.normalAttributeID = newNormalAttributeID;
         this.drawmode = newDrawMode;
+        this.textureAttributeID = newTextureAttributeID;
     }
 
     init(vertexData: number[], indexData: number[], normalData: number[], glRef: WebGLRenderingContext) {
@@ -55,20 +66,66 @@ export class Model {
             this.normalBuffer = <WebGLBuffer>temp_normalBuffer;
         }
 
+        // Create a Texture and ensure it is valid
+         var temp_texture = this.gl.createTexture();
+         if (temp_texture === null) {
+             alert("An Error Occured while rendering (Texture Undefined), Please try reloading the page");
+             return;
+         }
+         else {
+             this.texture = <WebGLTexture>temp_texture;
+         }
+
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+
+        // Temp data while waiting for image to load 
+        this.gl.texImage2D(
+            this.gl.TEXTURE_2D, 0, this.gl.RGBA, 0, 
+            1, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE,
+            new Uint8Array([0, 0, 255, 255]
+        ));
+
+        this.image = new Image();
+        this.image.src = Arial_Atlas; //Refactor
+        this.image.addEventListener('load', this.textureLoaded.bind(null, this.gl, this.image), false);
+
+        // Create a texture buffer and ensure it is valid 
+        var temp_textureBuffer = this.gl.createBuffer();
+        if (temp_textureBuffer === null) {
+            alert("An Error Occured while rendering (Normal Buffer Undefined), Please try reloading the page");
+            return;
+        }
+        else {
+            this.textureBuffer = <WebGLBuffer>temp_textureBuffer;
+        }
+            
         //Bind Vertex Data to an array buffer
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(vertexData), this.gl.STATIC_DRAW);
-        console.log(new Float32Array(vertexData));
+        //console.log(new Float32Array(vertexData));
 
         //Bind Index Data to an array buffer
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
         this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexData), this.gl.STATIC_DRAW);
-        console.log(new Uint16Array(indexData));
+        //console.log(new Uint16Array(indexData));
 
         //Bind Normal Data to an array buffer
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(normalData), this.gl.STATIC_DRAW);
-        console.log(new Float32Array(normalData));
+        //console.log(new Float32Array(normalData));
+
+        //Bind Texture buffer
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(vertexData), this.gl.STATIC_DRAW);
+    }
+
+    textureLoaded(gl, image) {
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, (image as TexImageSource));
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     }
 
     render() {
@@ -85,11 +142,15 @@ export class Model {
         this.gl.vertexAttribPointer(
             this.positionAttributeID, size, type, normalize, stride, offset)
 
-        //Bind the index buffer
+        // Bind the index buffer
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
 
         // Bind the normal buffer.
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuffer);
+
+        // Bind texture
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
 
         // Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
         var size = 3;          // 3 components per iteration
@@ -99,6 +160,9 @@ export class Model {
         var offset = 0;        // start at the beginning of the buffer
         this.gl.vertexAttribPointer(
             this.normalAttributeID, size, type, normalize, stride, offset)
+
+        this.gl.vertexAttribPointer(
+            this.textureAttributeID, size, type, normalize, stride, offset)
 
         var primitiveType = this.drawmode;
         var offset = 0;
@@ -110,5 +174,8 @@ export class Model {
 
 
     }
+
+
 }
+
 

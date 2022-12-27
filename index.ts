@@ -24,6 +24,7 @@ let lightToggleUniformID: WebGLUniformLocation;
 
 let positionAttributeID: GLint;
 let normalAttributeID: GLint;
+let textureAttributeID: GLint;
 
 let iter = 0; //For a simple movment demo
 
@@ -33,9 +34,8 @@ let Axis;
 
 let label;
 let label2;
-let AxisLabels: Text[];
 
-let f: Font;
+let f: Font[];
 
 async function main() {
 
@@ -48,25 +48,25 @@ async function main() {
     lightToggleUniformID = <WebGLUniformLocation>gl.getUniformLocation(program, "light_toggle");
 
     let axisData = await load_OBJ("Axis");
-    Axis = new Model(positionAttributeID, normalAttributeID, gl.LINES);
+    Axis = new Model(positionAttributeID, normalAttributeID, textureAttributeID, gl.LINES);
     Axis.init(axisData[0], axisData[1], axisData[2], gl);
 
     let MonkeyData = await load_OBJ("Monkey");
-    Monkey = new Model(positionAttributeID, normalAttributeID, gl.TRIANGLES);
+    Monkey = new Model(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
     Monkey.init(MonkeyData[0], MonkeyData[1], MonkeyData[2], gl);
 
     let CubeData = await load_OBJ("Cube3");
-    Cube = new Model(positionAttributeID, normalAttributeID, gl.TRIANGLES);
+    Cube = new Model(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
     Cube.init(CubeData[0], CubeData[1], CubeData[2], gl);
 
     label = new Text("aa", gl.canvas.width, gl.canvas.height);
     label2 = new Text("bb", gl.canvas.width, gl.canvas.height);
 
-    AxisLabels = [];
-    for(let i=0; i<33; i++)
-    {
-        AxisLabels.push(new Text("div", gl.canvas.width, gl.canvas.height));
-    }
+    //f = [];
+    //for(let i=0; i<33; i++)
+   // {
+        //f.push(new Font("Arial", positionAttributeID, normalAttributeID, gl.TRIANGLES));
+    //}
 
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.FRONT);
@@ -107,6 +107,7 @@ function render(timestamp) {
     gl.useProgram(program);
     gl.enableVertexAttribArray(positionAttributeID);
     gl.enableVertexAttribArray(normalAttributeID);
+    gl.enableVertexAttribArray(textureAttributeID);
 
     gl.uniform1i(lightToggleUniformID, 1);
 
@@ -246,7 +247,8 @@ function init() {
     program = createProgram(temp_gl, vertex, fragment);
 
     positionAttributeID = temp_gl.getAttribLocation(program, "a_position");
-    normalAttributeID = temp_gl.getAttribLocation(program, "a_normal")
+    normalAttributeID = temp_gl.getAttribLocation(program, "a_normal");
+    textureAttributeID = temp_gl.getAttribLocation(program, "a_texture");
 
     return temp_gl;
 

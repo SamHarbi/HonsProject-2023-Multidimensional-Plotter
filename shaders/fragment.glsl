@@ -3,10 +3,12 @@
   precision mediump float;
 
   uniform int light_toggle;
+  uniform sampler2D u_texture;
 
   varying vec4 colour;
   varying vec3 v_normal;
   varying vec4 position;
+  varying vec2 v_texcoord;
 
   vec3 lightdir = vec3(0.2, 0.2, 1);
  
@@ -17,10 +19,9 @@
     vec3 normal = normalize(v_normal);
     float light = dot(normal, lightdir);
 
-    
     if(light_toggle == 1)
     {
-          gl_FragColor = vec4(colour.x, colour.y, colour.z, 1);
+          gl_FragColor = vec4(colour.x, colour.y, colour.z, 1) * texture2D(u_texture, v_texcoord);
           gl_FragColor.rgb *= light;
     }
     else

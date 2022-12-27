@@ -554,13 +554,13 @@ let projectionUniformID;
 let lightToggleUniformID;
 let positionAttributeID;
 let normalAttributeID;
+let textureAttributeID;
 let iter = 0; //For a simple movment demo
 let Monkey;
 let Cube;
 let Axis;
 let label;
 let label2;
-let AxisLabels;
 let f;
 async function main() {
     //gl has already been checked so cannot be undefined- safe to cast
@@ -570,18 +570,21 @@ async function main() {
     projectionUniformID = gl.getUniformLocation(program, "projection");
     lightToggleUniformID = gl.getUniformLocation(program, "light_toggle");
     let axisData = await (0, _loader.load_OBJ)("Axis");
-    Axis = new (0, _model.Model)(positionAttributeID, normalAttributeID, gl.LINES);
+    Axis = new (0, _model.Model)(positionAttributeID, normalAttributeID, textureAttributeID, gl.LINES);
     Axis.init(axisData[0], axisData[1], axisData[2], gl);
     let MonkeyData = await (0, _loader.load_OBJ)("Monkey");
-    Monkey = new (0, _model.Model)(positionAttributeID, normalAttributeID, gl.TRIANGLES);
+    Monkey = new (0, _model.Model)(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
     Monkey.init(MonkeyData[0], MonkeyData[1], MonkeyData[2], gl);
     let CubeData = await (0, _loader.load_OBJ)("Cube3");
-    Cube = new (0, _model.Model)(positionAttributeID, normalAttributeID, gl.TRIANGLES);
+    Cube = new (0, _model.Model)(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
     Cube.init(CubeData[0], CubeData[1], CubeData[2], gl);
     label = new (0, _text.Text)("aa", gl.canvas.width, gl.canvas.height);
     label2 = new (0, _text.Text)("bb", gl.canvas.width, gl.canvas.height);
-    AxisLabels = [];
-    for(let i = 0; i < 33; i++)AxisLabels.push(new (0, _text.Text)("div", gl.canvas.width, gl.canvas.height));
+    //f = [];
+    //for(let i=0; i<33; i++)
+    // {
+    //f.push(new Font("Arial", positionAttributeID, normalAttributeID, gl.TRIANGLES));
+    //}
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.FRONT);
     gl.enable(gl.DEPTH_TEST);
@@ -606,6 +609,7 @@ async function main() {
     gl.useProgram(program);
     gl.enableVertexAttribArray(positionAttributeID);
     gl.enableVertexAttribArray(normalAttributeID);
+    gl.enableVertexAttribArray(textureAttributeID);
     gl.uniform1i(lightToggleUniformID, 1);
     let projection = _glMatrix.mat4.create();
     projection = _glMatrix.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
@@ -816,6 +820,7 @@ async function main() {
     program = createProgram(temp_gl, vertex, fragment);
     positionAttributeID = temp_gl.getAttribLocation(program, "a_position");
     normalAttributeID = temp_gl.getAttribLocation(program, "a_normal");
+    textureAttributeID = temp_gl.getAttribLocation(program, "a_texture");
     return temp_gl;
 }
 function createShader(gl, type, source) {
@@ -840,22 +845,24 @@ function createProgram(gl, vertexShader, fragmentShader) {
 window.onload = main;
 
 },{"./shaders/fragment.glsl":"6yofB","./shaders/vertex.glsl":"fWka7","./Model":"10WY5","./Loader":"blLsM","gl-matrix":"1mBhM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./Text":"eAFEk"}],"6yofB":[function(require,module,exports) {
-module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    \n    if(light_toggle == 1)\n    {\n          gl_FragColor = vec4(colour.x, colour.y, colour.z, 1);\n          gl_FragColor.rgb *= light;\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
+module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          gl_FragColor = vec4(colour.x, colour.y, colour.z, 1) * texture2D(u_texture, v_texcoord);\n          gl_FragColor.rgb *= light;\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
 
 },{}],"fWka7":[function(require,module,exports) {
-module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n\n  uniform mat4 model, projection, view;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n  }\n\n";
+module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
 
 },{}],"10WY5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-/*
-    This is a class definition for a Model Object, Which act's as a store and renderer for a 3D object
-*/ parcelHelpers.export(exports, "Model", ()=>Model);
+parcelHelpers.export(exports, "Model", ()=>Model);
+// @ts-ignore
+var _arialPng = require("./fonts/Atlas/Arial.png");
+var _arialPngDefault = parcelHelpers.interopDefault(_arialPng);
 class Model {
-    constructor(newPositionAttributeID, newNormalAttributeID, newDrawMode){
+    constructor(newPositionAttributeID, newNormalAttributeID, newTextureAttributeID, newDrawMode){
         this.positionAttributeID = newPositionAttributeID;
         this.normalAttributeID = newNormalAttributeID;
         this.drawmode = newDrawMode;
+        this.textureAttributeID = newTextureAttributeID;
     }
     init(vertexData, indexData, normalData, glRef) {
         this.gl = glRef;
@@ -878,18 +885,52 @@ class Model {
             alert("An Error Occured while rendering (Normal Buffer Undefined), Please try reloading the page");
             return;
         } else this.normalBuffer = temp_normalBuffer;
+        // Create a Texture and ensure it is valid
+        var temp_texture = this.gl.createTexture();
+        if (temp_texture === null) {
+            alert("An Error Occured while rendering (Texture Undefined), Please try reloading the page");
+            return;
+        } else this.texture = temp_texture;
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+        // Temp data while waiting for image to load 
+        this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, 0, 1, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, new Uint8Array([
+            0,
+            0,
+            255,
+            255
+        ]));
+        this.image = new Image();
+        this.image.src = (0, _arialPngDefault.default); //Refactor
+        this.image.addEventListener("load", this.textureLoaded.bind(null, this.gl, this.image), false);
+        // Create a texture buffer and ensure it is valid 
+        var temp_textureBuffer = this.gl.createBuffer();
+        if (temp_textureBuffer === null) {
+            alert("An Error Occured while rendering (Normal Buffer Undefined), Please try reloading the page");
+            return;
+        } else this.textureBuffer = temp_textureBuffer;
         //Bind Vertex Data to an array buffer
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(vertexData), this.gl.STATIC_DRAW);
-        console.log(new Float32Array(vertexData));
+        //console.log(new Float32Array(vertexData));
         //Bind Index Data to an array buffer
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
         this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexData), this.gl.STATIC_DRAW);
-        console.log(new Uint16Array(indexData));
+        //console.log(new Uint16Array(indexData));
         //Bind Normal Data to an array buffer
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(normalData), this.gl.STATIC_DRAW);
-        console.log(new Float32Array(normalData));
+        //console.log(new Float32Array(normalData));
+        //Bind Texture buffer
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(vertexData), this.gl.STATIC_DRAW);
+    }
+    textureLoaded(gl, image) {
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     }
     render() {
         // Bind the position buffer.
@@ -901,10 +942,13 @@ class Model {
         var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
         var offset = 0; // start at the beginning of the buffer
         this.gl.vertexAttribPointer(this.positionAttributeID, size, type, normalize, stride, offset);
-        //Bind the index buffer
+        // Bind the index buffer
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
         // Bind the normal buffer.
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuffer);
+        // Bind texture
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
         // Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
         var size = 3; // 3 components per iteration
         var type = this.gl.FLOAT; // the data is 32bit floating point values
@@ -912,6 +956,7 @@ class Model {
         var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
         var offset = 0; // start at the beginning of the buffer
         this.gl.vertexAttribPointer(this.normalAttributeID, size, type, normalize, stride, offset);
+        this.gl.vertexAttribPointer(this.textureAttributeID, size, type, normalize, stride, offset);
         var primitiveType = this.drawmode;
         var offset = 0;
         var count = this.numIndices;
@@ -921,7 +966,7 @@ class Model {
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./fonts/Atlas/Arial.png":"4axCz"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -950,6 +995,43 @@ exports.export = function(dest, destName, get) {
         get: get
     });
 };
+
+},{}],"4axCz":[function(require,module,exports) {
+module.exports = require("./helpers/bundle-url").getBundleURL("ao0Rz") + "Arial.5339cec6.png" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
+"use strict";
+var bundleURL = {};
+function getBundleURLCached(id) {
+    var value = bundleURL[id];
+    if (!value) {
+        value = getBundleURL();
+        bundleURL[id] = value;
+    }
+    return value;
+}
+function getBundleURL() {
+    try {
+        throw new Error();
+    } catch (err) {
+        var matches = ("" + err.stack).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^)\n]+/g);
+        if (matches) // The first two stack frames will be this function and getBundleURLCached.
+        // Use the 3rd one, which will be a runtime in the original bundle.
+        return getBaseURL(matches[2]);
+    }
+    return "/";
+}
+function getBaseURL(url) {
+    return ("" + url).replace(/^((?:https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/.+)\/[^/]+$/, "$1") + "/";
+} // TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
+function getOrigin(url) {
+    var matches = ("" + url).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^/]+/);
+    if (!matches) throw new Error("Origin not found");
+    return matches[0];
+}
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+exports.getOrigin = getOrigin;
 
 },{}],"blLsM":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -1019,6 +1101,9 @@ async function ReadFile(model) {
         return raw;
     } else if (model == "Axis") {
         var raw = "v -1 0 0\r\nv 1 0 0\r\nf 1/1/1 2/2/2 \r\nvn 0 1 0 \r\nvn 0 1 0 \r\n\r\n";
+        return raw;
+    } else if (model == "Glyph") {
+        var raw = "v -1 1 0\r\nv -1 -1 0\r\nv 1 -1 0\r\nv 1 1 0\r\nf 1/1/1 2/2/2 3/3/3\r\nf 1/1/1 3/3/3 4/4/4\r\nvn 0 1 0 \r\nvn 0 1 0 \r\n";
         return raw;
     } else {
         var raw = "# Blender v2.82 (sub 7) OBJ File: ''\r\n# www.blender.org\r\nmtllib Cube2.mtl\r\no Cube\r\nv 1.000000 1.000000 -1.000000\r\nv 1.000000 -1.000000 -1.000000\r\nv 1.000000 1.000000 1.000000\r\nv 1.000000 -1.000000 1.000000\r\nv -1.000000 1.000000 -1.000000\r\nv -1.000000 -1.000000 -1.000000\r\nv -1.000000 1.000000 1.000000\r\nv -1.000000 -1.000000 1.000000\r\nvt 0.875000 0.500000\r\nvt 0.625000 0.750000\r\nvt 0.625000 0.500000\r\nvt 0.375000 1.000000\r\nvt 0.375000 0.750000\r\nvt 0.625000 0.000000\r\nvt 0.375000 0.250000\r\nvt 0.375000 0.000000\r\nvt 0.375000 0.500000\r\nvt 0.125000 0.750000\r\nvt 0.125000 0.500000\r\nvt 0.625000 0.250000\r\nvt 0.875000 0.750000\r\nvt 0.625000 1.000000\r\nvn 0.0000 1.0000 0.0000\r\nvn 0.0000 0.0000 1.0000\r\nvn -1.0000 0.0000 0.0000\r\nvn 0.0000 -1.0000 0.0000\r\nvn 1.0000 0.0000 0.0000\r\nvn 0.0000 0.0000 -1.0000\r\nusemtl Material\r\ns off\r\nf 5/1/1 3/2/1 1/3/1\r\nf 3/2/2 8/4/2 4/5/2\r\nf 7/6/3 6/7/3 8/8/3\r\nf 2/9/4 8/10/4 6/11/4\r\nf 1/3/5 4/5/5 2/9/5\r\nf 5/12/6 2/9/6 6/7/6\r\nf 5/1/1 7/13/1 3/2/1\r\nf 3/2/2 7/14/2 8/4/2\r\nf 7/6/3 5/12/3 6/7/3\r\nf 2/9/4 4/5/4 8/10/4\r\nf 1/3/5 3/2/5 4/5/5\r\nf 5/12/6 1/3/6 2/9/6\r\n\r\n";
