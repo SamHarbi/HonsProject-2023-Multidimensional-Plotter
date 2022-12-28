@@ -26,8 +26,9 @@ export class Model {
     constructor(newPositionAttributeID: GLint, newNormalAttributeID: GLint, newTextureAttributeID: GLint, newDrawMode: number) {
         this.positionAttributeID = newPositionAttributeID;
         this.normalAttributeID = newNormalAttributeID;
-        this.drawmode = newDrawMode;
         this.textureAttributeID = newTextureAttributeID;
+
+        this.drawmode = newDrawMode;
     }
 
     init(vertexData: number[], indexData: number[], normalData: number[], textureCord: number[], glRef: WebGLRenderingContext) {
@@ -85,7 +86,7 @@ export class Model {
             new Uint8Array([0, 0, 255, 255]
         ));
 
-        this.image = new Image();
+        this.image = new Image(341, 145);
         this.image.src = Arial_Atlas; //Refactor
         this.image.addEventListener('load', this.textureLoaded.bind(null, this.gl, this.image), false);
 
@@ -122,7 +123,7 @@ export class Model {
 
     textureLoaded(gl, image) {
         gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, (image as TexImageSource));
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
@@ -130,7 +131,7 @@ export class Model {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     }
 
-    render(textureBuffer?: WebGLBuffer, texture?: WebGLTexture) {
+    render() {
 
         // Bind the position buffer.
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
@@ -150,20 +151,10 @@ export class Model {
         // Bind the normal buffer.
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuffer);
 
-        if(textureBuffer === undefined)
-        {
-            // Bind predefined texture
-            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
-            this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
-        }
-        else
-        {
-            // Bind Passed in texture values 
-            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, <WebGLBuffer>textureBuffer);
-            this.gl.bindTexture(this.gl.TEXTURE_2D, <WebGLTexture>this.indexBuffer);
-        }
-        
-        
+        // Bind predefined texture
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+
         // Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
         var size = 3;          // 3 components per iteration
         var type = this.gl.FLOAT;   // the data is 32bit floating point values
@@ -174,7 +165,7 @@ export class Model {
             this.normalAttributeID, size, type, normalize, stride, offset)
 
         this.gl.vertexAttribPointer(
-            this.textureAttributeID, 2, type, true, stride, offset)
+            this.textureAttributeID, 2, type, false, stride, offset)
 
         var primitiveType = this.drawmode;
         var offset = 0;

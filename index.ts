@@ -26,18 +26,16 @@ let positionAttributeID: GLint;
 let normalAttributeID: GLint;
 let textureAttributeID: GLint;
 
-let iter = 0; //For a simple movment demo
+let iter = 0; //For a simple movement demo
 
 let Monkey;
 let Cube;
 let Axis;
 
-let label;
-let label2;
+let label; // For testing HTML based Text overlay
+let Letter; //For testing WebGL text rendering
 
-let f: Font;
-let testTextData;
-let testText;
+let Fonts;
 
 async function main() {
 
@@ -61,20 +59,14 @@ async function main() {
     Cube = new Model(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
     Cube.init(CubeData[0], CubeData[1], CubeData[2], MonkeyData[3], gl);
 
-    testTextData = await load_OBJ("Glyph");
-    testText = new Model(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
-    testText.init(testTextData[0], testTextData[1], testTextData[2], testTextData[3], gl);
-    f = new Font(0, gl);
-    //f.init("H");
+    Fonts = new Font(0, gl); //Create a Font Object
+    Fonts.init();
 
-    label = new Text("aa", gl.canvas.width, gl.canvas.height);
-    label2 = new Text("bb", gl.canvas.width, gl.canvas.height);
+    let LetterData = await load_OBJ("Glyph");
+    Letter = new Model(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
+    Letter.init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl);
 
-    //f = [];
-    //for(let i=0; i<33; i++)
-   // {
-        //f.push(new Font("Arial", positionAttributeID, normalAttributeID, gl.TRIANGLES));
-    //}
+    label = new Text("div", gl.canvas.width, gl.canvas.height);
 
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.FRONT);
@@ -86,8 +78,6 @@ async function main() {
 
     gl.enable(gl.STENCIL_TEST);
     
-
-
     //Start render loop 
     window.requestAnimationFrame(render);
 
@@ -166,7 +156,6 @@ function render(timestamp) {
         gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
         Axis.render(undefined, undefined);
         
-
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.rotate(Axismodel, Axismodel, 1.5708, [0, 1, 0]);
         glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i/10)]);
@@ -222,14 +211,15 @@ function render(timestamp) {
     glmath.mat4.scale(Monkeymodel, Monkeymodel, [0.2, 0.2, 0.2]);
     glmath.mat4.rotate(Monkeymodel, Monkeymodel, 0, [0.2, 1, 0]);
     gl.uniformMatrix4fv(modelUniformID, false, Monkeymodel);
-    //Monkey.render();
+    // Monkey.render();
 
     let point = glmath.vec4.create();
     point = glmath.vec4.clone([-0.5, -0.500000, -0.390625, 1]);
-    //label.render(point, Monkeymodel, projection, view, "label");
+    label.render(point, Monkeymodel, projection, view, "label");
+
+    Letter.render();
 
     gl.uniformMatrix4fv(modelUniformID, false, Monkeymodel);
-    testText.render(f.getTextureBuffer(), f.getTextureID());
 
     //Repeat
     window.requestAnimationFrame(render);

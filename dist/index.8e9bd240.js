@@ -556,15 +556,13 @@ let lightToggleUniformID;
 let positionAttributeID;
 let normalAttributeID;
 let textureAttributeID;
-let iter = 0; //For a simple movment demo
+let iter = 0; //For a simple movement demo
 let Monkey;
 let Cube;
 let Axis;
-let label;
-let label2;
-let f;
-let testTextData;
-let testText;
+let label; // For testing HTML based Text overlay
+let Letter; //For testing WebGL text rendering
+let Fonts;
 async function main() {
     //gl has already been checked so cannot be undefined- safe to cast
     gl = init();
@@ -581,18 +579,12 @@ async function main() {
     let CubeData = await (0, _loader.load_OBJ)("Cube3");
     Cube = new (0, _model.Model)(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
     Cube.init(CubeData[0], CubeData[1], CubeData[2], MonkeyData[3], gl);
-    testTextData = await (0, _loader.load_OBJ)("Glyph");
-    testText = new (0, _model.Model)(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
-    testText.init(testTextData[0], testTextData[1], testTextData[2], testTextData[3], gl);
-    f = new (0, _font.Font)(0, gl);
-    //f.init("H");
-    label = new (0, _text.Text)("aa", gl.canvas.width, gl.canvas.height);
-    label2 = new (0, _text.Text)("bb", gl.canvas.width, gl.canvas.height);
-    //f = [];
-    //for(let i=0; i<33; i++)
-    // {
-    //f.push(new Font("Arial", positionAttributeID, normalAttributeID, gl.TRIANGLES));
-    //}
+    Fonts = new (0, _font.Font)(0, gl); //Create a Font Object
+    Fonts.init();
+    let LetterData = await (0, _loader.load_OBJ)("Glyph");
+    Letter = new (0, _model.Model)(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
+    Letter.init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl);
+    label = new (0, _text.Text)("div", gl.canvas.width, gl.canvas.height);
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.FRONT);
     gl.enable(gl.DEPTH_TEST);
@@ -795,7 +787,7 @@ async function main() {
         0
     ]);
     gl.uniformMatrix4fv(modelUniformID, false, Monkeymodel);
-    //Monkey.render();
+    // Monkey.render();
     let point = _glMatrix.vec4.create();
     point = _glMatrix.vec4.clone([
         -0.5,
@@ -803,9 +795,9 @@ async function main() {
         -0.390625,
         1
     ]);
-    //label.render(point, Monkeymodel, projection, view, "label");
+    label.render(point, Monkeymodel, projection, view, "label");
+    Letter.render();
     gl.uniformMatrix4fv(modelUniformID, false, Monkeymodel);
-    testText.render(f.getTextureBuffer(), f.getTextureID());
     //Repeat
     window.requestAnimationFrame(render);
 }
@@ -869,8 +861,8 @@ class Model {
     constructor(newPositionAttributeID, newNormalAttributeID, newTextureAttributeID, newDrawMode){
         this.positionAttributeID = newPositionAttributeID;
         this.normalAttributeID = newNormalAttributeID;
-        this.drawmode = newDrawMode;
         this.textureAttributeID = newTextureAttributeID;
+        this.drawmode = newDrawMode;
     }
     init(vertexData, indexData, normalData, textureCord, glRef) {
         this.gl = glRef;
@@ -907,7 +899,7 @@ class Model {
             255,
             255
         ]));
-        this.image = new Image();
+        this.image = new Image(341, 145);
         this.image.src = (0, _arialPngDefault.default); //Refactor
         this.image.addEventListener("load", this.textureLoaded.bind(null, this.gl, this.image), false);
         // Create a texture buffer and ensure it is valid 
@@ -935,14 +927,14 @@ class Model {
     }
     textureLoaded(gl, image) {
         gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     }
-    render(textureBuffer, texture) {
+    render() {
         // Bind the position buffer.
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
         // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
@@ -956,15 +948,9 @@ class Model {
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
         // Bind the normal buffer.
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuffer);
-        if (textureBuffer === undefined) {
-            // Bind predefined texture
-            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
-            this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
-        } else {
-            // Bind Passed in texture values 
-            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, textureBuffer);
-            this.gl.bindTexture(this.gl.TEXTURE_2D, this.indexBuffer);
-        }
+        // Bind predefined texture
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
         // Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
         var size = 3; // 3 components per iteration
         var type = this.gl.FLOAT; // the data is 32bit floating point values
@@ -972,7 +958,7 @@ class Model {
         var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
         var offset = 0; // start at the beginning of the buffer
         this.gl.vertexAttribPointer(this.normalAttributeID, size, type, normalize, stride, offset);
-        this.gl.vertexAttribPointer(this.textureAttributeID, 2, type, true, stride, offset);
+        this.gl.vertexAttribPointer(this.textureAttributeID, 2, type, false, stride, offset);
         var primitiveType = this.drawmode;
         var offset = 0;
         var count = this.numIndices;
@@ -1128,7 +1114,7 @@ async function ReadFile(model) {
         var raw = "v -1 0 0\r\nv 1 0 0\r\nf 1/1/1 2/2/2 \r\nvn 0 1 0 \r\nvn 0 1 0 \r\n\r\n";
         return raw;
     } else if (model == "Glyph") {
-        var raw = "v -1 1 0\r\nv -1 -1 0\r\nv 1 -1 0\r\nv 1 1 0\r\nf 1/1/1 2/2/2 3/3/3\r\nf 1/1/1 3/3/3 4/4/4\r\nvn 0 1 0 \r\nvn 0 1 0 \r\n";
+        var raw = "v -1 1 0\r\nv -1 -1 0\r\nv 1 -1 0\r\nv 1 1 0\r\nf 3/3/3 4/4/4 1/1/1\r\nf 1/1/1 2/2/2 3/3/3\r\nvn 0 1 0 \r\nvn 0 1 0 \r\n";
         return raw;
     } else {
         var raw = "# Blender v2.82 (sub 7) OBJ File: ''\r\n# www.blender.org\r\nmtllib Cube2.mtl\r\no Cube\r\nv 1.000000 1.000000 -1.000000\r\nv 1.000000 -1.000000 -1.000000\r\nv 1.000000 1.000000 1.000000\r\nv 1.000000 -1.000000 1.000000\r\nv -1.000000 1.000000 -1.000000\r\nv -1.000000 -1.000000 -1.000000\r\nv -1.000000 1.000000 1.000000\r\nv -1.000000 -1.000000 1.000000\r\nvt 0.875000 0.500000\r\nvt 0.625000 0.750000\r\nvt 0.625000 0.500000\r\nvt 0.375000 1.000000\r\nvt 0.375000 0.750000\r\nvt 0.625000 0.000000\r\nvt 0.375000 0.250000\r\nvt 0.375000 0.000000\r\nvt 0.375000 0.500000\r\nvt 0.125000 0.750000\r\nvt 0.125000 0.500000\r\nvt 0.625000 0.250000\r\nvt 0.875000 0.750000\r\nvt 0.625000 1.000000\r\nvn 0.0000 1.0000 0.0000\r\nvn 0.0000 0.0000 1.0000\r\nvn -1.0000 0.0000 0.0000\r\nvn 0.0000 -1.0000 0.0000\r\nvn 1.0000 0.0000 0.0000\r\nvn 0.0000 0.0000 -1.0000\r\nusemtl Material\r\ns off\r\nf 5/1/1 3/2/1 1/3/1\r\nf 3/2/2 8/4/2 4/5/2\r\nf 7/6/3 6/7/3 8/8/3\r\nf 2/9/4 8/10/4 6/11/4\r\nf 1/3/5 4/5/5 2/9/5\r\nf 5/12/6 2/9/6 6/7/6\r\nf 5/1/1 7/13/1 3/2/1\r\nf 3/2/2 7/14/2 8/4/2\r\nf 7/6/3 5/12/3 6/7/3\r\nf 2/9/4 4/5/4 8/10/4\r\nf 1/3/5 3/2/5 4/5/5\r\nf 5/12/6 1/3/6 2/9/6\r\n\r\n";
@@ -7790,61 +7776,23 @@ class Font {
         this.image = new Image();
         this.image.src = this.font_pointers[this.font_option];
     }
-    init(text) {
-        // Create a Texture and ensure it is valid
-        var temp_texture = this.gl.createTexture();
-        if (temp_texture === null) {
-            alert("An Error Occured while rendering (Texture Undefined), Please try reloading the page");
-            return;
-        } else this.textureID = temp_texture;
-        this.gl.bindTexture(this.gl.TEXTURE_2D, this.textureID);
-        // Temp data while waiting for image to load 
-        this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, 0, 1, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, new Uint8Array([
-            0,
-            0,
-            255,
-            255
-        ]));
-        // Create a texture buffer and ensure it is valid 
-        var temp_textureBuffer = this.gl.createBuffer();
-        if (temp_textureBuffer === null) {
-            alert("An Error Occured while rendering (Texture Buffer Undefined), Please try reloading the page");
-            return;
-        } else this.textureBuffer = temp_textureBuffer;
+    init() {
         let x = this.font_data_pointers[this.font_option].characters["a"].x;
         let y = this.font_data_pointers[this.font_option].characters["a"].y;
         let width = this.font_data_pointers[this.font_option].characters["a"].width;
         let height = this.font_data_pointers[this.font_option].characters["a"].height;
         //Single Letter consists of 4 vertex points -> thus 4 texture cord pairs
-        this.textureCord.push(x);
-        this.textureCord.push(y);
-        this.textureCord.push(x);
-        this.textureCord.push(y - height);
-        this.textureCord.push(x + width);
-        this.textureCord.push(y - height);
-        this.textureCord.push(x + width);
-        this.textureCord.push(y);
-        //Bind Texture buffer
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.textureCord), this.gl.STATIC_DRAW);
-        this.image.src = this.font_pointers[this.font_option];
-        this.image.addEventListener("load", this.textureLoaded.bind(null, this.gl, this.image), false);
-        return this.textureBuffer;
+        this.textureCord.push(x / 341);
+        this.textureCord.push(y / 125);
+        this.textureCord.push(x / 341);
+        this.textureCord.push((y + height) / 125);
+        this.textureCord.push((x + width) / 341);
+        this.textureCord.push((y + height) / 125);
+        this.textureCord.push((x + width) / 341);
+        this.textureCord.push(y / 125);
     }
-    textureLoaded(gl, image) {
-        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-    }
-    getTextureID() {
-        return this.textureID;
-    }
-    getTextureBuffer() {
-        return this.textureBuffer;
+    getTextureCords() {
+        return this.textureCord;
     }
 }
 
