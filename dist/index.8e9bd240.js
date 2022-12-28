@@ -563,6 +563,7 @@ let Axis;
 let label; // For testing HTML based Text overlay
 let Letter; //For testing WebGL text rendering
 let Fonts;
+let AxisLabels;
 async function main() {
     //gl has already been checked so cannot be undefined- safe to cast
     gl = init();
@@ -578,12 +579,18 @@ async function main() {
     Monkey.init(MonkeyData[0], MonkeyData[1], MonkeyData[2], MonkeyData[3], gl);
     let CubeData = await (0, _loader.load_OBJ)("Cube3");
     Cube = new (0, _model.Model)(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
-    Cube.init(CubeData[0], CubeData[1], CubeData[2], MonkeyData[3], gl);
+    Cube.init(CubeData[0], CubeData[1], CubeData[2], CubeData[3], gl);
     Fonts = new (0, _font.Font)(0, gl); //Create a Font Object
-    Fonts.init();
+    Fonts.init("X");
     let LetterData = await (0, _loader.load_OBJ)("Glyph");
     Letter = new (0, _model.Model)(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
     Letter.init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl);
+    AxisLabels = [];
+    for(let i = 0; i < 3; i++){
+        Fonts.init("1");
+        AxisLabels[i] = new (0, _model.Model)(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
+        AxisLabels[i].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl);
+    }
     label = new (0, _text.Text)("div", gl.canvas.width, gl.canvas.height);
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.FRONT);
@@ -655,6 +662,37 @@ async function main() {
         -0.42,
         -0.25
     ]);
+    gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
+    let LetterModel = _glMatrix.mat4.create();
+    _glMatrix.mat4.copy(LetterModel, globalAxisModel);
+    _glMatrix.mat4.scale(LetterModel, LetterModel, [
+        0.03,
+        0.03,
+        1
+    ]);
+    _glMatrix.mat4.translate(LetterModel, LetterModel, [
+        36,
+        0,
+        0
+    ]);
+    gl.uniformMatrix4fv(modelUniformID, false, LetterModel);
+    AxisLabels[0].render();
+    _glMatrix.mat4.translate(LetterModel, LetterModel, [
+        -36,
+        36,
+        0
+    ]);
+    gl.uniformMatrix4fv(modelUniformID, false, LetterModel);
+    AxisLabels[1].render();
+    _glMatrix.mat4.translate(LetterModel, LetterModel, [
+        -2,
+        -39,
+        1
+    ]);
+    gl.uniformMatrix4fv(modelUniformID, false, LetterModel);
+    AxisLabels[2].render();
+    gl.stencilFunc(gl.EQUAL, 1, 0xFF);
+    gl.stencilOp(gl.REPLACE, gl.KEEP, gl.REPLACE);
     for(let i = 0; i < 11; i++){
         Axismodel = _glMatrix.mat4.create();
         _glMatrix.mat4.copy(Axismodel, globalAxisModel);
@@ -787,7 +825,7 @@ async function main() {
         0
     ]);
     gl.uniformMatrix4fv(modelUniformID, false, Monkeymodel);
-    // Monkey.render();
+    Monkey.render();
     let point = _glMatrix.vec4.create();
     point = _glMatrix.vec4.clone([
         -0.5,
@@ -796,8 +834,11 @@ async function main() {
         1
     ]);
     label.render(point, Monkeymodel, projection, view, "label");
-    Letter.render();
-    gl.uniformMatrix4fv(modelUniformID, false, Monkeymodel);
+    //LetterModel = glmath.mat4.create();
+    //glmath.mat4.scale(LetterModel, LetterModel, [0.03, 0.03, 1]);
+    //glmath.mat4.translate(LetterModel, LetterModel, [21, -9, 0]);
+    //gl.uniformMatrix4fv(modelUniformID, false, LetterModel);
+    //Letter.render();
     //Repeat
     window.requestAnimationFrame(render);
 }
@@ -923,7 +964,6 @@ class Model {
         //Bind Texture buffer
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(textureCord), this.gl.STATIC_DRAW);
-        console.log(textureCord);
     }
     textureLoaded(gl, image) {
         gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
@@ -932,7 +972,7 @@ class Model {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     }
     render() {
         // Bind the position buffer.
@@ -950,7 +990,7 @@ class Model {
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuffer);
         // Bind predefined texture
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
-        this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+        //this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
         // Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
         var size = 3; // 3 components per iteration
         var type = this.gl.FLOAT; // the data is 32bit floating point values
@@ -7776,11 +7816,11 @@ class Font {
         this.image = new Image();
         this.image.src = this.font_pointers[this.font_option];
     }
-    init() {
-        let x = this.font_data_pointers[this.font_option].characters["a"].x;
-        let y = this.font_data_pointers[this.font_option].characters["a"].y;
-        let width = this.font_data_pointers[this.font_option].characters["a"].width;
-        let height = this.font_data_pointers[this.font_option].characters["a"].height;
+    init(char) {
+        let x = this.font_data_pointers[this.font_option].characters[char].x;
+        let y = this.font_data_pointers[this.font_option].characters[char].y;
+        let width = this.font_data_pointers[this.font_option].characters[char].width;
+        let height = this.font_data_pointers[this.font_option].characters[char].height;
         //Single Letter consists of 4 vertex points -> thus 4 texture cord pairs
         this.textureCord.push(x / 341);
         this.textureCord.push(y / 125);

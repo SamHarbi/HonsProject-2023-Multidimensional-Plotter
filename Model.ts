@@ -118,7 +118,6 @@ export class Model {
         //Bind Texture buffer
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(textureCord), this.gl.STATIC_DRAW);
-        console.log(textureCord);
     }
 
     textureLoaded(gl, image) {
@@ -128,7 +127,7 @@ export class Model {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     }
 
     render() {
@@ -153,7 +152,7 @@ export class Model {
 
         // Bind predefined texture
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
-        this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+        //this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
 
         // Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
         var size = 3;          // 3 components per iteration

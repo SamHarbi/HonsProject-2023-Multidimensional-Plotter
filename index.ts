@@ -37,6 +37,8 @@ let Letter; //For testing WebGL text rendering
 
 let Fonts;
 
+let AxisLabels: Model[];
+
 async function main() {
 
     //gl has already been checked so cannot be undefined- safe to cast
@@ -57,14 +59,24 @@ async function main() {
 
     let CubeData = await load_OBJ("Cube3");
     Cube = new Model(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
-    Cube.init(CubeData[0], CubeData[1], CubeData[2], MonkeyData[3], gl);
+    Cube.init(CubeData[0], CubeData[1], CubeData[2], CubeData[3], gl);
 
     Fonts = new Font(0, gl); //Create a Font Object
-    Fonts.init();
+    Fonts.init('X');
 
     let LetterData = await load_OBJ("Glyph");
     Letter = new Model(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
     Letter.init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl);
+
+    AxisLabels = [];
+
+    for(let i=0; i<3; i++)
+    {
+        Fonts.init('1');
+        AxisLabels[i] = new Model(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
+        AxisLabels[i].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl);
+    }
+    
 
     label = new Text("div", gl.canvas.width, gl.canvas.height);
 
@@ -146,7 +158,28 @@ function render(timestamp) {
     let globalAxisModel = glmath.mat4.create();
     glmath.mat4.scale(globalAxisModel, globalAxisModel, [0.9, 0.9, 0.9]);
     glmath.mat4.translate(globalAxisModel, globalAxisModel, [-0.42, -0.42, -0.25]);
+
+    gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
+
+    let LetterModel = glmath.mat4.create();
+    glmath.mat4.copy(LetterModel, globalAxisModel);
+    glmath.mat4.scale(LetterModel, LetterModel, [0.03, 0.03, 1]);
     
+    glmath.mat4.translate(LetterModel, LetterModel, [36, 0, 0]);
+    gl.uniformMatrix4fv(modelUniformID, false, LetterModel);
+    AxisLabels[0].render();
+
+    glmath.mat4.translate(LetterModel, LetterModel, [-36, 36, 0]);
+    gl.uniformMatrix4fv(modelUniformID, false, LetterModel);
+    AxisLabels[1].render();
+
+    glmath.mat4.translate(LetterModel, LetterModel, [-2, -39, 1]);
+    gl.uniformMatrix4fv(modelUniformID, false, LetterModel);
+    AxisLabels[2].render();
+
+    gl.stencilFunc(gl.EQUAL, 1, 0xFF);
+    gl.stencilOp(gl.REPLACE, gl.KEEP, gl.REPLACE);
+
     for(let i=0; i<11; i++)
     {
         Axismodel = glmath.mat4.create();
@@ -211,15 +244,19 @@ function render(timestamp) {
     glmath.mat4.scale(Monkeymodel, Monkeymodel, [0.2, 0.2, 0.2]);
     glmath.mat4.rotate(Monkeymodel, Monkeymodel, 0, [0.2, 1, 0]);
     gl.uniformMatrix4fv(modelUniformID, false, Monkeymodel);
-    // Monkey.render();
+    Monkey.render();
 
     let point = glmath.vec4.create();
     point = glmath.vec4.clone([-0.5, -0.500000, -0.390625, 1]);
     label.render(point, Monkeymodel, projection, view, "label");
 
-    Letter.render();
-
-    gl.uniformMatrix4fv(modelUniformID, false, Monkeymodel);
+    //LetterModel = glmath.mat4.create();
+    //glmath.mat4.scale(LetterModel, LetterModel, [0.03, 0.03, 1]);
+    //glmath.mat4.translate(LetterModel, LetterModel, [21, -9, 0]);
+    //gl.uniformMatrix4fv(modelUniformID, false, LetterModel);
+    //Letter.render();
+    
+    
 
     //Repeat
     window.requestAnimationFrame(render);

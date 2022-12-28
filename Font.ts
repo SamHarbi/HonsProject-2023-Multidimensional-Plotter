@@ -37,13 +37,13 @@ export class Font {
         this.image.src = this.font_pointers[this.font_option];
     }
     
-    init()
+    init(char: string)
     {
 
-        let x = this.font_data_pointers[this.font_option].characters['a'].x;
-        let y = this.font_data_pointers[this.font_option].characters['a'].y;
-        let width = this.font_data_pointers[this.font_option].characters['a'].width;
-        let height = this.font_data_pointers[this.font_option].characters['a'].height;
+        let x = this.font_data_pointers[this.font_option].characters[char].x;
+        let y = this.font_data_pointers[this.font_option].characters[char].y;
+        let width = this.font_data_pointers[this.font_option].characters[char].width;
+        let height = this.font_data_pointers[this.font_option].characters[char].height;
 
         //Single Letter consists of 4 vertex points -> thus 4 texture cord pairs
         this.textureCord.push(x / 341);
