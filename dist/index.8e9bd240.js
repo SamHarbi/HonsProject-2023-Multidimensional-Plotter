@@ -535,6 +535,7 @@ function hmrAcceptRun(bundle, id) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 //Note: Adapted from https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html
 //Imports will give errors if not using parcel
+//refactor Start
 // @ts-ignore
 var _fragmentGlsl = require("./shaders/fragment.glsl");
 var _fragmentGlslDefault = parcelHelpers.interopDefault(_fragmentGlsl);
