@@ -1,5 +1,6 @@
 //Note: Adapted from https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html
 //Imports will give errors if not using parcel
+//refactor Start
 // @ts-ignore
 import fragmentSource from './shaders/fragment.glsl'
 // @ts-ignore
