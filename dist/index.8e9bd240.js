@@ -608,7 +608,7 @@ async function main() {
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LESS);
     gl.frontFace(gl.CW);
-    //gl.enable(gl.STENCIL_TEST);
+    gl.enable(gl.STENCIL_TEST);
     //Start render loop 
     window.requestAnimationFrame(render);
 }

@@ -96,7 +96,7 @@ async function main() {
 
     gl.frontFace(gl.CW);
 
-    //gl.enable(gl.STENCIL_TEST);
+    gl.enable(gl.STENCIL_TEST);
     
     //Start render loop 
     window.requestAnimationFrame(render);
