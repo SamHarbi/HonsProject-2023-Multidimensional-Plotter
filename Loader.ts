@@ -42,6 +42,7 @@ export async function load_OBJ(model: string) {
             for (let j = 1; j < vertices.length; j++) {
                 Vertices.push(Number(vertices[j]));
             }
+            continue;
         }
 
         //Extract Face Values
@@ -54,6 +55,7 @@ export async function load_OBJ(model: string) {
                 // @ts-ignore
                 Indicies.push(Number(indicies[0] - 1));
             }
+            continue;
         }
 
         //Extract Vertex Normal Values
@@ -64,6 +66,7 @@ export async function load_OBJ(model: string) {
             for (let i = 1; i < normals.length; i++) {
                 Normals.push(Number(normals[i]));
             }
+            continue;
         }
 
         //Extract Texture Values
