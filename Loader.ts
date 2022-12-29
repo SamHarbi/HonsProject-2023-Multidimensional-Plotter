@@ -109,7 +109,7 @@ async function ReadFile(model: string) {
         return raw;
     }
     else {
-        var raw = fs.readFileSync(path.join(__dirname, "./models/Cube2.obj"), "utf8");
+        var raw = fs.readFileSync(path.join(__dirname, "./models/Cube3.obj"), "utf8");
         return raw;
     }
 

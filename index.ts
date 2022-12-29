@@ -1,6 +1,5 @@
 //Note: Adapted from https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html
 //Imports will give errors if not using parcel
-//refactor Start
 // @ts-ignore
 import fragmentSource from './shaders/fragment.glsl'
 // @ts-ignore
@@ -34,9 +33,7 @@ let Cube;
 let Axis;
 
 let label; // For testing HTML based Text overlay
-let Letter; //For testing WebGL text rendering
-
-let Fonts;
+let Fonts; //Generator for Font Texture Data
 
 let AxisLabels: Model[];
 
@@ -62,20 +59,18 @@ async function main() {
     Cube = new Model(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
     Cube.init(CubeData[0], CubeData[1], CubeData[2], CubeData[3], gl);
 
-    Fonts = new Font(0, gl); //Create a Font Object
-    Fonts.init('X');
-
-    let LetterData = await load_OBJ("Glyph");
-    Letter = new Model(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
-    Letter.init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl);
-
     AxisLabels = [];
+    Fonts = new Font(0, gl); //Create a Font Object
 
     for(let i=0; i<3; i++)
     {
-        Fonts.init('1');
+        let LetterData = await load_OBJ("Glyph");
+        Letter = new Model(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
+        Letter.init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        Fonts.init(i);
+
         AxisLabels[i] = new Model(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
-        AxisLabels[i].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl);
+        AxisLabels[i].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
     }
     
 
@@ -243,7 +238,7 @@ function render(timestamp) {
     
     let Monkeymodel = glmath.mat4.create();
     glmath.mat4.scale(Monkeymodel, Monkeymodel, [0.2, 0.2, 0.2]);
-    glmath.mat4.rotate(Monkeymodel, Monkeymodel, 0, [0.2, 1, 0]);
+    glmath.mat4.rotate(Monkeymodel, Monkeymodel, iter, [0.2, 1, 0]);
     gl.uniformMatrix4fv(modelUniformID, false, Monkeymodel);
     Monkey.render();
 
