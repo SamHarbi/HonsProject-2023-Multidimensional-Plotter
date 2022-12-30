@@ -37,6 +37,7 @@ let label; // For testing HTML based Text overlay
 let Fonts; // Generator for Font Texture Data
 
 let AxisLabels: Model[];
+let AxisValues: Model[];
 
 async function main() {
 
@@ -71,20 +72,44 @@ async function main() {
     Cube.init(CubeData[0], CubeData[1], CubeData[2], CubeData[3], gl);
 
     AxisLabels = [];
+    AxisValues = [];
     Fonts = new Font(0, gl); // Create a Font Object
 
     // Define 3 glyph based letter labels for each axis 
     let LetterData = await load_OBJ("Glyph");
-    Fonts.init('x');
+
+    Fonts.init('z');
     AxisLabels[0] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
     AxisLabels[0].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
     Fonts.init('y');
     AxisLabels[1] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
     AxisLabels[1].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
-    Fonts.init('z');
+    Fonts.init('x');
     AxisLabels[2] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
     AxisLabels[2].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
     
+    // 10 value labels on each axis
+    for(let i=1; i<10; i++)
+    {
+        Fonts.init(i);
+        AxisValues[i] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        AxisValues[i].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+    }
+
+    for(let i=1; i<10; i++)
+    {
+        Fonts.init(i);
+        AxisValues[i+10] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        AxisValues[i+10].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+    }
+
+    for(let i=1; i<10; i++)
+    {
+        Fonts.init(i);
+        AxisValues[i+20] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        AxisValues[i+20].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+    }
+
     //Init HTML based label
     label = new Text("div", gl.canvas.width, gl.canvas.height);
 
@@ -140,8 +165,6 @@ function RenderAxisText(globalAxisModel: glmath.mat4) {
 
     gl.uniform1i(lightToggleUniformID[1], 1); // Use Light
 
-    //glmath.mat4.rotate(globalAxisModel, globalAxisModel, 1, [0, 0, 0.5]);
-
     gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
     
     let LetterModel = glmath.mat4.create();
@@ -152,6 +175,16 @@ function RenderAxisText(globalAxisModel: glmath.mat4) {
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[0].render();
 
+    let singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), LetterModel);
+    glmath.mat4.translate(singleAxisModel, singleAxisModel, [-1, 0, 1]);
+
+    for(let i=1; i<10; i++)
+    {
+        glmath.mat4.translate(singleAxisModel, singleAxisModel, [-3.8, 0, 0]);
+        gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
+        AxisValues[10-i].render();
+    }
+
     glmath.mat4.translate(LetterModel, LetterModel, [-36, 36, 0]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[1].render();
@@ -159,6 +192,8 @@ function RenderAxisText(globalAxisModel: glmath.mat4) {
     glmath.mat4.translate(LetterModel, LetterModel, [-2, -39, 1]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[2].render();
+
+
 
 }
 
@@ -246,6 +281,8 @@ function render(timestamp) {
     //For Axis Glyphs 
     const initGlobalAxisModel = glmath.mat4.copy((glmath.mat4.create()), globalAxisModel);
 
+    //glmath.mat4.rotate(globalAxisModel, globalAxisModel, iter, [0, 1, 0]);
+
     // Create a local and global model to split transformations applied to Axis Lines
     let Axismodel = glmath.mat4.create();
 
@@ -253,7 +290,7 @@ function render(timestamp) {
     {
         Axismodel = glmath.mat4.create();
         glmath.mat4.copy(Axismodel, globalAxisModel);
-        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i/10)]);
+        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, 0.1]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
         Axis.render(undefined, undefined);
