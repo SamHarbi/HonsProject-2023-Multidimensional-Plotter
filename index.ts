@@ -175,19 +175,33 @@ function RenderAxisText(globalAxisModel: glmath.mat4) {
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[0].render();
 
-    let singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), LetterModel);
-    glmath.mat4.translate(singleAxisModel, singleAxisModel, [-1, 0, 1]);
+    let singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), globalAxisModel);
+    glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.03, 0.03, 1]);
+    glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.5, 0, 1]);
+    glmath.mat4.translate(singleAxisModel, singleAxisModel, [-1.0, -1.0, 0]);
 
     for(let i=1; i<10; i++)
     {
-        glmath.mat4.translate(singleAxisModel, singleAxisModel, [-3.8, 0, 0]);
+        glmath.mat4.translate(singleAxisModel, singleAxisModel, [3.5, 0, 0]);
         gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
-        AxisValues[10-i].render();
+        AxisValues[i].render();
     }
 
     glmath.mat4.translate(LetterModel, LetterModel, [-36, 36, 0]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[1].render();
+
+    singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), globalAxisModel);
+    glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
+    glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.5, 0, 1]);
+    glmath.mat4.translate(singleAxisModel, singleAxisModel, [52.0, -1.0, 0]);
+
+    for(let i=1; i<10; i++)
+    {
+        glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.0, 0, -0.1]);
+        gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
+        AxisValues[10-i].render();
+    }
 
     glmath.mat4.translate(LetterModel, LetterModel, [-2, -39, 1]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
@@ -281,26 +295,23 @@ function render(timestamp) {
     //For Axis Glyphs 
     const initGlobalAxisModel = glmath.mat4.copy((glmath.mat4.create()), globalAxisModel);
 
-    //glmath.mat4.rotate(globalAxisModel, globalAxisModel, iter, [0, 1, 0]);
-
     // Create a local and global model to split transformations applied to Axis Lines
     let Axismodel = glmath.mat4.create();
 
     for(let i=0; i<11; i++)
     {
-        Axismodel = glmath.mat4.create();
         glmath.mat4.copy(Axismodel, globalAxisModel);
-        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, 0.1]);
+        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i/10)]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
-        Axis.render(undefined, undefined);
+        Axis.render();
         
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.rotate(Axismodel, Axismodel, 1.5708, [0, 1, 0]);
         glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i/10)]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 0]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
-        Axis.render(undefined, undefined);
+        Axis.render();
     }
     
     glmath.mat4.rotate(globalAxisModel, globalAxisModel, 1.5708, [1, 0, 0]);
@@ -313,7 +324,7 @@ function render(timestamp) {
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
 
-        Axis.render(undefined, undefined);
+        Axis.render();
 
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.rotate(Axismodel, Axismodel, 1.5708, [0, 1, 0]);
@@ -321,7 +332,7 @@ function render(timestamp) {
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 0]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
         
-        Axis.render(undefined, undefined);
+        Axis.render();
     }
 
     glmath.mat4.rotate(globalAxisModel, globalAxisModel, 1.5708, [0, 0, 1]);
@@ -334,7 +345,7 @@ function render(timestamp) {
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
 
-        Axis.render(undefined, undefined);
+        Axis.render();
 
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.rotate(Axismodel, Axismodel, 1.5708, [0, 1, 0]);
@@ -342,7 +353,7 @@ function render(timestamp) {
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 0]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
         
-        Axis.render(undefined, undefined);
+        Axis.render();
     }
 
     

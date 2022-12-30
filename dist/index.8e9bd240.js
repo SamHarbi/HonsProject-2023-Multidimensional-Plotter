@@ -671,20 +671,30 @@ async function main() {
     ]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[0].render();
-    let singleAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), LetterModel);
+    let singleAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), globalAxisModel);
+    _glMatrix.mat4.scale(singleAxisModel, singleAxisModel, [
+        0.03,
+        0.03,
+        1
+    ]);
     _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
-        -1,
+        0.5,
         0,
         1
     ]);
+    _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
+        -1,
+        -1,
+        0
+    ]);
     for(let i = 1; i < 10; i++){
         _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
-            -3.8,
+            3.5,
             0,
             0
         ]);
         gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
-        AxisValues[10 - i].render();
+        AxisValues[i].render();
     }
     _glMatrix.mat4.translate(LetterModel, LetterModel, [
         -36,
@@ -693,6 +703,31 @@ async function main() {
     ]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[1].render();
+    singleAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), globalAxisModel);
+    _glMatrix.mat4.scale(singleAxisModel, singleAxisModel, [
+        0.02,
+        0.02,
+        1
+    ]);
+    _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
+        0.5,
+        0,
+        1
+    ]);
+    _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
+        52.0,
+        -1,
+        0
+    ]);
+    for(let i1 = 1; i1 < 10; i1++){
+        _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
+            0.0,
+            0,
+            -0.1
+        ]);
+        gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
+        AxisValues[10 - i1].render();
+    }
     _glMatrix.mat4.translate(LetterModel, LetterModel, [
         -2,
         -39,
@@ -774,16 +809,14 @@ async function main() {
     ]);
     //For Axis Glyphs 
     const initGlobalAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), globalAxisModel);
-    //glmath.mat4.rotate(globalAxisModel, globalAxisModel, iter, [0, 1, 0]);
     // Create a local and global model to split transformations applied to Axis Lines
     let Axismodel = _glMatrix.mat4.create();
     for(let i = 0; i < 11; i++){
-        Axismodel = _glMatrix.mat4.create();
         _glMatrix.mat4.copy(Axismodel, globalAxisModel);
         _glMatrix.mat4.translate(Axismodel, Axismodel, [
             0.5,
             0,
-            0.1
+            i / 10
         ]);
         _glMatrix.mat4.scale(Axismodel, Axismodel, [
             0.5,
@@ -791,7 +824,7 @@ async function main() {
             1
         ]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
-        Axis.render(undefined, undefined);
+        Axis.render();
         _glMatrix.mat4.copy(Axismodel, globalAxisModel);
         _glMatrix.mat4.rotate(Axismodel, Axismodel, 1.5708, [
             0,
@@ -809,7 +842,7 @@ async function main() {
             0
         ]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
-        Axis.render(undefined, undefined);
+        Axis.render();
     }
     _glMatrix.mat4.rotate(globalAxisModel, globalAxisModel, 1.5708, [
         1,
@@ -834,7 +867,7 @@ async function main() {
             1
         ]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
-        Axis.render(undefined, undefined);
+        Axis.render();
         _glMatrix.mat4.copy(Axismodel, globalAxisModel);
         _glMatrix.mat4.rotate(Axismodel, Axismodel, 1.5708, [
             0,
@@ -852,7 +885,7 @@ async function main() {
             0
         ]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
-        Axis.render(undefined, undefined);
+        Axis.render();
     }
     _glMatrix.mat4.rotate(globalAxisModel, globalAxisModel, 1.5708, [
         0,
@@ -877,7 +910,7 @@ async function main() {
             1
         ]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
-        Axis.render(undefined, undefined);
+        Axis.render();
         _glMatrix.mat4.copy(Axismodel, globalAxisModel);
         _glMatrix.mat4.rotate(Axismodel, Axismodel, 1.5708, [
             0,
@@ -895,7 +928,7 @@ async function main() {
             0
         ]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
-        Axis.render(undefined, undefined);
+        Axis.render();
     }
     let Monkeymodel = _glMatrix.mat4.create();
     _glMatrix.mat4.scale(Monkeymodel, Monkeymodel, [
