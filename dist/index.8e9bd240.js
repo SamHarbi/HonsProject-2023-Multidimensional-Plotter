@@ -673,8 +673,8 @@ async function main() {
     AxisLabels[0].render();
     let singleAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), globalAxisModel);
     _glMatrix.mat4.scale(singleAxisModel, singleAxisModel, [
-        0.03,
-        0.03,
+        0.02,
+        0.02,
         1
     ]);
     _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
@@ -684,14 +684,14 @@ async function main() {
     ]);
     _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
         -1,
-        -1,
+        -2.2,
         0
     ]);
     for(let i = 1; i < 10; i++){
         _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
-            3.5,
+            5.0,
             0,
-            0
+            0.00
         ]);
         gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
         AxisValues[i].render();
@@ -715,7 +715,7 @@ async function main() {
         1
     ]);
     _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
-        52.0,
+        52.2,
         -1,
         0
     ]);
@@ -726,7 +726,7 @@ async function main() {
             -0.1
         ]);
         gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
-        AxisValues[10 - i1].render();
+        AxisValues[i1].render();
     }
     _glMatrix.mat4.translate(LetterModel, LetterModel, [
         -2,
@@ -735,6 +735,31 @@ async function main() {
     ]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[2].render();
+    singleAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), globalAxisModel);
+    _glMatrix.mat4.scale(singleAxisModel, singleAxisModel, [
+        0.02,
+        0.02,
+        1
+    ]);
+    _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
+        0.5,
+        0,
+        1
+    ]);
+    _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
+        -3,
+        -1,
+        0
+    ]);
+    for(let i2 = 1; i2 < 10; i2++){
+        _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
+            0.0,
+            5,
+            0
+        ]);
+        gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
+        AxisValues[i2].render();
+    }
 }
 /*
     Render Loop 

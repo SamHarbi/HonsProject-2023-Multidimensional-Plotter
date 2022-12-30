@@ -176,13 +176,13 @@ function RenderAxisText(globalAxisModel: glmath.mat4) {
     AxisLabels[0].render();
 
     let singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), globalAxisModel);
-    glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.03, 0.03, 1]);
+    glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.5, 0, 1]);
-    glmath.mat4.translate(singleAxisModel, singleAxisModel, [-1.0, -1.0, 0]);
+    glmath.mat4.translate(singleAxisModel, singleAxisModel, [-1.0, -2.2, 0]);
 
     for(let i=1; i<10; i++)
     {
-        glmath.mat4.translate(singleAxisModel, singleAxisModel, [3.5, 0, 0]);
+        glmath.mat4.translate(singleAxisModel, singleAxisModel, [5.0, 0, 0.00]);
         gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
         AxisValues[i].render();
     }
@@ -194,20 +194,30 @@ function RenderAxisText(globalAxisModel: glmath.mat4) {
     singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), globalAxisModel);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.5, 0, 1]);
-    glmath.mat4.translate(singleAxisModel, singleAxisModel, [52.0, -1.0, 0]);
+    glmath.mat4.translate(singleAxisModel, singleAxisModel, [52.2, -1.0, 0]);
 
     for(let i=1; i<10; i++)
     {
         glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.0, 0, -0.1]);
         gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
-        AxisValues[10-i].render();
+        AxisValues[i].render();
     }
 
     glmath.mat4.translate(LetterModel, LetterModel, [-2, -39, 1]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[2].render();
 
+    singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), globalAxisModel);
+    glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
+    glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.5, 0, 1]);
+    glmath.mat4.translate(singleAxisModel, singleAxisModel, [-3.0, -1.0, 0]);
 
+    for(let i=1; i<10; i++)
+    {
+        glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.0, 5, 0]);
+        gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
+        AxisValues[i].render();
+    }
 
 }
 
