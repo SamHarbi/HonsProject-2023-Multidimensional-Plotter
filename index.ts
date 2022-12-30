@@ -1,9 +1,13 @@
 // Note: Adapted from https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html
 // Imports will give errors if not using parcel
 // @ts-ignore
-import fragmentSource from './shaders/fragment.glsl'
+import fragmentSource_1 from './shaders/fragment_1.glsl'
 // @ts-ignore
-import vertexSource from './shaders/vertex.glsl'
+import vertexSource_1 from './shaders/vertex_1.glsl'
+// @ts-ignore
+import fragmentSource_2 from './shaders/fragment_2.glsl'
+// @ts-ignore
+import vertexSource_2 from './shaders/vertex_2.glsl'
 
 import { Model } from './Model';
 import { load_OBJ } from './Loader';
@@ -368,14 +372,15 @@ function render(timestamp) {
 
     
     let Monkeymodel = glmath.mat4.create();
-    glmath.mat4.scale(Monkeymodel, Monkeymodel, [0.2, 0.2, 0.2]);
+    glmath.mat4.scale(Monkeymodel, Monkeymodel, [0.1, 0.1, 0.1]);
     glmath.mat4.rotate(Monkeymodel, Monkeymodel, iter, [0.2, 1, 0]);
+    glmath.mat4.translate(Monkeymodel, Monkeymodel, [0, 0, 0]);
     gl.uniformMatrix4fv(modelUniformID[0], false, Monkeymodel);
     Monkey.render();
 
     let point = glmath.vec4.create();
     point = glmath.vec4.clone([-0.5, -0.500000, -0.390625, 1]);
-    label.render(point, Monkeymodel, projection, view, "label");
+    //label.render(point, Monkeymodel, projection, view, "label");
     
     RenderAxisText(initGlobalAxisModel);
 
@@ -399,8 +404,10 @@ function init() {
     }
 
     //Create, compile and link shaders
-    let vertex = createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource);
-    let fragment = createShader(temp_gl, temp_gl.FRAGMENT_SHADER, fragmentSource);
+    let vertex = [createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource_1),
+                  createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource_2)];
+    let fragment = [createShader(temp_gl, temp_gl.FRAGMENT_SHADER, fragmentSource_1),
+                    createShader(temp_gl, temp_gl.FRAGMENT_SHADER, fragmentSource_2)];
 
     programs = [];
     positionAttributeID = [];
@@ -409,7 +416,7 @@ function init() {
 
     for(let i=0; i<num_of_programs; i++)
     {
-        programs[i] = createProgram(temp_gl, vertex, fragment);
+        programs[i] = createProgram(temp_gl, vertex[i], fragment[i]);
 
         positionAttributeID[i] = temp_gl.getAttribLocation(programs[i], "a_position");
         normalAttributeID[i] = temp_gl.getAttribLocation(programs[i], "a_normal");
