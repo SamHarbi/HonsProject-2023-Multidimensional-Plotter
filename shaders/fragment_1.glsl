@@ -21,9 +21,9 @@
 
     if(light_toggle == 1)
     {
-          //gl_FragColor = vec4(colour.x, colour.y, colour.z, 1) * texture2D(u_texture, v_texcoord);
-          //gl_FragColor.rgb *= light;
-          gl_FragColor = texture2D(u_texture, v_texcoord);
+          gl_FragColor = vec4(colour.x, colour.y, colour.z, 1) * texture2D(u_texture, v_texcoord);
+          gl_FragColor.rgb *= light;
+          //gl_FragColor = texture2D(u_texture, v_texcoord);
     }
     else
     {

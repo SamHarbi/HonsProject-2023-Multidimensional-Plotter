@@ -533,15 +533,20 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"1jwFz":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-//Note: Adapted from https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html
-//Imports will give errors if not using parcel
-//refactor Start
+// Note: Adapted from https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html
+// Imports will give errors if not using parcel
 // @ts-ignore
-var _fragmentGlsl = require("./shaders/fragment.glsl");
-var _fragmentGlslDefault = parcelHelpers.interopDefault(_fragmentGlsl);
+var _fragment1Glsl = require("./shaders/fragment_1.glsl");
+var _fragment1GlslDefault = parcelHelpers.interopDefault(_fragment1Glsl);
 // @ts-ignore
-var _vertexGlsl = require("./shaders/vertex.glsl");
-var _vertexGlslDefault = parcelHelpers.interopDefault(_vertexGlsl);
+var _vertex1Glsl = require("./shaders/vertex_1.glsl");
+var _vertex1GlslDefault = parcelHelpers.interopDefault(_vertex1Glsl);
+// @ts-ignore
+var _fragment2Glsl = require("./shaders/fragment_2.glsl");
+var _fragment2GlslDefault = parcelHelpers.interopDefault(_fragment2Glsl);
+// @ts-ignore
+var _vertex2Glsl = require("./shaders/vertex_2.glsl");
+var _vertex2GlslDefault = parcelHelpers.interopDefault(_vertex2Glsl);
 var _model = require("./Model");
 var _loader = require("./Loader");
 var _text = require("./Text");
@@ -549,7 +554,8 @@ var _font = require("./Font");
 var _glMatrix = require("gl-matrix");
 let gl;
 let canvas;
-let program;
+let programs;
+const num_of_programs = 2;
 let modelUniformID;
 let viewUniformID;
 let projectionUniformID;
@@ -557,41 +563,69 @@ let lightToggleUniformID;
 let positionAttributeID;
 let normalAttributeID;
 let textureAttributeID;
-let iter = 0; //For a simple movement demo
+let iter = 0; // For a simple movement demo
 let Monkey;
 let Cube;
 let Axis;
 let label; // For testing HTML based Text overlay
-let Letter; //For testing WebGL text rendering
-let Fonts;
+let Fonts; // Generator for Font Texture Data
 let AxisLabels;
+let AxisValues;
 async function main() {
-    //gl has already been checked so cannot be undefined- safe to cast
+    // gl has already been checked so cannot be undefined- safe to cast
     gl = init();
-    modelUniformID = gl.getUniformLocation(program, "model");
-    viewUniformID = gl.getUniformLocation(program, "view");
-    projectionUniformID = gl.getUniformLocation(program, "projection");
-    lightToggleUniformID = gl.getUniformLocation(program, "light_toggle");
+    modelUniformID = [];
+    viewUniformID = [];
+    projectionUniformID = [];
+    lightToggleUniformID = [];
+    for(let i = 0; i < num_of_programs; i++){
+        // Get Uniform Locations 
+        modelUniformID[i] = gl.getUniformLocation(programs[i], "model");
+        viewUniformID[i] = gl.getUniformLocation(programs[i], "view");
+        projectionUniformID[i] = gl.getUniformLocation(programs[i], "projection");
+        lightToggleUniformID[i] = gl.getUniformLocation(programs[i], "light_toggle");
+    }
+    // Define and Init all Models to render
     let axisData = await (0, _loader.load_OBJ)("Axis");
-    Axis = new (0, _model.Model)(positionAttributeID, normalAttributeID, textureAttributeID, gl.LINES);
+    Axis = new (0, _model.Model)(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.LINES);
     Axis.init(axisData[0], axisData[1], axisData[2], axisData[3], gl);
     let MonkeyData = await (0, _loader.load_OBJ)("Monkey");
-    Monkey = new (0, _model.Model)(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
+    Monkey = new (0, _model.Model)(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.TRIANGLES);
     Monkey.init(MonkeyData[0], MonkeyData[1], MonkeyData[2], MonkeyData[3], gl);
     let CubeData = await (0, _loader.load_OBJ)("Cube3");
-    Cube = new (0, _model.Model)(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
+    Cube = new (0, _model.Model)(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.TRIANGLES);
     Cube.init(CubeData[0], CubeData[1], CubeData[2], CubeData[3], gl);
-    Fonts = new (0, _font.Font)(0, gl); //Create a Font Object
-    Fonts.init("X");
-    let LetterData = await (0, _loader.load_OBJ)("Glyph");
-    Letter = new (0, _model.Model)(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
-    Letter.init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl);
     AxisLabels = [];
-    for(let i = 0; i < 3; i++){
-        Fonts.init("1");
-        AxisLabels[i] = new (0, _model.Model)(positionAttributeID, normalAttributeID, textureAttributeID, gl.TRIANGLES);
-        AxisLabels[i].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl);
+    AxisValues = [];
+    Fonts = new (0, _font.Font)(0, gl); // Create a Font Object
+    // Define 3 glyph based letter labels for each axis 
+    let LetterData = await (0, _loader.load_OBJ)("Glyph");
+    Fonts.init("z");
+    AxisLabels[0] = new (0, _model.Model)(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+    AxisLabels[0].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+    Fonts.init("y");
+    AxisLabels[1] = new (0, _model.Model)(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+    AxisLabels[1].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+    Fonts.init("x");
+    AxisLabels[2] = new (0, _model.Model)(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+    AxisLabels[2].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+    // 10 value labels on each axis
+    for(let i1 = 1; i1 < 10; i1++){
+        Fonts.init(i1);
+        AxisValues[i1] = new (0, _model.Model)(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        AxisValues[i1].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
     }
+    for(let i2 = 1; i2 < 10; i2++){
+        Fonts.init(i2);
+        AxisValues[i2 + 10] = new (0, _model.Model)(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        AxisValues[i2 + 10].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+    }
+    for(let i3 = 1; i3 < 10; i3++){
+        Fonts.init(i3);
+        AxisValues[i3 + 20] = new (0, _model.Model)(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        AxisValues[i3 + 20].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+    }
+    //Init HTML based label
     label = new (0, _text.Text)("div", gl.canvas.width, gl.canvas.height);
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.FRONT);
@@ -603,66 +637,31 @@ async function main() {
     window.requestAnimationFrame(render);
 }
 /*
-    Render Loop 
-*/ function render(timestamp) {
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    iter = iter + 0.01;
-    if (iter > 100) iter = 0;
-    // Set clear color to black, fully opaque
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    // Clear the color buffer with specified clear color
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.useProgram(program);
-    gl.enableVertexAttribArray(positionAttributeID);
-    gl.enableVertexAttribArray(normalAttributeID);
-    gl.enableVertexAttribArray(textureAttributeID);
-    gl.uniform1i(lightToggleUniformID, 1);
-    let projection = _glMatrix.mat4.create();
-    projection = _glMatrix.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
-    gl.uniformMatrix4fv(projectionUniformID, false, projection);
+    Render Loop
+    Renders everything (glyph text) that needs shader program 1
+    Depends on positions of axis lines already placed to ensure relative placement of text
+*/ function RenderAxisText(globalAxisModel) {
+    // _____________
+    // +++ SETUP +++
+    // _____________
+    //Set Shader to use 
+    gl.useProgram(programs[1]);
+    gl.enableVertexAttribArray(positionAttributeID[1]);
+    gl.enableVertexAttribArray(normalAttributeID[1]);
+    gl.enableVertexAttribArray(textureAttributeID[1]);
+    // Setup View
     let view = _glMatrix.mat4.create();
     let viewPos = _glMatrix.vec3.create();
     let viewRotation = _glMatrix.vec3.create();
     let viewUp = _glMatrix.vec3.create();
     _glMatrix.mat4.lookAt(view, _glMatrix.vec3.set(viewPos, 1, 1, 3), _glMatrix.vec3.set(viewRotation, 0, 0, 0), _glMatrix.vec3.set(viewUp, 0, 1, 0));
-    gl.uniformMatrix4fv(viewUniformID, false, view);
-    // +++ DRAWING POLYGONS START +++
-    // DRAW STENCIL CUBE
-    gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
-    gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
-    gl.uniform1i(lightToggleUniformID, 0); // Don't Use Light
-    // Bounding Cube
-    let cubeModel = _glMatrix.mat4.create();
-    _glMatrix.mat4.scale(cubeModel, cubeModel, [
-        0.5,
-        0.5,
-        0.5
-    ]);
-    _glMatrix.mat4.translate(cubeModel, cubeModel, [
-        0,
-        0,
-        0
-    ]);
-    gl.uniformMatrix4fv(modelUniformID, false, cubeModel);
-    gl.cullFace(gl.BACK);
-    Cube.render(undefined, undefined);
-    gl.cullFace(gl.FRONT);
-    gl.stencilFunc(gl.EQUAL, 1, 0xFF);
-    gl.stencilOp(gl.REPLACE, gl.KEEP, gl.REPLACE);
-    // ALL OTHER POLYGONS WITHIN BOUNDING CUBE START
-    gl.uniform1i(lightToggleUniformID, 1); // Use Light
-    let Axismodel = _glMatrix.mat4.create();
-    let globalAxisModel = _glMatrix.mat4.create();
-    _glMatrix.mat4.scale(globalAxisModel, globalAxisModel, [
-        0.9,
-        0.9,
-        0.9
-    ]);
-    _glMatrix.mat4.translate(globalAxisModel, globalAxisModel, [
-        -0.42,
-        -0.42,
-        -0.25
-    ]);
+    gl.uniformMatrix4fv(viewUniformID[1], false, view);
+    // Setup Projection 
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    let projection = _glMatrix.mat4.create();
+    projection = _glMatrix.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
+    gl.uniformMatrix4fv(projectionUniformID[1], false, projection);
+    gl.uniform1i(lightToggleUniformID[1], 1); // Use Light
     gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
     let LetterModel = _glMatrix.mat4.create();
     _glMatrix.mat4.copy(LetterModel, globalAxisModel);
@@ -676,26 +675,174 @@ async function main() {
         0,
         0
     ]);
-    gl.uniformMatrix4fv(modelUniformID, false, LetterModel);
+    gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[0].render();
+    let singleAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), globalAxisModel);
+    _glMatrix.mat4.scale(singleAxisModel, singleAxisModel, [
+        0.02,
+        0.02,
+        1
+    ]);
+    _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
+        0.5,
+        0,
+        1
+    ]);
+    _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
+        -1,
+        -2.2,
+        0
+    ]);
+    for(let i = 1; i < 10; i++){
+        _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
+            5.0,
+            0,
+            0.00
+        ]);
+        gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
+        AxisValues[i].render();
+    }
     _glMatrix.mat4.translate(LetterModel, LetterModel, [
         -36,
         36,
         0
     ]);
-    gl.uniformMatrix4fv(modelUniformID, false, LetterModel);
+    gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[1].render();
+    singleAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), globalAxisModel);
+    _glMatrix.mat4.scale(singleAxisModel, singleAxisModel, [
+        0.02,
+        0.02,
+        1
+    ]);
+    _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
+        0.5,
+        0,
+        1
+    ]);
+    _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
+        52.2,
+        -1,
+        0
+    ]);
+    for(let i1 = 1; i1 < 10; i1++){
+        _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
+            0.0,
+            0,
+            -0.1
+        ]);
+        gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
+        AxisValues[i1].render();
+    }
     _glMatrix.mat4.translate(LetterModel, LetterModel, [
         -2,
         -39,
         1
     ]);
-    gl.uniformMatrix4fv(modelUniformID, false, LetterModel);
+    gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[2].render();
+    singleAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), globalAxisModel);
+    _glMatrix.mat4.scale(singleAxisModel, singleAxisModel, [
+        0.02,
+        0.02,
+        1
+    ]);
+    _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
+        0.5,
+        0,
+        1
+    ]);
+    _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
+        -3,
+        -1,
+        0
+    ]);
+    for(let i2 = 1; i2 < 10; i2++){
+        _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
+            0.0,
+            5,
+            0
+        ]);
+        gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
+        AxisValues[i2].render();
+    }
+}
+/*
+    Render Loop 
+    Renders everything that needs program 0
+*/ function render(timestamp) {
+    // _____________
+    // +++ SETUP +++
+    // _____________
+    //Simple Iterator for animation
+    iter = iter + 0.01;
+    if (iter > 100) iter = 0;
+    // Clear Canvas and Set Background Color 
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    //Set Shader to use 
+    gl.useProgram(programs[0]);
+    gl.enableVertexAttribArray(positionAttributeID[0]);
+    gl.enableVertexAttribArray(normalAttributeID[0]);
+    gl.enableVertexAttribArray(textureAttributeID[0]);
+    // Setup View
+    let view = _glMatrix.mat4.create();
+    let viewPos = _glMatrix.vec3.create();
+    let viewRotation = _glMatrix.vec3.create();
+    let viewUp = _glMatrix.vec3.create();
+    _glMatrix.mat4.lookAt(view, _glMatrix.vec3.set(viewPos, 1, 1, 3), _glMatrix.vec3.set(viewRotation, 0, 0, 0), _glMatrix.vec3.set(viewUp, 0, 1, 0));
+    gl.uniformMatrix4fv(viewUniformID[0], false, view);
+    // Setup Projection 
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    let projection = _glMatrix.mat4.create();
+    projection = _glMatrix.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
+    gl.uniformMatrix4fv(projectionUniformID[0], false, projection);
+    // ______________________________
+    // +++ DRAWING POLYGONS START +++
+    // ______________________________
+    // | DRAW STENCIL CUBE |
+    gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
+    gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
+    gl.uniform1i(lightToggleUniformID[0], 0); // Don't Use Light
+    // Bounding Cube
+    let cubeModel = _glMatrix.mat4.create();
+    _glMatrix.mat4.scale(cubeModel, cubeModel, [
+        0.5,
+        0.5,
+        0.5
+    ]);
+    _glMatrix.mat4.translate(cubeModel, cubeModel, [
+        0,
+        0,
+        0
+    ]);
+    gl.uniformMatrix4fv(modelUniformID[0], false, cubeModel);
+    gl.cullFace(gl.BACK);
+    Cube.render();
+    gl.cullFace(gl.FRONT);
     gl.stencilFunc(gl.EQUAL, 1, 0xFF);
     gl.stencilOp(gl.REPLACE, gl.KEEP, gl.REPLACE);
+    // | ALL OTHER POLYGONS WITHIN BOUNDING CUBE START |
+    gl.stencilFunc(gl.EQUAL, 1, 0xFF);
+    gl.stencilOp(gl.REPLACE, gl.KEEP, gl.REPLACE);
+    gl.uniform1i(lightToggleUniformID[0], 1); // Use Light
+    let globalAxisModel = _glMatrix.mat4.create();
+    //Apply global transformations
+    _glMatrix.mat4.scale(globalAxisModel, globalAxisModel, [
+        0.9,
+        0.9,
+        0.9
+    ]);
+    _glMatrix.mat4.translate(globalAxisModel, globalAxisModel, [
+        -0.42,
+        -0.42,
+        -0.25
+    ]);
+    //For Axis Glyphs 
+    const initGlobalAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), globalAxisModel);
+    // Create a local and global model to split transformations applied to Axis Lines
+    let Axismodel = _glMatrix.mat4.create();
     for(let i = 0; i < 11; i++){
-        Axismodel = _glMatrix.mat4.create();
         _glMatrix.mat4.copy(Axismodel, globalAxisModel);
         _glMatrix.mat4.translate(Axismodel, Axismodel, [
             0.5,
@@ -707,8 +854,8 @@ async function main() {
             1,
             1
         ]);
-        gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
-        Axis.render(undefined, undefined);
+        gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
+        Axis.render();
         _glMatrix.mat4.copy(Axismodel, globalAxisModel);
         _glMatrix.mat4.rotate(Axismodel, Axismodel, 1.5708, [
             0,
@@ -725,8 +872,8 @@ async function main() {
             1,
             0
         ]);
-        gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
-        Axis.render(undefined, undefined);
+        gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
+        Axis.render();
     }
     _glMatrix.mat4.rotate(globalAxisModel, globalAxisModel, 1.5708, [
         1,
@@ -750,8 +897,8 @@ async function main() {
             1,
             1
         ]);
-        gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
-        Axis.render(undefined, undefined);
+        gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
+        Axis.render();
         _glMatrix.mat4.copy(Axismodel, globalAxisModel);
         _glMatrix.mat4.rotate(Axismodel, Axismodel, 1.5708, [
             0,
@@ -768,8 +915,8 @@ async function main() {
             1,
             0
         ]);
-        gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
-        Axis.render(undefined, undefined);
+        gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
+        Axis.render();
     }
     _glMatrix.mat4.rotate(globalAxisModel, globalAxisModel, 1.5708, [
         0,
@@ -793,8 +940,8 @@ async function main() {
             1,
             1
         ]);
-        gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
-        Axis.render(undefined, undefined);
+        gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
+        Axis.render();
         _glMatrix.mat4.copy(Axismodel, globalAxisModel);
         _glMatrix.mat4.rotate(Axismodel, Axismodel, 1.5708, [
             0,
@@ -811,21 +958,26 @@ async function main() {
             1,
             0
         ]);
-        gl.uniformMatrix4fv(modelUniformID, false, Axismodel);
-        Axis.render(undefined, undefined);
+        gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
+        Axis.render();
     }
     let Monkeymodel = _glMatrix.mat4.create();
     _glMatrix.mat4.scale(Monkeymodel, Monkeymodel, [
-        0.2,
-        0.2,
-        0.2
+        0.1,
+        0.1,
+        0.1
     ]);
-    _glMatrix.mat4.rotate(Monkeymodel, Monkeymodel, 0, [
+    _glMatrix.mat4.rotate(Monkeymodel, Monkeymodel, iter, [
         0.2,
         1,
         0
     ]);
-    gl.uniformMatrix4fv(modelUniformID, false, Monkeymodel);
+    _glMatrix.mat4.translate(Monkeymodel, Monkeymodel, [
+        0,
+        0,
+        0
+    ]);
+    gl.uniformMatrix4fv(modelUniformID[0], false, Monkeymodel);
     Monkey.render();
     let point = _glMatrix.vec4.create();
     point = _glMatrix.vec4.clone([
@@ -834,12 +986,8 @@ async function main() {
         -0.390625,
         1
     ]);
-    label.render(point, Monkeymodel, projection, view, "label");
-    //LetterModel = glmath.mat4.create();
-    //glmath.mat4.scale(LetterModel, LetterModel, [0.03, 0.03, 1]);
-    //glmath.mat4.translate(LetterModel, LetterModel, [21, -9, 0]);
-    //gl.uniformMatrix4fv(modelUniformID, false, LetterModel);
-    //Letter.render();
+    //label.render(point, Monkeymodel, projection, view, "label");
+    RenderAxisText(initGlobalAxisModel);
     //Repeat
     window.requestAnimationFrame(render);
 }
@@ -857,12 +1005,24 @@ async function main() {
         return;
     }
     //Create, compile and link shaders
-    let vertex = createShader(temp_gl, temp_gl.VERTEX_SHADER, (0, _vertexGlslDefault.default));
-    let fragment = createShader(temp_gl, temp_gl.FRAGMENT_SHADER, (0, _fragmentGlslDefault.default));
-    program = createProgram(temp_gl, vertex, fragment);
-    positionAttributeID = temp_gl.getAttribLocation(program, "a_position");
-    normalAttributeID = temp_gl.getAttribLocation(program, "a_normal");
-    textureAttributeID = temp_gl.getAttribLocation(program, "a_texture");
+    let vertex = [
+        createShader(temp_gl, temp_gl.VERTEX_SHADER, (0, _vertex1GlslDefault.default)),
+        createShader(temp_gl, temp_gl.VERTEX_SHADER, (0, _vertex2GlslDefault.default))
+    ];
+    let fragment = [
+        createShader(temp_gl, temp_gl.FRAGMENT_SHADER, (0, _fragment1GlslDefault.default)),
+        createShader(temp_gl, temp_gl.FRAGMENT_SHADER, (0, _fragment2GlslDefault.default))
+    ];
+    programs = [];
+    positionAttributeID = [];
+    normalAttributeID = [];
+    textureAttributeID = [];
+    for(let i = 0; i < num_of_programs; i++){
+        programs[i] = createProgram(temp_gl, vertex[i], fragment[i]);
+        positionAttributeID[i] = temp_gl.getAttribLocation(programs[i], "a_position");
+        normalAttributeID[i] = temp_gl.getAttribLocation(programs[i], "a_normal");
+        textureAttributeID[i] = temp_gl.getAttribLocation(programs[i], "a_texture");
+    }
     return temp_gl;
 }
 function createShader(gl, type, source) {
@@ -886,19 +1046,13 @@ function createProgram(gl, vertexShader, fragmentShader) {
 }
 window.onload = main;
 
-},{"./shaders/fragment.glsl":"6yofB","./shaders/vertex.glsl":"fWka7","./Model":"10WY5","./Loader":"blLsM","gl-matrix":"1mBhM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./Text":"eAFEk","./Font":"kj6Xh"}],"6yofB":[function(require,module,exports) {
-module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          //gl_FragColor = vec4(colour.x, colour.y, colour.z, 1) * texture2D(u_texture, v_texcoord);\n          //gl_FragColor.rgb *= light;\n          gl_FragColor = texture2D(u_texture, v_texcoord);\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
-
-},{}],"fWka7":[function(require,module,exports) {
-module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
-
-},{}],"10WY5":[function(require,module,exports) {
+},{"./Model":"10WY5","./Loader":"blLsM","./Text":"eAFEk","./Font":"kj6Xh","gl-matrix":"1mBhM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./shaders/fragment_1.glsl":"cXi2N","./shaders/vertex_1.glsl":"3iC4R","./shaders/fragment_2.glsl":"7ORuU","./shaders/vertex_2.glsl":"7UWL5"}],"10WY5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Model", ()=>Model);
 // @ts-ignore
-var _arialPng = require("./fonts/Atlas/Arial.png");
-var _arialPngDefault = parcelHelpers.interopDefault(_arialPng);
+var _noTexturePng = require("./fonts/Atlas/no_texture.png");
+var _noTexturePngDefault = parcelHelpers.interopDefault(_noTexturePng);
 class Model {
     constructor(newPositionAttributeID, newNormalAttributeID, newTextureAttributeID, newDrawMode){
         this.positionAttributeID = newPositionAttributeID;
@@ -906,7 +1060,7 @@ class Model {
         this.textureAttributeID = newTextureAttributeID;
         this.drawmode = newDrawMode;
     }
-    init(vertexData, indexData, normalData, textureCord, glRef) {
+    init(vertexData, indexData, normalData, textureCord, glRef, texImageURL) {
         this.gl = glRef;
         this.numIndices = indexData.length;
         // Create a Vertex buffer and ensure it is valid
@@ -942,8 +1096,9 @@ class Model {
             255
         ]));
         this.image = new Image(341, 145);
-        this.image.src = (0, _arialPngDefault.default); //Refactor
-        this.image.addEventListener("load", this.textureLoaded.bind(null, this.gl, this.image), false);
+        if (texImageURL !== undefined) this.image.src = texImageURL; //Refactor
+        else this.image.src = (0, _noTexturePngDefault.default);
+        this.image.addEventListener("load", this.textureLoaded.bind(null, this.gl, this.image, this.texture), false);
         // Create a texture buffer and ensure it is valid 
         var temp_textureBuffer = this.gl.createBuffer();
         if (temp_textureBuffer === null) {
@@ -965,8 +1120,10 @@ class Model {
         //Bind Texture buffer
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(textureCord), this.gl.STATIC_DRAW);
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
     }
-    textureLoaded(gl, image) {
+    textureLoaded(gl, image, texture) {
+        gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
@@ -991,7 +1148,7 @@ class Model {
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuffer);
         // Bind predefined texture
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
-        //this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
         // Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
         var size = 3; // 3 components per iteration
         var type = this.gl.FLOAT; // the data is 32bit floating point values
@@ -1009,38 +1166,8 @@ class Model {
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./fonts/Atlas/Arial.png":"4axCz"}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, "__esModule", {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"4axCz":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("ao0Rz") + "Arial.5339cec6.png" + "?" + Date.now();
+},{"./fonts/Atlas/no_texture.png":"aeya0","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aeya0":[function(require,module,exports) {
+module.exports = require("./helpers/bundle-url").getBundleURL("ao0Rz") + "no_texture.f1c5d450.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
 "use strict";
@@ -1075,6 +1202,36 @@ function getOrigin(url) {
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
 exports.getOrigin = getOrigin;
+
+},{}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
 
 },{}],"blLsM":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -1115,6 +1272,7 @@ async function load_OBJ(model) {
         if (line.startsWith("v ")) {
             let vertices = line.split(" ");
             for(let j = 1; j < vertices.length; j++)Vertices.push(Number(vertices[j]));
+            continue;
         }
         //Extract Face Values
         if (line.startsWith("f ")) {
@@ -1124,11 +1282,13 @@ async function load_OBJ(model) {
                 // @ts-ignore
                 Indicies.push(Number(indicies[0] - 1));
             }
+            continue;
         }
         //Extract Vertex Normal Values
         if (line.startsWith("vn ")) {
             let normals = line.split(" ");
             for(let i2 = 1; i2 < normals.length; i2++)Normals.push(Number(normals[i2]));
+            continue;
         }
         //Extract Texture Values
         if (line.startsWith("vt ")) {
@@ -1158,7 +1318,7 @@ async function ReadFile(model) {
         var raw = "v -1 1 0\r\nv -1 -1 0\r\nv 1 -1 0\r\nv 1 1 0\r\nf 3/3/3 4/4/4 1/1/1\r\nf 1/1/1 2/2/2 3/3/3\r\nvn 0 1 0 \r\nvn 0 1 0 \r\n";
         return raw;
     } else {
-        var raw = "# Blender v2.82 (sub 7) OBJ File: ''\r\n# www.blender.org\r\nmtllib Cube2.mtl\r\no Cube\r\nv 1.000000 1.000000 -1.000000\r\nv 1.000000 -1.000000 -1.000000\r\nv 1.000000 1.000000 1.000000\r\nv 1.000000 -1.000000 1.000000\r\nv -1.000000 1.000000 -1.000000\r\nv -1.000000 -1.000000 -1.000000\r\nv -1.000000 1.000000 1.000000\r\nv -1.000000 -1.000000 1.000000\r\nvt 0.875000 0.500000\r\nvt 0.625000 0.750000\r\nvt 0.625000 0.500000\r\nvt 0.375000 1.000000\r\nvt 0.375000 0.750000\r\nvt 0.625000 0.000000\r\nvt 0.375000 0.250000\r\nvt 0.375000 0.000000\r\nvt 0.375000 0.500000\r\nvt 0.125000 0.750000\r\nvt 0.125000 0.500000\r\nvt 0.625000 0.250000\r\nvt 0.875000 0.750000\r\nvt 0.625000 1.000000\r\nvn 0.0000 1.0000 0.0000\r\nvn 0.0000 0.0000 1.0000\r\nvn -1.0000 0.0000 0.0000\r\nvn 0.0000 -1.0000 0.0000\r\nvn 1.0000 0.0000 0.0000\r\nvn 0.0000 0.0000 -1.0000\r\nusemtl Material\r\ns off\r\nf 5/1/1 3/2/1 1/3/1\r\nf 3/2/2 8/4/2 4/5/2\r\nf 7/6/3 6/7/3 8/8/3\r\nf 2/9/4 8/10/4 6/11/4\r\nf 1/3/5 4/5/5 2/9/5\r\nf 5/12/6 2/9/6 6/7/6\r\nf 5/1/1 7/13/1 3/2/1\r\nf 3/2/2 7/14/2 8/4/2\r\nf 7/6/3 5/12/3 6/7/3\r\nf 2/9/4 4/5/4 8/10/4\r\nf 1/3/5 3/2/5 4/5/5\r\nf 5/12/6 1/3/6 2/9/6\r\n\r\n";
+        var raw = "# Blender v2.92.0 OBJ File: ''\r\n# www.blender.org\r\nmtllib coolcube2.mtl\r\no Cube\r\nv -1.000000 1.000000 1.000000\r\nv -1.000000 -1.000000 1.000000\r\nv -1.000000 1.000000 -1.000000\r\nv -1.000000 -1.000000 -1.000000\r\nv 1.000000 1.000000 1.000000\r\nv 1.000000 -1.000000 1.000000\r\nv 1.000000 1.000000 -1.000000\r\nv 1.000000 -1.000000 -1.000000\r\nvt 0.875000 0.500000\r\nvt 0.625000 0.750000\r\nvt 0.625000 0.500000\r\nvt 0.375000 1.000000\r\nvt 0.375000 0.750000\r\nvt 0.625000 0.000000\r\nvt 0.375000 0.250000\r\nvt 0.375000 0.000000\r\nvt 0.375000 0.500000\r\nvt 0.125000 0.750000\r\nvt 0.125000 0.500000\r\nvt 0.625000 0.250000\r\nvt 0.875000 0.750000\r\nvt 0.625000 1.000000\r\nvn 0.0000 1.0000 0.0000\r\nvn 0.0000 0.0000 -1.0000\r\nvn 1.0000 0.0000 0.0000\r\nvn 0.0000 -1.0000 0.0000\r\nvn -1.0000 0.0000 0.0000\r\nvn 0.0000 0.0000 1.0000\r\nusemtl Material\r\ns off\r\nf 5/1/1 3/2/1 1/3/1\r\nf 3/2/2 8/4/2 4/5/2\r\nf 7/6/3 6/7/3 8/8/3\r\nf 2/9/4 8/10/4 6/11/4\r\nf 1/3/5 4/5/5 2/9/5\r\nf 5/12/6 2/9/6 6/7/6\r\nf 5/1/1 7/13/1 3/2/1\r\nf 3/2/2 7/14/2 8/4/2\r\nf 7/6/3 5/12/3 6/7/3\r\nf 2/9/4 4/5/4 8/10/4\r\nf 1/3/5 3/2/5 4/5/5\r\nf 5/12/6 1/3/6 2/9/6\r\n";
         return raw;
     }
 }
@@ -1736,7 +1896,44 @@ process.umask = function() {
     return 0;
 };
 
-},{}],"1mBhM":[function(require,module,exports) {
+},{}],"eAFEk":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Text", ()=>Text);
+/*
+    This is a class definition for a Text Object, Which is an abstraction for dealing with HTML that refrences vertex positions in the webgl scene
+    Idea for this implmentation was based on https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
+*/ var _glMatrix = require("gl-matrix");
+class Text {
+    constructor(set_ID, set_canvasWidth, set_canvasHeight){
+        this.parentDiv = document.createElement(set_ID);
+        this.parentDiv.classList.add("Label");
+        document.getElementById("Labels")?.appendChild(this.parentDiv);
+        this.ID = set_ID;
+        this.canvasHeight = set_canvasHeight;
+        this.canvasWidth = set_canvasWidth;
+    }
+    render(position, model, view, projection, value) {
+        //glmath.vec4.normalize(position, position);
+        let fin_matrix = _glMatrix.mat4.create();
+        fin_matrix = _glMatrix.mat4.multiply(fin_matrix, view, projection);
+        fin_matrix = _glMatrix.mat4.multiply(fin_matrix, fin_matrix, model);
+        let translated_position = _glMatrix.vec4.transformMat4(position, position, fin_matrix);
+        translated_position[0] /= translated_position[3];
+        translated_position[1] /= translated_position[3];
+        // convert from clipspace to pixels
+        var pixelX = (translated_position[0] * 0.5 + 0.5) * this.canvasWidth;
+        var pixelY = (translated_position[1] * -0.5 + 0.5) * this.canvasHeight;
+        var pixelZ = (translated_position[2] * -0.5 + 0.5) * this.canvasHeight / 20;
+        // position the div
+        this.parentDiv.style.left = Math.floor(pixelX) + "px";
+        this.parentDiv.style.top = Math.floor(pixelY) + "px";
+        this.parentDiv.style.fontSize = 1 - Math.floor(pixelZ) + "px";
+        this.parentDiv.innerHTML = value;
+    }
+}
+
+},{"gl-matrix":"1mBhM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1mBhM":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "glMatrix", ()=>_commonJs);
@@ -7746,44 +7943,7 @@ var forEach = function() {
     };
 }();
 
-},{"./common.js":"lYeTq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eAFEk":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Text", ()=>Text);
-/*
-    This is a class definition for a Text Object, Which is an abstraction for dealing with HTML that refrences vertex positions in the webgl scene
-    Idea for this implmentation was based on https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
-*/ var _glMatrix = require("gl-matrix");
-class Text {
-    constructor(set_ID, set_canvasWidth, set_canvasHeight){
-        this.parentDiv = document.createElement(set_ID);
-        this.parentDiv.classList.add("Label");
-        document.getElementById("Labels")?.appendChild(this.parentDiv);
-        this.ID = set_ID;
-        this.canvasHeight = set_canvasHeight;
-        this.canvasWidth = set_canvasWidth;
-    }
-    render(position, model, view, projection, value) {
-        //glmath.vec4.normalize(position, position);
-        let fin_matrix = _glMatrix.mat4.create();
-        fin_matrix = _glMatrix.mat4.multiply(fin_matrix, view, projection);
-        fin_matrix = _glMatrix.mat4.multiply(fin_matrix, fin_matrix, model);
-        let translated_position = _glMatrix.vec4.transformMat4(position, position, fin_matrix);
-        translated_position[0] /= translated_position[3];
-        translated_position[1] /= translated_position[3];
-        // convert from clipspace to pixels
-        var pixelX = (translated_position[0] * 0.5 + 0.5) * this.canvasWidth;
-        var pixelY = (translated_position[1] * -0.5 + 0.5) * this.canvasHeight;
-        var pixelZ = (translated_position[2] * -0.5 + 0.5) * this.canvasHeight / 20;
-        // position the div
-        this.parentDiv.style.left = Math.floor(pixelX) + "px";
-        this.parentDiv.style.top = Math.floor(pixelY) + "px";
-        this.parentDiv.style.fontSize = 1 - Math.floor(pixelZ) + "px";
-        this.parentDiv.innerHTML = value;
-    }
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","gl-matrix":"1mBhM"}],"kj6Xh":[function(require,module,exports) {
+},{"./common.js":"lYeTq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kj6Xh":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Font", ()=>Font);
@@ -7818,6 +7978,7 @@ class Font {
         this.image.src = this.font_pointers[this.font_option];
     }
     init(char) {
+        this.textureCord = [];
         let x = this.font_data_pointers[this.font_option].characters[char].x;
         let y = this.font_data_pointers[this.font_option].characters[char].y;
         let width = this.font_data_pointers[this.font_option].characters[char].width;
@@ -7835,6 +7996,9 @@ class Font {
     getTextureCords() {
         return this.textureCord;
     }
+    getImage() {
+        return this.image.src;
+    }
 }
 
 },{"./fonts/Atlas/Arial.json":"bzou9","./fonts/Atlas/Arial-Bold.json":"hKcF4","./fonts/Atlas/Arial.png":"4axCz","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bzou9":[function(require,module,exports) {
@@ -7842,6 +8006,21 @@ module.exports = JSON.parse('{"name":"Arial","size":32,"bold":false,"italic":fal
 
 },{}],"hKcF4":[function(require,module,exports) {
 module.exports = JSON.parse('{"name":"Arial","size":32,"bold":true,"italic":false,"width":351,"height":126,"characters":{"0":{"x":211,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"1":{"x":86,"y":82,"width":13,"height":25,"originX":-1,"originY":24,"advance":18},"2":{"x":40,"y":57,"width":19,"height":25,"originX":1,"originY":24,"advance":18},"3":{"x":229,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"4":{"x":59,"y":57,"width":19,"height":25,"originX":1,"originY":24,"advance":18},"5":{"x":247,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"6":{"x":265,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"7":{"x":283,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"8":{"x":301,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"9":{"x":319,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18}," ":{"x":298,"y":107,"width":3,"height":3,"originX":1,"originY":1,"advance":9},"!":{"x":134,"y":82,"width":8,"height":25,"originX":-1,"originY":24,"advance":11},"\\"":{"x":206,"y":107,"width":15,"height":10,"originX":0,"originY":24,"advance":15},"#":{"x":311,"y":32,"width":20,"height":25,"originX":1,"originY":24,"advance":18},"$":{"x":120,"y":0,"width":18,"height":30,"originX":0,"originY":26,"advance":18},"%":{"x":164,"y":0,"width":28,"height":26,"originX":0,"originY":24,"advance":28},"&":{"x":300,"y":0,"width":24,"height":25,"originX":0,"originY":24,"advance":23},"\'":{"x":221,"y":107,"width":8,"height":10,"originX":0,"originY":24,"advance":8},"(":{"x":65,"y":0,"width":11,"height":31,"originX":0,"originY":24,"advance":11},")":{"x":76,"y":0,"width":11,"height":31,"originX":0,"originY":24,"advance":11},"*":{"x":184,"y":107,"width":14,"height":12,"originX":1,"originY":24,"advance":12},"+":{"x":128,"y":107,"width":19,"height":18,"originX":0,"originY":20,"advance":19},",":{"x":198,"y":107,"width":8,"height":11,"originX":0,"originY":5,"advance":9},"-":{"x":258,"y":107,"width":12,"height":6,"originX":0,"originY":11,"advance":11},".":{"x":270,"y":107,"width":7,"height":6,"originX":-1,"originY":5,"advance":9},"/":{"x":112,"y":82,"width":11,"height":25,"originX":1,"originY":24,"advance":9},":":{"x":121,"y":107,"width":7,"height":19,"originX":-2,"originY":18,"advance":11},";":{"x":163,"y":82,"width":8,"height":24,"originX":-1,"originY":18,"advance":11},"<":{"x":306,"y":82,"width":18,"height":19,"originX":0,"originY":21,"advance":19},"=":{"x":165,"y":107,"width":19,"height":13,"originX":0,"originY":18,"advance":19},">":{"x":324,"y":82,"width":18,"height":19,"originX":0,"originY":21,"advance":19},"?":{"x":331,"y":32,"width":20,"height":25,"originX":0,"originY":24,"advance":20},"@":{"x":0,"y":0,"width":32,"height":32,"originX":0,"originY":24,"advance":31},"A":{"x":225,"y":0,"width":25,"height":25,"originX":1,"originY":24,"advance":23},"B":{"x":141,"y":32,"width":22,"height":25,"originX":-1,"originY":24,"advance":23},"C":{"x":72,"y":32,"width":23,"height":25,"originX":0,"originY":24,"advance":23},"D":{"x":163,"y":32,"width":22,"height":25,"originX":-1,"originY":24,"advance":23},"E":{"x":0,"y":57,"width":20,"height":25,"originX":-1,"originY":24,"advance":21},"F":{"x":0,"y":82,"width":18,"height":25,"originX":-1,"originY":24,"advance":20},"G":{"x":324,"y":0,"width":24,"height":25,"originX":0,"originY":24,"advance":25},"H":{"x":185,"y":32,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"I":{"x":142,"y":82,"width":7,"height":25,"originX":-1,"originY":24,"advance":9},"J":{"x":18,"y":82,"width":18,"height":25,"originX":1,"originY":24,"advance":18},"K":{"x":95,"y":32,"width":23,"height":25,"originX":-1,"originY":24,"advance":23},"L":{"x":78,"y":57,"width":19,"height":25,"originX":-1,"originY":24,"advance":20},"M":{"x":250,"y":0,"width":25,"height":25,"originX":-1,"originY":24,"advance":27},"N":{"x":206,"y":32,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"O":{"x":275,"y":0,"width":25,"height":25,"originX":0,"originY":24,"advance":25},"P":{"x":20,"y":57,"width":20,"height":25,"originX":-1,"originY":24,"advance":21},"Q":{"x":138,"y":0,"width":26,"height":27,"originX":0,"originY":24,"advance":25},"R":{"x":118,"y":32,"width":23,"height":25,"originX":-1,"originY":24,"advance":23},"S":{"x":227,"y":32,"width":21,"height":25,"originX":0,"originY":24,"advance":21},"T":{"x":248,"y":32,"width":21,"height":25,"originX":0,"originY":24,"advance":20},"U":{"x":269,"y":32,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"V":{"x":0,"y":32,"width":24,"height":25,"originX":1,"originY":24,"advance":21},"W":{"x":192,"y":0,"width":33,"height":25,"originX":1,"originY":24,"advance":30},"X":{"x":24,"y":32,"width":24,"height":25,"originX":1,"originY":24,"advance":21},"Y":{"x":48,"y":32,"width":24,"height":25,"originX":1,"originY":24,"advance":21},"Z":{"x":290,"y":32,"width":21,"height":25,"originX":1,"originY":24,"advance":20},"[":{"x":87,"y":0,"width":11,"height":31,"originX":-1,"originY":24,"advance":11},"\\\\":{"x":123,"y":82,"width":11,"height":25,"originX":1,"originY":24,"advance":9},"]":{"x":98,"y":0,"width":11,"height":31,"originX":1,"originY":24,"advance":11},"^":{"x":147,"y":107,"width":18,"height":14,"originX":0,"originY":24,"advance":19},"_":{"x":277,"y":107,"width":21,"height":5,"originX":2,"originY":-2,"advance":18},"`":{"x":248,"y":107,"width":10,"height":7,"originX":1,"originY":24,"advance":11},"a":{"x":0,"y":107,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"b":{"x":97,"y":57,"width":19,"height":25,"originX":-1,"originY":24,"advance":20},"c":{"x":18,"y":107,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"d":{"x":116,"y":57,"width":19,"height":25,"originX":0,"originY":24,"advance":20},"e":{"x":36,"y":107,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"f":{"x":72,"y":82,"width":14,"height":25,"originX":1,"originY":24,"advance":11},"g":{"x":135,"y":57,"width":19,"height":25,"originX":0,"originY":18,"advance":20},"h":{"x":36,"y":82,"width":18,"height":25,"originX":-1,"originY":24,"advance":20},"i":{"x":149,"y":82,"width":7,"height":25,"originX":-1,"originY":24,"advance":9},"j":{"x":109,"y":0,"width":11,"height":31,"originX":3,"originY":24,"advance":9},"k":{"x":54,"y":82,"width":18,"height":25,"originX":-1,"originY":24,"advance":18},"l":{"x":156,"y":82,"width":7,"height":25,"originX":-1,"originY":24,"advance":9},"m":{"x":171,"y":82,"width":28,"height":19,"originX":0,"originY":18,"advance":28},"n":{"x":54,"y":107,"width":18,"height":19,"originX":-1,"originY":18,"advance":20},"o":{"x":227,"y":82,"width":20,"height":19,"originX":0,"originY":18,"advance":20},"p":{"x":154,"y":57,"width":19,"height":25,"originX":-1,"originY":18,"advance":20},"q":{"x":173,"y":57,"width":19,"height":25,"originX":0,"originY":18,"advance":20},"r":{"x":108,"y":107,"width":13,"height":19,"originX":-1,"originY":18,"advance":12},"s":{"x":287,"y":82,"width":19,"height":19,"originX":1,"originY":18,"advance":18},"t":{"x":99,"y":82,"width":13,"height":25,"originX":1,"originY":24,"advance":11},"u":{"x":72,"y":107,"width":18,"height":19,"originX":-1,"originY":18,"advance":20},"v":{"x":247,"y":82,"width":20,"height":19,"originX":1,"originY":18,"advance":18},"w":{"x":199,"y":82,"width":28,"height":19,"originX":1,"originY":18,"advance":25},"x":{"x":267,"y":82,"width":20,"height":19,"originX":1,"originY":18,"advance":18},"y":{"x":192,"y":57,"width":19,"height":25,"originX":1,"originY":18,"advance":18},"z":{"x":90,"y":107,"width":18,"height":19,"originX":1,"originY":18,"advance":16},"{":{"x":39,"y":0,"width":13,"height":31,"originX":0,"originY":24,"advance":12},"|":{"x":32,"y":0,"width":7,"height":32,"originX":-1,"originY":24,"advance":9},"}":{"x":52,"y":0,"width":13,"height":31,"originX":0,"originY":24,"advance":12},"~":{"x":229,"y":107,"width":19,"height":8,"originX":0,"originY":15,"advance":19}}}');
+
+},{}],"4axCz":[function(require,module,exports) {
+module.exports = require("./helpers/bundle-url").getBundleURL("ao0Rz") + "Arial.5339cec6.png" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"lgJ39"}],"cXi2N":[function(require,module,exports) {
+module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          gl_FragColor = vec4(colour.x, colour.y, colour.z, 1) * texture2D(u_texture, v_texcoord);\n          gl_FragColor.rgb *= light;\n          //gl_FragColor = texture2D(u_texture, v_texcoord);\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
+
+},{}],"3iC4R":[function(require,module,exports) {
+module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
+
+},{}],"7ORuU":[function(require,module,exports) {
+module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          gl_FragColor = texture2D(u_texture, v_texcoord);\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
+
+},{}],"7UWL5":[function(require,module,exports) {
+module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
 
 },{}]},["cWaoa","1jwFz"], "1jwFz", "parcelRequirec478")
 

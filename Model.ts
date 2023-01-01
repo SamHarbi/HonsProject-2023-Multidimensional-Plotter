@@ -4,7 +4,7 @@
 
 import Arial from './fonts/Atlas/Arial.json' //Needs refactoring for sure
 // @ts-ignore
-import Arial_Atlas from "./fonts/Atlas/Arial.png"
+import Arial_Atlas from "./fonts/Atlas/no_texture.png"
 
 export class Model {
 
@@ -31,7 +31,7 @@ export class Model {
         this.drawmode = newDrawMode;
     }
 
-    init(vertexData: number[], indexData: number[], normalData: number[], textureCord: number[], glRef: WebGLRenderingContext) {
+    init(vertexData: number[], indexData: number[], normalData: number[], textureCord: number[], glRef: WebGLRenderingContext,  texImageURL?: string) {
 
         this.gl = glRef;
 
@@ -87,8 +87,15 @@ export class Model {
         ));
 
         this.image = new Image(341, 145);
-        this.image.src = Arial_Atlas; //Refactor
-        this.image.addEventListener('load', this.textureLoaded.bind(null, this.gl, this.image), false);
+        if(texImageURL !== undefined)
+        {
+            this.image.src = texImageURL; //Refactor
+        }
+        else
+        {
+            this.image.src = Arial_Atlas;
+        }
+        this.image.addEventListener('load', this.textureLoaded.bind(null, this.gl, this.image, this.texture), false);
 
         // Create a texture buffer and ensure it is valid 
         var temp_textureBuffer = this.gl.createBuffer();
@@ -118,9 +125,11 @@ export class Model {
         //Bind Texture buffer
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(textureCord), this.gl.STATIC_DRAW);
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
     }
 
-    textureLoaded(gl, image) {
+    textureLoaded(gl, image, texture) {
+        gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, (image as TexImageSource));
@@ -152,7 +161,7 @@ export class Model {
 
         // Bind predefined texture
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
-        //this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
 
         // Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
         var size = 3;          // 3 components per iteration

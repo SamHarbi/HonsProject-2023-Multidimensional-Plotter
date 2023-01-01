@@ -40,6 +40,8 @@ export class Font {
     init(char: string)
     {
 
+        this.textureCord = [];
+
         let x = this.font_data_pointers[this.font_option].characters[char].x;
         let y = this.font_data_pointers[this.font_option].characters[char].y;
         let width = this.font_data_pointers[this.font_option].characters[char].width;
@@ -63,6 +65,11 @@ export class Font {
     getTextureCords()
     {
         return this.textureCord;
+    }
+
+    getImage()
+    {
+        return this.image.src;
     }
 
 }
