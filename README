@@ -1,5 +1,4 @@
-# Development Branch
+# Refactor Branch
 
-This is the "first stop" for written code. In-Progress code and non-working code is pushed here mainly to keep a backup of the work 
-being actively done to complete a task / user story. Once a user story is considered complete- A Pull request is activated to merge the branch with
-the Refactor branch for refactoring. 
+This is where code from the development branch is pushed once a task or user story is implemented. General cleanup or generally putting together the final app
+which will be pushed to production is done here
