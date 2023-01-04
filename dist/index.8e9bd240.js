@@ -551,7 +551,6 @@ var _model = require("./Model");
 var _loader = require("./Loader");
 var _text = require("./Text");
 var _font = require("./Font");
-// @ts-ignore
 var _glMatrix = require("gl-matrix");
 let gl;
 let canvas;
@@ -565,7 +564,7 @@ let positionAttributeID;
 let normalAttributeID;
 let textureAttributeID;
 let iter = 0; // For a simple movement demo
-let Monkey;
+let Point;
 let Cube;
 let Axis;
 let label; // For testing HTML based Text overlay
@@ -590,9 +589,9 @@ async function main() {
     let axisData = await (0, _loader.load_OBJ)("Axis");
     Axis = new (0, _model.Model)(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.LINES);
     Axis.init(axisData[0], axisData[1], axisData[2], axisData[3], gl);
-    let MonkeyData = await (0, _loader.load_OBJ)("Cube3");
-    Monkey = new (0, _model.Model)(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.TRIANGLES);
-    Monkey.init(MonkeyData[0], MonkeyData[1], MonkeyData[2], MonkeyData[3], gl);
+    let PointData = await (0, _loader.load_OBJ)("Cube3");
+    Point = new (0, _model.Model)(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.TRIANGLES);
+    Point.init(PointData[0], PointData[1], PointData[2], PointData[3], gl);
     let CubeData = await (0, _loader.load_OBJ)("Cube3");
     Cube = new (0, _model.Model)(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.TRIANGLES);
     Cube.init(CubeData[0], CubeData[1], CubeData[2], CubeData[3], gl);
@@ -635,13 +634,51 @@ async function main() {
     gl.frontFace(gl.CW);
     gl.enable(gl.STENCIL_TEST);
     //Start render loop 
-    window.requestAnimationFrame(render);
+    window.requestAnimationFrame(Render);
 }
-/*
-    Render Loop
-    Renders everything (glyph text) that needs shader program 1
-    Depends on positions of axis lines already placed to ensure relative placement of text
-*/ function RenderAxisText(globalAxisModel) {
+function Render(timestamp) {
+    //Create a top level model
+    let GLOBAL_MODEL = _glMatrix.mat4.create();
+    _glMatrix.mat4.scale(GLOBAL_MODEL, GLOBAL_MODEL, [
+        0.4,
+        0.4,
+        0.4
+    ]);
+    _glMatrix.mat4.translate(GLOBAL_MODEL, GLOBAL_MODEL, [
+        1,
+        0.2,
+        0
+    ]);
+    _glMatrix.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 15 * (Math.PI / 180), [
+        1,
+        0,
+        0
+    ]);
+    _glMatrix.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * (Math.PI / 180), [
+        0,
+        -1,
+        0
+    ]);
+    gl.useProgram(programs[0]);
+    // Setup View
+    let view = _glMatrix.mat4.create();
+    let viewPos = _glMatrix.vec3.create();
+    let viewRotation = _glMatrix.vec3.create();
+    let viewUp = _glMatrix.vec3.create();
+    _glMatrix.mat4.lookAt(view, _glMatrix.vec3.set(viewPos, 0, 0, 3), _glMatrix.vec3.set(viewRotation, 0, 0, 0), _glMatrix.vec3.set(viewUp, 0, 1, 0));
+    gl.uniformMatrix4fv(viewUniformID[0], false, view);
+    RenderStructure(GLOBAL_MODEL);
+    gl.useProgram(programs[1]);
+    gl.uniformMatrix4fv(viewUniformID[1], false, view);
+    RenderAxisText(GLOBAL_MODEL);
+    RenderData(GLOBAL_MODEL, [
+        0,
+        1,
+        0
+    ]);
+    window.requestAnimationFrame(Render);
+}
+function RenderData(global_model, Data) {
     // _____________
     // +++ SETUP +++
     // _____________
@@ -650,13 +687,47 @@ async function main() {
     gl.enableVertexAttribArray(positionAttributeID[1]);
     gl.enableVertexAttribArray(normalAttributeID[1]);
     gl.enableVertexAttribArray(textureAttributeID[1]);
-    // Setup View
-    let view = _glMatrix.mat4.create();
-    let viewPos = _glMatrix.vec3.create();
-    let viewRotation = _glMatrix.vec3.create();
-    let viewUp = _glMatrix.vec3.create();
-    _glMatrix.mat4.lookAt(view, _glMatrix.vec3.set(viewPos, 1, 1, 3), _glMatrix.vec3.set(viewRotation, 0, 0, 0), _glMatrix.vec3.set(viewUp, 0, 1, 0));
-    gl.uniformMatrix4fv(viewUniformID[1], false, view);
+    // Setup Projection 
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    let projection = _glMatrix.mat4.create();
+    projection = _glMatrix.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
+    gl.uniformMatrix4fv(projectionUniformID[1], false, projection);
+    gl.uniform1i(lightToggleUniformID[1], 1); // Use Light
+    gl.stencilFunc(gl.EQUAL, 1, 0xFF);
+    gl.stencilOp(gl.REPLACE, gl.KEEP, gl.REPLACE);
+    // _____________
+    // +++ Render +++
+    // _____________
+    let point_model = _glMatrix.mat4.create();
+    _glMatrix.mat4.copy(point_model, global_model);
+    _glMatrix.mat4.scale(point_model, point_model, [
+        0.05,
+        0.05,
+        0.05
+    ]);
+    for(let i = 0; i < Data.length; i++){
+        _glMatrix.mat4.translate(point_model, point_model, [
+            2,
+            2,
+            0
+        ]);
+        gl.uniformMatrix4fv(modelUniformID[1], false, point_model);
+        Point.render();
+    }
+}
+/*
+    Render Loop
+    Renders everything (glyph text) that needs shader program 1
+    Depends on positions of axis lines already placed to ensure relative placement of text
+*/ function RenderAxisText(global_model) {
+    // _____________
+    // +++ SETUP +++
+    // _____________
+    //Set Shader to use 
+    gl.useProgram(programs[1]);
+    gl.enableVertexAttribArray(positionAttributeID[1]);
+    gl.enableVertexAttribArray(normalAttributeID[1]);
+    gl.enableVertexAttribArray(textureAttributeID[1]);
     // Setup Projection 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     let projection = _glMatrix.mat4.create();
@@ -664,8 +735,21 @@ async function main() {
     gl.uniformMatrix4fv(projectionUniformID[1], false, projection);
     gl.uniform1i(lightToggleUniformID[1], 1); // Use Light
     gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
+    // _____________
+    // +++ Render +++
+    // _____________
+    _glMatrix.mat4.scale(global_model, global_model, [
+        1.8,
+        1.8,
+        1.8
+    ]);
+    _glMatrix.mat4.translate(global_model, global_model, [
+        -0.55,
+        -0.55,
+        -0.55
+    ]);
     let LetterModel = _glMatrix.mat4.create();
-    _glMatrix.mat4.copy(LetterModel, globalAxisModel);
+    _glMatrix.mat4.copy(LetterModel, global_model);
     _glMatrix.mat4.scale(LetterModel, LetterModel, [
         0.03,
         0.03,
@@ -678,7 +762,7 @@ async function main() {
     ]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[0].render();
-    let singleAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), globalAxisModel);
+    let singleAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), global_model);
     _glMatrix.mat4.scale(singleAxisModel, singleAxisModel, [
         0.02,
         0.02,
@@ -710,7 +794,7 @@ async function main() {
     ]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[1].render();
-    singleAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), globalAxisModel);
+    singleAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), global_model);
     _glMatrix.mat4.scale(singleAxisModel, singleAxisModel, [
         0.02,
         0.02,
@@ -742,7 +826,7 @@ async function main() {
     ]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[2].render();
-    singleAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), globalAxisModel);
+    singleAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), global_model);
     _glMatrix.mat4.scale(singleAxisModel, singleAxisModel, [
         0.02,
         0.02,
@@ -771,7 +855,7 @@ async function main() {
 /*
     Render Loop 
     Renders everything that needs program 0
-*/ function render(timestamp) {
+*/ function RenderStructure(global_model) {
     // _____________
     // +++ SETUP +++
     // _____________
@@ -786,30 +870,11 @@ async function main() {
     gl.enableVertexAttribArray(positionAttributeID[0]);
     gl.enableVertexAttribArray(normalAttributeID[0]);
     gl.enableVertexAttribArray(textureAttributeID[0]);
-    // Setup View
-    let view = _glMatrix.mat4.create();
-    let viewPos = _glMatrix.vec3.create();
-    let viewRotation = _glMatrix.vec3.create();
-    let viewUp = _glMatrix.vec3.create();
-    _glMatrix.mat4.lookAt(view, _glMatrix.vec3.set(viewPos, 1, 1, 3), _glMatrix.vec3.set(viewRotation, 0, 0, 0), _glMatrix.vec3.set(viewUp, 0, 1, 0));
-    gl.uniformMatrix4fv(viewUniformID[0], false, view);
     // Setup Projection 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     let projection = _glMatrix.mat4.create();
     projection = _glMatrix.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
     gl.uniformMatrix4fv(projectionUniformID[0], false, projection);
-    //Create a top level model
-    let GLOBAL_MODEL = _glMatrix.mat4.create();
-    _glMatrix.mat4.scale(GLOBAL_MODEL, GLOBAL_MODEL, [
-        0.4,
-        0.4,
-        0.4
-    ]);
-    _glMatrix.mat4.translate(GLOBAL_MODEL, GLOBAL_MODEL, [
-        0,
-        0,
-        0
-    ]);
     // ______________________________
     // +++ DRAWING POLYGONS START +++
     // ______________________________
@@ -819,7 +884,7 @@ async function main() {
     gl.uniform1i(lightToggleUniformID[0], 0); // Don't Use Light
     // Bounding Cube
     let cubeModel = _glMatrix.mat4.create();
-    _glMatrix.mat4.copy(cubeModel, GLOBAL_MODEL);
+    _glMatrix.mat4.copy(cubeModel, global_model);
     //glmath.mat4.rotate(cubeModel, cubeModel, iter, [0, 1, 0]);
     gl.uniformMatrix4fv(modelUniformID[0], false, cubeModel);
     gl.cullFace(gl.BACK);
@@ -834,7 +899,7 @@ async function main() {
     let globalAxisModel = _glMatrix.mat4.create();
     let glyphModel = _glMatrix.mat4.create();
     //Apply global transformations
-    _glMatrix.mat4.copy(globalAxisModel, GLOBAL_MODEL);
+    _glMatrix.mat4.copy(globalAxisModel, global_model);
     //glmath.mat4.rotate(globalAxisModel, globalAxisModel, iter, [0, 1, 0]);
     _glMatrix.mat4.scale(globalAxisModel, globalAxisModel, [
         1.8,
@@ -846,7 +911,7 @@ async function main() {
         -0.55,
         -0.55
     ]);
-    _glMatrix.mat4.copy(glyphModel, GLOBAL_MODEL);
+    _glMatrix.mat4.copy(glyphModel, global_model);
     _glMatrix.mat4.scale(glyphModel, glyphModel, [
         1.8,
         1.8,
@@ -978,35 +1043,6 @@ async function main() {
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
         Axis.render();
     }
-    let Monkeymodel = _glMatrix.mat4.create();
-    _glMatrix.mat4.scale(Monkeymodel, Monkeymodel, [
-        0.1,
-        0.1,
-        0.1
-    ]);
-    _glMatrix.mat4.rotate(Monkeymodel, Monkeymodel, iter, [
-        0.2,
-        1,
-        0
-    ]);
-    _glMatrix.mat4.translate(Monkeymodel, Monkeymodel, [
-        0,
-        0,
-        0
-    ]);
-    gl.uniformMatrix4fv(modelUniformID[0], false, Monkeymodel);
-    Monkey.render();
-    let point = _glMatrix.vec4.create();
-    point = _glMatrix.vec4.clone([
-        -0.5,
-        -0.5,
-        -0.390625,
-        1
-    ]);
-    //label.render(point, Monkeymodel, projection, view, "label");
-    RenderAxisText(glyphModel);
-    //Repeat
-    window.requestAnimationFrame(render);
 }
 /*
     Initialise WebGL Context and setup everything before render loop
@@ -1061,6 +1097,11 @@ function createProgram(gl, vertexShader, fragmentShader) {
     console.log(gl.getProgramInfoLog(program));
     gl.deleteProgram(program);
 }
+/*
+    Set rotation part to the indentity matrix
+*/ function eraseRotation(matrix) {
+    return _glMatrix.mat4.fromValues(1, 0, 0, matrix[0][3], 0, 1, 0, matrix[1][3], 0, 0, 1, matrix[2][3], matrix[3][0], matrix[3][1], matrix[3][2], matrix[3][3]);
+}
 window.onload = main;
 
 },{"./shaders/fragment_1.glsl":"cXi2N","./shaders/vertex_1.glsl":"3iC4R","./shaders/fragment_2.glsl":"7ORuU","./shaders/vertex_2.glsl":"7UWL5","./Model":"10WY5","./Loader":"blLsM","./Text":"eAFEk","./Font":"kj6Xh","gl-matrix":"1mBhM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cXi2N":[function(require,module,exports) {
@@ -1073,7 +1114,7 @@ module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a bu
 module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          gl_FragColor = texture2D(u_texture, v_texcoord);\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
 
 },{}],"7UWL5":[function(require,module,exports) {
-module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
+module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n    \n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
 
 },{}],"10WY5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

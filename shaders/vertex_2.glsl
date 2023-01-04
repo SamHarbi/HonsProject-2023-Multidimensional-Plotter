@@ -16,6 +16,7 @@
     // gl_Position is a special variable a vertex shader
     // is responsible for setting
     gl_Position = projection * view * model * vec4(a_position, 1);
+    
 
     position = gl_Position;
     
