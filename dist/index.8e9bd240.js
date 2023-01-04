@@ -551,6 +551,7 @@ var _model = require("./Model");
 var _loader = require("./Loader");
 var _text = require("./Text");
 var _font = require("./Font");
+// @ts-ignore
 var _glMatrix = require("gl-matrix");
 let gl;
 let canvas;
@@ -589,7 +590,7 @@ async function main() {
     let axisData = await (0, _loader.load_OBJ)("Axis");
     Axis = new (0, _model.Model)(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.LINES);
     Axis.init(axisData[0], axisData[1], axisData[2], axisData[3], gl);
-    let MonkeyData = await (0, _loader.load_OBJ)("Monkey");
+    let MonkeyData = await (0, _loader.load_OBJ)("Cube3");
     Monkey = new (0, _model.Model)(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.TRIANGLES);
     Monkey.init(MonkeyData[0], MonkeyData[1], MonkeyData[2], MonkeyData[3], gl);
     let CubeData = await (0, _loader.load_OBJ)("Cube3");
@@ -671,7 +672,7 @@ async function main() {
         1
     ]);
     _glMatrix.mat4.translate(LetterModel, LetterModel, [
-        36,
+        40,
         0,
         0
     ]);
@@ -685,7 +686,7 @@ async function main() {
     ]);
     _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
         0.5,
-        0,
+        -3,
         1
     ]);
     _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
@@ -703,8 +704,8 @@ async function main() {
         AxisValues[i].render();
     }
     _glMatrix.mat4.translate(LetterModel, LetterModel, [
-        -36,
-        36,
+        -40,
+        40,
         0
     ]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
@@ -716,7 +717,7 @@ async function main() {
         1
     ]);
     _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
-        0.5,
+        5,
         0,
         1
     ]);
@@ -735,8 +736,8 @@ async function main() {
         AxisValues[i1].render();
     }
     _glMatrix.mat4.translate(LetterModel, LetterModel, [
-        -2,
-        -39,
+        -5,
+        -45,
         1
     ]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
@@ -748,7 +749,7 @@ async function main() {
         1
     ]);
     _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
-        0.5,
+        -2,
         0,
         1
     ]);
@@ -797,6 +798,18 @@ async function main() {
     let projection = _glMatrix.mat4.create();
     projection = _glMatrix.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
     gl.uniformMatrix4fv(projectionUniformID[0], false, projection);
+    //Create a top level model
+    let GLOBAL_MODEL = _glMatrix.mat4.create();
+    _glMatrix.mat4.scale(GLOBAL_MODEL, GLOBAL_MODEL, [
+        0.4,
+        0.4,
+        0.4
+    ]);
+    _glMatrix.mat4.translate(GLOBAL_MODEL, GLOBAL_MODEL, [
+        0,
+        0,
+        0
+    ]);
     // ______________________________
     // +++ DRAWING POLYGONS START +++
     // ______________________________
@@ -806,16 +819,8 @@ async function main() {
     gl.uniform1i(lightToggleUniformID[0], 0); // Don't Use Light
     // Bounding Cube
     let cubeModel = _glMatrix.mat4.create();
-    _glMatrix.mat4.scale(cubeModel, cubeModel, [
-        0.5,
-        0.5,
-        0.5
-    ]);
-    _glMatrix.mat4.translate(cubeModel, cubeModel, [
-        0,
-        0,
-        0
-    ]);
+    _glMatrix.mat4.copy(cubeModel, GLOBAL_MODEL);
+    //glmath.mat4.rotate(cubeModel, cubeModel, iter, [0, 1, 0]);
     gl.uniformMatrix4fv(modelUniformID[0], false, cubeModel);
     gl.cullFace(gl.BACK);
     Cube.render();
@@ -827,19 +832,31 @@ async function main() {
     gl.stencilOp(gl.REPLACE, gl.KEEP, gl.REPLACE);
     gl.uniform1i(lightToggleUniformID[0], 1); // Use Light
     let globalAxisModel = _glMatrix.mat4.create();
+    let glyphModel = _glMatrix.mat4.create();
     //Apply global transformations
+    _glMatrix.mat4.copy(globalAxisModel, GLOBAL_MODEL);
+    //glmath.mat4.rotate(globalAxisModel, globalAxisModel, iter, [0, 1, 0]);
     _glMatrix.mat4.scale(globalAxisModel, globalAxisModel, [
-        0.9,
-        0.9,
-        0.9
+        1.8,
+        1.8,
+        1.8
     ]);
     _glMatrix.mat4.translate(globalAxisModel, globalAxisModel, [
-        -0.42,
-        -0.42,
-        -0.25
+        -0.55,
+        -0.55,
+        -0.55
     ]);
-    //For Axis Glyphs 
-    const initGlobalAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), globalAxisModel);
+    _glMatrix.mat4.copy(glyphModel, GLOBAL_MODEL);
+    _glMatrix.mat4.scale(glyphModel, glyphModel, [
+        1.8,
+        1.8,
+        1.8
+    ]);
+    _glMatrix.mat4.translate(glyphModel, glyphModel, [
+        -0.55,
+        -0.55,
+        -0.55
+    ]);
     // Create a local and global model to split transformations applied to Axis Lines
     let Axismodel = _glMatrix.mat4.create();
     for(let i = 0; i < 11; i++){
@@ -987,7 +1004,7 @@ async function main() {
         1
     ]);
     //label.render(point, Monkeymodel, projection, view, "label");
-    RenderAxisText(initGlobalAxisModel);
+    RenderAxisText(glyphModel);
     //Repeat
     window.requestAnimationFrame(render);
 }
@@ -1046,7 +1063,19 @@ function createProgram(gl, vertexShader, fragmentShader) {
 }
 window.onload = main;
 
-},{"./Model":"10WY5","./Loader":"blLsM","./Text":"eAFEk","./Font":"kj6Xh","gl-matrix":"1mBhM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./shaders/fragment_1.glsl":"cXi2N","./shaders/vertex_1.glsl":"3iC4R","./shaders/fragment_2.glsl":"7ORuU","./shaders/vertex_2.glsl":"7UWL5"}],"10WY5":[function(require,module,exports) {
+},{"./shaders/fragment_1.glsl":"cXi2N","./shaders/vertex_1.glsl":"3iC4R","./shaders/fragment_2.glsl":"7ORuU","./shaders/vertex_2.glsl":"7UWL5","./Model":"10WY5","./Loader":"blLsM","./Text":"eAFEk","./Font":"kj6Xh","gl-matrix":"1mBhM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cXi2N":[function(require,module,exports) {
+module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          gl_FragColor = vec4(colour.x, colour.y, colour.z, 1) * texture2D(u_texture, v_texcoord);\n          gl_FragColor.rgb *= light;\n          //gl_FragColor = texture2D(u_texture, v_texcoord);\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
+
+},{}],"3iC4R":[function(require,module,exports) {
+module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
+
+},{}],"7ORuU":[function(require,module,exports) {
+module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          gl_FragColor = texture2D(u_texture, v_texcoord);\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
+
+},{}],"7UWL5":[function(require,module,exports) {
+module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
+
+},{}],"10WY5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Model", ()=>Model);
@@ -8010,18 +8039,6 @@ module.exports = JSON.parse('{"name":"Arial","size":32,"bold":true,"italic":fals
 },{}],"4axCz":[function(require,module,exports) {
 module.exports = require("./helpers/bundle-url").getBundleURL("ao0Rz") + "Arial.5339cec6.png" + "?" + Date.now();
 
-},{"./helpers/bundle-url":"lgJ39"}],"cXi2N":[function(require,module,exports) {
-module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          gl_FragColor = vec4(colour.x, colour.y, colour.z, 1) * texture2D(u_texture, v_texcoord);\n          gl_FragColor.rgb *= light;\n          //gl_FragColor = texture2D(u_texture, v_texcoord);\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
-
-},{}],"3iC4R":[function(require,module,exports) {
-module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
-
-},{}],"7ORuU":[function(require,module,exports) {
-module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          gl_FragColor = texture2D(u_texture, v_texcoord);\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
-
-},{}],"7UWL5":[function(require,module,exports) {
-module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
-
-},{}]},["cWaoa","1jwFz"], "1jwFz", "parcelRequirec478")
+},{"./helpers/bundle-url":"lgJ39"}]},["cWaoa","1jwFz"], "1jwFz", "parcelRequirec478")
 
 //# sourceMappingURL=index.8e9bd240.js.map

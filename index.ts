@@ -14,6 +14,7 @@ import { load_OBJ } from './Loader';
 import { Text } from './Text';
 import { Font } from './Font';
 
+// @ts-ignore
 import * as glmath from 'gl-matrix';
 
 let gl: WebGLRenderingContext;
@@ -67,7 +68,7 @@ async function main() {
     Axis = new Model(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.LINES);
     Axis.init(axisData[0], axisData[1], axisData[2], axisData[3], gl);
 
-    let MonkeyData = await load_OBJ("Monkey");
+    let MonkeyData = await load_OBJ("Cube3");
     Monkey = new Model(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.TRIANGLES);
     Monkey.init(MonkeyData[0], MonkeyData[1], MonkeyData[2], MonkeyData[3], gl);
 
@@ -170,19 +171,20 @@ function RenderAxisText(globalAxisModel: glmath.mat4) {
     gl.uniform1i(lightToggleUniformID[1], 1); // Use Light
 
     gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
-    
+
     let LetterModel = glmath.mat4.create();
     glmath.mat4.copy(LetterModel, globalAxisModel);
     glmath.mat4.scale(LetterModel, LetterModel, [0.03, 0.03, 1]);
     
-    glmath.mat4.translate(LetterModel, LetterModel, [36, 0, 0]);
+    glmath.mat4.translate(LetterModel, LetterModel, [40, 0, 0]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[0].render();
 
     let singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), globalAxisModel);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
-    glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.5, 0, 1]);
+    glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.5, -3, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [-1.0, -2.2, 0]);
+    
 
     for(let i=1; i<10; i++)
     {
@@ -191,13 +193,13 @@ function RenderAxisText(globalAxisModel: glmath.mat4) {
         AxisValues[i].render();
     }
 
-    glmath.mat4.translate(LetterModel, LetterModel, [-36, 36, 0]);
+    glmath.mat4.translate(LetterModel, LetterModel, [-40, 40, 0]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[1].render();
 
     singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), globalAxisModel);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
-    glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.5, 0, 1]);
+    glmath.mat4.translate(singleAxisModel, singleAxisModel, [5, 0, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [52.2, -1.0, 0]);
 
     for(let i=1; i<10; i++)
@@ -207,13 +209,13 @@ function RenderAxisText(globalAxisModel: glmath.mat4) {
         AxisValues[i].render();
     }
 
-    glmath.mat4.translate(LetterModel, LetterModel, [-2, -39, 1]);
+    glmath.mat4.translate(LetterModel, LetterModel, [-5, -45, 1]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[2].render();
 
     singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), globalAxisModel);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
-    glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.5, 0, 1]);
+    glmath.mat4.translate(singleAxisModel, singleAxisModel, [-2, 0, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [-3.0, -1.0, 0]);
 
     for(let i=1; i<10; i++)
@@ -269,6 +271,13 @@ function render(timestamp) {
     projection = glmath.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
     gl.uniformMatrix4fv(projectionUniformID[0], false, projection);
 
+    //Create a top level model
+    let GLOBAL_MODEL = glmath.mat4.create();
+    glmath.mat4.scale(GLOBAL_MODEL, GLOBAL_MODEL, [0.4, 0.4, 0.4]);
+    glmath.mat4.translate(GLOBAL_MODEL, GLOBAL_MODEL, [0, 0, 0]);
+    
+
+
     // ______________________________
     // +++ DRAWING POLYGONS START +++
     // ______________________________
@@ -281,9 +290,8 @@ function render(timestamp) {
 
     // Bounding Cube
     let cubeModel = glmath.mat4.create();
-
-    glmath.mat4.scale(cubeModel, cubeModel, [0.5, 0.5, 0.5]);
-    glmath.mat4.translate(cubeModel, cubeModel, [0, 0, 0]);
+    glmath.mat4.copy(cubeModel, GLOBAL_MODEL);
+    //glmath.mat4.rotate(cubeModel, cubeModel, iter, [0, 1, 0]);
     gl.uniformMatrix4fv(modelUniformID[0], false, cubeModel);
 
     gl.cullFace(gl.BACK);
@@ -301,13 +309,18 @@ function render(timestamp) {
     gl.uniform1i(lightToggleUniformID[0], 1); // Use Light
 
     let globalAxisModel = glmath.mat4.create();
+    let glyphModel = glmath.mat4.create();
 
     //Apply global transformations
-    glmath.mat4.scale(globalAxisModel, globalAxisModel, [0.9, 0.9, 0.9]);
-    glmath.mat4.translate(globalAxisModel, globalAxisModel, [-0.42, -0.42, -0.25]);
-
-    //For Axis Glyphs 
-    const initGlobalAxisModel = glmath.mat4.copy((glmath.mat4.create()), globalAxisModel);
+    glmath.mat4.copy(globalAxisModel, GLOBAL_MODEL);
+    //glmath.mat4.rotate(globalAxisModel, globalAxisModel, iter, [0, 1, 0]);
+    glmath.mat4.scale(globalAxisModel, globalAxisModel, [1.8, 1.8, 1.8]);
+    glmath.mat4.translate(globalAxisModel, globalAxisModel, [-0.55, -0.55, -0.55]);
+    
+    glmath.mat4.copy(glyphModel, GLOBAL_MODEL);
+    glmath.mat4.scale(glyphModel, glyphModel, [1.8, 1.8, 1.8]);
+    glmath.mat4.translate(glyphModel, glyphModel, [-0.55, -0.55, -0.55]);
+    
 
     // Create a local and global model to split transformations applied to Axis Lines
     let Axismodel = glmath.mat4.create();
@@ -382,7 +395,7 @@ function render(timestamp) {
     point = glmath.vec4.clone([-0.5, -0.500000, -0.390625, 1]);
     //label.render(point, Monkeymodel, projection, view, "label");
     
-    RenderAxisText(initGlobalAxisModel);
+    RenderAxisText(glyphModel);
 
     //Repeat
     window.requestAnimationFrame(render);
