@@ -8,6 +8,8 @@ import fs from "fs";
 // @ts-ignore
 import path from "path";
 
+var csv = require('jquery-csv'); //Not actually jquery, just a parser with jquery compliant syntax
+
 export async function load_OBJ(model: string) {
 
     let raw = await ReadFile(model); //The Model to load
@@ -91,6 +93,33 @@ export async function load_OBJ(model: string) {
 
 }
 
+/*
+    Extensively uses example code from https://developer.mozilla.org/en-US/docs/Web/API/File_API
+*/
+export async function read_CSV() {
+
+    const fileInput = <HTMLInputElement>document.querySelector("input[type=file]");
+    const output = document.querySelector('.output');
+
+    fileInput.addEventListener("change", () => {
+        let [file] = <FileList>fileInput.files;
+        if (file) {
+            const reader = new FileReader();
+            reader.addEventListener("load", () => {
+                try{
+                let arr = csv.toArray(reader.result);
+                console.log(arr);
+                } catch(error)
+                {
+                    alert("Wrong file format, Please Uplaod a .csv file");
+                }
+            });
+            reader.readAsText(file);
+          }
+    })
+
+}
+
 //Read a file 
 async function ReadFile(model: string) {
 
@@ -115,6 +144,4 @@ async function ReadFile(model: string) {
         var raw = fs.readFileSync(path.join(__dirname, "./models/Cube3.obj"), "utf8");
         return raw;
     }
-
-
 }

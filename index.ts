@@ -9,13 +9,15 @@ import fragmentSource_2 from './shaders/fragment_2.glsl'
 // @ts-ignore
 import vertexSource_2 from './shaders/vertex_2.glsl'
 
+
 import { Model } from './Model';
-import { load_OBJ } from './Loader';
+import { load_OBJ, read_CSV } from './Loader';
 import { Text } from './Text';
 import { Font } from './Font';
 import { App } from './App';
 
 import * as glmath from 'gl-matrix';
+
 
 let gl: WebGLRenderingContext;
 let canvas: HTMLCanvasElement;
@@ -128,7 +130,10 @@ async function main() {
 
     gl.enable(gl.STENCIL_TEST);
 
+    //let a = new App(null);
+    //a.setFileListener();
 
+    read_CSV();
     
     //Start render loop 
     window.requestAnimationFrame(Render);
