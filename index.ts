@@ -11,10 +11,9 @@ import vertexSource_2 from './shaders/vertex_2.glsl'
 //
 
 import { Model } from './Model';
-import { DATASET, IMPORTED, load_OBJ, read_CSV } from './Loader';
+import { DATASET, load_OBJ, read_CSV } from './Loader';
 import { Text } from './Text';
 import { Font } from './Font';
-import { App } from './App';
 
 import * as glmath from 'gl-matrix';
 
@@ -130,9 +129,6 @@ async function main() {
 
     gl.enable(gl.STENCIL_TEST);
 
-    //let a = new App(null);
-    //a.setFileListener();
-
     await read_CSV();
     
     //Start render loop 
@@ -140,16 +136,20 @@ async function main() {
 
 }
 
+/*
+    Top Level Render Function, setup reused components such as the global model and view then call 
+    upon helper function to render some logical part of the scene using those values
+*/
 function Render(timestamp)
 {
+    // | Setup |
+
     //Create a top level model
     let GLOBAL_MODEL = glmath.mat4.create();
     glmath.mat4.scale(GLOBAL_MODEL, GLOBAL_MODEL, [0.4, 0.4, 0.4]);
     glmath.mat4.translate(GLOBAL_MODEL, GLOBAL_MODEL, [1, 0.2, 0]);
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 15 * (Math.PI / 180), [1, 0, 0]);
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * (Math.PI / 180), [0, -1, 0]);
-    
-    gl.useProgram(programs[0]);
 
     // Setup View
     let view = glmath.mat4.create()
@@ -161,12 +161,16 @@ function Render(timestamp)
         glmath.vec3.set(viewPos, 0, 0, 3), 
         glmath.vec3.set(viewRotation, 0, 0, 0), 
         glmath.vec3.set(viewUp, 0, 1, 0));
-    gl.uniformMatrix4fv(viewUniformID[0], false, view);
 
-    RenderStructure(GLOBAL_MODEL);
+    gl.useProgram(programs[0]);
+    gl.uniformMatrix4fv(viewUniformID[0], false, view);
 
     gl.useProgram(programs[1]);
     gl.uniformMatrix4fv(viewUniformID[1], false, view);
+
+    // | Helper Functions Start |
+
+    RenderStructure(GLOBAL_MODEL);
 
     RenderAxisText(GLOBAL_MODEL);
 
@@ -175,6 +179,9 @@ function Render(timestamp)
     window.requestAnimationFrame(Render);
 }
 
+/*
+    Renders Imported Data Points that need shader program 1
+*/
 function RenderData(global_model: glmath.mat4)
 {
     // _____________
@@ -209,17 +216,21 @@ function RenderData(global_model: glmath.mat4)
 
     for(let i=0; i<DATASET.length; i++)
     {
+        let max_axis = 9; //Will need to be edited based on what the axis max currently is
+        let x = Number(Object.values(DATASET[i])[0]) * 2;
+        let y = Number(Object.values(DATASET[i])[1]) * 2;
+        let z = (max_axis*2+2)-(Number(Object.values(DATASET[i])[2]) * 2); //Use max_axis to flip the z axis to fit visual
+        
         let point_model = glmath.mat4.create();
         glmath.mat4.copy(point_model, global_point_model);
-        glmath.mat4.translate(point_model, point_model, [Number(Object.values(DATASET[i])[0])*2, Number(Object.values(DATASET[i])[1])*2, (9*2+2)-(Number(Object.values(DATASET[i])[2])*2)]);
+        glmath.mat4.translate(point_model, point_model, [x, y, z]);
         gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
         Point.render();
     }
 }
 
 /*
-    Render Loop
-    Renders everything (glyph text) that needs shader program 1
+    Renders glyph text that needs shader program 1
     Depends on positions of axis lines already placed to ensure relative placement of text
 */
 function RenderAxisText(global_model: glmath.mat4) {
