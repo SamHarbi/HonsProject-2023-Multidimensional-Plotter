@@ -635,7 +635,7 @@ async function main() {
     gl.enable(gl.STENCIL_TEST);
     //let a = new App(null);
     //a.setFileListener();
-    (0, _loader.read_CSV)();
+    await (0, _loader.read_CSV)();
     //Start render loop 
     window.requestAnimationFrame(Render);
 }
@@ -674,47 +674,50 @@ function Render(timestamp) {
     gl.useProgram(programs[1]);
     gl.uniformMatrix4fv(viewUniformID[1], false, view);
     RenderAxisText(GLOBAL_MODEL);
-    RenderData(GLOBAL_MODEL, [
-        0,
-        1,
-        0
-    ]);
+    RenderData(GLOBAL_MODEL);
     window.requestAnimationFrame(Render);
 }
-function RenderData(global_model, Data) {
+function RenderData(global_model) {
     // _____________
     // +++ SETUP +++
     // _____________
     //Set Shader to use 
-    gl.useProgram(programs[1]);
-    gl.enableVertexAttribArray(positionAttributeID[1]);
-    gl.enableVertexAttribArray(normalAttributeID[1]);
-    gl.enableVertexAttribArray(textureAttributeID[1]);
+    gl.useProgram(programs[0]);
+    gl.enableVertexAttribArray(positionAttributeID[0]);
+    gl.enableVertexAttribArray(normalAttributeID[0]);
+    gl.enableVertexAttribArray(textureAttributeID[0]);
     // Setup Projection 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     let projection = _glMatrix.mat4.create();
     projection = _glMatrix.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
-    gl.uniformMatrix4fv(projectionUniformID[1], false, projection);
-    gl.uniform1i(lightToggleUniformID[1], 1); // Use Light
+    gl.uniformMatrix4fv(projectionUniformID[0], false, projection);
+    gl.uniform1i(lightToggleUniformID[0], 1); // Use Light
     gl.stencilFunc(gl.EQUAL, 1, 0xFF);
     gl.stencilOp(gl.REPLACE, gl.KEEP, gl.REPLACE);
     // _____________
     // +++ Render +++
     // _____________
-    let point_model = _glMatrix.mat4.create();
-    _glMatrix.mat4.copy(point_model, global_model);
-    _glMatrix.mat4.scale(point_model, point_model, [
+    let global_point_model = _glMatrix.mat4.create();
+    _glMatrix.mat4.copy(global_point_model, global_model);
+    _glMatrix.mat4.scale(global_point_model, global_point_model, [
         0.05,
         0.05,
         0.05
     ]);
-    for(let i = 0; i < Data.length; i++){
+    _glMatrix.mat4.translate(global_point_model, global_point_model, [
+        0,
+        0,
+        0
+    ]);
+    for(let i = 0; i < (0, _loader.DATASET).length; i++){
+        let point_model = _glMatrix.mat4.create();
+        _glMatrix.mat4.copy(point_model, global_point_model);
         _glMatrix.mat4.translate(point_model, point_model, [
-            2,
-            2,
-            0
+            Number(Object.values((0, _loader.DATASET)[i])[0]) * 2,
+            Number(Object.values((0, _loader.DATASET)[i])[1]) * 2,
+            20 - Number(Object.values((0, _loader.DATASET)[i])[2]) * 2
         ]);
-        gl.uniformMatrix4fv(modelUniformID[1], false, point_model);
+        gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
         Point.render();
     }
 }
@@ -1309,20 +1312,19 @@ exports.export = function(dest, destName, get) {
 },{}],"blLsM":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "DATASET", ()=>DATASET);
 parcelHelpers.export(exports, "load_OBJ", ()=>load_OBJ);
 /*
     Extensively uses example code from https://developer.mozilla.org/en-US/docs/Web/API/File_API
 */ parcelHelpers.export(exports, "read_CSV", ()=>read_CSV);
-/*
-    This is a collection of functions for dealing with loading in models 
-*/ //Imports will give errors if not using parcel
-// @ts-ignore
 var _fs = require("fs");
 var _fsDefault = parcelHelpers.interopDefault(_fs);
 // @ts-ignore
 var _path = require("path");
 var _pathDefault = parcelHelpers.interopDefault(_path);
 var csv = require("jquery-csv"); //Not actually jquery, just a parser with jquery compliant syntax
+var DATASET;
+DATASET = [];
 async function load_OBJ(model) {
     let raw = await ReadFile(model); //The Model to load
     const lines = raw.split("\n");
@@ -1389,8 +1391,7 @@ async function read_CSV() {
             const reader = new FileReader();
             reader.addEventListener("load", ()=>{
                 try {
-                    let arr = csv.toArray(reader.result);
-                    console.log(arr);
+                    DATASET = csv.toObjects(reader.result);
                 } catch (error) {
                     alert("Wrong file format, Please Uplaod a .csv file");
                 }

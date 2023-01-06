@@ -4,11 +4,15 @@
 
 //Imports will give errors if not using parcel
 // @ts-ignore
+import { Console } from "console";
 import fs from "fs";
 // @ts-ignore
 import path from "path";
 
 var csv = require('jquery-csv'); //Not actually jquery, just a parser with jquery compliant syntax
+
+export var DATASET: number[][];
+DATASET = [];
 
 export async function load_OBJ(model: string) {
 
@@ -107,8 +111,7 @@ export async function read_CSV() {
             const reader = new FileReader();
             reader.addEventListener("load", () => {
                 try{
-                let arr = csv.toArray(reader.result);
-                console.log(arr);
+                DATASET = csv.toObjects(reader.result);
                 } catch(error)
                 {
                     alert("Wrong file format, Please Uplaod a .csv file");

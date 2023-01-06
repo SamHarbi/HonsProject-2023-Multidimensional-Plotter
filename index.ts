@@ -11,7 +11,7 @@ import vertexSource_2 from './shaders/vertex_2.glsl'
 
 
 import { Model } from './Model';
-import { load_OBJ, read_CSV } from './Loader';
+import { DATASET, IMPORTED, load_OBJ, read_CSV } from './Loader';
 import { Text } from './Text';
 import { Font } from './Font';
 import { App } from './App';
@@ -133,7 +133,7 @@ async function main() {
     //let a = new App(null);
     //a.setFileListener();
 
-    read_CSV();
+    await read_CSV();
     
     //Start render loop 
     window.requestAnimationFrame(Render);
@@ -170,30 +170,30 @@ function Render(timestamp)
 
     RenderAxisText(GLOBAL_MODEL);
 
-    RenderData(GLOBAL_MODEL, [0, 1, 0]);
+    RenderData(GLOBAL_MODEL);
 
     window.requestAnimationFrame(Render);
 }
 
-function RenderData(global_model: glmath.mat4, Data: number[])
+function RenderData(global_model: glmath.mat4)
 {
     // _____________
     // +++ SETUP +++
     // _____________
 
     //Set Shader to use 
-    gl.useProgram(programs[1]);
-    gl.enableVertexAttribArray(positionAttributeID[1]);
-    gl.enableVertexAttribArray(normalAttributeID[1]);
-    gl.enableVertexAttribArray(textureAttributeID[1]);
+    gl.useProgram(programs[0]);
+    gl.enableVertexAttribArray(positionAttributeID[0]);
+    gl.enableVertexAttribArray(normalAttributeID[0]);
+    gl.enableVertexAttribArray(textureAttributeID[0]);
     
     // Setup Projection 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     let projection: glmath.mat4 = glmath.mat4.create();
     projection = glmath.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
-    gl.uniformMatrix4fv(projectionUniformID[1], false, projection);
+    gl.uniformMatrix4fv(projectionUniformID[0], false, projection);
 
-    gl.uniform1i(lightToggleUniformID[1], 1); // Use Light
+    gl.uniform1i(lightToggleUniformID[0], 1); // Use Light
 
     gl.stencilFunc(gl.EQUAL, 1, 0xFF);
     gl.stencilOp(gl.REPLACE, gl.KEEP, gl.REPLACE);
@@ -202,14 +202,17 @@ function RenderData(global_model: glmath.mat4, Data: number[])
     // +++ Render +++
     // _____________
     
-    let point_model = glmath.mat4.create();
-    glmath.mat4.copy(point_model, global_model);
-    glmath.mat4.scale(point_model, point_model, [0.05, 0.05, 0.05]);
+    let global_point_model = glmath.mat4.create();
+    glmath.mat4.copy(global_point_model, global_model);
+    glmath.mat4.scale(global_point_model, global_point_model, [0.05, 0.05, 0.05]);
+    glmath.mat4.translate(global_point_model, global_point_model, [0, 0, 0]);
 
-    for(let i=0; i<Data.length; i++)
+    for(let i=0; i<DATASET.length; i++)
     {
-        glmath.mat4.translate(point_model, point_model, [2, 2, 0]);
-        gl.uniformMatrix4fv(modelUniformID[1], false, point_model);
+        let point_model = glmath.mat4.create();
+        glmath.mat4.copy(point_model, global_point_model);
+        glmath.mat4.translate(point_model, point_model, [Number(Object.values(DATASET[i])[0])*2, Number(Object.values(DATASET[i])[1])*2, (9*2+2)-(Number(Object.values(DATASET[i])[2])*2)]);
+        gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
         Point.render();
     }
 }
