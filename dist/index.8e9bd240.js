@@ -633,13 +633,15 @@ async function main() {
     gl.depthFunc(gl.LESS);
     gl.frontFace(gl.CW);
     gl.enable(gl.STENCIL_TEST);
-    //let a = new App(null);
-    //a.setFileListener();
     await (0, _loader.read_CSV)();
     //Start render loop 
     window.requestAnimationFrame(Render);
 }
-function Render(timestamp) {
+/*
+    Top Level Render Function, setup reused components such as the global model and view then call 
+    upon helper function to render some logical part of the scene using those values
+*/ function Render(timestamp) {
+    // | Setup |
     //Create a top level model
     let GLOBAL_MODEL = _glMatrix.mat4.create();
     _glMatrix.mat4.scale(GLOBAL_MODEL, GLOBAL_MODEL, [
@@ -662,22 +664,25 @@ function Render(timestamp) {
         -1,
         0
     ]);
-    gl.useProgram(programs[0]);
     // Setup View
     let view = _glMatrix.mat4.create();
     let viewPos = _glMatrix.vec3.create();
     let viewRotation = _glMatrix.vec3.create();
     let viewUp = _glMatrix.vec3.create();
     _glMatrix.mat4.lookAt(view, _glMatrix.vec3.set(viewPos, 0, 0, 3), _glMatrix.vec3.set(viewRotation, 0, 0, 0), _glMatrix.vec3.set(viewUp, 0, 1, 0));
+    gl.useProgram(programs[0]);
     gl.uniformMatrix4fv(viewUniformID[0], false, view);
-    RenderStructure(GLOBAL_MODEL);
     gl.useProgram(programs[1]);
     gl.uniformMatrix4fv(viewUniformID[1], false, view);
+    // | Helper Functions Start |
+    RenderStructure(GLOBAL_MODEL);
     RenderAxisText(GLOBAL_MODEL);
     RenderData(GLOBAL_MODEL);
     window.requestAnimationFrame(Render);
 }
-function RenderData(global_model) {
+/*
+    Renders Imported Data Points that need shader program 1
+*/ function RenderData(global_model) {
     // _____________
     // +++ SETUP +++
     // _____________
@@ -710,20 +715,23 @@ function RenderData(global_model) {
         0
     ]);
     for(let i = 0; i < (0, _loader.DATASET).length; i++){
+        let max_axis = 9; //Will need to be edited based on what the axis max currently is
+        let x = Number(Object.values((0, _loader.DATASET)[i])[0]) * 2;
+        let y = Number(Object.values((0, _loader.DATASET)[i])[1]) * 2;
+        let z = max_axis * 2 + 2 - Number(Object.values((0, _loader.DATASET)[i])[2]) * 2; //Use max_axis to flip the z axis to fit visual
         let point_model = _glMatrix.mat4.create();
         _glMatrix.mat4.copy(point_model, global_point_model);
         _glMatrix.mat4.translate(point_model, point_model, [
-            Number(Object.values((0, _loader.DATASET)[i])[0]) * 2,
-            Number(Object.values((0, _loader.DATASET)[i])[1]) * 2,
-            20 - Number(Object.values((0, _loader.DATASET)[i])[2]) * 2
+            x,
+            y,
+            z
         ]);
         gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
         Point.render();
     }
 }
 /*
-    Render Loop
-    Renders everything (glyph text) that needs shader program 1
+    Renders glyph text that needs shader program 1
     Depends on positions of axis lines already placed to ensure relative placement of text
 */ function RenderAxisText(global_model) {
     // _____________
@@ -1315,7 +1323,9 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "DATASET", ()=>DATASET);
 parcelHelpers.export(exports, "load_OBJ", ()=>load_OBJ);
 /*
-    Extensively uses example code from https://developer.mozilla.org/en-US/docs/Web/API/File_API
+    Partially based on https://developer.mozilla.org/en-US/docs/Web/API/File_API
+
+    Uses jquery-csv to read in a csv file (compliant with IETF RFC 4180) and save it into DATASET as a JS Object 
 */ parcelHelpers.export(exports, "read_CSV", ()=>read_CSV);
 var _fs = require("fs");
 var _fsDefault = parcelHelpers.interopDefault(_fs);
@@ -1384,14 +1394,13 @@ async function load_OBJ(model) {
 }
 async function read_CSV() {
     const fileInput = document.querySelector("input[type=file]");
-    const output = document.querySelector(".output");
     fileInput.addEventListener("change", ()=>{
         let [file] = fileInput.files;
         if (file) {
             const reader = new FileReader();
             reader.addEventListener("load", ()=>{
                 try {
-                    DATASET = csv.toObjects(reader.result);
+                    DATASET = csv.toObjects(reader.result); //Save to Object
                 } catch (error) {
                     alert("Wrong file format, Please Uplaod a .csv file");
                 }
@@ -1420,7 +1429,7 @@ async function ReadFile(model) {
     }
 }
 
-},{"fs":"jhUEF","path":"loE3o","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","jquery-csv":"4jeMV"}],"jhUEF":[function(require,module,exports) {
+},{"fs":"jhUEF","path":"loE3o","jquery-csv":"4jeMV","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jhUEF":[function(require,module,exports) {
 "use strict";
 
 },{}],"loE3o":[function(require,module,exports) {
