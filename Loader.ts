@@ -4,9 +4,16 @@
 
 //Imports will give errors if not using parcel
 // @ts-ignore
+import { Console } from "console";
 import fs from "fs";
 // @ts-ignore
 import path from "path";
+
+var csv = require('jquery-csv'); //Not actually jquery, just a parser with jquery compliant syntax
+
+//Global Dataset Variable of currently last imported (valid) data
+export var DATASET: number[][];
+DATASET = [];
 
 export async function load_OBJ(model: string) {
 
@@ -91,6 +98,33 @@ export async function load_OBJ(model: string) {
 
 }
 
+/*
+    Partially based on https://developer.mozilla.org/en-US/docs/Web/API/File_API
+
+    Uses jquery-csv to read in a csv file (compliant with IETF RFC 4180) and save it into DATASET as a JS Object 
+*/
+export async function read_CSV() {
+
+    const fileInput = <HTMLInputElement>document.querySelector("input[type=file]");
+
+    fileInput.addEventListener("change", () => {
+        let [file] = <FileList>fileInput.files;
+        if (file) {
+            const reader = new FileReader();
+            reader.addEventListener("load", () => {
+                try{
+                    DATASET = csv.toObjects(reader.result); //Save to Object
+                } catch(error)
+                {
+                    alert("Wrong file format, Please Uplaod a .csv file");
+                }
+            });
+            reader.readAsText(file);
+          }
+    })
+
+}
+
 //Read a file 
 async function ReadFile(model: string) {
 
@@ -115,6 +149,4 @@ async function ReadFile(model: string) {
         var raw = fs.readFileSync(path.join(__dirname, "./models/Cube3.obj"), "utf8");
         return raw;
     }
-
-
 }

@@ -1,3 +1,5 @@
-# Production Branch
+# Refactor Branch
 
-This is an iteration of the code that can be served to the client / is served. It has been refactored and implements at least one new task or user story. 
+This is where code from the development branch is pushed once a task or user story is implemented. General cleanup or generally putting together the final app
+which will be pushed to production is done here
+
