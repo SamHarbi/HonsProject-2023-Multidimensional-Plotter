@@ -564,7 +564,7 @@ let positionAttributeID;
 let normalAttributeID;
 let textureAttributeID;
 let iter = 0; // For a simple movement demo
-let Monkey;
+let Point;
 let Cube;
 let Axis;
 let label; // For testing HTML based Text overlay
@@ -589,9 +589,9 @@ async function main() {
     let axisData = await (0, _loader.load_OBJ)("Axis");
     Axis = new (0, _model.Model)(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.LINES);
     Axis.init(axisData[0], axisData[1], axisData[2], axisData[3], gl);
-    let MonkeyData = await (0, _loader.load_OBJ)("Monkey");
-    Monkey = new (0, _model.Model)(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.TRIANGLES);
-    Monkey.init(MonkeyData[0], MonkeyData[1], MonkeyData[2], MonkeyData[3], gl);
+    let PointData = await (0, _loader.load_OBJ)("Cube3");
+    Point = new (0, _model.Model)(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.TRIANGLES);
+    Point.init(PointData[0], PointData[1], PointData[2], PointData[3], gl);
     let CubeData = await (0, _loader.load_OBJ)("Cube3");
     Cube = new (0, _model.Model)(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.TRIANGLES);
     Cube.init(CubeData[0], CubeData[1], CubeData[2], CubeData[3], gl);
@@ -633,14 +633,99 @@ async function main() {
     gl.depthFunc(gl.LESS);
     gl.frontFace(gl.CW);
     gl.enable(gl.STENCIL_TEST);
+    //let a = new App(null);
+    //a.setFileListener();
+    await (0, _loader.read_CSV)();
     //Start render loop 
-    window.requestAnimationFrame(render);
+    window.requestAnimationFrame(Render);
+}
+function Render(timestamp) {
+    //Create a top level model
+    let GLOBAL_MODEL = _glMatrix.mat4.create();
+    _glMatrix.mat4.scale(GLOBAL_MODEL, GLOBAL_MODEL, [
+        0.4,
+        0.4,
+        0.4
+    ]);
+    _glMatrix.mat4.translate(GLOBAL_MODEL, GLOBAL_MODEL, [
+        1,
+        0.2,
+        0
+    ]);
+    _glMatrix.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 15 * (Math.PI / 180), [
+        1,
+        0,
+        0
+    ]);
+    _glMatrix.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * (Math.PI / 180), [
+        0,
+        -1,
+        0
+    ]);
+    gl.useProgram(programs[0]);
+    // Setup View
+    let view = _glMatrix.mat4.create();
+    let viewPos = _glMatrix.vec3.create();
+    let viewRotation = _glMatrix.vec3.create();
+    let viewUp = _glMatrix.vec3.create();
+    _glMatrix.mat4.lookAt(view, _glMatrix.vec3.set(viewPos, 0, 0, 3), _glMatrix.vec3.set(viewRotation, 0, 0, 0), _glMatrix.vec3.set(viewUp, 0, 1, 0));
+    gl.uniformMatrix4fv(viewUniformID[0], false, view);
+    RenderStructure(GLOBAL_MODEL);
+    gl.useProgram(programs[1]);
+    gl.uniformMatrix4fv(viewUniformID[1], false, view);
+    RenderAxisText(GLOBAL_MODEL);
+    RenderData(GLOBAL_MODEL);
+    window.requestAnimationFrame(Render);
+}
+function RenderData(global_model) {
+    // _____________
+    // +++ SETUP +++
+    // _____________
+    //Set Shader to use 
+    gl.useProgram(programs[0]);
+    gl.enableVertexAttribArray(positionAttributeID[0]);
+    gl.enableVertexAttribArray(normalAttributeID[0]);
+    gl.enableVertexAttribArray(textureAttributeID[0]);
+    // Setup Projection 
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    let projection = _glMatrix.mat4.create();
+    projection = _glMatrix.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
+    gl.uniformMatrix4fv(projectionUniformID[0], false, projection);
+    gl.uniform1i(lightToggleUniformID[0], 1); // Use Light
+    gl.stencilFunc(gl.EQUAL, 1, 0xFF);
+    gl.stencilOp(gl.REPLACE, gl.KEEP, gl.REPLACE);
+    // _____________
+    // +++ Render +++
+    // _____________
+    let global_point_model = _glMatrix.mat4.create();
+    _glMatrix.mat4.copy(global_point_model, global_model);
+    _glMatrix.mat4.scale(global_point_model, global_point_model, [
+        0.05,
+        0.05,
+        0.05
+    ]);
+    _glMatrix.mat4.translate(global_point_model, global_point_model, [
+        0,
+        0,
+        0
+    ]);
+    for(let i = 0; i < (0, _loader.DATASET).length; i++){
+        let point_model = _glMatrix.mat4.create();
+        _glMatrix.mat4.copy(point_model, global_point_model);
+        _glMatrix.mat4.translate(point_model, point_model, [
+            Number(Object.values((0, _loader.DATASET)[i])[0]) * 2,
+            Number(Object.values((0, _loader.DATASET)[i])[1]) * 2,
+            20 - Number(Object.values((0, _loader.DATASET)[i])[2]) * 2
+        ]);
+        gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
+        Point.render();
+    }
 }
 /*
     Render Loop
     Renders everything (glyph text) that needs shader program 1
     Depends on positions of axis lines already placed to ensure relative placement of text
-*/ function RenderAxisText(globalAxisModel) {
+*/ function RenderAxisText(global_model) {
     // _____________
     // +++ SETUP +++
     // _____________
@@ -649,13 +734,6 @@ async function main() {
     gl.enableVertexAttribArray(positionAttributeID[1]);
     gl.enableVertexAttribArray(normalAttributeID[1]);
     gl.enableVertexAttribArray(textureAttributeID[1]);
-    // Setup View
-    let view = _glMatrix.mat4.create();
-    let viewPos = _glMatrix.vec3.create();
-    let viewRotation = _glMatrix.vec3.create();
-    let viewUp = _glMatrix.vec3.create();
-    _glMatrix.mat4.lookAt(view, _glMatrix.vec3.set(viewPos, 1, 1, 3), _glMatrix.vec3.set(viewRotation, 0, 0, 0), _glMatrix.vec3.set(viewUp, 0, 1, 0));
-    gl.uniformMatrix4fv(viewUniformID[1], false, view);
     // Setup Projection 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     let projection = _glMatrix.mat4.create();
@@ -663,21 +741,34 @@ async function main() {
     gl.uniformMatrix4fv(projectionUniformID[1], false, projection);
     gl.uniform1i(lightToggleUniformID[1], 1); // Use Light
     gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
+    // _____________
+    // +++ Render +++
+    // _____________
+    _glMatrix.mat4.scale(global_model, global_model, [
+        1.8,
+        1.8,
+        1.8
+    ]);
+    _glMatrix.mat4.translate(global_model, global_model, [
+        -0.55,
+        -0.55,
+        -0.55
+    ]);
     let LetterModel = _glMatrix.mat4.create();
-    _glMatrix.mat4.copy(LetterModel, globalAxisModel);
+    _glMatrix.mat4.copy(LetterModel, global_model);
     _glMatrix.mat4.scale(LetterModel, LetterModel, [
         0.03,
         0.03,
         1
     ]);
     _glMatrix.mat4.translate(LetterModel, LetterModel, [
-        36,
+        40,
         0,
         0
     ]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[0].render();
-    let singleAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), globalAxisModel);
+    let singleAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), global_model);
     _glMatrix.mat4.scale(singleAxisModel, singleAxisModel, [
         0.02,
         0.02,
@@ -685,7 +776,7 @@ async function main() {
     ]);
     _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
         0.5,
-        0,
+        -3,
         1
     ]);
     _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
@@ -703,20 +794,20 @@ async function main() {
         AxisValues[i].render();
     }
     _glMatrix.mat4.translate(LetterModel, LetterModel, [
-        -36,
-        36,
+        -40,
+        40,
         0
     ]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[1].render();
-    singleAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), globalAxisModel);
+    singleAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), global_model);
     _glMatrix.mat4.scale(singleAxisModel, singleAxisModel, [
         0.02,
         0.02,
         1
     ]);
     _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
-        0.5,
+        5,
         0,
         1
     ]);
@@ -735,20 +826,20 @@ async function main() {
         AxisValues[i1].render();
     }
     _glMatrix.mat4.translate(LetterModel, LetterModel, [
-        -2,
-        -39,
+        -5,
+        -45,
         1
     ]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[2].render();
-    singleAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), globalAxisModel);
+    singleAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), global_model);
     _glMatrix.mat4.scale(singleAxisModel, singleAxisModel, [
         0.02,
         0.02,
         1
     ]);
     _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
-        0.5,
+        -2,
         0,
         1
     ]);
@@ -770,7 +861,7 @@ async function main() {
 /*
     Render Loop 
     Renders everything that needs program 0
-*/ function render(timestamp) {
+*/ function RenderStructure(global_model) {
     // _____________
     // +++ SETUP +++
     // _____________
@@ -785,13 +876,6 @@ async function main() {
     gl.enableVertexAttribArray(positionAttributeID[0]);
     gl.enableVertexAttribArray(normalAttributeID[0]);
     gl.enableVertexAttribArray(textureAttributeID[0]);
-    // Setup View
-    let view = _glMatrix.mat4.create();
-    let viewPos = _glMatrix.vec3.create();
-    let viewRotation = _glMatrix.vec3.create();
-    let viewUp = _glMatrix.vec3.create();
-    _glMatrix.mat4.lookAt(view, _glMatrix.vec3.set(viewPos, 1, 1, 3), _glMatrix.vec3.set(viewRotation, 0, 0, 0), _glMatrix.vec3.set(viewUp, 0, 1, 0));
-    gl.uniformMatrix4fv(viewUniformID[0], false, view);
     // Setup Projection 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     let projection = _glMatrix.mat4.create();
@@ -806,16 +890,8 @@ async function main() {
     gl.uniform1i(lightToggleUniformID[0], 0); // Don't Use Light
     // Bounding Cube
     let cubeModel = _glMatrix.mat4.create();
-    _glMatrix.mat4.scale(cubeModel, cubeModel, [
-        0.5,
-        0.5,
-        0.5
-    ]);
-    _glMatrix.mat4.translate(cubeModel, cubeModel, [
-        0,
-        0,
-        0
-    ]);
+    _glMatrix.mat4.copy(cubeModel, global_model);
+    //glmath.mat4.rotate(cubeModel, cubeModel, iter, [0, 1, 0]);
     gl.uniformMatrix4fv(modelUniformID[0], false, cubeModel);
     gl.cullFace(gl.BACK);
     Cube.render();
@@ -827,19 +903,31 @@ async function main() {
     gl.stencilOp(gl.REPLACE, gl.KEEP, gl.REPLACE);
     gl.uniform1i(lightToggleUniformID[0], 1); // Use Light
     let globalAxisModel = _glMatrix.mat4.create();
+    let glyphModel = _glMatrix.mat4.create();
     //Apply global transformations
+    _glMatrix.mat4.copy(globalAxisModel, global_model);
+    //glmath.mat4.rotate(globalAxisModel, globalAxisModel, iter, [0, 1, 0]);
     _glMatrix.mat4.scale(globalAxisModel, globalAxisModel, [
-        0.9,
-        0.9,
-        0.9
+        1.8,
+        1.8,
+        1.8
     ]);
     _glMatrix.mat4.translate(globalAxisModel, globalAxisModel, [
-        -0.42,
-        -0.42,
-        -0.25
+        -0.55,
+        -0.55,
+        -0.55
     ]);
-    //For Axis Glyphs 
-    const initGlobalAxisModel = _glMatrix.mat4.copy(_glMatrix.mat4.create(), globalAxisModel);
+    _glMatrix.mat4.copy(glyphModel, global_model);
+    _glMatrix.mat4.scale(glyphModel, glyphModel, [
+        1.8,
+        1.8,
+        1.8
+    ]);
+    _glMatrix.mat4.translate(glyphModel, glyphModel, [
+        -0.55,
+        -0.55,
+        -0.55
+    ]);
     // Create a local and global model to split transformations applied to Axis Lines
     let Axismodel = _glMatrix.mat4.create();
     for(let i = 0; i < 11; i++){
@@ -961,35 +1049,6 @@ async function main() {
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
         Axis.render();
     }
-    let Monkeymodel = _glMatrix.mat4.create();
-    _glMatrix.mat4.scale(Monkeymodel, Monkeymodel, [
-        0.1,
-        0.1,
-        0.1
-    ]);
-    _glMatrix.mat4.rotate(Monkeymodel, Monkeymodel, iter, [
-        0.2,
-        1,
-        0
-    ]);
-    _glMatrix.mat4.translate(Monkeymodel, Monkeymodel, [
-        0,
-        0,
-        0
-    ]);
-    gl.uniformMatrix4fv(modelUniformID[0], false, Monkeymodel);
-    Monkey.render();
-    let point = _glMatrix.vec4.create();
-    point = _glMatrix.vec4.clone([
-        -0.5,
-        -0.5,
-        -0.390625,
-        1
-    ]);
-    //label.render(point, Monkeymodel, projection, view, "label");
-    RenderAxisText(initGlobalAxisModel);
-    //Repeat
-    window.requestAnimationFrame(render);
 }
 /*
     Initialise WebGL Context and setup everything before render loop
@@ -1044,9 +1103,26 @@ function createProgram(gl, vertexShader, fragmentShader) {
     console.log(gl.getProgramInfoLog(program));
     gl.deleteProgram(program);
 }
+/*
+    Set rotation part to the indentity matrix
+*/ function eraseRotation(matrix) {
+    return _glMatrix.mat4.fromValues(1, 0, 0, matrix[0][3], 0, 1, 0, matrix[1][3], 0, 0, 1, matrix[2][3], matrix[3][0], matrix[3][1], matrix[3][2], matrix[3][3]);
+}
 window.onload = main;
 
-},{"./Model":"10WY5","./Loader":"blLsM","./Text":"eAFEk","./Font":"kj6Xh","gl-matrix":"1mBhM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./shaders/fragment_1.glsl":"cXi2N","./shaders/vertex_1.glsl":"3iC4R","./shaders/fragment_2.glsl":"7ORuU","./shaders/vertex_2.glsl":"7UWL5"}],"10WY5":[function(require,module,exports) {
+},{"./shaders/fragment_1.glsl":"cXi2N","./shaders/vertex_1.glsl":"3iC4R","./shaders/fragment_2.glsl":"7ORuU","./shaders/vertex_2.glsl":"7UWL5","./Model":"10WY5","./Loader":"blLsM","./Text":"eAFEk","./Font":"kj6Xh","gl-matrix":"1mBhM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cXi2N":[function(require,module,exports) {
+module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          gl_FragColor = vec4(colour.x, colour.y, colour.z, 1) * texture2D(u_texture, v_texcoord);\n          gl_FragColor.rgb *= light;\n          //gl_FragColor = texture2D(u_texture, v_texcoord);\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
+
+},{}],"3iC4R":[function(require,module,exports) {
+module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
+
+},{}],"7ORuU":[function(require,module,exports) {
+module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          gl_FragColor = texture2D(u_texture, v_texcoord);\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
+
+},{}],"7UWL5":[function(require,module,exports) {
+module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n    \n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
+
+},{}],"10WY5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Model", ()=>Model);
@@ -1236,16 +1312,19 @@ exports.export = function(dest, destName, get) {
 },{}],"blLsM":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "DATASET", ()=>DATASET);
 parcelHelpers.export(exports, "load_OBJ", ()=>load_OBJ);
 /*
-    This is a collection of functions for dealing with loading in models 
-*/ //Imports will give errors if not using parcel
-// @ts-ignore
+    Extensively uses example code from https://developer.mozilla.org/en-US/docs/Web/API/File_API
+*/ parcelHelpers.export(exports, "read_CSV", ()=>read_CSV);
 var _fs = require("fs");
 var _fsDefault = parcelHelpers.interopDefault(_fs);
 // @ts-ignore
 var _path = require("path");
 var _pathDefault = parcelHelpers.interopDefault(_path);
+var csv = require("jquery-csv"); //Not actually jquery, just a parser with jquery compliant syntax
+var DATASET;
+DATASET = [];
 async function load_OBJ(model) {
     let raw = await ReadFile(model); //The Model to load
     const lines = raw.split("\n");
@@ -1303,6 +1382,24 @@ async function load_OBJ(model) {
     console.log(Combined);
     return Combined;
 }
+async function read_CSV() {
+    const fileInput = document.querySelector("input[type=file]");
+    const output = document.querySelector(".output");
+    fileInput.addEventListener("change", ()=>{
+        let [file] = fileInput.files;
+        if (file) {
+            const reader = new FileReader();
+            reader.addEventListener("load", ()=>{
+                try {
+                    DATASET = csv.toObjects(reader.result);
+                } catch (error) {
+                    alert("Wrong file format, Please Uplaod a .csv file");
+                }
+            });
+            reader.readAsText(file);
+        }
+    });
+}
 //Read a file 
 async function ReadFile(model) {
     if (model === "Monkey") {
@@ -1323,7 +1420,7 @@ async function ReadFile(model) {
     }
 }
 
-},{"fs":"jhUEF","path":"loE3o","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jhUEF":[function(require,module,exports) {
+},{"fs":"jhUEF","path":"loE3o","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","jquery-csv":"4jeMV"}],"jhUEF":[function(require,module,exports) {
 "use strict";
 
 },{}],"loE3o":[function(require,module,exports) {
@@ -1895,6 +1992,797 @@ process.chdir = function(dir) {
 process.umask = function() {
     return 0;
 };
+
+},{}],"4jeMV":[function(require,module,exports) {
+/* eslint no-prototype-builtins: 0 */ /**
+ * jQuery-csv (jQuery Plugin)
+ *
+ * This document is licensed as free software under the terms of the
+ * MIT License: http://www.opensource.org/licenses/mit-license.php
+ *
+ * Acknowledgements:
+ * The original design and influence to implement this library as a jquery
+ * plugin is influenced by jquery-json (http://code.google.com/p/jquery-json/).
+ * If you're looking to use native JSON.Stringify but want additional backwards
+ * compatibility for browsers that don't support it, I highly recommend you
+ * check it out.
+ *
+ * A special thanks goes out to rwk@acm.org for providing a lot of valuable
+ * feedback to the project including the core for the new FSM
+ * (Finite State Machine) parsers. If you're looking for a stable TSV parser
+ * be sure to take a look at jquery-tsv (http://code.google.com/p/jquery-tsv/).
+
+ * For legal purposes I'll include the "NO WARRANTY EXPRESSED OR IMPLIED.
+ * USE AT YOUR OWN RISK.". Which, in 'layman's terms' means, by using this
+ * library you are accepting responsibility if it breaks your code.
+ *
+ * Legal jargon aside, I will do my best to provide a useful and stable core
+ * that can effectively be built on.
+ *
+ * Copyrighted 2012 by Evan Plaice.
+ */ RegExp.escape = function(s) {
+    return s.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+};
+(function() {
+    "use strict";
+    let $;
+    // to keep backwards compatibility
+    if (typeof jQuery !== "undefined" && jQuery) $ = jQuery;
+    else $ = {};
+    /**
+   * jQuery.csv.defaults
+   * Encapsulates the method paramater defaults for the CSV plugin module.
+   */ $.csv = {
+        defaults: {
+            separator: ",",
+            delimiter: '"',
+            headers: true
+        },
+        hooks: {
+            castToScalar: function(value, state) {
+                const hasDot = /\./;
+                if (isNaN(value)) return value;
+                else {
+                    if (hasDot.test(value)) return parseFloat(value);
+                    else {
+                        const integer = parseInt(value);
+                        if (isNaN(integer)) return null;
+                        else return integer;
+                    }
+                }
+            }
+        },
+        parsers: {
+            parse: function(csv, options) {
+                // cache settings
+                const separator = options.separator;
+                const delimiter = options.delimiter;
+                // set initial state if it's missing
+                if (!options.state.rowNum) options.state.rowNum = 1;
+                if (!options.state.colNum) options.state.colNum = 1;
+                // clear initial state
+                const data = [];
+                let entry = [];
+                let state = 0;
+                let value = "";
+                let exit = false;
+                function endOfEntry() {
+                    // reset the state
+                    state = 0;
+                    value = "";
+                    // if 'start' hasn't been met, don't output
+                    if (options.start && options.state.rowNum < options.start) {
+                        // update global state
+                        entry = [];
+                        options.state.rowNum++;
+                        options.state.colNum = 1;
+                        return;
+                    }
+                    if (options.onParseEntry === undefined) // onParseEntry hook not set
+                    data.push(entry);
+                    else {
+                        const hookVal = options.onParseEntry(entry, options.state) // onParseEntry Hook
+                        ;
+                        // false skips the row, configurable through a hook
+                        if (hookVal !== false) data.push(hookVal);
+                    }
+                    // console.log('entry:' + entry);
+                    // cleanup
+                    entry = [];
+                    // if 'end' is met, stop parsing
+                    if (options.end && options.state.rowNum >= options.end) exit = true;
+                    // update global state
+                    options.state.rowNum++;
+                    options.state.colNum = 1;
+                }
+                function endOfValue() {
+                    if (options.onParseValue === undefined) // onParseValue hook not set
+                    entry.push(value);
+                    else if (options.headers && options.state.rowNum === 1) // don't onParseValue object headers
+                    entry.push(value);
+                    else {
+                        const hook = options.onParseValue(value, options.state) // onParseValue Hook
+                        ;
+                        // false skips the row, configurable through a hook
+                        if (hook !== false) entry.push(hook);
+                    }
+                    // console.log('value:' + value);
+                    // reset the state
+                    value = "";
+                    state = 0;
+                    // update global state
+                    options.state.colNum++;
+                }
+                // escape regex-specific control chars
+                const escSeparator = RegExp.escape(separator);
+                const escDelimiter = RegExp.escape(delimiter);
+                // compile the regEx str using the custom delimiter/separator
+                let match = /(D|S|\r\n|\n|\r|[^DS\r\n]+)/;
+                let matchSrc = match.source;
+                matchSrc = matchSrc.replace(/S/g, escSeparator);
+                matchSrc = matchSrc.replace(/D/g, escDelimiter);
+                match = new RegExp(matchSrc, "gm");
+                // put on your fancy pants...
+                // process control chars individually, use look-ahead on non-control chars
+                csv.replace(match, function(m0) {
+                    if (exit) return;
+                    switch(state){
+                        // the start of a value
+                        case 0:
+                            // null last value
+                            if (m0 === separator) {
+                                value += "";
+                                endOfValue();
+                                break;
+                            }
+                            // opening delimiter
+                            if (m0 === delimiter) {
+                                state = 1;
+                                break;
+                            }
+                            // null last value
+                            if (/^(\r\n|\n|\r)$/.test(m0)) {
+                                endOfValue();
+                                endOfEntry();
+                                break;
+                            }
+                            // un-delimited value
+                            value += m0;
+                            state = 3;
+                            break;
+                        // delimited input
+                        case 1:
+                            // second delimiter? check further
+                            if (m0 === delimiter) {
+                                state = 2;
+                                break;
+                            }
+                            // delimited data
+                            value += m0;
+                            state = 1;
+                            break;
+                        // delimiter found in delimited input
+                        case 2:
+                            // escaped delimiter?
+                            if (m0 === delimiter) {
+                                value += m0;
+                                state = 1;
+                                break;
+                            }
+                            // null value
+                            if (m0 === separator) {
+                                endOfValue();
+                                break;
+                            }
+                            // end of entry
+                            if (/^(\r\n|\n|\r)$/.test(m0)) {
+                                endOfValue();
+                                endOfEntry();
+                                break;
+                            }
+                            // broken paser?
+                            throw Error("CSVDataError: Illegal State [Row:" + options.state.rowNum + "][Col:" + options.state.colNum + "]");
+                        // un-delimited input
+                        case 3:
+                            // null last value
+                            if (m0 === separator) {
+                                endOfValue();
+                                break;
+                            }
+                            // end of entry
+                            if (/^(\r\n|\n|\r)$/.test(m0)) {
+                                endOfValue();
+                                endOfEntry();
+                                break;
+                            }
+                            if (m0 === delimiter) // non-compliant data
+                            throw Error("CSVDataError: Illegal Quote [Row:" + options.state.rowNum + "][Col:" + options.state.colNum + "]");
+                            // broken parser?
+                            throw Error("CSVDataError: Illegal Data [Row:" + options.state.rowNum + "][Col:" + options.state.colNum + "]");
+                        default:
+                            // shenanigans
+                            throw Error("CSVDataError: Unknown State [Row:" + options.state.rowNum + "][Col:" + options.state.colNum + "]");
+                    }
+                // console.log('val:' + m0 + ' state:' + state);
+                });
+                // submit the last entry
+                // ignore null last line
+                if (entry.length !== 0) {
+                    endOfValue();
+                    endOfEntry();
+                }
+                return data;
+            },
+            // a csv-specific line splitter
+            splitLines: function(csv, options) {
+                if (!csv) return undefined;
+                options = options || {};
+                // cache settings
+                const separator = options.separator || $.csv.defaults.separator;
+                const delimiter = options.delimiter || $.csv.defaults.delimiter;
+                // set initial state if it's missing
+                options.state = options.state || {};
+                if (!options.state.rowNum) options.state.rowNum = 1;
+                // clear initial state
+                const entries = [];
+                let state = 0;
+                let entry = "";
+                let exit = false;
+                function endOfLine() {
+                    // reset the state
+                    state = 0;
+                    // if 'start' hasn't been met, don't output
+                    if (options.start && options.state.rowNum < options.start) {
+                        // update global state
+                        entry = "";
+                        options.state.rowNum++;
+                        return;
+                    }
+                    if (options.onParseEntry === undefined) // onParseEntry hook not set
+                    entries.push(entry);
+                    else {
+                        const hookVal = options.onParseEntry(entry, options.state) // onParseEntry Hook
+                        ;
+                        // false skips the row, configurable through a hook
+                        if (hookVal !== false) entries.push(hookVal);
+                    }
+                    // cleanup
+                    entry = "";
+                    // if 'end' is met, stop parsing
+                    if (options.end && options.state.rowNum >= options.end) exit = true;
+                    // update global state
+                    options.state.rowNum++;
+                }
+                // escape regex-specific control chars
+                const escSeparator = RegExp.escape(separator);
+                const escDelimiter = RegExp.escape(delimiter);
+                // compile the regEx str using the custom delimiter/separator
+                let match = /(D|S|\n|\r|[^DS\r\n]+)/;
+                let matchSrc = match.source;
+                matchSrc = matchSrc.replace(/S/g, escSeparator);
+                matchSrc = matchSrc.replace(/D/g, escDelimiter);
+                match = new RegExp(matchSrc, "gm");
+                // put on your fancy pants...
+                // process control chars individually, use look-ahead on non-control chars
+                csv.replace(match, function(m0) {
+                    if (exit) return;
+                    switch(state){
+                        // the start of a value/entry
+                        case 0:
+                            // null value
+                            if (m0 === separator) {
+                                entry += m0;
+                                state = 0;
+                                break;
+                            }
+                            // opening delimiter
+                            if (m0 === delimiter) {
+                                entry += m0;
+                                state = 1;
+                                break;
+                            }
+                            // end of line
+                            if (m0 === "\n") {
+                                endOfLine();
+                                break;
+                            }
+                            // phantom carriage return
+                            if (/^\r$/.test(m0)) break;
+                            // un-delimit value
+                            entry += m0;
+                            state = 3;
+                            break;
+                        // delimited input
+                        case 1:
+                            // second delimiter? check further
+                            if (m0 === delimiter) {
+                                entry += m0;
+                                state = 2;
+                                break;
+                            }
+                            // delimited data
+                            entry += m0;
+                            state = 1;
+                            break;
+                        // delimiter found in delimited input
+                        case 2:
+                            {
+                                // escaped delimiter?
+                                const prevChar = entry.substr(entry.length - 1);
+                                if (m0 === delimiter && prevChar === delimiter) {
+                                    entry += m0;
+                                    state = 1;
+                                    break;
+                                }
+                                // end of value
+                                if (m0 === separator) {
+                                    entry += m0;
+                                    state = 0;
+                                    break;
+                                }
+                                // end of line
+                                if (m0 === "\n") {
+                                    endOfLine();
+                                    break;
+                                }
+                                // phantom carriage return
+                                if (m0 === "\r") break;
+                                // broken paser?
+                                throw Error("CSVDataError: Illegal state [Row:" + options.state.rowNum + "]");
+                            }
+                        // un-delimited input
+                        case 3:
+                            // null value
+                            if (m0 === separator) {
+                                entry += m0;
+                                state = 0;
+                                break;
+                            }
+                            // end of line
+                            if (m0 === "\n") {
+                                endOfLine();
+                                break;
+                            }
+                            // phantom carriage return
+                            if (m0 === "\r") break;
+                            // non-compliant data
+                            if (m0 === delimiter) throw Error("CSVDataError: Illegal quote [Row:" + options.state.rowNum + "]");
+                            // broken parser?
+                            throw Error("CSVDataError: Illegal state [Row:" + options.state.rowNum + "]");
+                        default:
+                            // shenanigans
+                            throw Error("CSVDataError: Unknown state [Row:" + options.state.rowNum + "]");
+                    }
+                // console.log('val:' + m0 + ' state:' + state);
+                });
+                // submit the last entry
+                // ignore null last line
+                if (entry !== "") endOfLine();
+                return entries;
+            },
+            // a csv entry parser
+            parseEntry: function(csv, options) {
+                // cache settings
+                const separator = options.separator;
+                const delimiter = options.delimiter;
+                // set initial state if it's missing
+                if (!options.state.rowNum) options.state.rowNum = 1;
+                if (!options.state.colNum) options.state.colNum = 1;
+                // clear initial state
+                const entry = [];
+                let state = 0;
+                let value = "";
+                function endOfValue() {
+                    if (options.onParseValue === undefined) // onParseValue hook not set
+                    entry.push(value);
+                    else {
+                        const hook = options.onParseValue(value, options.state) // onParseValue Hook
+                        ;
+                        // false skips the value, configurable through a hook
+                        if (hook !== false) entry.push(hook);
+                    }
+                    // reset the state
+                    value = "";
+                    state = 0;
+                    // update global state
+                    options.state.colNum++;
+                }
+                // checked for a cached regEx first
+                if (!options.match) {
+                    // escape regex-specific control chars
+                    const escSeparator = RegExp.escape(separator);
+                    const escDelimiter = RegExp.escape(delimiter);
+                    // compile the regEx str using the custom delimiter/separator
+                    const match = /(D|S|\n|\r|[^DS\r\n]+)/;
+                    let matchSrc = match.source;
+                    matchSrc = matchSrc.replace(/S/g, escSeparator);
+                    matchSrc = matchSrc.replace(/D/g, escDelimiter);
+                    options.match = new RegExp(matchSrc, "gm");
+                }
+                // put on your fancy pants...
+                // process control chars individually, use look-ahead on non-control chars
+                csv.replace(options.match, function(m0) {
+                    switch(state){
+                        // the start of a value
+                        case 0:
+                            // null last value
+                            if (m0 === separator) {
+                                value += "";
+                                endOfValue();
+                                break;
+                            }
+                            // opening delimiter
+                            if (m0 === delimiter) {
+                                state = 1;
+                                break;
+                            }
+                            // skip un-delimited new-lines
+                            if (m0 === "\n" || m0 === "\r") break;
+                            // un-delimited value
+                            value += m0;
+                            state = 3;
+                            break;
+                        // delimited input
+                        case 1:
+                            // second delimiter? check further
+                            if (m0 === delimiter) {
+                                state = 2;
+                                break;
+                            }
+                            // delimited data
+                            value += m0;
+                            state = 1;
+                            break;
+                        // delimiter found in delimited input
+                        case 2:
+                            // escaped delimiter?
+                            if (m0 === delimiter) {
+                                value += m0;
+                                state = 1;
+                                break;
+                            }
+                            // null value
+                            if (m0 === separator) {
+                                endOfValue();
+                                break;
+                            }
+                            // skip un-delimited new-lines
+                            if (m0 === "\n" || m0 === "\r") break;
+                            // broken paser?
+                            throw Error("CSVDataError: Illegal State [Row:" + options.state.rowNum + "][Col:" + options.state.colNum + "]");
+                        // un-delimited input
+                        case 3:
+                            // null last value
+                            if (m0 === separator) {
+                                endOfValue();
+                                break;
+                            }
+                            // skip un-delimited new-lines
+                            if (m0 === "\n" || m0 === "\r") break;
+                            // non-compliant data
+                            if (m0 === delimiter) throw Error("CSVDataError: Illegal Quote [Row:" + options.state.rowNum + "][Col:" + options.state.colNum + "]");
+                            // broken parser?
+                            throw Error("CSVDataError: Illegal Data [Row:" + options.state.rowNum + "][Col:" + options.state.colNum + "]");
+                        default:
+                            // shenanigans
+                            throw Error("CSVDataError: Unknown State [Row:" + options.state.rowNum + "][Col:" + options.state.colNum + "]");
+                    }
+                // console.log('val:' + m0 + ' state:' + state);
+                });
+                // submit the last value
+                endOfValue();
+                return entry;
+            }
+        },
+        helpers: {
+            /**
+       * $.csv.helpers.collectPropertyNames(objectsArray)
+       * Collects all unique property names from all passed objects.
+       *
+       * @param {Array} objects Objects to collect properties from.
+       *
+       * Returns an array of property names (array will be empty,
+       * if objects have no own properties).
+       */ collectPropertyNames: function(objects) {
+                let o = [];
+                let propName = [];
+                const props = [];
+                for(o in objects){
+                    for(propName in objects[o])if (objects[o].hasOwnProperty(propName) && props.indexOf(propName) < 0 && typeof objects[o][propName] !== "function") props.push(propName);
+                }
+                return props;
+            }
+        },
+        /**
+     * $.csv.toArray(csv)
+     * Converts a CSV entry string to a javascript array.
+     *
+     * @param {Array} csv The string containing the CSV data.
+     * @param {Object} [options] An object containing user-defined options.
+     * @param {Character} [separator] An override for the separator character. Defaults to a comma(,).
+     * @param {Character} [delimiter] An override for the delimiter character. Defaults to a double-quote(").
+     *
+     * This method deals with simple CSV strings only. It's useful if you only
+     * need to parse a single entry. If you need to parse more than one line,
+     * use $.csv2Array instead.
+     */ toArray: function(csv, options, callback) {
+            // if callback was passed to options swap callback with options
+            if (options !== undefined && typeof options === "function") {
+                if (callback !== undefined) return console.error("You cannot 3 arguments with the 2nd argument being a function");
+                callback = options;
+                options = {};
+            }
+            options = options !== undefined ? options : {};
+            const config = {};
+            config.callback = callback !== undefined && typeof callback === "function" ? callback : false;
+            config.separator = "separator" in options ? options.separator : $.csv.defaults.separator;
+            config.delimiter = "delimiter" in options ? options.delimiter : $.csv.defaults.delimiter;
+            const state = options.state !== undefined ? options.state : {};
+            // setup
+            options = {
+                delimiter: config.delimiter,
+                separator: config.separator,
+                onParseEntry: options.onParseEntry,
+                onParseValue: options.onParseValue,
+                state: state
+            };
+            const entry = $.csv.parsers.parseEntry(csv, options);
+            // push the value to a callback if one is defined
+            if (!config.callback) return entry;
+            else config.callback("", entry);
+        },
+        /**
+     * $.csv.toArrays(csv)
+     * Converts a CSV string to a javascript array.
+     *
+     * @param {String} csv The string containing the raw CSV data.
+     * @param {Object} [options] An object containing user-defined options.
+     * @param {Character} [separator] An override for the separator character. Defaults to a comma(,).
+     * @param {Character} [delimiter] An override for the delimiter character. Defaults to a double-quote(").
+     *
+     * This method deals with multi-line CSV. The breakdown is simple. The first
+     * dimension of the array represents the line (or entry/row) while the second
+     * dimension contains the values (or values/columns).
+     */ toArrays: function(csv, options, callback) {
+            // if callback was passed to options swap callback with options
+            if (options !== undefined && typeof options === "function") {
+                if (callback !== undefined) return console.error("You cannot 3 arguments with the 2nd argument being a function");
+                callback = options;
+                options = {};
+            }
+            options = options !== undefined ? options : {};
+            const config = {};
+            config.callback = callback !== undefined && typeof callback === "function" ? callback : false;
+            config.separator = "separator" in options ? options.separator : $.csv.defaults.separator;
+            config.delimiter = "delimiter" in options ? options.delimiter : $.csv.defaults.delimiter;
+            // setup
+            let data = [];
+            options = {
+                delimiter: config.delimiter,
+                separator: config.separator,
+                onPreParse: options.onPreParse,
+                onParseEntry: options.onParseEntry,
+                onParseValue: options.onParseValue,
+                onPostParse: options.onPostParse,
+                start: options.start,
+                end: options.end,
+                state: {
+                    rowNum: 1,
+                    colNum: 1
+                }
+            };
+            // onPreParse hook
+            if (options.onPreParse !== undefined) csv = options.onPreParse(csv, options.state);
+            // parse the data
+            data = $.csv.parsers.parse(csv, options);
+            // onPostParse hook
+            if (options.onPostParse !== undefined) data = options.onPostParse(data, options.state);
+            // push the value to a callback if one is defined
+            if (!config.callback) return data;
+            else config.callback("", data);
+        },
+        /**
+     * $.csv.toObjects(csv)
+     * Converts a CSV string to a javascript object.
+     * @param {String} csv The string containing the raw CSV data.
+     * @param {Object} [options] An object containing user-defined options.
+     * @param {Character} [separator] An override for the separator character. Defaults to a comma(,).
+     * @param {Character} [delimiter] An override for the delimiter character. Defaults to a double-quote(").
+     * @param {Boolean} [headers] Indicates whether the data contains a header line. Defaults to true.
+     *
+     * This method deals with multi-line CSV strings. Where the headers line is
+     * used as the key for each value per entry.
+     */ toObjects: function(csv, options, callback) {
+            // if callback was passed to options swap callback with options
+            if (options !== undefined && typeof options === "function") {
+                if (callback !== undefined) return console.error("You cannot 3 arguments with the 2nd argument being a function");
+                callback = options;
+                options = {};
+            }
+            options = options !== undefined ? options : {};
+            const config = {};
+            config.callback = callback !== undefined && typeof callback === "function" ? callback : false;
+            config.separator = "separator" in options ? options.separator : $.csv.defaults.separator;
+            config.delimiter = "delimiter" in options ? options.delimiter : $.csv.defaults.delimiter;
+            config.headers = "headers" in options ? options.headers : $.csv.defaults.headers;
+            options.start = "start" in options ? options.start : 1;
+            // account for headers
+            if (config.headers) options.start++;
+            if (options.end && config.headers) options.end++;
+            // setup
+            let lines = [];
+            let data = [];
+            options = {
+                delimiter: config.delimiter,
+                separator: config.separator,
+                onPreParse: options.onPreParse,
+                onParseEntry: options.onParseEntry,
+                onParseValue: options.onParseValue,
+                onPostParse: options.onPostParse,
+                start: options.start,
+                end: options.end,
+                state: {
+                    rowNum: 1,
+                    colNum: 1
+                },
+                match: false,
+                transform: options.transform
+            };
+            // fetch the headers
+            const headerOptions = {
+                delimiter: config.delimiter,
+                separator: config.separator,
+                start: 1,
+                end: 1,
+                state: {
+                    rowNum: 1,
+                    colNum: 1
+                },
+                headers: true
+            };
+            // onPreParse hook
+            if (options.onPreParse !== undefined) csv = options.onPreParse(csv, options.state);
+            // parse the csv
+            const headerLine = $.csv.parsers.splitLines(csv, headerOptions);
+            const headers = $.csv.toArray(headerLine[0], headerOptions);
+            // fetch the data
+            lines = $.csv.parsers.splitLines(csv, options);
+            // reset the state for re-use
+            options.state.colNum = 1;
+            if (headers) options.state.rowNum = 2;
+            else options.state.rowNum = 1;
+            // convert data to objects
+            for(let i = 0, len = lines.length; i < len; i++){
+                const entry = $.csv.toArray(lines[i], options);
+                const object = {};
+                for(let j = 0; j < headers.length; j++)object[headers[j]] = entry[j];
+                if (options.transform !== undefined) data.push(options.transform.call(undefined, object));
+                else data.push(object);
+                // update row state
+                options.state.rowNum++;
+            }
+            // onPostParse hook
+            if (options.onPostParse !== undefined) data = options.onPostParse(data, options.state);
+            // push the value to a callback if one is defined
+            if (!config.callback) return data;
+            else config.callback("", data);
+        },
+        /**
+    * $.csv.fromArrays(arrays)
+    * Converts a javascript array to a CSV String.
+    *
+    * @param {Array} arrays An array containing an array of CSV entries.
+    * @param {Object} [options] An object containing user-defined options.
+    * @param {Character} [separator] An override for the separator character. Defaults to a comma(,).
+    * @param {Character} [delimiter] An override for the delimiter character. Defaults to a double-quote(").
+    *
+    * This method generates a CSV file from an array of arrays (representing entries).
+    */ fromArrays: function(arrays, options, callback) {
+            // if callback was passed to options swap callback with options
+            if (options !== undefined && typeof options === "function") {
+                if (callback !== undefined) return console.error("You cannot 3 arguments with the 2nd argument being a function");
+                callback = options;
+                options = {};
+            }
+            options = options !== undefined ? options : {};
+            const config = {};
+            config.callback = callback !== undefined && typeof callback === "function" ? callback : false;
+            config.separator = "separator" in options ? options.separator : $.csv.defaults.separator;
+            config.delimiter = "delimiter" in options ? options.delimiter : $.csv.defaults.delimiter;
+            let output = "";
+            for(let i = 0; i < arrays.length; i++){
+                const line = arrays[i];
+                const lineValues = [];
+                for(let j = 0; j < line.length; j++){
+                    let strValue = line[j] === undefined || line[j] === null ? "" : line[j].toString();
+                    if (strValue.indexOf(config.delimiter) > -1) strValue = strValue.replace(new RegExp(config.delimiter, "g"), config.delimiter + config.delimiter);
+                    let escMatcher = "\n|\r|S|D";
+                    escMatcher = escMatcher.replace("S", config.separator);
+                    escMatcher = escMatcher.replace("D", config.delimiter);
+                    if (strValue.search(escMatcher) > -1) strValue = config.delimiter + strValue + config.delimiter;
+                    lineValues.push(strValue);
+                }
+                output += lineValues.join(config.separator) + "\n";
+            }
+            // push the value to a callback if one is defined
+            if (!config.callback) return output;
+            else config.callback("", output);
+        },
+        /**
+     * $.csv.fromObjects(objects)
+     * Converts a javascript dictionary to a CSV string.
+     *
+     * @param {Object} objects An array of objects containing the data.
+     * @param {Object} [options] An object containing user-defined options.
+     * @param {Character} [separator] An override for the separator character. Defaults to a comma(,).
+     * @param {Character} [delimiter] An override for the delimiter character. Defaults to a double-quote(").
+     * @param {Character} [sortOrder] Sort order of columns (named after
+     *   object properties). Use 'alpha' for alphabetic. Default is 'declare',
+     *   which means, that properties will _probably_ appear in order they were
+     *   declared for the object. But without any guarantee.
+     * @param {Character or Array} [manualOrder] Manually order columns. May be
+     * a strin in a same csv format as an output or an array of header names
+     * (array items won't be parsed). All the properties, not present in
+     * `manualOrder` will be appended to the end in accordance with `sortOrder`
+     * option. So the `manualOrder` always takes preference, if present.
+     *
+     * This method generates a CSV file from an array of objects (name:value pairs).
+     * It starts by detecting the headers and adding them as the first line of
+     * the CSV file, followed by a structured dump of the data.
+     */ fromObjects: function(objects, options, callback) {
+            // if callback was passed to options swap callback with options
+            if (options !== undefined && typeof options === "function") {
+                if (callback !== undefined) return console.error("You cannot 3 arguments with the 2nd argument being a function");
+                callback = options;
+                options = {};
+            }
+            options = options !== undefined ? options : {};
+            const config = {};
+            config.callback = callback !== undefined && typeof callback === "function" ? callback : false;
+            config.separator = "separator" in options ? options.separator : $.csv.defaults.separator;
+            config.delimiter = "delimiter" in options ? options.delimiter : $.csv.defaults.delimiter;
+            config.headers = "headers" in options ? options.headers : $.csv.defaults.headers;
+            config.sortOrder = "sortOrder" in options ? options.sortOrder : "declare";
+            config.manualOrder = "manualOrder" in options ? options.manualOrder : [];
+            config.transform = options.transform;
+            if (typeof config.manualOrder === "string") config.manualOrder = $.csv.toArray(config.manualOrder, config);
+            if (config.transform !== undefined) {
+                const origObjects = objects;
+                objects = [];
+                for(let i = 0; i < origObjects.length; i++)objects.push(config.transform.call(undefined, origObjects[i]));
+            }
+            let props = $.csv.helpers.collectPropertyNames(objects);
+            if (config.sortOrder === "alpha") props.sort();
+            if (config.manualOrder.length > 0) {
+                const propsManual = [].concat(config.manualOrder);
+                for(let p = 0; p < props.length; p++)if (propsManual.indexOf(props[p]) < 0) propsManual.push(props[p]);
+                props = propsManual;
+            }
+            let line;
+            const output = [];
+            let propName;
+            if (config.headers) output.push(props);
+            for(let o = 0; o < objects.length; o++){
+                line = [];
+                for(let p1 = 0; p1 < props.length; p1++){
+                    propName = props[p1];
+                    if (propName in objects[o] && typeof objects[o][propName] !== "function") line.push(objects[o][propName]);
+                    else line.push("");
+                }
+                output.push(line);
+            }
+            // push the value to a callback if one is defined
+            return $.csv.fromArrays(output, options, config.callback);
+        }
+    };
+    // Maintenance code to maintain backward-compatibility
+    // Will be removed in release 1.0
+    $.csvEntry2Array = $.csv.toArray;
+    $.csv2Array = $.csv.toArrays;
+    $.csv2Dictionary = $.csv.toObjects;
+    // CommonJS module is defined
+    if (module.exports) module.exports = $.csv;
+}).call(this);
 
 },{}],"eAFEk":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -8010,18 +8898,6 @@ module.exports = JSON.parse('{"name":"Arial","size":32,"bold":true,"italic":fals
 },{}],"4axCz":[function(require,module,exports) {
 module.exports = require("./helpers/bundle-url").getBundleURL("ao0Rz") + "Arial.5339cec6.png" + "?" + Date.now();
 
-},{"./helpers/bundle-url":"lgJ39"}],"cXi2N":[function(require,module,exports) {
-module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          gl_FragColor = vec4(colour.x, colour.y, colour.z, 1) * texture2D(u_texture, v_texcoord);\n          gl_FragColor.rgb *= light;\n          //gl_FragColor = texture2D(u_texture, v_texcoord);\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
-
-},{}],"3iC4R":[function(require,module,exports) {
-module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
-
-},{}],"7ORuU":[function(require,module,exports) {
-module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          gl_FragColor = texture2D(u_texture, v_texcoord);\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
-
-},{}],"7UWL5":[function(require,module,exports) {
-module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
-
-},{}]},["cWaoa","1jwFz"], "1jwFz", "parcelRequirec478")
+},{"./helpers/bundle-url":"lgJ39"}]},["cWaoa","1jwFz"], "1jwFz", "parcelRequirec478")
 
 //# sourceMappingURL=index.8e9bd240.js.map
