@@ -14,6 +14,8 @@ import Arial_Bold from './fonts/Atlas/Arial-Bold.json'
 import Arial_Atlas from "./fonts/Atlas/Arial.png"
 import ArialBold_Atlas from "./fonts/Atlas/Arial-Bold.json"
 
+import { load_OBJ } from './Loader';
+
 export class Font {
 
     font_option: number;
@@ -37,15 +39,14 @@ export class Font {
         this.image.src = this.font_pointers[this.font_option];
     }
     
-    init(char: string)
+    init(num: string)
     {
 
         this.textureCord = [];
-
-        let x = this.font_data_pointers[this.font_option].characters[char].x;
-        let y = this.font_data_pointers[this.font_option].characters[char].y;
-        let width = this.font_data_pointers[this.font_option].characters[char].width;
-        let height = this.font_data_pointers[this.font_option].characters[char].height;
+        let x = this.font_data_pointers[this.font_option].characters[num].x;
+        let y = this.font_data_pointers[this.font_option].characters[num].y;
+        let width = this.font_data_pointers[this.font_option].characters[num].width;
+        let height = this.font_data_pointers[this.font_option].characters[num].height;
 
         //Single Letter consists of 4 vertex points -> thus 4 texture cord pairs
         this.textureCord.push(x / 341);
@@ -71,5 +72,7 @@ export class Font {
     {
         return this.image.src;
     }
+
+
 
 }

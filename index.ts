@@ -8,7 +8,6 @@ import vertexSource_1 from './shaders/vertex_1.glsl'
 import fragmentSource_2 from './shaders/fragment_2.glsl'
 // @ts-ignore
 import vertexSource_2 from './shaders/vertex_2.glsl'
-//
 
 import { Model } from './Model';
 import { DATASET, load_OBJ, read_CSV } from './Loader';
@@ -43,7 +42,14 @@ let label; // For testing HTML based Text overlay
 let Fonts; // Generator for Font Texture Data
 
 let AxisLabels: Model[];
-let AxisValues: Model[];
+let AxisValues: Model[][];
+
+//Axis Options
+let xLength;
+let yLength;
+let zLength;
+
+let range;
 
 async function main() {
 
@@ -78,8 +84,9 @@ async function main() {
     Cube.init(CubeData[0], CubeData[1], CubeData[2], CubeData[3], gl);
 
     AxisLabels = [];
-    AxisValues = [];
+    AxisValues = [[]];
     Fonts = new Font(0, gl); // Create a Font Object
+    xLength = 2;
 
     // Define 3 glyph based letter labels for each axis 
     let LetterData = await load_OBJ("Glyph");
@@ -97,23 +104,17 @@ async function main() {
     // 10 value labels on each axis
     for(let i=1; i<10; i++)
     {
+        AxisValues[i] = [];
         Fonts.init(i);
-        AxisValues[i] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-        AxisValues[i].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
-    }
+        AxisValues[i][0] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        AxisValues[i][0].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
 
-    for(let i=1; i<10; i++)
-    {
-        Fonts.init(i);
-        AxisValues[i+10] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-        AxisValues[i+10].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
-    }
-
-    for(let i=1; i<10; i++)
-    {
-        Fonts.init(i);
-        AxisValues[i+20] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-        AxisValues[i+20].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        for(let j=1; j<xLength; j++)
+        {
+            Fonts.init(0);
+            AxisValues[i][j] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+            AxisValues[i][j].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        }
     }
 
     //Init HTML based label
@@ -129,6 +130,7 @@ async function main() {
 
     gl.enable(gl.STENCIL_TEST);
 
+    // Listen for a file upload 
     await read_CSV();
     
     //Start render loop 
@@ -279,9 +281,18 @@ function RenderAxisText(global_model: glmath.mat4) {
 
     for(let i=1; i<10; i++)
     {
-        glmath.mat4.translate(singleAxisModel, singleAxisModel, [5.0, 0, 0.00]);
-        gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
-        AxisValues[i].render();
+        let loopModel = glmath.mat4.create();
+        glmath.mat4.copy(loopModel, singleAxisModel);
+        glmath.mat4.translate(loopModel, loopModel, [5.0*i, 0, 0]);
+        for(let j=0; j<xLength; j++)
+        {
+            if(j>0)
+            {
+                glmath.mat4.translate(loopModel, loopModel, [2, -2, 0]);
+            }
+            gl.uniformMatrix4fv(modelUniformID[1], false, loopModel);
+            AxisValues[i][j].render();
+        }
     }
 
     glmath.mat4.translate(LetterModel, LetterModel, [-40, 40, 0]);
@@ -295,9 +306,18 @@ function RenderAxisText(global_model: glmath.mat4) {
 
     for(let i=1; i<10; i++)
     {
-        glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.0, 0, -0.1]);
-        gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
-        AxisValues[i].render();
+        let loopModel = glmath.mat4.create();
+        glmath.mat4.copy(loopModel, singleAxisModel);
+        glmath.mat4.translate(loopModel, loopModel, [0, 0, -0.1*i]);
+        for(let j=0; j<xLength; j++)
+        {
+            if(j>0)
+            {
+                glmath.mat4.translate(loopModel, loopModel, [2, 0, 0]);
+            }
+            gl.uniformMatrix4fv(modelUniformID[1], false, loopModel);
+            AxisValues[i][j].render();
+        }
     }
 
     glmath.mat4.translate(LetterModel, LetterModel, [-5, -45, 1]);
@@ -311,9 +331,18 @@ function RenderAxisText(global_model: glmath.mat4) {
 
     for(let i=1; i<10; i++)
     {
-        glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.0, 5, 0]);
-        gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
-        AxisValues[i].render();
+        let loopModel = glmath.mat4.create();
+        glmath.mat4.copy(loopModel, singleAxisModel);
+        glmath.mat4.translate(loopModel, loopModel, [-2*xLength, 5.0*i, 0]);
+        for(let j=0; j<xLength; j++)
+        {
+            if(j>0)
+            {
+                glmath.mat4.translate(loopModel, loopModel, [2, 0, 0]);
+            }
+            gl.uniformMatrix4fv(modelUniformID[1], false, loopModel);
+            AxisValues[i][j].render();
+        }
     }
 
 }
