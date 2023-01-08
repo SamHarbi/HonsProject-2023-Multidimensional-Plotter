@@ -86,7 +86,10 @@ async function main() {
     AxisLabels = [];
     AxisValues = [[]];
     Fonts = new Font(0, gl); // Create a Font Object
+
     xLength = 2;
+    yLength = 1;
+    zLength = 3;
 
     // Define 3 glyph based letter labels for each axis 
     let LetterData = await load_OBJ("Glyph");
@@ -110,6 +113,36 @@ async function main() {
         AxisValues[i][0].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
 
         for(let j=1; j<xLength; j++)
+        {
+            Fonts.init(0);
+            AxisValues[i][j] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+            AxisValues[i][j].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        }
+    }
+
+    for(let i=11; i<20; i++)
+    {
+        AxisValues[i] = [];
+        Fonts.init(i-10);
+        AxisValues[i][0] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        AxisValues[i][0].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+
+        for(let j=1; j<zLength; j++)
+        {
+            Fonts.init(0);
+            AxisValues[i][j] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+            AxisValues[i][j].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        }
+    }
+
+    for(let i=21; i<30; i++)
+    {
+        AxisValues[i] = [];
+        Fonts.init(i-20);
+        AxisValues[i][0] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        AxisValues[i][0].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+
+        for(let j=1; j<yLength; j++)
         {
             Fonts.init(0);
             AxisValues[i][j] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
@@ -304,12 +337,12 @@ function RenderAxisText(global_model: glmath.mat4) {
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [5, 0, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [52.2, -1.0, 0]);
 
-    for(let i=1; i<10; i++)
+    for(let i=11; i<20; i++)
     {
         let loopModel = glmath.mat4.create();
         glmath.mat4.copy(loopModel, singleAxisModel);
-        glmath.mat4.translate(loopModel, loopModel, [0, 0, -0.1*i]);
-        for(let j=0; j<xLength; j++)
+        glmath.mat4.translate(loopModel, loopModel, [0, 0, -0.1*(i-10)]);
+        for(let j=0; j<zLength; j++)
         {
             if(j>0)
             {
@@ -329,12 +362,12 @@ function RenderAxisText(global_model: glmath.mat4) {
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [-2, 0, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [-3.0, -1.0, 0]);
 
-    for(let i=1; i<10; i++)
+    for(let i=21; i<30; i++)
     {
         let loopModel = glmath.mat4.create();
         glmath.mat4.copy(loopModel, singleAxisModel);
-        glmath.mat4.translate(loopModel, loopModel, [-2*xLength, 5.0*i, 0]);
-        for(let j=0; j<xLength; j++)
+        glmath.mat4.translate(loopModel, loopModel, [-2*xLength, 5.0*(i-20), 0]);
+        for(let j=0; j<yLength; j++)
         {
             if(j>0)
             {

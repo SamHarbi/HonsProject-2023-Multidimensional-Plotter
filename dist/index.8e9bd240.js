@@ -606,6 +606,8 @@ async function main() {
     ];
     Fonts = new (0, _font.Font)(0, gl); // Create a Font Object
     xLength = 2;
+    yLength = 1;
+    zLength = 3;
     // Define 3 glyph based letter labels for each axis 
     let LetterData = await (0, _loader.load_OBJ)("Glyph");
     Fonts.init("z");
@@ -627,6 +629,28 @@ async function main() {
             Fonts.init(0);
             AxisValues[i1][j] = new (0, _model.Model)(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
             AxisValues[i1][j].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        }
+    }
+    for(let i2 = 11; i2 < 20; i2++){
+        AxisValues[i2] = [];
+        Fonts.init(i2 - 10);
+        AxisValues[i2][0] = new (0, _model.Model)(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        AxisValues[i2][0].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        for(let j1 = 1; j1 < zLength; j1++){
+            Fonts.init(0);
+            AxisValues[i2][j1] = new (0, _model.Model)(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+            AxisValues[i2][j1].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        }
+    }
+    for(let i3 = 21; i3 < 30; i3++){
+        AxisValues[i3] = [];
+        Fonts.init(i3 - 20);
+        AxisValues[i3][0] = new (0, _model.Model)(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        AxisValues[i3][0].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        for(let j2 = 1; j2 < yLength; j2++){
+            Fonts.init(0);
+            AxisValues[i3][j2] = new (0, _model.Model)(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+            AxisValues[i3][j2].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
         }
     }
     //Init HTML based label
@@ -838,15 +862,15 @@ async function main() {
         -1,
         0
     ]);
-    for(let i1 = 1; i1 < 10; i1++){
+    for(let i1 = 11; i1 < 20; i1++){
         let loopModel1 = _glMatrix.mat4.create();
         _glMatrix.mat4.copy(loopModel1, singleAxisModel);
         _glMatrix.mat4.translate(loopModel1, loopModel1, [
             0,
             0,
-            -0.1 * i1
+            -0.1 * (i1 - 10)
         ]);
-        for(let j1 = 0; j1 < xLength; j1++){
+        for(let j1 = 0; j1 < zLength; j1++){
             if (j1 > 0) _glMatrix.mat4.translate(loopModel1, loopModel1, [
                 2,
                 0,
@@ -879,15 +903,15 @@ async function main() {
         -1,
         0
     ]);
-    for(let i2 = 1; i2 < 10; i2++){
+    for(let i2 = 21; i2 < 30; i2++){
         let loopModel2 = _glMatrix.mat4.create();
         _glMatrix.mat4.copy(loopModel2, singleAxisModel);
         _glMatrix.mat4.translate(loopModel2, loopModel2, [
             -2 * xLength,
-            5.0 * i2,
+            5.0 * (i2 - 20),
             0
         ]);
-        for(let j2 = 0; j2 < xLength; j2++){
+        for(let j2 = 0; j2 < yLength; j2++){
             if (j2 > 0) _glMatrix.mat4.translate(loopModel2, loopModel2, [
                 2,
                 0,
