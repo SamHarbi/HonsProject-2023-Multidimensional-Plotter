@@ -566,6 +566,9 @@ let positionAttributeID;
 let normalAttributeID;
 let textureAttributeID;
 let iter = 0; // For a simple movement demo
+//User controlled rotation
+let x_rotation;
+let y_rotation;
 let Point;
 let Cube;
 let Axis;
@@ -578,6 +581,18 @@ let xLength;
 let yLength;
 let zLength;
 let range;
+document.getElementById("left").addEventListener("click", function() {
+    x_rotation -= 0.1;
+});
+document.getElementById("right").addEventListener("click", function() {
+    x_rotation += 0.1;
+});
+document.getElementById("up").addEventListener("click", function() {
+    y_rotation += 0.1;
+});
+document.getElementById("down").addEventListener("click", function() {
+    y_rotation -= 0.1;
+});
 async function main() {
     // gl has already been checked so cannot be undefined- safe to cast
     gl = init();
@@ -613,6 +628,8 @@ async function main() {
     xLength = 1;
     yLength = 1;
     zLength = 1;
+    x_rotation = 0;
+    y_rotation = 0;
     // Define 3 glyph based letter labels for each axis 
     let LetterData = await (0, _loader.load_OBJ)("Glyph");
     Fonts.init("z");
@@ -693,9 +710,20 @@ async function main() {
         0,
         0
     ]);
-    _glMatrix.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * iter * (Math.PI / 180), [
+    _glMatrix.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * (Math.PI / 180), [
         0,
         -1,
+        0
+    ]);
+    //User controlled rotation applied
+    _glMatrix.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, x_rotation, [
+        0,
+        1,
+        0
+    ]);
+    _glMatrix.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, y_rotation, [
+        1,
+        0,
         0
     ]);
     // Setup View
@@ -801,6 +829,7 @@ async function main() {
     // _____________
     // +++ Render +++
     // _____________
+    //global_model = eraseRotation(global_model);
     _glMatrix.mat4.scale(global_model, global_model, [
         1.8,
         1.8,
@@ -1204,7 +1233,7 @@ module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a bu
 module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          gl_FragColor = texture2D(u_texture, v_texcoord);\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
 
 },{}],"7UWL5":[function(require,module,exports) {
-module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n  uniform vec3 camRight_WS, camUp_WS;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    //vec3 posi = [position_a * 2 + 1, position_a.y, position_a.z];\n    //vec3 pos = a_position - (camRight_WS * a_position.x * v_texcoord.x) + (camUp_WS * a_position.y * v_texcoord.x);\n    //vec4 pos = view * model;\n    gl_Position = projection * (view * model * vec4(a_position, 1) + vec4(a_position.x * 0.01, a_position.y * 0.01, a_position.z * 0.01, 1));\n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
+module.exports = "#define GLSLIFY 1\n/*\n  Billboarding based on https://stackoverflow.com/questions/41767490/how-to-transform-vertices-in-vertex-shader-to-get-a-3d-billboard\n*/\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n  uniform vec3 camRight_WS, camUp_WS;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    //vec3 posi = [position_a * 2 + 1, position_a.y, position_a.z];\n    //vec3 pos = a_position - (camRight_WS * a_position.x * v_texcoord.x) + (camUp_WS * a_position.y * v_texcoord.x);\n    //vec4 pos = view * model;\n    gl_Position = projection * (view * model * vec4(a_position, 5) + vec4(a_position.x * 0.05, a_position.y * 0.05, 0, 0));\n    //gl_Position = projection * view * model * vec4(a_position, 1);\n\n    position = projection * view * model * vec4(a_position, 1);\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
 
 },{}],"10WY5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

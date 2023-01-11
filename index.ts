@@ -37,6 +37,10 @@ let textureAttributeID: GLint[];
 
 let iter = 0; // For a simple movement demo
 
+//User controlled rotation
+let x_rotation;
+let y_rotation;
+
 let Point;
 let Cube;
 let Axis;
@@ -53,6 +57,22 @@ let yLength;
 let zLength;
 
 let range;
+
+(<HTMLElement>document.getElementById("left")).addEventListener("click", function(){
+    x_rotation -= 0.1;
+});
+
+(<HTMLElement>document.getElementById("right")).addEventListener("click", function(){
+    x_rotation += 0.1;
+});
+
+(<HTMLElement>document.getElementById("up")).addEventListener("click", function(){
+    y_rotation += 0.1;
+});
+
+(<HTMLElement>document.getElementById("down")).addEventListener("click", function(){
+    y_rotation -= 0.1;
+});
 
 async function main() {
 
@@ -97,6 +117,9 @@ async function main() {
     xLength = 1;
     yLength = 1;
     zLength = 1;
+
+    x_rotation = 0;
+    y_rotation = 0;
 
     // Define 3 glyph based letter labels for each axis 
     let LetterData = await load_OBJ("Glyph");
@@ -191,7 +214,11 @@ function Render(timestamp)
     glmath.mat4.scale(GLOBAL_MODEL, GLOBAL_MODEL, [0.4, 0.4, 0.4]);
     glmath.mat4.translate(GLOBAL_MODEL, GLOBAL_MODEL, [1, 0.2, 0]);
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 15 * (Math.PI / 180), [1, 0, 0]);
-    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * iter * (Math.PI / 180), [0, -1, 0]);
+    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * (Math.PI / 180), [0, -1, 0]);
+
+    //User controlled rotation applied
+    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, x_rotation, [0, 1, 0]);
+    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, y_rotation, [1, 0, 0]);
 
     // Setup View
     let view = glmath.mat4.create()
@@ -318,7 +345,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     // +++ Render +++
     // _____________
     
-
+    //global_model = eraseRotation(global_model);
     glmath.mat4.scale(global_model, global_model, [1.8, 1.8, 1.8]);
     glmath.mat4.translate(global_model, global_model, [-0.55, -0.55, -0.55]);
 

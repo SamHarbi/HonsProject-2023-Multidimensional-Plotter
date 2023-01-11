@@ -1,3 +1,6 @@
+/*
+  Billboarding based on https://stackoverflow.com/questions/41767490/how-to-transform-vertices-in-vertex-shader-to-get-a-3d-billboard
+*/
 // an attribute will receive data from a buffer
   attribute vec3 a_position;
   attribute vec3 a_normal;
@@ -17,9 +20,10 @@
     //vec3 posi = [position_a * 2 + 1, position_a.y, position_a.z];
     //vec3 pos = a_position - (camRight_WS * a_position.x * v_texcoord.x) + (camUp_WS * a_position.y * v_texcoord.x);
     //vec4 pos = view * model;
-    gl_Position = projection * (view * model * vec4(a_position, 1) + vec4(a_position.x * 0.01, a_position.y * 0.01, a_position.z * 0.01, 1));
+    gl_Position = projection * (view * model * vec4(a_position, 5) + vec4(a_position.x * 0.05, a_position.y * 0.05, 0, 0));
+    //gl_Position = projection * view * model * vec4(a_position, 1);
 
-    position = gl_Position;
+    position = projection * view * model * vec4(a_position, 1);
     
     colour = vec4(1, 1, 0.5, 1.0);
     v_normal = a_normal;
