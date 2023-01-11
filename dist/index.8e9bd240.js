@@ -560,6 +560,8 @@ let modelUniformID;
 let viewUniformID;
 let projectionUniformID;
 let lightToggleUniformID;
+let cameraRightWorldSpaceUniformID;
+let cameraUpWorldSpaceUniformID;
 let positionAttributeID;
 let normalAttributeID;
 let textureAttributeID;
@@ -590,6 +592,9 @@ async function main() {
         projectionUniformID[i] = gl.getUniformLocation(programs[i], "projection");
         lightToggleUniformID[i] = gl.getUniformLocation(programs[i], "light_toggle");
     }
+    //Uniforms only in shader program 1
+    cameraRightWorldSpaceUniformID = gl.getUniformLocation(programs[1], "camRight_WS");
+    cameraUpWorldSpaceUniformID = gl.getUniformLocation(programs[1], "camUp_WS");
     // Define and Init all Models to render
     let axisData = await (0, _loader.load_OBJ)("Axis");
     Axis = new (0, _model.Model)(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.LINES);
@@ -605,9 +610,9 @@ async function main() {
         []
     ];
     Fonts = new (0, _font.Font)(0, gl); // Create a Font Object
-    xLength = 2;
+    xLength = 1;
     yLength = 1;
-    zLength = 3;
+    zLength = 1;
     // Define 3 glyph based letter labels for each axis 
     let LetterData = await (0, _loader.load_OBJ)("Glyph");
     Fonts.init("z");
@@ -688,7 +693,7 @@ async function main() {
         0,
         0
     ]);
-    _glMatrix.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * (Math.PI / 180), [
+    _glMatrix.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * iter * (Math.PI / 180), [
         0,
         -1,
         0
@@ -705,7 +710,7 @@ async function main() {
     gl.uniformMatrix4fv(viewUniformID[1], false, view);
     // | Helper Functions Start |
     RenderStructure(GLOBAL_MODEL);
-    RenderAxisText(GLOBAL_MODEL);
+    RenderAxisText(GLOBAL_MODEL, view);
     RenderData(GLOBAL_MODEL);
     window.requestAnimationFrame(Render);
 }
@@ -762,11 +767,24 @@ async function main() {
 /*
     Renders glyph text that needs shader program 1
     Depends on positions of axis lines already placed to ensure relative placement of text
-*/ function RenderAxisText(global_model) {
+*/ function RenderAxisText(global_model, view) {
     // _____________
     // +++ SETUP +++
     // _____________
-    //Set Shader to use 
+    /* Really simple way to scale the axis values automatically, needs to re-init axis values though
+    This will need to be revisted to implement correctly 
+    if(DATASET[0] != undefined)
+    {
+        let max_x = String(Object.values(DATASET[0])[0]);
+        xLength = max_x.length;
+
+        let max_y = String(Object.values(DATASET[0])[1]);
+        yLength = max_y.length;
+    
+        let max_z = String(Object.values(DATASET[0])[2]);
+        zLength = max_z.length;
+    }
+    */ //Set Shader to use 
     gl.useProgram(programs[1]);
     gl.enableVertexAttribArray(positionAttributeID[1]);
     gl.enableVertexAttribArray(normalAttributeID[1]);
@@ -777,6 +795,8 @@ async function main() {
     projection = _glMatrix.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
     gl.uniformMatrix4fv(projectionUniformID[1], false, projection);
     gl.uniform1i(lightToggleUniformID[1], 1); // Use Light
+    gl.uniform3f(cameraRightWorldSpaceUniformID, view[0][0], view[1][0], view[2][0]);
+    gl.uniform3f(cameraUpWorldSpaceUniformID, view[0][1], view[1][1], view[2][1]);
     gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
     // _____________
     // +++ Render +++
@@ -1184,7 +1204,7 @@ module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a bu
 module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          gl_FragColor = texture2D(u_texture, v_texcoord);\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
 
 },{}],"7UWL5":[function(require,module,exports) {
-module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n    \n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
+module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n  uniform vec3 camRight_WS, camUp_WS;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    //vec3 posi = [position_a * 2 + 1, position_a.y, position_a.z];\n    //vec3 pos = a_position - (camRight_WS * a_position.x * v_texcoord.x) + (camUp_WS * a_position.y * v_texcoord.x);\n    //vec4 pos = view * model;\n    gl_Position = projection * (view * model * vec4(a_position, 1) + vec4(a_position.x * 0.01, a_position.y * 0.01, a_position.z * 0.01, 1));\n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
 
 },{}],"10WY5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

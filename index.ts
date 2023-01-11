@@ -28,6 +28,9 @@ let viewUniformID: WebGLUniformLocation;
 let projectionUniformID: WebGLUniformLocation;
 let lightToggleUniformID: WebGLUniformLocation;
 
+let cameraRightWorldSpaceUniformID: WebGLUniformLocation;
+let cameraUpWorldSpaceUniformID: WebGLUniformLocation;
+
 let positionAttributeID: GLint[];
 let normalAttributeID: GLint[];
 let textureAttributeID: GLint[];
@@ -70,6 +73,10 @@ async function main() {
         lightToggleUniformID[i] = <WebGLUniformLocation>gl.getUniformLocation(programs[i], "light_toggle");
     }
 
+    //Uniforms only in shader program 1
+    cameraRightWorldSpaceUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "camRight_WS");
+    cameraUpWorldSpaceUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "camUp_WS");
+
     // Define and Init all Models to render
     let axisData = await load_OBJ("Axis");
     Axis = new Model(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.LINES);
@@ -87,9 +94,9 @@ async function main() {
     AxisValues = [[]];
     Fonts = new Font(0, gl); // Create a Font Object
 
-    xLength = 2;
+    xLength = 1;
     yLength = 1;
-    zLength = 3;
+    zLength = 1;
 
     // Define 3 glyph based letter labels for each axis 
     let LetterData = await load_OBJ("Glyph");
@@ -184,7 +191,7 @@ function Render(timestamp)
     glmath.mat4.scale(GLOBAL_MODEL, GLOBAL_MODEL, [0.4, 0.4, 0.4]);
     glmath.mat4.translate(GLOBAL_MODEL, GLOBAL_MODEL, [1, 0.2, 0]);
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 15 * (Math.PI / 180), [1, 0, 0]);
-    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * (Math.PI / 180), [0, -1, 0]);
+    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * iter * (Math.PI / 180), [0, -1, 0]);
 
     // Setup View
     let view = glmath.mat4.create()
@@ -207,7 +214,7 @@ function Render(timestamp)
 
     RenderStructure(GLOBAL_MODEL);
 
-    RenderAxisText(GLOBAL_MODEL);
+    RenderAxisText(GLOBAL_MODEL, view);
 
     RenderData(GLOBAL_MODEL);
 
@@ -268,11 +275,26 @@ function RenderData(global_model: glmath.mat4)
     Renders glyph text that needs shader program 1
     Depends on positions of axis lines already placed to ensure relative placement of text
 */
-function RenderAxisText(global_model: glmath.mat4) {
+function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     
     // _____________
     // +++ SETUP +++
     // _____________
+    
+    /* Really simple way to scale the axis values automatically, needs to re-init axis values though
+    This will need to be revisted to implement correctly 
+    if(DATASET[0] != undefined)
+    {
+        let max_x = String(Object.values(DATASET[0])[0]);
+        xLength = max_x.length;
+
+        let max_y = String(Object.values(DATASET[0])[1]);
+        yLength = max_y.length;
+    
+        let max_z = String(Object.values(DATASET[0])[2]);
+        zLength = max_z.length;
+    }
+    */
 
     //Set Shader to use 
     gl.useProgram(programs[1]);
@@ -287,6 +309,8 @@ function RenderAxisText(global_model: glmath.mat4) {
     gl.uniformMatrix4fv(projectionUniformID[1], false, projection);
 
     gl.uniform1i(lightToggleUniformID[1], 1); // Use Light
+    gl.uniform3f(cameraRightWorldSpaceUniformID, view[0][0], view[1][0], view[2][0]);
+    gl.uniform3f(cameraUpWorldSpaceUniformID, view[0][1], view[1][1], view[2][1]);
 
     gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
 
@@ -301,8 +325,8 @@ function RenderAxisText(global_model: glmath.mat4) {
     let LetterModel = glmath.mat4.create();
     glmath.mat4.copy(LetterModel, global_model);
     glmath.mat4.scale(LetterModel, LetterModel, [0.03, 0.03, 1]);
-    
     glmath.mat4.translate(LetterModel, LetterModel, [40, 0, 0]);
+
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[0].render();
 
