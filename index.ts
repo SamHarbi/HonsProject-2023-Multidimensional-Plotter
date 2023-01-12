@@ -9,7 +9,6 @@ import fragmentSource_2 from './shaders/fragment_2.glsl'
 // @ts-ignore
 import vertexSource_2 from './shaders/vertex_2.glsl'
 
-
 import { Model } from './Model';
 import { DATASET, load_OBJ, read_CSV } from './Loader';
 import { Text } from './Text';
@@ -29,11 +28,18 @@ let viewUniformID: WebGLUniformLocation;
 let projectionUniformID: WebGLUniformLocation;
 let lightToggleUniformID: WebGLUniformLocation;
 
+let cameraRightWorldSpaceUniformID: WebGLUniformLocation;
+let cameraUpWorldSpaceUniformID: WebGLUniformLocation;
+
 let positionAttributeID: GLint[];
 let normalAttributeID: GLint[];
 let textureAttributeID: GLint[];
 
 let iter = 0; // For a simple movement demo
+
+//User controlled rotation
+let x_rotation;
+let y_rotation;
 
 let Point;
 let Cube;
@@ -43,7 +49,30 @@ let label; // For testing HTML based Text overlay
 let Fonts; // Generator for Font Texture Data
 
 let AxisLabels: Model[];
-let AxisValues: Model[];
+let AxisValues: Model[][];
+
+//Axis Options
+let xLength;
+let yLength;
+let zLength;
+
+let range;
+
+(<HTMLElement>document.getElementById("left")).addEventListener("click", function(){
+    x_rotation -= 0.1;
+});
+
+(<HTMLElement>document.getElementById("right")).addEventListener("click", function(){
+    x_rotation += 0.1;
+});
+
+(<HTMLElement>document.getElementById("up")).addEventListener("click", function(){
+    y_rotation += 0.1;
+});
+
+(<HTMLElement>document.getElementById("down")).addEventListener("click", function(){
+    y_rotation -= 0.1;
+});
 
 async function main() {
 
@@ -64,6 +93,10 @@ async function main() {
         lightToggleUniformID[i] = <WebGLUniformLocation>gl.getUniformLocation(programs[i], "light_toggle");
     }
 
+    //Uniforms only in shader program 1
+    cameraRightWorldSpaceUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "camRight_WS");
+    cameraUpWorldSpaceUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "camUp_WS");
+
     // Define and Init all Models to render
     let axisData = await load_OBJ("Axis");
     Axis = new Model(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.LINES);
@@ -78,8 +111,15 @@ async function main() {
     Cube.init(CubeData[0], CubeData[1], CubeData[2], CubeData[3], gl);
 
     AxisLabels = [];
-    AxisValues = [];
+    AxisValues = [[]];
     Fonts = new Font(0, gl); // Create a Font Object
+
+    xLength = 1;
+    yLength = 1;
+    zLength = 1;
+
+    x_rotation = 0;
+    y_rotation = 0;
 
     // Define 3 glyph based letter labels for each axis 
     let LetterData = await load_OBJ("Glyph");
@@ -97,23 +137,47 @@ async function main() {
     // 10 value labels on each axis
     for(let i=1; i<10; i++)
     {
+        AxisValues[i] = [];
         Fonts.init(i);
-        AxisValues[i] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-        AxisValues[i].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        AxisValues[i][0] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        AxisValues[i][0].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+
+        for(let j=1; j<xLength; j++)
+        {
+            Fonts.init(0);
+            AxisValues[i][j] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+            AxisValues[i][j].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        }
     }
 
-    for(let i=1; i<10; i++)
+    for(let i=11; i<20; i++)
     {
-        Fonts.init(i);
-        AxisValues[i+10] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-        AxisValues[i+10].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        AxisValues[i] = [];
+        Fonts.init(i-10);
+        AxisValues[i][0] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        AxisValues[i][0].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+
+        for(let j=1; j<zLength; j++)
+        {
+            Fonts.init(0);
+            AxisValues[i][j] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+            AxisValues[i][j].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        }
     }
 
-    for(let i=1; i<10; i++)
+    for(let i=21; i<30; i++)
     {
-        Fonts.init(i);
-        AxisValues[i+20] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-        AxisValues[i+20].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        AxisValues[i] = [];
+        Fonts.init(i-20);
+        AxisValues[i][0] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        AxisValues[i][0].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+
+        for(let j=1; j<yLength; j++)
+        {
+            Fonts.init(0);
+            AxisValues[i][j] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+            AxisValues[i][j].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        }
     }
 
     //Init HTML based label
@@ -129,6 +193,7 @@ async function main() {
 
     gl.enable(gl.STENCIL_TEST);
 
+    // Listen for a file upload 
     await read_CSV();
     
     //Start render loop 
@@ -151,6 +216,10 @@ function Render(timestamp)
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 15 * (Math.PI / 180), [1, 0, 0]);
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * (Math.PI / 180), [0, -1, 0]);
 
+    //User controlled rotation applied
+    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, x_rotation, [0, 1, 0]);
+    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, y_rotation, [1, 0, 0]);
+
     // Setup View
     let view = glmath.mat4.create()
     let viewPos = glmath.vec3.create();
@@ -172,7 +241,7 @@ function Render(timestamp)
 
     RenderStructure(GLOBAL_MODEL);
 
-    RenderAxisText(GLOBAL_MODEL);
+    RenderAxisText(GLOBAL_MODEL, view);
 
     RenderData(GLOBAL_MODEL);
 
@@ -233,11 +302,26 @@ function RenderData(global_model: glmath.mat4)
     Renders glyph text that needs shader program 1
     Depends on positions of axis lines already placed to ensure relative placement of text
 */
-function RenderAxisText(global_model: glmath.mat4) {
+function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     
     // _____________
     // +++ SETUP +++
     // _____________
+    
+    /* Really simple way to scale the axis values automatically, needs to re-init axis values though
+    This will need to be revisted to implement correctly 
+    if(DATASET[0] != undefined)
+    {
+        let max_x = String(Object.values(DATASET[0])[0]);
+        xLength = max_x.length;
+
+        let max_y = String(Object.values(DATASET[0])[1]);
+        yLength = max_y.length;
+    
+        let max_z = String(Object.values(DATASET[0])[2]);
+        zLength = max_z.length;
+    }
+    */
 
     //Set Shader to use 
     gl.useProgram(programs[1]);
@@ -252,6 +336,8 @@ function RenderAxisText(global_model: glmath.mat4) {
     gl.uniformMatrix4fv(projectionUniformID[1], false, projection);
 
     gl.uniform1i(lightToggleUniformID[1], 1); // Use Light
+    gl.uniform3f(cameraRightWorldSpaceUniformID, view[0][0], view[1][0], view[2][0]);
+    gl.uniform3f(cameraUpWorldSpaceUniformID, view[0][1], view[1][1], view[2][1]);
 
     gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
 
@@ -259,29 +345,36 @@ function RenderAxisText(global_model: glmath.mat4) {
     // +++ Render +++
     // _____________
     
-
+    //global_model = eraseRotation(global_model);
     glmath.mat4.scale(global_model, global_model, [1.8, 1.8, 1.8]);
     glmath.mat4.translate(global_model, global_model, [-0.55, -0.55, -0.55]);
 
     let LetterModel = glmath.mat4.create();
     glmath.mat4.copy(LetterModel, global_model);
     glmath.mat4.scale(LetterModel, LetterModel, [0.03, 0.03, 1]);
-    
     glmath.mat4.translate(LetterModel, LetterModel, [40, 0, 0]);
+
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[0].render();
 
     let singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
-    glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.5, -3, 1]);
-    glmath.mat4.translate(singleAxisModel, singleAxisModel, [-1.0, -2.2, 0]);
+    glmath.mat4.translate(singleAxisModel, singleAxisModel, [0, 0.6, 0.01]);
     
-
     for(let i=1; i<10; i++)
     {
-        glmath.mat4.translate(singleAxisModel, singleAxisModel, [5.0, 0, 0.00]);
-        gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
-        AxisValues[i].render();
+        let loopModel = glmath.mat4.create();
+        glmath.mat4.copy(loopModel, singleAxisModel);
+        glmath.mat4.translate(loopModel, loopModel, [5.0*i, 0, 0]);
+        for(let j=0; j<xLength; j++)
+        {
+            if(j>0)
+            {
+                glmath.mat4.translate(loopModel, loopModel, [2, -2, 0]);
+            }
+            gl.uniformMatrix4fv(modelUniformID[1], false, loopModel);
+            AxisValues[i][j].render();
+        }
     }
 
     glmath.mat4.translate(LetterModel, LetterModel, [-40, 40, 0]);
@@ -290,14 +383,22 @@ function RenderAxisText(global_model: glmath.mat4) {
 
     singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
-    glmath.mat4.translate(singleAxisModel, singleAxisModel, [5, 0, 1]);
-    glmath.mat4.translate(singleAxisModel, singleAxisModel, [52.2, -1.0, 0]);
+    glmath.mat4.translate(singleAxisModel, singleAxisModel, [1, 0.6, 1]);
 
-    for(let i=1; i<10; i++)
+    for(let i=11; i<20; i++)
     {
-        glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.0, 0, -0.1]);
-        gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
-        AxisValues[i].render();
+        let loopModel = glmath.mat4.create();
+        glmath.mat4.copy(loopModel, singleAxisModel);
+        glmath.mat4.translate(loopModel, loopModel, [0, 0, -0.1*(i-10)]);
+        for(let j=0; j<zLength; j++)
+        {
+            if(j>0)
+            {
+                glmath.mat4.translate(loopModel, loopModel, [2, 0, 0]);
+            }
+            gl.uniformMatrix4fv(modelUniformID[1], false, loopModel);
+            AxisValues[i][j].render();
+        }
     }
 
     glmath.mat4.translate(LetterModel, LetterModel, [-5, -45, 1]);
@@ -309,11 +410,20 @@ function RenderAxisText(global_model: glmath.mat4) {
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [-2, 0, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [-3.0, -1.0, 0]);
 
-    for(let i=1; i<10; i++)
+    for(let i=21; i<30; i++)
     {
-        glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.0, 5, 0]);
-        gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
-        AxisValues[i].render();
+        let loopModel = glmath.mat4.create();
+        glmath.mat4.copy(loopModel, singleAxisModel);
+        glmath.mat4.translate(loopModel, loopModel, [-2*xLength, 5.0*(i-20), 0]);
+        for(let j=0; j<yLength; j++)
+        {
+            if(j>0)
+            {
+                glmath.mat4.translate(loopModel, loopModel, [2, 0, 0]);
+            }
+            gl.uniformMatrix4fv(modelUniformID[1], false, loopModel);
+            AxisValues[i][j].render();
+        }
     }
 
 }
