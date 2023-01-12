@@ -359,10 +359,8 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
 
     let singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
-    glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.5, -3, 1]);
-    glmath.mat4.translate(singleAxisModel, singleAxisModel, [-1.0, -2.2, 0]);
+    glmath.mat4.translate(singleAxisModel, singleAxisModel, [0, 0.6, 0.01]);
     
-
     for(let i=1; i<10; i++)
     {
         let loopModel = glmath.mat4.create();
@@ -385,8 +383,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
 
     singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
-    glmath.mat4.translate(singleAxisModel, singleAxisModel, [5, 0, 1]);
-    glmath.mat4.translate(singleAxisModel, singleAxisModel, [52.2, -1.0, 0]);
+    glmath.mat4.translate(singleAxisModel, singleAxisModel, [1, 0.6, 1]);
 
     for(let i=11; i<20; i++)
     {
