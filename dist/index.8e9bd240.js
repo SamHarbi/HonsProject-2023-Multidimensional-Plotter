@@ -791,6 +791,7 @@ async function main() {
         Point.render();
     }
 }
+
 /*
     Renders glyph text that needs shader program 1
     Depends on positions of axis lines already placed to ensure relative placement of text
@@ -2916,6 +2917,7 @@ class Font {
         this.textureCord = [];
         this.image = new Image();
         this.image.src = this.font_pointers[this.font_option];
+
     }
     init(num) {
         this.textureCord = [];
@@ -8959,6 +8961,7 @@ var forEach = function() {
         return a;
     };
 }();
+
 
 },{"./common.js":"lYeTq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["cWaoa","1jwFz"], "1jwFz", "parcelRequirec478")
 
