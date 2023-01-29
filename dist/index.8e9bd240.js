@@ -549,7 +549,6 @@ var _vertex2Glsl = require("./shaders/vertex_2.glsl");
 var _vertex2GlslDefault = parcelHelpers.interopDefault(_vertex2Glsl);
 var _model = require("./Model");
 var _loader = require("./Loader");
-var _text = require("./Text");
 var _font = require("./Font");
 var _glMatrix = require("gl-matrix");
 let gl;
@@ -560,10 +559,15 @@ let modelUniformID;
 let viewUniformID;
 let projectionUniformID;
 let lightToggleUniformID;
+let cameraRightWorldSpaceUniformID;
+let cameraUpWorldSpaceUniformID;
 let positionAttributeID;
 let normalAttributeID;
 let textureAttributeID;
 let iter = 0; // For a simple movement demo
+//User controlled rotation
+let x_rotation;
+let y_rotation;
 let Point;
 let Cube;
 let Axis;
@@ -571,6 +575,23 @@ let label; // For testing HTML based Text overlay
 let Fonts; // Generator for Font Texture Data
 let AxisLabels;
 let AxisValues;
+//Axis Options
+let xLength;
+let yLength;
+let zLength;
+// Event Listeners for movement controls 
+document.getElementById("left").addEventListener("click", function() {
+    x_rotation -= 0.1;
+});
+document.getElementById("right").addEventListener("click", function() {
+    x_rotation += 0.1;
+});
+document.getElementById("up").addEventListener("click", function() {
+    y_rotation += 0.1;
+});
+document.getElementById("down").addEventListener("click", function() {
+    y_rotation -= 0.1;
+});
 async function main() {
     // gl has already been checked so cannot be undefined- safe to cast
     gl = init();
@@ -585,6 +606,9 @@ async function main() {
         projectionUniformID[i] = gl.getUniformLocation(programs[i], "projection");
         lightToggleUniformID[i] = gl.getUniformLocation(programs[i], "light_toggle");
     }
+    //Uniforms only in shader program 1
+    cameraRightWorldSpaceUniformID = gl.getUniformLocation(programs[1], "camRight_WS");
+    cameraUpWorldSpaceUniformID = gl.getUniformLocation(programs[1], "camUp_WS");
     // Define and Init all Models to render
     let axisData = await (0, _loader.load_OBJ)("Axis");
     Axis = new (0, _model.Model)(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.LINES);
@@ -596,8 +620,15 @@ async function main() {
     Cube = new (0, _model.Model)(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.TRIANGLES);
     Cube.init(CubeData[0], CubeData[1], CubeData[2], CubeData[3], gl);
     AxisLabels = [];
-    AxisValues = [];
+    AxisValues = [
+        []
+    ];
     Fonts = new (0, _font.Font)(0, gl); // Create a Font Object
+    xLength = 1;
+    yLength = 1;
+    zLength = 1;
+    x_rotation = 0;
+    y_rotation = 0;
     // Define 3 glyph based letter labels for each axis 
     let LetterData = await (0, _loader.load_OBJ)("Glyph");
     Fonts.init("z");
@@ -611,28 +642,47 @@ async function main() {
     AxisLabels[2].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
     // 10 value labels on each axis
     for(let i1 = 1; i1 < 10; i1++){
+        AxisValues[i1] = [];
         Fonts.init(i1);
-        AxisValues[i1] = new (0, _model.Model)(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-        AxisValues[i1].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        AxisValues[i1][0] = new (0, _model.Model)(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        AxisValues[i1][0].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        for(let j = 1; j < xLength; j++){
+            Fonts.init(0);
+            AxisValues[i1][j] = new (0, _model.Model)(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+            AxisValues[i1][j].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        }
     }
-    for(let i2 = 1; i2 < 10; i2++){
-        Fonts.init(i2);
-        AxisValues[i2 + 10] = new (0, _model.Model)(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-        AxisValues[i2 + 10].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+    for(let i2 = 11; i2 < 20; i2++){
+        AxisValues[i2] = [];
+        Fonts.init(i2 - 10);
+        AxisValues[i2][0] = new (0, _model.Model)(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        AxisValues[i2][0].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        for(let j1 = 1; j1 < zLength; j1++){
+            Fonts.init(0);
+            AxisValues[i2][j1] = new (0, _model.Model)(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+            AxisValues[i2][j1].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        }
     }
-    for(let i3 = 1; i3 < 10; i3++){
-        Fonts.init(i3);
-        AxisValues[i3 + 20] = new (0, _model.Model)(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-        AxisValues[i3 + 20].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+    for(let i3 = 21; i3 < 30; i3++){
+        AxisValues[i3] = [];
+        Fonts.init(i3 - 20);
+        AxisValues[i3][0] = new (0, _model.Model)(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        AxisValues[i3][0].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        for(let j2 = 1; j2 < yLength; j2++){
+            Fonts.init(0);
+            AxisValues[i3][j2] = new (0, _model.Model)(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+            AxisValues[i3][j2].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        }
     }
     //Init HTML based label
-    label = new (0, _text.Text)("div", gl.canvas.width, gl.canvas.height);
+    //label = new Text("div", gl.canvas.width, gl.canvas.height);
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.FRONT);
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LESS);
     gl.frontFace(gl.CW);
     gl.enable(gl.STENCIL_TEST);
+    // Listen for a file upload 
     await (0, _loader.read_CSV)();
     //Start render loop 
     window.requestAnimationFrame(Render);
@@ -664,6 +714,17 @@ async function main() {
         -1,
         0
     ]);
+    //User controlled rotation applied
+    _glMatrix.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, x_rotation, [
+        0,
+        1,
+        0
+    ]);
+    _glMatrix.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, y_rotation, [
+        1,
+        0,
+        0
+    ]);
     // Setup View
     let view = _glMatrix.mat4.create();
     let viewPos = _glMatrix.vec3.create();
@@ -676,7 +737,7 @@ async function main() {
     gl.uniformMatrix4fv(viewUniformID[1], false, view);
     // | Helper Functions Start |
     RenderStructure(GLOBAL_MODEL);
-    RenderAxisText(GLOBAL_MODEL);
+    RenderAxisText(GLOBAL_MODEL, view);
     RenderData(GLOBAL_MODEL);
     window.requestAnimationFrame(Render);
 }
@@ -730,14 +791,28 @@ async function main() {
         Point.render();
     }
 }
+
 /*
     Renders glyph text that needs shader program 1
     Depends on positions of axis lines already placed to ensure relative placement of text
-*/ function RenderAxisText(global_model) {
+*/ function RenderAxisText(global_model, view) {
     // _____________
     // +++ SETUP +++
     // _____________
-    //Set Shader to use 
+    /* Really simple way to scale the axis values automatically, needs to re-init axis values though
+    This will need to be revisted to implement correctly 
+    if(DATASET[0] != undefined)
+    {
+        let max_x = String(Object.values(DATASET[0])[0]);
+        xLength = max_x.length;
+
+        let max_y = String(Object.values(DATASET[0])[1]);
+        yLength = max_y.length;
+    
+        let max_z = String(Object.values(DATASET[0])[2]);
+        zLength = max_z.length;
+    }
+    */ //Set Shader to use 
     gl.useProgram(programs[1]);
     gl.enableVertexAttribArray(positionAttributeID[1]);
     gl.enableVertexAttribArray(normalAttributeID[1]);
@@ -748,10 +823,13 @@ async function main() {
     projection = _glMatrix.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
     gl.uniformMatrix4fv(projectionUniformID[1], false, projection);
     gl.uniform1i(lightToggleUniformID[1], 1); // Use Light
+    gl.uniform3f(cameraRightWorldSpaceUniformID, view[0][0], view[1][0], view[2][0]);
+    gl.uniform3f(cameraUpWorldSpaceUniformID, view[0][1], view[1][1], view[2][1]);
     gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
     // _____________
     // +++ Render +++
     // _____________
+    //global_model = eraseRotation(global_model);
     _glMatrix.mat4.scale(global_model, global_model, [
         1.8,
         1.8,
@@ -783,23 +861,27 @@ async function main() {
         1
     ]);
     _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
-        0.5,
-        -3,
-        1
-    ]);
-    _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
-        -1,
-        -2.2,
+        0,
+        0.6,
         0
     ]);
     for(let i = 1; i < 10; i++){
-        _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
-            5.0,
+        let loopModel = _glMatrix.mat4.create();
+        _glMatrix.mat4.copy(loopModel, singleAxisModel);
+        _glMatrix.mat4.translate(loopModel, loopModel, [
+            5.0 * i,
             0,
-            0.00
+            0
         ]);
-        gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
-        AxisValues[i].render();
+        for(let j = 0; j < xLength; j++){
+            if (j > 0) _glMatrix.mat4.translate(loopModel, loopModel, [
+                2,
+                -2,
+                0
+            ]);
+            gl.uniformMatrix4fv(modelUniformID[1], false, loopModel);
+            AxisValues[i][j].render();
+        }
     }
     _glMatrix.mat4.translate(LetterModel, LetterModel, [
         -40,
@@ -815,23 +897,27 @@ async function main() {
         1
     ]);
     _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
-        5,
-        0,
+        1,
+        0.6,
         1
     ]);
-    _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
-        52.2,
-        -1,
-        0
-    ]);
-    for(let i1 = 1; i1 < 10; i1++){
-        _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
-            0.0,
+    for(let i1 = 11; i1 < 20; i1++){
+        let loopModel1 = _glMatrix.mat4.create();
+        _glMatrix.mat4.copy(loopModel1, singleAxisModel);
+        _glMatrix.mat4.translate(loopModel1, loopModel1, [
             0,
-            -0.1
+            0,
+            -0.1 * (i1 - 10)
         ]);
-        gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
-        AxisValues[i1].render();
+        for(let j1 = 0; j1 < zLength; j1++){
+            if (j1 > 0) _glMatrix.mat4.translate(loopModel1, loopModel1, [
+                2,
+                0,
+                0
+            ]);
+            gl.uniformMatrix4fv(modelUniformID[1], false, loopModel1);
+            AxisValues[i1][j1].render();
+        }
     }
     _glMatrix.mat4.translate(LetterModel, LetterModel, [
         -5,
@@ -847,23 +933,28 @@ async function main() {
         1
     ]);
     _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
-        -2,
+        2,
         0,
-        1
-    ]);
-    _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
-        -3,
-        -1,
         0
     ]);
-    for(let i2 = 1; i2 < 10; i2++){
-        _glMatrix.mat4.translate(singleAxisModel, singleAxisModel, [
-            0.0,
-            5,
+    //glmath.mat4.translate(singleAxisModel, singleAxisModel, [-3.0, -1.0, 0]);
+    for(let i2 = 21; i2 < 30; i2++){
+        let loopModel2 = _glMatrix.mat4.create();
+        _glMatrix.mat4.copy(loopModel2, singleAxisModel);
+        _glMatrix.mat4.translate(loopModel2, loopModel2, [
+            -2 * xLength,
+            5.0 * (i2 - 20),
             0
         ]);
-        gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
-        AxisValues[i2].render();
+        for(let j2 = 0; j2 < yLength; j2++){
+            if (j2 > 0) _glMatrix.mat4.translate(loopModel2, loopModel2, [
+                2,
+                0,
+                0
+            ]);
+            gl.uniformMatrix4fv(modelUniformID[1], false, loopModel2);
+            AxisValues[i2][j2].render();
+        }
     }
 }
 /*
@@ -889,9 +980,9 @@ async function main() {
     let projection = _glMatrix.mat4.create();
     projection = _glMatrix.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
     gl.uniformMatrix4fv(projectionUniformID[0], false, projection);
-    // ______________________________
-    // +++ DRAWING POLYGONS START +++
-    // ______________________________
+    // ________________
+    // +++ Render +++
+    // ________________
     // | DRAW STENCIL CUBE |
     gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
     gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
@@ -1118,8 +1209,8 @@ function createProgram(gl, vertexShader, fragmentShader) {
 }
 window.onload = main;
 
-},{"./shaders/fragment_1.glsl":"cXi2N","./shaders/vertex_1.glsl":"3iC4R","./shaders/fragment_2.glsl":"7ORuU","./shaders/vertex_2.glsl":"7UWL5","./Model":"10WY5","./Loader":"blLsM","./Text":"eAFEk","./Font":"kj6Xh","gl-matrix":"1mBhM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cXi2N":[function(require,module,exports) {
-module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          gl_FragColor = vec4(colour.x, colour.y, colour.z, 1) * texture2D(u_texture, v_texcoord);\n          gl_FragColor.rgb *= light;\n          //gl_FragColor = texture2D(u_texture, v_texcoord);\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
+},{"./shaders/fragment_1.glsl":"cXi2N","./shaders/vertex_1.glsl":"3iC4R","./shaders/fragment_2.glsl":"7ORuU","./shaders/vertex_2.glsl":"7UWL5","./Model":"10WY5","./Loader":"blLsM","./Font":"kj6Xh","gl-matrix":"1mBhM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cXi2N":[function(require,module,exports) {
+module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          gl_FragColor = vec4(colour.x, colour.y, position.z, 1) * texture2D(u_texture, v_texcoord);\n          gl_FragColor.rgb *= light;\n          //gl_FragColor = texture2D(u_texture, v_texcoord);\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
 
 },{}],"3iC4R":[function(require,module,exports) {
 module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
@@ -1128,7 +1219,7 @@ module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a bu
 module.exports = "// fragment shaders don't have a default precision so we need\n  // to pick one. mediump is a good default\n  precision mediump float;\n#define GLSLIFY 1\n\n\n  uniform int light_toggle;\n  uniform sampler2D u_texture;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n\n  vec3 lightdir = vec3(0.2, 0.2, 1);\n \n  void main() {\n    // gl_FragColor is a special variable a fragment shader\n    // is responsible for setting\n\n    vec3 normal = normalize(v_normal);\n    float light = dot(normal, lightdir);\n\n    if(light_toggle == 1)\n    {\n          gl_FragColor = texture2D(u_texture, v_texcoord);\n    }\n    else\n    {\n      //light = dot(normal, position.xyz);\n      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);\n    }\n  }";
 
 },{}],"7UWL5":[function(require,module,exports) {
-module.exports = "#define GLSLIFY 1\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    // gl_Position is a special variable a vertex shader\n    // is responsible for setting\n    gl_Position = projection * view * model * vec4(a_position, 1);\n    \n\n    position = gl_Position;\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
+module.exports = "#define GLSLIFY 1\n/*\n  Billboarding based on https://stackoverflow.com/questions/41767490/how-to-transform-vertices-in-vertex-shader-to-get-a-3d-billboard\n*/\n// an attribute will receive data from a buffer\n  attribute vec3 a_position;\n  attribute vec3 a_normal;\n  attribute vec2 a_texture;\n\n  uniform mat4 model, projection, view;\n  uniform vec3 camRight_WS, camUp_WS;\n\n  varying vec4 colour;\n  varying vec3 v_normal;\n  varying vec4 position;\n  varying vec2 v_texcoord;\n \n  // all shaders have a main function\n  void main() {\n \n    gl_Position = projection * (view * model * vec4(a_position, 5) + vec4(a_position.x * 0.05, a_position.y * 0.05, a_position.z * 0.05, 1));\n\n    position = projection * view * model * vec4(a_position, 1);\n    \n    colour = vec4(1, 1, 0.5, 1.0);\n    v_normal = a_normal;\n    v_texcoord = a_texture;\n  }\n\n";
 
 },{}],"10WY5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -2793,44 +2884,75 @@ process.umask = function() {
     if (module.exports) module.exports = $.csv;
 }).call(this);
 
-},{}],"eAFEk":[function(require,module,exports) {
+},{}],"kj6Xh":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Text", ()=>Text);
+parcelHelpers.export(exports, "Font", ()=>Font);
 /*
-    This is a class definition for a Text Object, Which is an abstraction for dealing with HTML that refrences vertex positions in the webgl scene
-    Idea for this implmentation was based on https://webglfundamentals.org/webgl/lessons/webgl-text-html.html
-*/ var _glMatrix = require("gl-matrix");
-class Text {
-    constructor(set_ID, set_canvasWidth, set_canvasHeight){
-        this.parentDiv = document.createElement(set_ID);
-        this.parentDiv.classList.add("Label");
-        document.getElementById("Labels")?.appendChild(this.parentDiv);
-        this.ID = set_ID;
-        this.canvasHeight = set_canvasHeight;
-        this.canvasWidth = set_canvasWidth;
+    This is a class definition that generates texture and vertex data for a given character / number 
+        x----x
+        |    |    +   texture of a single letter
+        |    |
+        x----x
+    A Single letter consists of a 2 triangle rect geometery with the glyph texture applied
+*/ var _arialJson = require("./fonts/Atlas/Arial.json");
+var _arialJsonDefault = parcelHelpers.interopDefault(_arialJson);
+var _arialBoldJson = require("./fonts/Atlas/Arial-Bold.json");
+var _arialBoldJsonDefault = parcelHelpers.interopDefault(_arialBoldJson);
+// @ts-ignore
+var _arialPng = require("./fonts/Atlas/Arial.png");
+var _arialPngDefault = parcelHelpers.interopDefault(_arialPng);
+class Font {
+    constructor(set_font_option, set_gl){
+        this.font_pointers = [
+            (0, _arialPngDefault.default),
+            (0, _arialBoldJsonDefault.default)
+        ];
+        this.font_data_pointers = [
+            (0, _arialJsonDefault.default),
+            (0, _arialBoldJsonDefault.default)
+        ];
+        this.font_option = set_font_option;
+        this.gl = set_gl;
+        this.textureCord = [];
+        this.image = new Image();
+        this.image.src = this.font_pointers[this.font_option];
+
     }
-    render(position, model, view, projection, value) {
-        //glmath.vec4.normalize(position, position);
-        let fin_matrix = _glMatrix.mat4.create();
-        fin_matrix = _glMatrix.mat4.multiply(fin_matrix, view, projection);
-        fin_matrix = _glMatrix.mat4.multiply(fin_matrix, fin_matrix, model);
-        let translated_position = _glMatrix.vec4.transformMat4(position, position, fin_matrix);
-        translated_position[0] /= translated_position[3];
-        translated_position[1] /= translated_position[3];
-        // convert from clipspace to pixels
-        var pixelX = (translated_position[0] * 0.5 + 0.5) * this.canvasWidth;
-        var pixelY = (translated_position[1] * -0.5 + 0.5) * this.canvasHeight;
-        var pixelZ = (translated_position[2] * -0.5 + 0.5) * this.canvasHeight / 20;
-        // position the div
-        this.parentDiv.style.left = Math.floor(pixelX) + "px";
-        this.parentDiv.style.top = Math.floor(pixelY) + "px";
-        this.parentDiv.style.fontSize = 1 - Math.floor(pixelZ) + "px";
-        this.parentDiv.innerHTML = value;
+    init(num) {
+        this.textureCord = [];
+        let x = this.font_data_pointers[this.font_option].characters[num].x;
+        let y = this.font_data_pointers[this.font_option].characters[num].y;
+        let width = this.font_data_pointers[this.font_option].characters[num].width;
+        let height = this.font_data_pointers[this.font_option].characters[num].height;
+        //Single Letter consists of 4 vertex points -> thus 4 texture cord pairs
+        this.textureCord.push(x / 341);
+        this.textureCord.push(y / 125);
+        this.textureCord.push(x / 341);
+        this.textureCord.push((y + height) / 125);
+        this.textureCord.push((x + width) / 341);
+        this.textureCord.push((y + height) / 125);
+        this.textureCord.push((x + width) / 341);
+        this.textureCord.push(y / 125);
+    }
+    getTextureCords() {
+        return this.textureCord;
+    }
+    getImage() {
+        return this.image.src;
     }
 }
 
-},{"gl-matrix":"1mBhM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1mBhM":[function(require,module,exports) {
+},{"./fonts/Atlas/Arial.json":"bzou9","./fonts/Atlas/Arial-Bold.json":"hKcF4","./fonts/Atlas/Arial.png":"4axCz","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bzou9":[function(require,module,exports) {
+module.exports = JSON.parse('{"name":"Arial","size":32,"bold":false,"italic":false,"width":341,"height":125,"characters":{"0":{"x":59,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"1":{"x":87,"y":81,"width":11,"height":25,"originX":-2,"originY":24,"advance":18},"2":{"x":239,"y":56,"width":17,"height":25,"originX":0,"originY":24,"advance":18},"3":{"x":77,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"4":{"x":40,"y":56,"width":19,"height":25,"originX":1,"originY":24,"advance":18},"5":{"x":95,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"6":{"x":113,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"7":{"x":131,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"8":{"x":149,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"9":{"x":167,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18}," ":{"x":237,"y":106,"width":3,"height":3,"originX":1,"originY":1,"advance":9},"!":{"x":120,"y":81,"width":7,"height":25,"originX":-1,"originY":24,"advance":9},"\\"":{"x":148,"y":106,"width":11,"height":10,"originX":0,"originY":24,"advance":11},"#":{"x":284,"y":31,"width":20,"height":25,"originX":1,"originY":24,"advance":18},"$":{"x":108,"y":0,"width":18,"height":29,"originX":0,"originY":25,"advance":18},"%":{"x":183,"y":0,"width":28,"height":25,"originX":0,"originY":24,"advance":28},"&":{"x":92,"y":31,"width":22,"height":25,"originX":0,"originY":24,"advance":21},"\'":{"x":159,"y":106,"width":6,"height":10,"originX":0,"originY":24,"advance":6},"(":{"x":56,"y":0,"width":10,"height":31,"originX":-1,"originY":24,"advance":11},")":{"x":66,"y":0,"width":10,"height":31,"originX":-1,"originY":24,"advance":11},"*":{"x":135,"y":106,"width":13,"height":12,"originX":0,"originY":24,"advance":12},"+":{"x":84,"y":106,"width":18,"height":17,"originX":0,"originY":20,"advance":19},",":{"x":165,"y":106,"width":6,"height":10,"originX":-1,"originY":4,"advance":9},"-":{"x":199,"y":106,"width":11,"height":5,"originX":0,"originY":11,"advance":11},".":{"x":210,"y":106,"width":5,"height":5,"originX":-2,"originY":4,"advance":9},"/":{"x":76,"y":81,"width":11,"height":25,"originX":1,"originY":24,"advance":9},":":{"x":43,"y":106,"width":5,"height":19,"originX":-2,"originY":18,"advance":9},";":{"x":142,"y":81,"width":6,"height":24,"originX":-1,"originY":18,"advance":9},"<":{"x":48,"y":106,"width":18,"height":18,"originX":0,"originY":20,"advance":19},"=":{"x":117,"y":106,"width":18,"height":12,"originX":0,"originY":17,"advance":19},">":{"x":66,"y":106,"width":18,"height":18,"originX":0,"originY":20,"advance":19},"?":{"x":185,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"@":{"x":0,"y":0,"width":33,"height":31,"originX":0,"originY":24,"advance":32},"A":{"x":261,"y":0,"width":24,"height":25,"originX":1,"originY":24,"advance":21},"B":{"x":304,"y":31,"width":20,"height":25,"originX":-1,"originY":24,"advance":21},"C":{"x":309,"y":0,"width":23,"height":25,"originX":0,"originY":24,"advance":23},"D":{"x":114,"y":31,"width":22,"height":25,"originX":-1,"originY":24,"advance":23},"E":{"x":0,"y":56,"width":20,"height":25,"originX":-1,"originY":24,"advance":21},"F":{"x":203,"y":56,"width":18,"height":25,"originX":-1,"originY":24,"advance":20},"G":{"x":285,"y":0,"width":24,"height":25,"originX":0,"originY":24,"advance":25},"H":{"x":158,"y":31,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"I":{"x":127,"y":81,"width":5,"height":25,"originX":-2,"originY":24,"advance":9},"J":{"x":49,"y":81,"width":15,"height":25,"originX":0,"originY":24,"advance":16},"K":{"x":136,"y":31,"width":22,"height":25,"originX":-1,"originY":24,"advance":21},"L":{"x":256,"y":56,"width":17,"height":25,"originX":-1,"originY":24,"advance":18},"M":{"x":211,"y":0,"width":25,"height":25,"originX":-1,"originY":24,"advance":27},"N":{"x":179,"y":31,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"O":{"x":236,"y":0,"width":25,"height":25,"originX":0,"originY":24,"advance":25},"P":{"x":20,"y":56,"width":20,"height":25,"originX":-1,"originY":24,"advance":21},"Q":{"x":126,"y":0,"width":25,"height":26,"originX":0,"originY":24,"advance":25},"R":{"x":0,"y":31,"width":23,"height":25,"originX":-1,"originY":24,"advance":23},"S":{"x":200,"y":31,"width":21,"height":25,"originX":0,"originY":24,"advance":21},"T":{"x":221,"y":31,"width":21,"height":25,"originX":1,"originY":24,"advance":20},"U":{"x":242,"y":31,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"V":{"x":23,"y":31,"width":23,"height":25,"originX":1,"originY":24,"advance":21},"W":{"x":151,"y":0,"width":32,"height":25,"originX":1,"originY":24,"advance":30},"X":{"x":46,"y":31,"width":23,"height":25,"originX":1,"originY":24,"advance":21},"Y":{"x":69,"y":31,"width":23,"height":25,"originX":1,"originY":24,"advance":21},"Z":{"x":263,"y":31,"width":21,"height":25,"originX":1,"originY":24,"advance":20},"[":{"x":76,"y":0,"width":9,"height":31,"originX":-1,"originY":24,"advance":9},"\\\\":{"x":98,"y":81,"width":11,"height":25,"originX":1,"originY":24,"advance":9},"]":{"x":85,"y":0,"width":9,"height":31,"originX":1,"originY":24,"advance":9},"^":{"x":102,"y":106,"width":15,"height":15,"originX":0,"originY":24,"advance":15},"_":{"x":215,"y":106,"width":22,"height":4,"originX":2,"originY":-3,"advance":18},"`":{"x":190,"y":106,"width":9,"height":6,"originX":0,"originY":24,"advance":11},"a":{"x":198,"y":81,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"b":{"x":273,"y":56,"width":17,"height":25,"originX":-1,"originY":24,"advance":18},"c":{"x":306,"y":81,"width":17,"height":19,"originX":0,"originY":18,"advance":16},"d":{"x":290,"y":56,"width":17,"height":25,"originX":0,"originY":24,"advance":18},"e":{"x":216,"y":81,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"f":{"x":64,"y":81,"width":12,"height":25,"originX":1,"originY":24,"advance":9},"g":{"x":307,"y":56,"width":17,"height":25,"originX":0,"originY":18,"advance":18},"h":{"x":17,"y":81,"width":16,"height":25,"originX":-1,"originY":24,"advance":18},"i":{"x":132,"y":81,"width":5,"height":25,"originX":-1,"originY":24,"advance":7},"j":{"x":94,"y":0,"width":9,"height":31,"originX":3,"originY":24,"advance":7},"k":{"x":33,"y":81,"width":16,"height":25,"originX":-1,"originY":24,"advance":16},"l":{"x":137,"y":81,"width":5,"height":25,"originX":-1,"originY":24,"advance":7},"m":{"x":148,"y":81,"width":25,"height":19,"originX":-1,"originY":18,"advance":27},"n":{"x":323,"y":81,"width":16,"height":19,"originX":-1,"originY":18,"advance":18},"o":{"x":234,"y":81,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"p":{"x":324,"y":56,"width":17,"height":25,"originX":-1,"originY":18,"advance":18},"q":{"x":0,"y":81,"width":17,"height":25,"originX":0,"originY":18,"advance":18},"r":{"x":32,"y":106,"width":11,"height":19,"originX":-1,"originY":18,"advance":11},"s":{"x":0,"y":106,"width":16,"height":19,"originX":0,"originY":18,"advance":16},"t":{"x":109,"y":81,"width":11,"height":25,"originX":1,"originY":24,"advance":9},"u":{"x":16,"y":106,"width":16,"height":19,"originX":-1,"originY":18,"advance":18},"v":{"x":252,"y":81,"width":18,"height":19,"originX":1,"originY":18,"advance":16},"w":{"x":173,"y":81,"width":25,"height":19,"originX":1,"originY":18,"advance":23},"x":{"x":270,"y":81,"width":18,"height":19,"originX":1,"originY":18,"advance":16},"y":{"x":221,"y":56,"width":18,"height":25,"originX":1,"originY":18,"advance":16},"z":{"x":288,"y":81,"width":18,"height":19,"originX":1,"originY":18,"advance":16},"{":{"x":45,"y":0,"width":11,"height":31,"originX":0,"originY":24,"advance":11},"|":{"x":103,"y":0,"width":5,"height":31,"originX":-2,"originY":24,"advance":8},"}":{"x":33,"y":0,"width":12,"height":31,"originX":1,"originY":24,"advance":11},"~":{"x":171,"y":106,"width":19,"height":7,"originX":0,"originY":15,"advance":19}}}');
+
+},{}],"hKcF4":[function(require,module,exports) {
+module.exports = JSON.parse('{"name":"Arial","size":32,"bold":true,"italic":false,"width":351,"height":126,"characters":{"0":{"x":211,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"1":{"x":86,"y":82,"width":13,"height":25,"originX":-1,"originY":24,"advance":18},"2":{"x":40,"y":57,"width":19,"height":25,"originX":1,"originY":24,"advance":18},"3":{"x":229,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"4":{"x":59,"y":57,"width":19,"height":25,"originX":1,"originY":24,"advance":18},"5":{"x":247,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"6":{"x":265,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"7":{"x":283,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"8":{"x":301,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"9":{"x":319,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18}," ":{"x":298,"y":107,"width":3,"height":3,"originX":1,"originY":1,"advance":9},"!":{"x":134,"y":82,"width":8,"height":25,"originX":-1,"originY":24,"advance":11},"\\"":{"x":206,"y":107,"width":15,"height":10,"originX":0,"originY":24,"advance":15},"#":{"x":311,"y":32,"width":20,"height":25,"originX":1,"originY":24,"advance":18},"$":{"x":120,"y":0,"width":18,"height":30,"originX":0,"originY":26,"advance":18},"%":{"x":164,"y":0,"width":28,"height":26,"originX":0,"originY":24,"advance":28},"&":{"x":300,"y":0,"width":24,"height":25,"originX":0,"originY":24,"advance":23},"\'":{"x":221,"y":107,"width":8,"height":10,"originX":0,"originY":24,"advance":8},"(":{"x":65,"y":0,"width":11,"height":31,"originX":0,"originY":24,"advance":11},")":{"x":76,"y":0,"width":11,"height":31,"originX":0,"originY":24,"advance":11},"*":{"x":184,"y":107,"width":14,"height":12,"originX":1,"originY":24,"advance":12},"+":{"x":128,"y":107,"width":19,"height":18,"originX":0,"originY":20,"advance":19},",":{"x":198,"y":107,"width":8,"height":11,"originX":0,"originY":5,"advance":9},"-":{"x":258,"y":107,"width":12,"height":6,"originX":0,"originY":11,"advance":11},".":{"x":270,"y":107,"width":7,"height":6,"originX":-1,"originY":5,"advance":9},"/":{"x":112,"y":82,"width":11,"height":25,"originX":1,"originY":24,"advance":9},":":{"x":121,"y":107,"width":7,"height":19,"originX":-2,"originY":18,"advance":11},";":{"x":163,"y":82,"width":8,"height":24,"originX":-1,"originY":18,"advance":11},"<":{"x":306,"y":82,"width":18,"height":19,"originX":0,"originY":21,"advance":19},"=":{"x":165,"y":107,"width":19,"height":13,"originX":0,"originY":18,"advance":19},">":{"x":324,"y":82,"width":18,"height":19,"originX":0,"originY":21,"advance":19},"?":{"x":331,"y":32,"width":20,"height":25,"originX":0,"originY":24,"advance":20},"@":{"x":0,"y":0,"width":32,"height":32,"originX":0,"originY":24,"advance":31},"A":{"x":225,"y":0,"width":25,"height":25,"originX":1,"originY":24,"advance":23},"B":{"x":141,"y":32,"width":22,"height":25,"originX":-1,"originY":24,"advance":23},"C":{"x":72,"y":32,"width":23,"height":25,"originX":0,"originY":24,"advance":23},"D":{"x":163,"y":32,"width":22,"height":25,"originX":-1,"originY":24,"advance":23},"E":{"x":0,"y":57,"width":20,"height":25,"originX":-1,"originY":24,"advance":21},"F":{"x":0,"y":82,"width":18,"height":25,"originX":-1,"originY":24,"advance":20},"G":{"x":324,"y":0,"width":24,"height":25,"originX":0,"originY":24,"advance":25},"H":{"x":185,"y":32,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"I":{"x":142,"y":82,"width":7,"height":25,"originX":-1,"originY":24,"advance":9},"J":{"x":18,"y":82,"width":18,"height":25,"originX":1,"originY":24,"advance":18},"K":{"x":95,"y":32,"width":23,"height":25,"originX":-1,"originY":24,"advance":23},"L":{"x":78,"y":57,"width":19,"height":25,"originX":-1,"originY":24,"advance":20},"M":{"x":250,"y":0,"width":25,"height":25,"originX":-1,"originY":24,"advance":27},"N":{"x":206,"y":32,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"O":{"x":275,"y":0,"width":25,"height":25,"originX":0,"originY":24,"advance":25},"P":{"x":20,"y":57,"width":20,"height":25,"originX":-1,"originY":24,"advance":21},"Q":{"x":138,"y":0,"width":26,"height":27,"originX":0,"originY":24,"advance":25},"R":{"x":118,"y":32,"width":23,"height":25,"originX":-1,"originY":24,"advance":23},"S":{"x":227,"y":32,"width":21,"height":25,"originX":0,"originY":24,"advance":21},"T":{"x":248,"y":32,"width":21,"height":25,"originX":0,"originY":24,"advance":20},"U":{"x":269,"y":32,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"V":{"x":0,"y":32,"width":24,"height":25,"originX":1,"originY":24,"advance":21},"W":{"x":192,"y":0,"width":33,"height":25,"originX":1,"originY":24,"advance":30},"X":{"x":24,"y":32,"width":24,"height":25,"originX":1,"originY":24,"advance":21},"Y":{"x":48,"y":32,"width":24,"height":25,"originX":1,"originY":24,"advance":21},"Z":{"x":290,"y":32,"width":21,"height":25,"originX":1,"originY":24,"advance":20},"[":{"x":87,"y":0,"width":11,"height":31,"originX":-1,"originY":24,"advance":11},"\\\\":{"x":123,"y":82,"width":11,"height":25,"originX":1,"originY":24,"advance":9},"]":{"x":98,"y":0,"width":11,"height":31,"originX":1,"originY":24,"advance":11},"^":{"x":147,"y":107,"width":18,"height":14,"originX":0,"originY":24,"advance":19},"_":{"x":277,"y":107,"width":21,"height":5,"originX":2,"originY":-2,"advance":18},"`":{"x":248,"y":107,"width":10,"height":7,"originX":1,"originY":24,"advance":11},"a":{"x":0,"y":107,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"b":{"x":97,"y":57,"width":19,"height":25,"originX":-1,"originY":24,"advance":20},"c":{"x":18,"y":107,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"d":{"x":116,"y":57,"width":19,"height":25,"originX":0,"originY":24,"advance":20},"e":{"x":36,"y":107,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"f":{"x":72,"y":82,"width":14,"height":25,"originX":1,"originY":24,"advance":11},"g":{"x":135,"y":57,"width":19,"height":25,"originX":0,"originY":18,"advance":20},"h":{"x":36,"y":82,"width":18,"height":25,"originX":-1,"originY":24,"advance":20},"i":{"x":149,"y":82,"width":7,"height":25,"originX":-1,"originY":24,"advance":9},"j":{"x":109,"y":0,"width":11,"height":31,"originX":3,"originY":24,"advance":9},"k":{"x":54,"y":82,"width":18,"height":25,"originX":-1,"originY":24,"advance":18},"l":{"x":156,"y":82,"width":7,"height":25,"originX":-1,"originY":24,"advance":9},"m":{"x":171,"y":82,"width":28,"height":19,"originX":0,"originY":18,"advance":28},"n":{"x":54,"y":107,"width":18,"height":19,"originX":-1,"originY":18,"advance":20},"o":{"x":227,"y":82,"width":20,"height":19,"originX":0,"originY":18,"advance":20},"p":{"x":154,"y":57,"width":19,"height":25,"originX":-1,"originY":18,"advance":20},"q":{"x":173,"y":57,"width":19,"height":25,"originX":0,"originY":18,"advance":20},"r":{"x":108,"y":107,"width":13,"height":19,"originX":-1,"originY":18,"advance":12},"s":{"x":287,"y":82,"width":19,"height":19,"originX":1,"originY":18,"advance":18},"t":{"x":99,"y":82,"width":13,"height":25,"originX":1,"originY":24,"advance":11},"u":{"x":72,"y":107,"width":18,"height":19,"originX":-1,"originY":18,"advance":20},"v":{"x":247,"y":82,"width":20,"height":19,"originX":1,"originY":18,"advance":18},"w":{"x":199,"y":82,"width":28,"height":19,"originX":1,"originY":18,"advance":25},"x":{"x":267,"y":82,"width":20,"height":19,"originX":1,"originY":18,"advance":18},"y":{"x":192,"y":57,"width":19,"height":25,"originX":1,"originY":18,"advance":18},"z":{"x":90,"y":107,"width":18,"height":19,"originX":1,"originY":18,"advance":16},"{":{"x":39,"y":0,"width":13,"height":31,"originX":0,"originY":24,"advance":12},"|":{"x":32,"y":0,"width":7,"height":32,"originX":-1,"originY":24,"advance":9},"}":{"x":52,"y":0,"width":13,"height":31,"originX":0,"originY":24,"advance":12},"~":{"x":229,"y":107,"width":19,"height":8,"originX":0,"originY":15,"advance":19}}}');
+
+},{}],"4axCz":[function(require,module,exports) {
+module.exports = require("./helpers/bundle-url").getBundleURL("ao0Rz") + "Arial.5339cec6.png" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"lgJ39"}],"1mBhM":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "glMatrix", ()=>_commonJs);
@@ -8840,73 +8962,7 @@ var forEach = function() {
     };
 }();
 
-},{"./common.js":"lYeTq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kj6Xh":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Font", ()=>Font);
-/*
-    This is a class definition that handles WebGL Text using glyph textures
-        x----x
-        |    |    +   texture of a single letter
-        |    |
-        x----x
-    A Single letter consists of a 2 triangle rect geometery with the glyph texture applied
-*/ var _arialJson = require("./fonts/Atlas/Arial.json");
-var _arialJsonDefault = parcelHelpers.interopDefault(_arialJson);
-var _arialBoldJson = require("./fonts/Atlas/Arial-Bold.json");
-var _arialBoldJsonDefault = parcelHelpers.interopDefault(_arialBoldJson);
-// @ts-ignore
-var _arialPng = require("./fonts/Atlas/Arial.png");
-var _arialPngDefault = parcelHelpers.interopDefault(_arialPng);
-class Font {
-    constructor(set_font_option, set_gl){
-        this.font_pointers = [
-            (0, _arialPngDefault.default),
-            (0, _arialBoldJsonDefault.default)
-        ];
-        this.font_data_pointers = [
-            (0, _arialJsonDefault.default),
-            (0, _arialBoldJsonDefault.default)
-        ];
-        this.font_option = set_font_option;
-        this.gl = set_gl;
-        this.textureCord = [];
-        this.image = new Image();
-        this.image.src = this.font_pointers[this.font_option];
-    }
-    init(char) {
-        this.textureCord = [];
-        let x = this.font_data_pointers[this.font_option].characters[char].x;
-        let y = this.font_data_pointers[this.font_option].characters[char].y;
-        let width = this.font_data_pointers[this.font_option].characters[char].width;
-        let height = this.font_data_pointers[this.font_option].characters[char].height;
-        //Single Letter consists of 4 vertex points -> thus 4 texture cord pairs
-        this.textureCord.push(x / 341);
-        this.textureCord.push(y / 125);
-        this.textureCord.push(x / 341);
-        this.textureCord.push((y + height) / 125);
-        this.textureCord.push((x + width) / 341);
-        this.textureCord.push((y + height) / 125);
-        this.textureCord.push((x + width) / 341);
-        this.textureCord.push(y / 125);
-    }
-    getTextureCords() {
-        return this.textureCord;
-    }
-    getImage() {
-        return this.image.src;
-    }
-}
 
-},{"./fonts/Atlas/Arial.json":"bzou9","./fonts/Atlas/Arial-Bold.json":"hKcF4","./fonts/Atlas/Arial.png":"4axCz","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bzou9":[function(require,module,exports) {
-module.exports = JSON.parse('{"name":"Arial","size":32,"bold":false,"italic":false,"width":341,"height":125,"characters":{"0":{"x":59,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"1":{"x":87,"y":81,"width":11,"height":25,"originX":-2,"originY":24,"advance":18},"2":{"x":239,"y":56,"width":17,"height":25,"originX":0,"originY":24,"advance":18},"3":{"x":77,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"4":{"x":40,"y":56,"width":19,"height":25,"originX":1,"originY":24,"advance":18},"5":{"x":95,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"6":{"x":113,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"7":{"x":131,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"8":{"x":149,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"9":{"x":167,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18}," ":{"x":237,"y":106,"width":3,"height":3,"originX":1,"originY":1,"advance":9},"!":{"x":120,"y":81,"width":7,"height":25,"originX":-1,"originY":24,"advance":9},"\\"":{"x":148,"y":106,"width":11,"height":10,"originX":0,"originY":24,"advance":11},"#":{"x":284,"y":31,"width":20,"height":25,"originX":1,"originY":24,"advance":18},"$":{"x":108,"y":0,"width":18,"height":29,"originX":0,"originY":25,"advance":18},"%":{"x":183,"y":0,"width":28,"height":25,"originX":0,"originY":24,"advance":28},"&":{"x":92,"y":31,"width":22,"height":25,"originX":0,"originY":24,"advance":21},"\'":{"x":159,"y":106,"width":6,"height":10,"originX":0,"originY":24,"advance":6},"(":{"x":56,"y":0,"width":10,"height":31,"originX":-1,"originY":24,"advance":11},")":{"x":66,"y":0,"width":10,"height":31,"originX":-1,"originY":24,"advance":11},"*":{"x":135,"y":106,"width":13,"height":12,"originX":0,"originY":24,"advance":12},"+":{"x":84,"y":106,"width":18,"height":17,"originX":0,"originY":20,"advance":19},",":{"x":165,"y":106,"width":6,"height":10,"originX":-1,"originY":4,"advance":9},"-":{"x":199,"y":106,"width":11,"height":5,"originX":0,"originY":11,"advance":11},".":{"x":210,"y":106,"width":5,"height":5,"originX":-2,"originY":4,"advance":9},"/":{"x":76,"y":81,"width":11,"height":25,"originX":1,"originY":24,"advance":9},":":{"x":43,"y":106,"width":5,"height":19,"originX":-2,"originY":18,"advance":9},";":{"x":142,"y":81,"width":6,"height":24,"originX":-1,"originY":18,"advance":9},"<":{"x":48,"y":106,"width":18,"height":18,"originX":0,"originY":20,"advance":19},"=":{"x":117,"y":106,"width":18,"height":12,"originX":0,"originY":17,"advance":19},">":{"x":66,"y":106,"width":18,"height":18,"originX":0,"originY":20,"advance":19},"?":{"x":185,"y":56,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"@":{"x":0,"y":0,"width":33,"height":31,"originX":0,"originY":24,"advance":32},"A":{"x":261,"y":0,"width":24,"height":25,"originX":1,"originY":24,"advance":21},"B":{"x":304,"y":31,"width":20,"height":25,"originX":-1,"originY":24,"advance":21},"C":{"x":309,"y":0,"width":23,"height":25,"originX":0,"originY":24,"advance":23},"D":{"x":114,"y":31,"width":22,"height":25,"originX":-1,"originY":24,"advance":23},"E":{"x":0,"y":56,"width":20,"height":25,"originX":-1,"originY":24,"advance":21},"F":{"x":203,"y":56,"width":18,"height":25,"originX":-1,"originY":24,"advance":20},"G":{"x":285,"y":0,"width":24,"height":25,"originX":0,"originY":24,"advance":25},"H":{"x":158,"y":31,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"I":{"x":127,"y":81,"width":5,"height":25,"originX":-2,"originY":24,"advance":9},"J":{"x":49,"y":81,"width":15,"height":25,"originX":0,"originY":24,"advance":16},"K":{"x":136,"y":31,"width":22,"height":25,"originX":-1,"originY":24,"advance":21},"L":{"x":256,"y":56,"width":17,"height":25,"originX":-1,"originY":24,"advance":18},"M":{"x":211,"y":0,"width":25,"height":25,"originX":-1,"originY":24,"advance":27},"N":{"x":179,"y":31,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"O":{"x":236,"y":0,"width":25,"height":25,"originX":0,"originY":24,"advance":25},"P":{"x":20,"y":56,"width":20,"height":25,"originX":-1,"originY":24,"advance":21},"Q":{"x":126,"y":0,"width":25,"height":26,"originX":0,"originY":24,"advance":25},"R":{"x":0,"y":31,"width":23,"height":25,"originX":-1,"originY":24,"advance":23},"S":{"x":200,"y":31,"width":21,"height":25,"originX":0,"originY":24,"advance":21},"T":{"x":221,"y":31,"width":21,"height":25,"originX":1,"originY":24,"advance":20},"U":{"x":242,"y":31,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"V":{"x":23,"y":31,"width":23,"height":25,"originX":1,"originY":24,"advance":21},"W":{"x":151,"y":0,"width":32,"height":25,"originX":1,"originY":24,"advance":30},"X":{"x":46,"y":31,"width":23,"height":25,"originX":1,"originY":24,"advance":21},"Y":{"x":69,"y":31,"width":23,"height":25,"originX":1,"originY":24,"advance":21},"Z":{"x":263,"y":31,"width":21,"height":25,"originX":1,"originY":24,"advance":20},"[":{"x":76,"y":0,"width":9,"height":31,"originX":-1,"originY":24,"advance":9},"\\\\":{"x":98,"y":81,"width":11,"height":25,"originX":1,"originY":24,"advance":9},"]":{"x":85,"y":0,"width":9,"height":31,"originX":1,"originY":24,"advance":9},"^":{"x":102,"y":106,"width":15,"height":15,"originX":0,"originY":24,"advance":15},"_":{"x":215,"y":106,"width":22,"height":4,"originX":2,"originY":-3,"advance":18},"`":{"x":190,"y":106,"width":9,"height":6,"originX":0,"originY":24,"advance":11},"a":{"x":198,"y":81,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"b":{"x":273,"y":56,"width":17,"height":25,"originX":-1,"originY":24,"advance":18},"c":{"x":306,"y":81,"width":17,"height":19,"originX":0,"originY":18,"advance":16},"d":{"x":290,"y":56,"width":17,"height":25,"originX":0,"originY":24,"advance":18},"e":{"x":216,"y":81,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"f":{"x":64,"y":81,"width":12,"height":25,"originX":1,"originY":24,"advance":9},"g":{"x":307,"y":56,"width":17,"height":25,"originX":0,"originY":18,"advance":18},"h":{"x":17,"y":81,"width":16,"height":25,"originX":-1,"originY":24,"advance":18},"i":{"x":132,"y":81,"width":5,"height":25,"originX":-1,"originY":24,"advance":7},"j":{"x":94,"y":0,"width":9,"height":31,"originX":3,"originY":24,"advance":7},"k":{"x":33,"y":81,"width":16,"height":25,"originX":-1,"originY":24,"advance":16},"l":{"x":137,"y":81,"width":5,"height":25,"originX":-1,"originY":24,"advance":7},"m":{"x":148,"y":81,"width":25,"height":19,"originX":-1,"originY":18,"advance":27},"n":{"x":323,"y":81,"width":16,"height":19,"originX":-1,"originY":18,"advance":18},"o":{"x":234,"y":81,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"p":{"x":324,"y":56,"width":17,"height":25,"originX":-1,"originY":18,"advance":18},"q":{"x":0,"y":81,"width":17,"height":25,"originX":0,"originY":18,"advance":18},"r":{"x":32,"y":106,"width":11,"height":19,"originX":-1,"originY":18,"advance":11},"s":{"x":0,"y":106,"width":16,"height":19,"originX":0,"originY":18,"advance":16},"t":{"x":109,"y":81,"width":11,"height":25,"originX":1,"originY":24,"advance":9},"u":{"x":16,"y":106,"width":16,"height":19,"originX":-1,"originY":18,"advance":18},"v":{"x":252,"y":81,"width":18,"height":19,"originX":1,"originY":18,"advance":16},"w":{"x":173,"y":81,"width":25,"height":19,"originX":1,"originY":18,"advance":23},"x":{"x":270,"y":81,"width":18,"height":19,"originX":1,"originY":18,"advance":16},"y":{"x":221,"y":56,"width":18,"height":25,"originX":1,"originY":18,"advance":16},"z":{"x":288,"y":81,"width":18,"height":19,"originX":1,"originY":18,"advance":16},"{":{"x":45,"y":0,"width":11,"height":31,"originX":0,"originY":24,"advance":11},"|":{"x":103,"y":0,"width":5,"height":31,"originX":-2,"originY":24,"advance":8},"}":{"x":33,"y":0,"width":12,"height":31,"originX":1,"originY":24,"advance":11},"~":{"x":171,"y":106,"width":19,"height":7,"originX":0,"originY":15,"advance":19}}}');
-
-},{}],"hKcF4":[function(require,module,exports) {
-module.exports = JSON.parse('{"name":"Arial","size":32,"bold":true,"italic":false,"width":351,"height":126,"characters":{"0":{"x":211,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"1":{"x":86,"y":82,"width":13,"height":25,"originX":-1,"originY":24,"advance":18},"2":{"x":40,"y":57,"width":19,"height":25,"originX":1,"originY":24,"advance":18},"3":{"x":229,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"4":{"x":59,"y":57,"width":19,"height":25,"originX":1,"originY":24,"advance":18},"5":{"x":247,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"6":{"x":265,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"7":{"x":283,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"8":{"x":301,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18},"9":{"x":319,"y":57,"width":18,"height":25,"originX":0,"originY":24,"advance":18}," ":{"x":298,"y":107,"width":3,"height":3,"originX":1,"originY":1,"advance":9},"!":{"x":134,"y":82,"width":8,"height":25,"originX":-1,"originY":24,"advance":11},"\\"":{"x":206,"y":107,"width":15,"height":10,"originX":0,"originY":24,"advance":15},"#":{"x":311,"y":32,"width":20,"height":25,"originX":1,"originY":24,"advance":18},"$":{"x":120,"y":0,"width":18,"height":30,"originX":0,"originY":26,"advance":18},"%":{"x":164,"y":0,"width":28,"height":26,"originX":0,"originY":24,"advance":28},"&":{"x":300,"y":0,"width":24,"height":25,"originX":0,"originY":24,"advance":23},"\'":{"x":221,"y":107,"width":8,"height":10,"originX":0,"originY":24,"advance":8},"(":{"x":65,"y":0,"width":11,"height":31,"originX":0,"originY":24,"advance":11},")":{"x":76,"y":0,"width":11,"height":31,"originX":0,"originY":24,"advance":11},"*":{"x":184,"y":107,"width":14,"height":12,"originX":1,"originY":24,"advance":12},"+":{"x":128,"y":107,"width":19,"height":18,"originX":0,"originY":20,"advance":19},",":{"x":198,"y":107,"width":8,"height":11,"originX":0,"originY":5,"advance":9},"-":{"x":258,"y":107,"width":12,"height":6,"originX":0,"originY":11,"advance":11},".":{"x":270,"y":107,"width":7,"height":6,"originX":-1,"originY":5,"advance":9},"/":{"x":112,"y":82,"width":11,"height":25,"originX":1,"originY":24,"advance":9},":":{"x":121,"y":107,"width":7,"height":19,"originX":-2,"originY":18,"advance":11},";":{"x":163,"y":82,"width":8,"height":24,"originX":-1,"originY":18,"advance":11},"<":{"x":306,"y":82,"width":18,"height":19,"originX":0,"originY":21,"advance":19},"=":{"x":165,"y":107,"width":19,"height":13,"originX":0,"originY":18,"advance":19},">":{"x":324,"y":82,"width":18,"height":19,"originX":0,"originY":21,"advance":19},"?":{"x":331,"y":32,"width":20,"height":25,"originX":0,"originY":24,"advance":20},"@":{"x":0,"y":0,"width":32,"height":32,"originX":0,"originY":24,"advance":31},"A":{"x":225,"y":0,"width":25,"height":25,"originX":1,"originY":24,"advance":23},"B":{"x":141,"y":32,"width":22,"height":25,"originX":-1,"originY":24,"advance":23},"C":{"x":72,"y":32,"width":23,"height":25,"originX":0,"originY":24,"advance":23},"D":{"x":163,"y":32,"width":22,"height":25,"originX":-1,"originY":24,"advance":23},"E":{"x":0,"y":57,"width":20,"height":25,"originX":-1,"originY":24,"advance":21},"F":{"x":0,"y":82,"width":18,"height":25,"originX":-1,"originY":24,"advance":20},"G":{"x":324,"y":0,"width":24,"height":25,"originX":0,"originY":24,"advance":25},"H":{"x":185,"y":32,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"I":{"x":142,"y":82,"width":7,"height":25,"originX":-1,"originY":24,"advance":9},"J":{"x":18,"y":82,"width":18,"height":25,"originX":1,"originY":24,"advance":18},"K":{"x":95,"y":32,"width":23,"height":25,"originX":-1,"originY":24,"advance":23},"L":{"x":78,"y":57,"width":19,"height":25,"originX":-1,"originY":24,"advance":20},"M":{"x":250,"y":0,"width":25,"height":25,"originX":-1,"originY":24,"advance":27},"N":{"x":206,"y":32,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"O":{"x":275,"y":0,"width":25,"height":25,"originX":0,"originY":24,"advance":25},"P":{"x":20,"y":57,"width":20,"height":25,"originX":-1,"originY":24,"advance":21},"Q":{"x":138,"y":0,"width":26,"height":27,"originX":0,"originY":24,"advance":25},"R":{"x":118,"y":32,"width":23,"height":25,"originX":-1,"originY":24,"advance":23},"S":{"x":227,"y":32,"width":21,"height":25,"originX":0,"originY":24,"advance":21},"T":{"x":248,"y":32,"width":21,"height":25,"originX":0,"originY":24,"advance":20},"U":{"x":269,"y":32,"width":21,"height":25,"originX":-1,"originY":24,"advance":23},"V":{"x":0,"y":32,"width":24,"height":25,"originX":1,"originY":24,"advance":21},"W":{"x":192,"y":0,"width":33,"height":25,"originX":1,"originY":24,"advance":30},"X":{"x":24,"y":32,"width":24,"height":25,"originX":1,"originY":24,"advance":21},"Y":{"x":48,"y":32,"width":24,"height":25,"originX":1,"originY":24,"advance":21},"Z":{"x":290,"y":32,"width":21,"height":25,"originX":1,"originY":24,"advance":20},"[":{"x":87,"y":0,"width":11,"height":31,"originX":-1,"originY":24,"advance":11},"\\\\":{"x":123,"y":82,"width":11,"height":25,"originX":1,"originY":24,"advance":9},"]":{"x":98,"y":0,"width":11,"height":31,"originX":1,"originY":24,"advance":11},"^":{"x":147,"y":107,"width":18,"height":14,"originX":0,"originY":24,"advance":19},"_":{"x":277,"y":107,"width":21,"height":5,"originX":2,"originY":-2,"advance":18},"`":{"x":248,"y":107,"width":10,"height":7,"originX":1,"originY":24,"advance":11},"a":{"x":0,"y":107,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"b":{"x":97,"y":57,"width":19,"height":25,"originX":-1,"originY":24,"advance":20},"c":{"x":18,"y":107,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"d":{"x":116,"y":57,"width":19,"height":25,"originX":0,"originY":24,"advance":20},"e":{"x":36,"y":107,"width":18,"height":19,"originX":0,"originY":18,"advance":18},"f":{"x":72,"y":82,"width":14,"height":25,"originX":1,"originY":24,"advance":11},"g":{"x":135,"y":57,"width":19,"height":25,"originX":0,"originY":18,"advance":20},"h":{"x":36,"y":82,"width":18,"height":25,"originX":-1,"originY":24,"advance":20},"i":{"x":149,"y":82,"width":7,"height":25,"originX":-1,"originY":24,"advance":9},"j":{"x":109,"y":0,"width":11,"height":31,"originX":3,"originY":24,"advance":9},"k":{"x":54,"y":82,"width":18,"height":25,"originX":-1,"originY":24,"advance":18},"l":{"x":156,"y":82,"width":7,"height":25,"originX":-1,"originY":24,"advance":9},"m":{"x":171,"y":82,"width":28,"height":19,"originX":0,"originY":18,"advance":28},"n":{"x":54,"y":107,"width":18,"height":19,"originX":-1,"originY":18,"advance":20},"o":{"x":227,"y":82,"width":20,"height":19,"originX":0,"originY":18,"advance":20},"p":{"x":154,"y":57,"width":19,"height":25,"originX":-1,"originY":18,"advance":20},"q":{"x":173,"y":57,"width":19,"height":25,"originX":0,"originY":18,"advance":20},"r":{"x":108,"y":107,"width":13,"height":19,"originX":-1,"originY":18,"advance":12},"s":{"x":287,"y":82,"width":19,"height":19,"originX":1,"originY":18,"advance":18},"t":{"x":99,"y":82,"width":13,"height":25,"originX":1,"originY":24,"advance":11},"u":{"x":72,"y":107,"width":18,"height":19,"originX":-1,"originY":18,"advance":20},"v":{"x":247,"y":82,"width":20,"height":19,"originX":1,"originY":18,"advance":18},"w":{"x":199,"y":82,"width":28,"height":19,"originX":1,"originY":18,"advance":25},"x":{"x":267,"y":82,"width":20,"height":19,"originX":1,"originY":18,"advance":18},"y":{"x":192,"y":57,"width":19,"height":25,"originX":1,"originY":18,"advance":18},"z":{"x":90,"y":107,"width":18,"height":19,"originX":1,"originY":18,"advance":16},"{":{"x":39,"y":0,"width":13,"height":31,"originX":0,"originY":24,"advance":12},"|":{"x":32,"y":0,"width":7,"height":32,"originX":-1,"originY":24,"advance":9},"}":{"x":52,"y":0,"width":13,"height":31,"originX":0,"originY":24,"advance":12},"~":{"x":229,"y":107,"width":19,"height":8,"originX":0,"originY":15,"advance":19}}}');
-
-},{}],"4axCz":[function(require,module,exports) {
-module.exports = require("./helpers/bundle-url").getBundleURL("ao0Rz") + "Arial.5339cec6.png" + "?" + Date.now();
-
-},{"./helpers/bundle-url":"lgJ39"}]},["cWaoa","1jwFz"], "1jwFz", "parcelRequirec478")
+},{"./common.js":"lYeTq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["cWaoa","1jwFz"], "1jwFz", "parcelRequirec478")
 
 //# sourceMappingURL=index.8e9bd240.js.map

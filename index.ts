@@ -9,7 +9,6 @@ import fragmentSource_2 from './shaders/fragment_2.glsl'
 // @ts-ignore
 import vertexSource_2 from './shaders/vertex_2.glsl'
 
-
 import { Model } from './Model';
 import { DATASET, load_OBJ, read_CSV } from './Loader';
 import { Text } from './Text';
@@ -29,11 +28,18 @@ let viewUniformID: WebGLUniformLocation;
 let projectionUniformID: WebGLUniformLocation;
 let lightToggleUniformID: WebGLUniformLocation;
 
+let cameraRightWorldSpaceUniformID: WebGLUniformLocation;
+let cameraUpWorldSpaceUniformID: WebGLUniformLocation;
+
 let positionAttributeID: GLint[];
 let normalAttributeID: GLint[];
 let textureAttributeID: GLint[];
 
 let iter = 0; // For a simple movement demo
+
+//User controlled rotation
+let x_rotation;
+let y_rotation;
 
 let Point;
 let Cube;
@@ -43,7 +49,29 @@ let label; // For testing HTML based Text overlay
 let Fonts; // Generator for Font Texture Data
 
 let AxisLabels: Model[];
-let AxisValues: Model[];
+let AxisValues: Model[][];
+
+//Axis Options
+let xLength;
+let yLength;
+let zLength;
+
+// Event Listeners for movement controls 
+(<HTMLElement>document.getElementById("left")).addEventListener("click", function () {
+    x_rotation -= 0.1;
+});
+
+(<HTMLElement>document.getElementById("right")).addEventListener("click", function () {
+    x_rotation += 0.1;
+});
+
+(<HTMLElement>document.getElementById("up")).addEventListener("click", function () {
+    y_rotation += 0.1;
+});
+
+(<HTMLElement>document.getElementById("down")).addEventListener("click", function () {
+    y_rotation -= 0.1;
+});
 
 async function main() {
 
@@ -55,14 +83,17 @@ async function main() {
     projectionUniformID = [];
     lightToggleUniformID = [];
 
-    for(let i=0; i<num_of_programs; i++)
-    {
+    for (let i = 0; i < num_of_programs; i++) {
         // Get Uniform Locations 
         modelUniformID[i] = <WebGLUniformLocation>gl.getUniformLocation(programs[i], "model");
         viewUniformID[i] = <WebGLUniformLocation>gl.getUniformLocation(programs[i], "view");
         projectionUniformID[i] = <WebGLUniformLocation>gl.getUniformLocation(programs[i], "projection");
         lightToggleUniformID[i] = <WebGLUniformLocation>gl.getUniformLocation(programs[i], "light_toggle");
     }
+
+    //Uniforms only in shader program 1
+    cameraRightWorldSpaceUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "camRight_WS");
+    cameraUpWorldSpaceUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "camUp_WS");
 
     // Define and Init all Models to render
     let axisData = await load_OBJ("Axis");
@@ -78,8 +109,15 @@ async function main() {
     Cube.init(CubeData[0], CubeData[1], CubeData[2], CubeData[3], gl);
 
     AxisLabels = [];
-    AxisValues = [];
+    AxisValues = [[]];
     Fonts = new Font(0, gl); // Create a Font Object
+
+    xLength = 1;
+    yLength = 1;
+    zLength = 1;
+
+    x_rotation = 0;
+    y_rotation = 0;
 
     // Define 3 glyph based letter labels for each axis 
     let LetterData = await load_OBJ("Glyph");
@@ -93,31 +131,49 @@ async function main() {
     Fonts.init('x');
     AxisLabels[2] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
     AxisLabels[2].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
-    
+
     // 10 value labels on each axis
-    for(let i=1; i<10; i++)
-    {
+    for (let i = 1; i < 10; i++) {
+        AxisValues[i] = [];
         Fonts.init(i);
-        AxisValues[i] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-        AxisValues[i].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        AxisValues[i][0] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        AxisValues[i][0].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+
+        for (let j = 1; j < xLength; j++) {
+            Fonts.init(0);
+            AxisValues[i][j] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+            AxisValues[i][j].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        }
     }
 
-    for(let i=1; i<10; i++)
-    {
-        Fonts.init(i);
-        AxisValues[i+10] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-        AxisValues[i+10].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+    for (let i = 11; i < 20; i++) {
+        AxisValues[i] = [];
+        Fonts.init(i - 10);
+        AxisValues[i][0] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        AxisValues[i][0].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+
+        for (let j = 1; j < zLength; j++) {
+            Fonts.init(0);
+            AxisValues[i][j] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+            AxisValues[i][j].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        }
     }
 
-    for(let i=1; i<10; i++)
-    {
-        Fonts.init(i);
-        AxisValues[i+20] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-        AxisValues[i+20].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+    for (let i = 21; i < 30; i++) {
+        AxisValues[i] = [];
+        Fonts.init(i - 20);
+        AxisValues[i][0] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        AxisValues[i][0].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+
+        for (let j = 1; j < yLength; j++) {
+            Fonts.init(0);
+            AxisValues[i][j] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+            AxisValues[i][j].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        }
     }
 
     //Init HTML based label
-    label = new Text("div", gl.canvas.width, gl.canvas.height);
+    //label = new Text("div", gl.canvas.width, gl.canvas.height);
 
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.FRONT);
@@ -129,8 +185,9 @@ async function main() {
 
     gl.enable(gl.STENCIL_TEST);
 
+    // Listen for a file upload 
     await read_CSV();
-    
+
     //Start render loop 
     window.requestAnimationFrame(Render);
 
@@ -140,8 +197,7 @@ async function main() {
     Top Level Render Function, setup reused components such as the global model and view then call 
     upon helper function to render some logical part of the scene using those values
 */
-function Render(timestamp)
-{
+function Render(timestamp) {
     // | Setup |
 
     //Create a top level model
@@ -151,15 +207,19 @@ function Render(timestamp)
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 15 * (Math.PI / 180), [1, 0, 0]);
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * (Math.PI / 180), [0, -1, 0]);
 
+    //User controlled rotation applied
+    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, x_rotation, [0, 1, 0]);
+    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, y_rotation, [1, 0, 0]);
+
     // Setup View
     let view = glmath.mat4.create()
     let viewPos = glmath.vec3.create();
     let viewRotation = glmath.vec3.create();
     let viewUp = glmath.vec3.create();
 
-    glmath.mat4.lookAt(view, 
-        glmath.vec3.set(viewPos, 0, 0, 3), 
-        glmath.vec3.set(viewRotation, 0, 0, 0), 
+    glmath.mat4.lookAt(view,
+        glmath.vec3.set(viewPos, 0, 0, 3),
+        glmath.vec3.set(viewRotation, 0, 0, 0),
         glmath.vec3.set(viewUp, 0, 1, 0));
 
     gl.useProgram(programs[0]);
@@ -172,7 +232,7 @@ function Render(timestamp)
 
     RenderStructure(GLOBAL_MODEL);
 
-    RenderAxisText(GLOBAL_MODEL);
+    RenderAxisText(GLOBAL_MODEL, view);
 
     RenderData(GLOBAL_MODEL);
 
@@ -182,8 +242,7 @@ function Render(timestamp)
 /*
     Renders Imported Data Points that need shader program 1
 */
-function RenderData(global_model: glmath.mat4)
-{
+function RenderData(global_model: glmath.mat4) {
     // _____________
     // +++ SETUP +++
     // _____________
@@ -193,7 +252,7 @@ function RenderData(global_model: glmath.mat4)
     gl.enableVertexAttribArray(positionAttributeID[0]);
     gl.enableVertexAttribArray(normalAttributeID[0]);
     gl.enableVertexAttribArray(textureAttributeID[0]);
-    
+
     // Setup Projection 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     let projection: glmath.mat4 = glmath.mat4.create();
@@ -208,19 +267,18 @@ function RenderData(global_model: glmath.mat4)
     // _____________
     // +++ Render +++
     // _____________
-    
+
     let global_point_model = glmath.mat4.create();
     glmath.mat4.copy(global_point_model, global_model);
     glmath.mat4.scale(global_point_model, global_point_model, [0.05, 0.05, 0.05]);
     glmath.mat4.translate(global_point_model, global_point_model, [0, 0, 0]);
 
-    for(let i=0; i<DATASET.length; i++)
-    {
+    for (let i = 0; i < DATASET.length; i++) {
         let max_axis = 9; //Will need to be edited based on what the axis max currently is
         let x = Number(Object.values(DATASET[i])[0]) * 2;
         let y = Number(Object.values(DATASET[i])[1]) * 2;
-        let z = (max_axis*2+2)-(Number(Object.values(DATASET[i])[2]) * 2); //Use max_axis to flip the z axis to fit visual
-        
+        let z = (max_axis * 2 + 2) - (Number(Object.values(DATASET[i])[2]) * 2); //Use max_axis to flip the z axis to fit visual
+
         let point_model = glmath.mat4.create();
         glmath.mat4.copy(point_model, global_point_model);
         glmath.mat4.translate(point_model, point_model, [x, y, z]);
@@ -233,18 +291,33 @@ function RenderData(global_model: glmath.mat4)
     Renders glyph text that needs shader program 1
     Depends on positions of axis lines already placed to ensure relative placement of text
 */
-function RenderAxisText(global_model: glmath.mat4) {
-    
+function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
+
     // _____________
     // +++ SETUP +++
     // _____________
+
+    /* Really simple way to scale the axis values automatically, needs to re-init axis values though
+    This will need to be revisted to implement correctly 
+    if(DATASET[0] != undefined)
+    {
+        let max_x = String(Object.values(DATASET[0])[0]);
+        xLength = max_x.length;
+
+        let max_y = String(Object.values(DATASET[0])[1]);
+        yLength = max_y.length;
+    
+        let max_z = String(Object.values(DATASET[0])[2]);
+        zLength = max_z.length;
+    }
+    */
 
     //Set Shader to use 
     gl.useProgram(programs[1]);
     gl.enableVertexAttribArray(positionAttributeID[1]);
     gl.enableVertexAttribArray(normalAttributeID[1]);
     gl.enableVertexAttribArray(textureAttributeID[1]);
-    
+
     // Setup Projection 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     let projection: glmath.mat4 = glmath.mat4.create();
@@ -252,36 +325,42 @@ function RenderAxisText(global_model: glmath.mat4) {
     gl.uniformMatrix4fv(projectionUniformID[1], false, projection);
 
     gl.uniform1i(lightToggleUniformID[1], 1); // Use Light
+    gl.uniform3f(cameraRightWorldSpaceUniformID, view[0][0], view[1][0], view[2][0]);
+    gl.uniform3f(cameraUpWorldSpaceUniformID, view[0][1], view[1][1], view[2][1]);
 
     gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
 
     // _____________
     // +++ Render +++
     // _____________
-    
 
+    //global_model = eraseRotation(global_model);
     glmath.mat4.scale(global_model, global_model, [1.8, 1.8, 1.8]);
     glmath.mat4.translate(global_model, global_model, [-0.55, -0.55, -0.55]);
 
     let LetterModel = glmath.mat4.create();
     glmath.mat4.copy(LetterModel, global_model);
     glmath.mat4.scale(LetterModel, LetterModel, [0.03, 0.03, 1]);
-    
     glmath.mat4.translate(LetterModel, LetterModel, [40, 0, 0]);
+
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[0].render();
 
     let singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
-    glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.5, -3, 1]);
-    glmath.mat4.translate(singleAxisModel, singleAxisModel, [-1.0, -2.2, 0]);
-    
+    glmath.mat4.translate(singleAxisModel, singleAxisModel, [0, 0.6, 0]);
 
-    for(let i=1; i<10; i++)
-    {
-        glmath.mat4.translate(singleAxisModel, singleAxisModel, [5.0, 0, 0.00]);
-        gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
-        AxisValues[i].render();
+    for (let i = 1; i < 10; i++) {
+        let loopModel = glmath.mat4.create();
+        glmath.mat4.copy(loopModel, singleAxisModel);
+        glmath.mat4.translate(loopModel, loopModel, [5.0 * i, 0, 0]);
+        for (let j = 0; j < xLength; j++) {
+            if (j > 0) {
+                glmath.mat4.translate(loopModel, loopModel, [2, -2, 0]);
+            }
+            gl.uniformMatrix4fv(modelUniformID[1], false, loopModel);
+            AxisValues[i][j].render();
+        }
     }
 
     glmath.mat4.translate(LetterModel, LetterModel, [-40, 40, 0]);
@@ -290,14 +369,19 @@ function RenderAxisText(global_model: glmath.mat4) {
 
     singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
-    glmath.mat4.translate(singleAxisModel, singleAxisModel, [5, 0, 1]);
-    glmath.mat4.translate(singleAxisModel, singleAxisModel, [52.2, -1.0, 0]);
+    glmath.mat4.translate(singleAxisModel, singleAxisModel, [1, 0.6, 1]);
 
-    for(let i=1; i<10; i++)
-    {
-        glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.0, 0, -0.1]);
-        gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
-        AxisValues[i].render();
+    for (let i = 11; i < 20; i++) {
+        let loopModel = glmath.mat4.create();
+        glmath.mat4.copy(loopModel, singleAxisModel);
+        glmath.mat4.translate(loopModel, loopModel, [0, 0, -0.1 * (i - 10)]);
+        for (let j = 0; j < zLength; j++) {
+            if (j > 0) {
+                glmath.mat4.translate(loopModel, loopModel, [2, 0, 0]);
+            }
+            gl.uniformMatrix4fv(modelUniformID[1], false, loopModel);
+            AxisValues[i][j].render();
+        }
     }
 
     glmath.mat4.translate(LetterModel, LetterModel, [-5, -45, 1]);
@@ -306,14 +390,20 @@ function RenderAxisText(global_model: glmath.mat4) {
 
     singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
-    glmath.mat4.translate(singleAxisModel, singleAxisModel, [-2, 0, 1]);
-    glmath.mat4.translate(singleAxisModel, singleAxisModel, [-3.0, -1.0, 0]);
+    glmath.mat4.translate(singleAxisModel, singleAxisModel, [2, 0, 0]);
+    //glmath.mat4.translate(singleAxisModel, singleAxisModel, [-3.0, -1.0, 0]);
 
-    for(let i=1; i<10; i++)
-    {
-        glmath.mat4.translate(singleAxisModel, singleAxisModel, [0.0, 5, 0]);
-        gl.uniformMatrix4fv(modelUniformID[1], false, singleAxisModel);
-        AxisValues[i].render();
+    for (let i = 21; i < 30; i++) {
+        let loopModel = glmath.mat4.create();
+        glmath.mat4.copy(loopModel, singleAxisModel);
+        glmath.mat4.translate(loopModel, loopModel, [-2 * xLength, 5.0 * (i - 20), 0]);
+        for (let j = 0; j < yLength; j++) {
+            if (j > 0) {
+                glmath.mat4.translate(loopModel, loopModel, [2, 0, 0]);
+            }
+            gl.uniformMatrix4fv(modelUniformID[1], false, loopModel);
+            AxisValues[i][j].render();
+        }
     }
 
 }
@@ -343,18 +433,18 @@ function RenderStructure(global_model: glmath.mat4) {
     gl.enableVertexAttribArray(positionAttributeID[0]);
     gl.enableVertexAttribArray(normalAttributeID[0]);
     gl.enableVertexAttribArray(textureAttributeID[0]);
-    
+
     // Setup Projection 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     let projection: glmath.mat4 = glmath.mat4.create();
     projection = glmath.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
     gl.uniformMatrix4fv(projectionUniformID[0], false, projection);
-    
 
 
-    // ______________________________
-    // +++ DRAWING POLYGONS START +++
-    // ______________________________
+
+    // ________________
+    // +++ Render +++
+    // ________________
 
     // | DRAW STENCIL CUBE |
     gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
@@ -390,38 +480,36 @@ function RenderStructure(global_model: glmath.mat4) {
     //glmath.mat4.rotate(globalAxisModel, globalAxisModel, iter, [0, 1, 0]);
     glmath.mat4.scale(globalAxisModel, globalAxisModel, [1.8, 1.8, 1.8]);
     glmath.mat4.translate(globalAxisModel, globalAxisModel, [-0.55, -0.55, -0.55]);
-    
+
     glmath.mat4.copy(glyphModel, global_model);
     glmath.mat4.scale(glyphModel, glyphModel, [1.8, 1.8, 1.8]);
     glmath.mat4.translate(glyphModel, glyphModel, [-0.55, -0.55, -0.55]);
-    
+
 
     // Create a local and global model to split transformations applied to Axis Lines
     let Axismodel = glmath.mat4.create();
 
-    for(let i=0; i<11; i++)
-    {
+    for (let i = 0; i < 11; i++) {
         glmath.mat4.copy(Axismodel, globalAxisModel);
-        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i/10)]);
+        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / 10)]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
         Axis.render();
-        
+
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.rotate(Axismodel, Axismodel, 1.5708, [0, 1, 0]);
-        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i/10)]);
+        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i / 10)]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 0]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
         Axis.render();
     }
-    
+
     glmath.mat4.rotate(globalAxisModel, globalAxisModel, 1.5708, [1, 0, 0]);
     glmath.mat4.translate(globalAxisModel, globalAxisModel, [0, 0, -1]);
 
-    for(let i=0; i<11; i++)
-    {
+    for (let i = 0; i < 11; i++) {
         glmath.mat4.copy(Axismodel, globalAxisModel);
-        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i/10)]);
+        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / 10)]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
 
@@ -429,20 +517,19 @@ function RenderStructure(global_model: glmath.mat4) {
 
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.rotate(Axismodel, Axismodel, 1.5708, [0, 1, 0]);
-        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i/10)]);
+        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i / 10)]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 0]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
-        
+
         Axis.render();
     }
 
     glmath.mat4.rotate(globalAxisModel, globalAxisModel, 1.5708, [0, 0, 1]);
     glmath.mat4.translate(globalAxisModel, globalAxisModel, [0, 0, 0]);
 
-    for(let i=0; i<11; i++)
-    {
+    for (let i = 0; i < 11; i++) {
         glmath.mat4.copy(Axismodel, globalAxisModel);
-        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i/10)]);
+        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / 10)]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
 
@@ -450,10 +537,10 @@ function RenderStructure(global_model: glmath.mat4) {
 
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.rotate(Axismodel, Axismodel, 1.5708, [0, 1, 0]);
-        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i/10)]);
+        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i / 10)]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 0]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
-        
+
         Axis.render();
     }
 
@@ -477,24 +564,23 @@ function init() {
 
     //Create, compile and link shaders
     let vertex = [createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource_1),
-                  createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource_2)];
+    createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource_2)];
     let fragment = [createShader(temp_gl, temp_gl.FRAGMENT_SHADER, fragmentSource_1),
-                    createShader(temp_gl, temp_gl.FRAGMENT_SHADER, fragmentSource_2)];
+    createShader(temp_gl, temp_gl.FRAGMENT_SHADER, fragmentSource_2)];
 
     programs = [];
     positionAttributeID = [];
     normalAttributeID = [];
     textureAttributeID = [];
 
-    for(let i=0; i<num_of_programs; i++)
-    {
+    for (let i = 0; i < num_of_programs; i++) {
         programs[i] = createProgram(temp_gl, vertex[i], fragment[i]);
 
         positionAttributeID[i] = temp_gl.getAttribLocation(programs[i], "a_position");
         normalAttributeID[i] = temp_gl.getAttribLocation(programs[i], "a_normal");
         textureAttributeID[i] = temp_gl.getAttribLocation(programs[i], "a_texture");
     }
-    
+
     return temp_gl;
 
 }
@@ -529,14 +615,13 @@ function createProgram(gl, vertexShader, fragmentShader) {
 /*
     Set rotation part to the indentity matrix
 */
-function eraseRotation(matrix:glmath.mat4)
-{
+function eraseRotation(matrix: glmath.mat4) {
     return glmath.mat4.fromValues(
         1, 0, 0, matrix[0][3],
         0, 1, 0, matrix[1][3],
         0, 0, 1, matrix[2][3],
         matrix[3][0], matrix[3][1], matrix[3][2], matrix[3][3]
-        );
+    );
 }
 
 window.onload = main;
