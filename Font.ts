@@ -1,5 +1,5 @@
 /*
-    This is a class definition that handles WebGL Text using glyph textures
+    This is a class definition that generates texture and vertex data for a given character / number 
         x----x
         |    |    +   texture of a single letter
         |    |
@@ -27,20 +27,18 @@ export class Font {
     image: HTMLImageElement;
     gl: WebGLRenderingContext;
 
-    constructor(set_font_option: number, set_gl: WebGLRenderingContext)
-    {
+    constructor(set_font_option: number, set_gl: WebGLRenderingContext) {
         this.font_pointers = [Arial_Atlas, ArialBold_Atlas];
         this.font_data_pointers = [Arial, Arial_Bold];
         this.font_option = set_font_option;
         this.gl = set_gl;
         this.textureCord = [];
-        
+
         this.image = new Image();
         this.image.src = this.font_pointers[this.font_option];
     }
-    
-    init(num: string)
-    {
+
+    init(num: string) {
 
         this.textureCord = [];
         let x = this.font_data_pointers[this.font_option].characters[num].x;
@@ -53,23 +51,21 @@ export class Font {
         this.textureCord.push(y / 125);
 
         this.textureCord.push(x / 341);
-        this.textureCord.push((y+height) / 125);
+        this.textureCord.push((y + height) / 125);
 
-        this.textureCord.push((x+width) / 341);
-        this.textureCord.push((y+height) / 125);
+        this.textureCord.push((x + width) / 341);
+        this.textureCord.push((y + height) / 125);
 
-        this.textureCord.push((x+width) / 341);
-        this.textureCord.push(y /125);
+        this.textureCord.push((x + width) / 341);
+        this.textureCord.push(y / 125);
 
     }
 
-    getTextureCords()
-    {
+    getTextureCords() {
         return this.textureCord;
     }
 
-    getImage()
-    {
+    getImage() {
         return this.image.src;
     }
 
