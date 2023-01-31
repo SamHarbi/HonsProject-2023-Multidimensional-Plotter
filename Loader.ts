@@ -1,5 +1,5 @@
 /*
-    This is a collection of functions for dealing with loading in models 
+    This is a collection of functions for dealing with loading in data 
 */
 
 //Imports will give errors if not using parcel
@@ -112,15 +112,14 @@ export async function read_CSV() {
         if (file) {
             const reader = new FileReader();
             reader.addEventListener("load", () => {
-                try{
+                try {
                     DATASET = csv.toObjects(reader.result); //Save to Object
-                } catch(error)
-                {
+                } catch (error) {
                     alert("Wrong file format, Please Uplaod a .csv file");
                 }
             });
             reader.readAsText(file);
-          }
+        }
     })
 
 }
@@ -140,8 +139,7 @@ async function ReadFile(model: string) {
         var raw = fs.readFileSync(path.join(__dirname, "./models/AxisLine.obj"), "utf8");
         return raw;
     }
-    else if(model == "Glyph")
-    {
+    else if (model == "Glyph") {
         var raw = fs.readFileSync(path.join(__dirname, "./models/Glyph.obj"), "utf-8");
         return raw;
     }
