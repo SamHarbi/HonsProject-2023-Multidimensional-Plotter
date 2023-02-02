@@ -1,12 +1,12 @@
 @import 'npm:@picocss/pico';
-@import url('https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css');
 
-#invisible {
-    display: none;
+#grid {
+    display: flex;
+    justify-content: center;
 }
 
 article {
-    max-height: min-content;
+    margin: 1vh;
 }
 
 h4 {
@@ -15,6 +15,20 @@ h4 {
 
 a {
     margin: 1%;
+}
+
+#row-large {
+    flex: 2;
+    flex-grow: 2;
+}
+
+#row-small {
+    flex: 1;
+    flex-grow: 1;
+}
+
+#invisible {
+    display: none;
 }
 
 #Overlay {
