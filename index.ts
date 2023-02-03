@@ -148,9 +148,9 @@ async function main() {
     AxisValues = [[]];
     Fonts = new Font(0, gl); // Create a Font Object
 
-    xLength = 3;
-    yLength = 2;
-    zLength = 2;
+    xLength = 1;
+    yLength = 1;
+    zLength = 1;
 
     x_rotation = 0;
     y_rotation = 0;
@@ -198,10 +198,17 @@ async function main() {
 /*
     Helper Function used by setAxisValues
 */
-function generateAxisValuesAt(i, LetterData, mod, controller, length) {
+function generateAxisValuesAt(i, LetterData, mod, controller) {
     AxisValues[i] = [];
-    var digit = String(Math.abs((i - mod) + controller)).split('').map(Number); //Get Array of digits
-    for (let j = 0; j < length; j++) {
+
+    if (controller > 0) {
+        var digit = String(Math.abs((i - mod) + controller)).split('').map(Number); //Get Array of digits
+    }
+    else {
+        var digit = String(Math.abs((i - mod) + controller)).split('').map(Number); //Get Array of digits
+    }
+
+    for (let j = 0; j < digit.length; j++) {
 
         if (digit[j] === undefined) {
             Fonts.init(0);
@@ -210,9 +217,8 @@ function generateAxisValuesAt(i, LetterData, mod, controller, length) {
         }
         AxisValues[i][j] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
         AxisValues[i][j].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
-
-        return digit.length;
     }
+
 }
 
 /*
@@ -222,13 +228,13 @@ async function setAxisValues() {
 
     let LetterData = await load_OBJ("Glyph"); //Performance Hit 
 
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 31; i++) {
         if (i <= 10) {
-            xLength = generateAxisValuesAt(i, LetterData, 0, z_move, xLength);
+            generateAxisValuesAt(i, LetterData, 0, z_move);
         } else if (i <= 20) {
-            yLength = generateAxisValuesAt(i, LetterData, 10, x_move, yLength);
+            generateAxisValuesAt(i, LetterData, 10, x_move);
         } else if (i <= 31) {
-            zLength = generateAxisValuesAt(i, LetterData, 20, y_move, zLength);
+            generateAxisValuesAt(i, LetterData, 20, y_move);
         }
 
     }
@@ -315,7 +321,7 @@ function RenderData(global_model: glmath.mat4) {
     let global_point_model = glmath.mat4.create();
     glmath.mat4.copy(global_point_model, global_model);
     glmath.mat4.scale(global_point_model, global_point_model, [0.05, 0.05, 0.05]);
-    glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * x_move, 0, 0]);
+    glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * z_move, 0 - 2 * y_move, 0 + 2 * x_move]);
 
     for (let i = 0; i < DATASET.length; i++) {
         let max_axis = 9; //Will need to be edited based on what the axis max currently is
@@ -398,7 +404,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         let loopModel = glmath.mat4.create();
         glmath.mat4.copy(loopModel, singleAxisModel);
         glmath.mat4.translate(loopModel, loopModel, [5.0 * i, 0, 0]);
-        for (let j = 0; j < xLength; j++) {
+        for (let j = 0; j < AxisValues[i].length; j++) {
             if (j > 0) {
                 glmath.mat4.translate(loopModel, loopModel, [2, -2, 0]);
             }
@@ -421,7 +427,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         let loopModel = glmath.mat4.create();
         glmath.mat4.copy(loopModel, singleAxisModel);
         glmath.mat4.translate(loopModel, loopModel, [0, 0, -0.1 * (i - 10)]);
-        for (let j = 0; j < zLength; j++) {
+        for (let j = 0; j < AxisValues[i].length; j++) {
             if (j > 0) {
                 glmath.mat4.translate(loopModel, loopModel, [2, 0, 0]);
             }
@@ -445,7 +451,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         let loopModel = glmath.mat4.create();
         glmath.mat4.copy(loopModel, singleAxisModel);
         glmath.mat4.translate(loopModel, loopModel, [-2 * xLength, 5.0 * (i - 20), 0]);
-        for (let j = 0; j < yLength; j++) {
+        for (let j = 0; j < AxisValues[i].length; j++) {
             if (j > 0) {
                 glmath.mat4.translate(loopModel, loopModel, [2, 0, 0]);
             }

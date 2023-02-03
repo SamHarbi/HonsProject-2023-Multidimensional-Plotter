@@ -5,6 +5,10 @@
     justify-content: center;
 }
 
+#compressed {
+    display: flex;
+}
+
 article {
     margin: 1vh;
     padding: 3vh;
