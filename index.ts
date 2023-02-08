@@ -65,8 +65,9 @@ let zLength;
 (<HTMLElement>document.getElementById("zoom")).addEventListener("input", function () {
     // @ts-ignore 1
     let change = <Number>document.getElementById("zoom").value;
-    zoom = change;
-
+    // @ts-ignore 1
+    zoom = change / 10;
+    setAxisValues();
 });
 
 
@@ -88,12 +89,12 @@ let zLength;
 
 
 (<HTMLElement>document.getElementById("back-Move")).addEventListener("click", function () {
-    x_move -= 2;
+    x_move += 2;
     setAxisValues();
 });
 
 (<HTMLElement>document.getElementById("forward-Move")).addEventListener("click", function () {
-    x_move += 2;
+    x_move -= 2;
     setAxisValues();
 });
 
@@ -169,7 +170,7 @@ async function main() {
     y_move = 0;
     z_move = 0;
 
-    zoom = 10;
+    zoom = 1;
 
     // Define 3 glyph based letter labels for each axis 
     let LetterData = await load_OBJ("Glyph");
@@ -213,12 +214,8 @@ async function main() {
 function generateAxisValuesAt(i, LetterData, mod, controller) {
     AxisValues[i] = [];
 
-    if (controller > 0) {
-        var digit = String(Math.abs((i - mod) + controller)).split('').map(Number); //Get Array of digits
-    }
-    else {
-        var digit = String(Math.abs((i - mod) + controller)).split('').map(Number); //Get Array of digits
-    }
+    let zoom_mod = (-zoom / 0.1) + 10;
+    var digit = String(Math.abs((i - mod) + (controller * zoom_mod))).split('').map(Number); //Get Array of digits
 
     for (let j = 0; j < digit.length; j++) {
 
@@ -339,11 +336,12 @@ function RenderData(global_model: glmath.mat4) {
         let max_axis = 9; //Will need to be edited based on what the axis max currently is
         let x = Number(Object.values(DATASET[i])[0]) * 2;
         let y = Number(Object.values(DATASET[i])[1]) * 2;
-        let z = (max_axis * 2 + 2) - (Number(Object.values(DATASET[i])[2]) * 2); //Use max_axis to flip the z axis to fit visual
+        let z = (Number(Object.values(DATASET[i])[2]) * 2); //Use max_axis to flip the z axis to fit visual
 
         let point_model = glmath.mat4.create();
         glmath.mat4.copy(point_model, global_point_model);
-        glmath.mat4.translate(point_model, point_model, [x, y, z]);
+        glmath.mat4.translate(point_model, point_model, [x * zoom, y * zoom, z * zoom]);
+        glmath.mat4.scale(point_model, point_model, [1 * zoom, 1 * zoom, 1 * zoom]);
         gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
         Point.render();
     }
@@ -412,10 +410,15 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [0, 0.6, 0]);
 
-    for (let i = 1; i < 10; i++) {
+    /*
+        This affects how many glyphs are rendered based on the zoom level
+    */
+    let zoom_factor = zoom * 10
+
+    for (let i = 1; i < zoom_factor; i++) {
         let loopModel = glmath.mat4.create();
         glmath.mat4.copy(loopModel, singleAxisModel);
-        glmath.mat4.translate(loopModel, loopModel, [5.0 * i, 0, 0]);
+        glmath.mat4.translate(loopModel, loopModel, [5 * i / zoom, 0, 0]);
         for (let j = 0; j < AxisValues[i].length; j++) {
             if (j > 0) {
                 glmath.mat4.translate(loopModel, loopModel, [2, -2, 0]);
@@ -435,10 +438,10 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [1, 0.6, 1]);
 
-    for (let i = 11; i < 20; i++) {
+    for (let i = 11; i < zoom_factor + 10; i++) {
         let loopModel = glmath.mat4.create();
         glmath.mat4.copy(loopModel, singleAxisModel);
-        glmath.mat4.translate(loopModel, loopModel, [0, 0, -0.1 * (i - 10)]);
+        glmath.mat4.translate(loopModel, loopModel, [0, 0, (0.1 * (i - 10)) / zoom - 1]);
         for (let j = 0; j < AxisValues[i].length; j++) {
             if (j > 0) {
                 glmath.mat4.translate(loopModel, loopModel, [2, 0, 0]);
@@ -459,10 +462,10 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [2, 0, 0]);
     //glmath.mat4.translate(singleAxisModel, singleAxisModel, [-3.0, -1.0, 0]);
 
-    for (let i = 21; i < 30; i++) {
+    for (let i = 21; i < zoom_factor + 20; i++) {
         let loopModel = glmath.mat4.create();
         glmath.mat4.copy(loopModel, singleAxisModel);
-        glmath.mat4.translate(loopModel, loopModel, [-2 * xLength, 5.0 * (i - 20), 0]);
+        glmath.mat4.translate(loopModel, loopModel, [-2 * xLength, (5.0 * (i - 20)) / zoom, 0]);
         for (let j = 0; j < AxisValues[i].length; j++) {
             if (j > 0) {
                 glmath.mat4.translate(loopModel, loopModel, [2, 0, 0]);
@@ -559,14 +562,14 @@ function RenderStructure(global_model: glmath.mat4) {
 
     for (let i = 0; i < 11; i++) {
         glmath.mat4.copy(Axismodel, globalAxisModel);
-        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / (10 * zoom / 10))]);
+        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / (10 * zoom))]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
         Axis.render();
 
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.rotate(Axismodel, Axismodel, 1.5708, [0, 1, 0]);
-        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i / (10 * zoom / 10))]);
+        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i / (10 * zoom))]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 0]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
         Axis.render();
@@ -577,7 +580,7 @@ function RenderStructure(global_model: glmath.mat4) {
 
     for (let i = 0; i < 11; i++) {
         glmath.mat4.copy(Axismodel, globalAxisModel);
-        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / (10 * zoom / 10))]);
+        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / (10 * zoom))]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
 
@@ -585,7 +588,7 @@ function RenderStructure(global_model: glmath.mat4) {
 
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.rotate(Axismodel, Axismodel, 90 * (Math.PI / 180), [0, 1, 0]);
-        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i / (10 * zoom / 10))]);
+        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i / (10 * zoom))]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 0]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
 
@@ -597,7 +600,7 @@ function RenderStructure(global_model: glmath.mat4) {
 
     for (let i = 0; i < 11; i++) {
         glmath.mat4.copy(Axismodel, globalAxisModel);
-        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / (10 * zoom / 10))]);
+        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / (10 * zoom))]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
 
@@ -605,7 +608,7 @@ function RenderStructure(global_model: glmath.mat4) {
 
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.rotate(Axismodel, Axismodel, 90 * (Math.PI / 180), [0, 1, 0]);
-        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i / (10 * zoom / 10))]);
+        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i / (10 * zoom))]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 0]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
 
