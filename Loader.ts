@@ -5,10 +5,12 @@
 //Imports will give errors if not using parcel
 // @ts-ignore
 import { Console } from "console";
+// @ts-ignore
 import fs from "fs";
 // @ts-ignore
 import path from "path";
 
+// @ts-ignore
 var csv = require('jquery-csv'); //Not actually jquery, just a parser with jquery compliant syntax
 
 //Global Dataset Variable of currently last imported (valid) data
