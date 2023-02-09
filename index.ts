@@ -550,7 +550,7 @@ function RenderStructure(global_model: glmath.mat4) {
     gl.cullFace(gl.FRONT);
 
     gl.stencilFunc(gl.EQUAL, 1, 0xFF);
-    gl.stencilOp(gl.REPLACE, gl.KEEP, gl.REPLACE);
+    gl.stencilOp(gl.REPLACE, gl.REPLACE, gl.REPLACE);
 
     // | ALL OTHER POLYGONS WITHIN BOUNDING CUBE START |
 
