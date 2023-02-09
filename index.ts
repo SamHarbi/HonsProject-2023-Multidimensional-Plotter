@@ -16,6 +16,7 @@ import { Font } from './Font';
 
 import * as glmath from 'gl-matrix';
 
+let glyph; // Loaded WebGL Label Skeleton
 
 let gl: WebGLRenderingContext;
 let canvas: HTMLCanvasElement;
@@ -44,7 +45,7 @@ let x_move;
 let y_move;
 let z_move;
 
-let zoom;
+let zoom; // At what zoom level is the view
 
 let Point;
 let Cube;
@@ -118,8 +119,6 @@ let zLength;
     setAxisValues();
 });
 
-//More buttons for z axis needed here TODO
-
 async function main() {
 
     // gl has already been checked so cannot be undefined- safe to cast
@@ -172,6 +171,9 @@ async function main() {
 
     zoom = 1;
 
+    //Prepare Label 
+    glyph = await load_OBJ("Glyph");
+
     // Define 3 glyph based letter labels for each axis 
     let LetterData = await load_OBJ("Glyph");
 
@@ -214,20 +216,25 @@ async function main() {
 function generateAxisValuesAt(i, LetterData, mod, controller) {
     AxisValues[i] = [];
 
+    // Dual zoom level, this could be made better with more zoom levels
     let zoom_mod = 1;
     if (zoom <= 0.2) {
         zoom_mod = 25
     }
 
-    var digit = String(Math.abs((i - mod) + controller) * zoom_mod).split('').map(Number); //Get Array of digits
+    var digit = String(Math.abs((i - mod) + controller) * zoom_mod).split('').map(Number); // Calculate the Axis value, then  get array of digits
 
+    // For every digit that makes the axis label 
     for (let j = 0; j < digit.length; j++) {
 
+        // Init digit
         if (digit[j] === undefined) {
             Fonts.init(0);
         } else {
             Fonts.init(digit[j]);
         }
+
+        // Save digit
         AxisValues[i][j] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
         AxisValues[i][j].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
     }
@@ -237,10 +244,11 @@ function generateAxisValuesAt(i, LetterData, mod, controller) {
 
 /*
     Set the values on the axis
+    10 value labels on each axis
 */
 async function setAxisValues() {
 
-    let LetterData = await load_OBJ("Glyph"); //Performance Hit 
+    let LetterData = glyph;
 
     for (let i = 0; i < 31; i++) {
         if (i <= 10) {
@@ -252,8 +260,6 @@ async function setAxisValues() {
         }
 
     }
-
-    // 10 value labels on each axis
 
 }
 
@@ -338,10 +344,9 @@ function RenderData(global_model: glmath.mat4) {
     glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * z_move, 0 - 2 * y_move, 0 + 2 * x_move]);
 
     for (let i = 0; i < DATASET.length; i++) {
-        let max_axis = 9; //Will need to be edited based on what the axis max currently is
         let x = Number(Object.values(DATASET[i])[0]) * 2;
         let y = Number(Object.values(DATASET[i])[1]) * 2;
-        let z = (Number(Object.values(DATASET[i])[2]) * 2); //Use max_axis to flip the z axis to fit visual
+        let z = (Number(Object.values(DATASET[i])[2]) * 2);
 
         let point_model = glmath.mat4.create();
         glmath.mat4.copy(point_model, global_point_model);
