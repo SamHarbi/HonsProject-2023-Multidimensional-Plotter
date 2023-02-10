@@ -28,6 +28,6 @@
     else
     {
       //light = dot(normal, position.xyz);
-      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);
+      gl_FragColor = colour;
     }
   }

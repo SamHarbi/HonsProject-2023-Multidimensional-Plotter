@@ -4,6 +4,7 @@
   attribute vec2 a_texture;
 
   uniform mat4 model, projection, view;
+  uniform vec3 in_colour;
 
   varying vec4 colour;
   varying vec3 v_normal;
@@ -19,7 +20,7 @@
 
     position = gl_Position;
     
-    colour = vec4(1, 1, 0.5, 1.0);
+    colour = vec4(in_colour, 1.0);
     v_normal = a_normal;
     v_texcoord = a_texture;
   }

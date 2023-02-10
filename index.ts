@@ -27,7 +27,7 @@ let modelUniformID: WebGLUniformLocation;
 let viewUniformID: WebGLUniformLocation;
 let projectionUniformID: WebGLUniformLocation;
 let lightToggleUniformID: WebGLUniformLocation;
-
+let colourUniformID: WebGLUniformLocation;
 let cameraRightWorldSpaceUniformID: WebGLUniformLocation;
 let cameraUpWorldSpaceUniformID: WebGLUniformLocation;
 
@@ -55,11 +55,16 @@ let Fonts; // Generator for Font Texture Data
 
 let AxisLabels: Model[];
 let AxisValues: Model[][];
+let AxisMap: Number[]; //data describing the nature of the axis values, negative or positive 
 
 //Axis Options
 let xLength;
 let yLength;
 let zLength;
+
+//Colours of Axis
+let positiveColour = [1, 1, 1];
+let negativeColour = [1, 0.4, 0.4];
 
 // Event Listeners for user controls
 (<HTMLElement>document.getElementById("zoom")).addEventListener("input", function () {
@@ -129,6 +134,7 @@ async function main() {
     viewUniformID = [];
     projectionUniformID = [];
     lightToggleUniformID = [];
+    colourUniformID = [];
 
     for (let i = 0; i < num_of_programs; i++) {
         // Get Uniform Locations 
@@ -136,6 +142,7 @@ async function main() {
         viewUniformID[i] = <WebGLUniformLocation>gl.getUniformLocation(programs[i], "view");
         projectionUniformID[i] = <WebGLUniformLocation>gl.getUniformLocation(programs[i], "projection");
         lightToggleUniformID[i] = <WebGLUniformLocation>gl.getUniformLocation(programs[i], "light_toggle");
+        colourUniformID[i] = <WebGLUniformLocation>gl.getUniformLocation(programs[i], "in_colour");
     }
 
     //Uniforms only in shader program 1
@@ -157,6 +164,7 @@ async function main() {
 
     AxisLabels = [];
     AxisValues = [[]];
+    AxisMap = [];
     Fonts = new Font(0, gl); // Create a Font Object
 
     xLength = 1;
@@ -219,7 +227,16 @@ function generateAxisValuesAt(i, LetterData, mod, controller) {
         zoom_mod = 25
     }
 
-    var digit = String(Math.abs((i - mod) + controller) * zoom_mod).split('').map(Number); //Get Array of digits
+    let rawAxisValue = (i - mod) + controller;
+    var digit = String(Math.abs(rawAxisValue) * zoom_mod).split('').map(Number); //Get Array of digits
+
+    if (rawAxisValue > 0) // Positive Number 
+    {
+        AxisMap[i] = 1;
+    } else { // Negative Number
+        AxisMap[i] = 0;
+    }
+
 
     for (let j = 0; j < digit.length; j++) {
 
@@ -392,6 +409,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     gl.uniform1i(lightToggleUniformID[1], 1); // Use Light
     gl.uniform3f(cameraRightWorldSpaceUniformID, view[0][0], view[1][0], view[2][0]);
     gl.uniform3f(cameraUpWorldSpaceUniformID, view[0][1], view[1][1], view[2][1]);
+    gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
 
     gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
 
@@ -431,6 +449,11 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
                 }
                 gl.uniformMatrix4fv(modelUniformID[1], false, loopModel);
                 if (AxisValues[i][j] != undefined) {
+                    if (AxisMap[i] == 0) {
+                        gl.uniform3f(colourUniformID[1], negativeColour[0], negativeColour[1], negativeColour[2]);
+                    } else {
+                        gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
+                    }
                     AxisValues[i][j].render();
                 }
             }
@@ -440,6 +463,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
 
     glmath.mat4.translate(LetterModel, LetterModel, [-40, 40, 0]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
+    gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
     AxisLabels[1].render();
 
     singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
@@ -457,6 +481,11 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
                 }
                 gl.uniformMatrix4fv(modelUniformID[1], false, loopModel);
                 if (AxisValues[i][j] != undefined) {
+                    if (AxisMap[i] == 0) {
+                        gl.uniform3f(colourUniformID[1], negativeColour[0], negativeColour[1], negativeColour[2]);
+                    } else {
+                        gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
+                    }
                     AxisValues[i][j].render();
                 }
             }
@@ -465,6 +494,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
 
     glmath.mat4.translate(LetterModel, LetterModel, [-5, -45, 1]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
+    gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
     AxisLabels[2].render();
 
     singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
@@ -483,6 +513,11 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
                 }
                 gl.uniformMatrix4fv(modelUniformID[1], false, loopModel);
                 if (AxisValues[i][j] != undefined) {
+                    if (AxisMap[i] == 0) {
+                        gl.uniform3f(colourUniformID[1], negativeColour[0], negativeColour[1], negativeColour[2]);
+                    } else {
+                        gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
+                    }
                     AxisValues[i][j].render();
                 }
             }
@@ -521,6 +556,7 @@ function RenderStructure(global_model: glmath.mat4) {
     let projection: glmath.mat4 = glmath.mat4.create();
     projection = glmath.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
     gl.uniformMatrix4fv(projectionUniformID[0], false, projection);
+    gl.uniform3f(colourUniformID[0], 1, 1, 1);
 
 
 
