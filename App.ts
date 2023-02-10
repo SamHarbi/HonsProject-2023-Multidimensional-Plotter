@@ -3,14 +3,12 @@
     to be rendered in WebGL.
 */
 export class App {
-    
-    Parent: HTMLElement; 
 
-    constructor(parent)
-    {
+    Parent: HTMLElement;
+
+    constructor(parent) {
         let temp_parent = document.getElementById(parent);
-        if(typeof(temp_parent) === null)
-        {
+        if (typeof (temp_parent) === null) {
             let temp_parent = document.body;
         }
 
