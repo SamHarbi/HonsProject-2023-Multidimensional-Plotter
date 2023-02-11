@@ -47,6 +47,7 @@ let y_move;
 let z_move;
 
 let zoom; // At what zoom level is the view
+let datasize;
 
 let Point;
 let Cube;
@@ -75,6 +76,11 @@ let negativeColour = [1, 0.4, 0.4];
     // @ts-ignore 1
     zoom = change / 10;
     setAxisValues();
+});
+
+(<HTMLElement>document.getElementById("datasize")).addEventListener("input", function () {
+    // @ts-ignore 1 1
+    datasize = <Number>document.getElementById("datasize").value / 100;
 });
 
 
@@ -179,6 +185,7 @@ async function main() {
     z_move = 0;
 
     zoom = 1;
+    datasize = 0.05
 
     //Prepare Label 
     glyph = await load_OBJ("Glyph");
@@ -366,7 +373,7 @@ function RenderData(global_model: glmath.mat4) {
     let global_point_model = glmath.mat4.create();
     glmath.mat4.copy(global_point_model, global_model);
     glmath.mat4.scale(global_point_model, global_point_model, [0.05, 0.05, 0.05]);
-    glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * z_move, 0 - 2 * y_move, 0 + 2 * x_move]);
+    glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * z_move * 1 / zoom, 0 - 2 * y_move * 1 / zoom, 0 - 2 * x_move * 1 / zoom]);
 
     for (let i = 0; i < DATASET.length; i++) {
         let x = Number(Object.values(DATASET[i])[0]) * 2;
