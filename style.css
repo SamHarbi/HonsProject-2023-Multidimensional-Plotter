@@ -21,11 +21,13 @@ a {
 #row-large {
     flex: 2;
     flex-grow: 2;
+    overflow: hidden;
 }
 
 #row-small {
     flex: 1;
     flex-grow: 1;
+    overflow-y: auto;
 }
 
 #invisible {

@@ -17,6 +17,7 @@ import { Font } from './Font';
 import * as glmath from 'gl-matrix';
 
 let glyph; // Loaded WebGL Label Skeleton
+let short_glyph;
 
 let gl: WebGLRenderingContext;
 let canvas: HTMLCanvasElement;
@@ -181,6 +182,7 @@ async function main() {
 
     //Prepare Label 
     glyph = await load_OBJ("Glyph");
+    short_glyph = await load_OBJ("ShortGlyph");
 
     // Define 3 glyph based letter labels for each axis 
     let LetterData = await load_OBJ("Glyph");
@@ -221,7 +223,7 @@ async function main() {
 /*
     Helper Function used by setAxisValues
 */
-function generateAxisValuesAt(i, LetterData, mod, controller) {
+function generateAxisValuesAt(i, mod, controller) {
     AxisValues[i] = [];
 
     // Dual zoom level, this could be made better with more zoom levels
@@ -240,7 +242,6 @@ function generateAxisValuesAt(i, LetterData, mod, controller) {
         AxisMap[i] = 0;
     }
 
-
     // For every digit that makes the axis label 
     for (let j = 0; j < digit.length; j++) {
 
@@ -253,9 +254,18 @@ function generateAxisValuesAt(i, LetterData, mod, controller) {
 
         // Save digit
         AxisValues[i][j] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-        AxisValues[i][j].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        AxisValues[i][j].init(glyph[0], glyph[1], glyph[2], Fonts.getTextureCords(), gl, Fonts.getImage());
     }
 
+    if (rawAxisValue < 0) {
+
+        Fonts.init('-');
+
+        let temp_val = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+        temp_val.init(short_glyph[0], short_glyph[1], short_glyph[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+
+        AxisValues[i].unshift(temp_val);
+    }
 
 }
 
@@ -265,15 +275,13 @@ function generateAxisValuesAt(i, LetterData, mod, controller) {
 */
 async function setAxisValues() {
 
-    let LetterData = glyph;
-
     for (let i = 0; i < 31; i++) {
         if (i <= 10) {
-            generateAxisValuesAt(i, LetterData, 0, z_move);
+            generateAxisValuesAt(i, 0, z_move);
         } else if (i <= 20) {
-            generateAxisValuesAt(i, LetterData, 10, x_move);
+            generateAxisValuesAt(i, 10, x_move);
         } else if (i <= 31) {
-            generateAxisValuesAt(i, LetterData, 20, y_move);
+            generateAxisValuesAt(i, 20, y_move);
         }
 
     }

@@ -31,7 +31,7 @@ export class Model {
         this.drawmode = newDrawMode;
     }
 
-    init(vertexData: number[], indexData: number[], normalData: number[], textureCord: number[], glRef: WebGLRenderingContext,  texImageURL?: string) {
+    init(vertexData: number[], indexData: number[], normalData: number[], textureCord: number[], glRef: WebGLRenderingContext, texImageURL?: string) {
 
         this.gl = glRef;
 
@@ -68,31 +68,29 @@ export class Model {
         }
 
         // Create a Texture and ensure it is valid
-         var temp_texture = this.gl.createTexture();
-         if (temp_texture === null) {
-             alert("An Error Occured while rendering (Texture Undefined), Please try reloading the page");
-             return;
-         }
-         else {
-             this.texture = <WebGLTexture>temp_texture;
-         }
+        var temp_texture = this.gl.createTexture();
+        if (temp_texture === null) {
+            alert("An Error Occured while rendering (Texture Undefined), Please try reloading the page");
+            return;
+        }
+        else {
+            this.texture = <WebGLTexture>temp_texture;
+        }
 
         this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
 
         // Temp data while waiting for image to load 
         this.gl.texImage2D(
-            this.gl.TEXTURE_2D, 0, this.gl.RGBA, 0, 
+            this.gl.TEXTURE_2D, 0, this.gl.RGBA, 0,
             1, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE,
             new Uint8Array([0, 0, 255, 255]
-        ));
+            ));
 
         this.image = new Image(341, 145);
-        if(texImageURL !== undefined)
-        {
+        if (texImageURL !== undefined) {
             this.image.src = texImageURL; //Refactor
         }
-        else
-        {
+        else {
             this.image.src = Arial_Atlas;
         }
         this.image.addEventListener('load', this.textureLoaded.bind(null, this.gl, this.image, this.texture), false);
@@ -106,7 +104,7 @@ export class Model {
         else {
             this.textureBuffer = <WebGLBuffer>temp_textureBuffer;
         }
-            
+
         //Bind Vertex Data to an array buffer
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(vertexData), this.gl.STATIC_DRAW);
@@ -132,7 +130,7 @@ export class Model {
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, (image as TexImageSource));
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, (image as TexImageSource));
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
