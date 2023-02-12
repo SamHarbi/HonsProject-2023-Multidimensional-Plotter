@@ -392,9 +392,9 @@ function RenderData(global_model: glmath.mat4) {
     glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * z_move * 1 / zoom, 0 - 2 * y_move * 1 / zoom, 0 - 2 * x_move * 1 / zoom]);
 
     for (let i = 0; i < DATASET.length; i++) {
-        let x = Number(Object.values(DATASET[i])[0]) * 2;
+        let z = Number(Object.values(DATASET[i])[0]) * 2;
         let y = Number(Object.values(DATASET[i])[1]) * 2;
-        let z = (Number(Object.values(DATASET[i])[2]) * 2);
+        let x = (Number(Object.values(DATASET[i])[2]) * 2);
 
         let point_model = glmath.mat4.create();
         glmath.mat4.copy(point_model, global_point_model);
