@@ -21,11 +21,11 @@
 
     if(light_toggle == 1)
     {
-          gl_FragColor = texture2D(u_texture, v_texcoord);
+          gl_FragColor = texture2D(u_texture, v_texcoord) * colour;
     }
     else
     {
       //light = dot(normal, position.xyz);
-      gl_FragColor = vec4(0.8, 0.8, 0.8, 1);
+      gl_FragColor = colour;
     }
   }

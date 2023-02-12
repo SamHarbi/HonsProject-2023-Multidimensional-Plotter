@@ -1,8 +1,23 @@
 @import 'npm:@picocss/pico';
 
-#grid {
-    display: flex;
-    justify-content: center;
+@media screen and (min-width: 1000px) {
+    #grid {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        flex-flow: wrap;
+        align-items: flex-start;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    #grid {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        flex-flow: column;
+        align-items: flex-start;
+    }
 }
 
 article {
@@ -21,11 +36,13 @@ a {
 #row-large {
     flex: 2;
     flex-grow: 2;
+    overflow: hidden;
 }
 
 #row-small {
     flex: 1;
     flex-grow: 1;
+    overflow-y: auto;
 }
 
 #invisible {
