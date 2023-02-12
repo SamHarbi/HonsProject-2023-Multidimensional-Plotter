@@ -46,8 +46,12 @@ let x_move;
 let y_move;
 let z_move;
 
+//Position modififed by mouse controls
+let mouse_x;
+let mouse_y;
+
 let zoom; // At what zoom level is the view
-let datasize;
+let viewsize;
 
 let Point;
 let Cube;
@@ -78,11 +82,20 @@ let negativeColour = [1, 0.4, 0.4];
     setAxisValues();
 });
 
-(<HTMLElement>document.getElementById("datasize")).addEventListener("input", function () {
+(<HTMLElement>document.getElementById("viewsize")).addEventListener("input", function () {
     // @ts-ignore 1 1
-    datasize = <Number>document.getElementById("datasize").value / 100;
+    viewsize = <Number>document.getElementById("viewsize").value / 10;
 });
 
+(<HTMLElement>document.getElementById("glCanvas")).addEventListener("mousemove", function (event) {
+
+    if (event.buttons == 1) {
+        mouse_x += event.movementX;
+        mouse_y += event.movementY;
+        //mouse_held = true;
+    }
+
+});
 
 (<HTMLElement>document.getElementById("left")).addEventListener("click", function () {
     x_rotation -= 0.1;
@@ -185,7 +198,10 @@ async function main() {
     z_move = 0;
 
     zoom = 1;
-    datasize = 0.05
+    viewsize = 0.4;
+
+    mouse_x = 1;
+    mouse_y = 1;
 
     //Prepare Label 
     glyph = await load_OBJ("Glyph");
@@ -304,14 +320,14 @@ function Render(timestamp) {
 
     //Create a top level model
     let GLOBAL_MODEL = glmath.mat4.create();
-    glmath.mat4.scale(GLOBAL_MODEL, GLOBAL_MODEL, [0.4, 0.4, 0.4]);
+    glmath.mat4.scale(GLOBAL_MODEL, GLOBAL_MODEL, [viewsize, viewsize, viewsize]);
     glmath.mat4.translate(GLOBAL_MODEL, GLOBAL_MODEL, [0.2, 0.2, 1]);
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 15 * (Math.PI / 180), [1, 0, 0]);
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * (Math.PI / 180), [0, -1, 0]);
 
     //User controlled rotation applied
-    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, x_rotation, [0, 1, 0]);
-    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, y_rotation, [1, 0, 0]);
+    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, x_rotation + mouse_x / 100, [0, 1, 0]);
+    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, y_rotation + mouse_y / 100, [1, 0, 0]);
 
     // Setup View
     let view = glmath.mat4.create()
