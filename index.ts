@@ -594,8 +594,6 @@ function RenderStructure(global_model: glmath.mat4) {
     gl.uniformMatrix4fv(projectionUniformID[0], false, projection);
     gl.uniform3f(colourUniformID[0], 1, 1, 1);
 
-
-
     // ________________
     // +++ Render +++
     // ________________
@@ -714,6 +712,11 @@ function init() {
     if (temp_gl === null) {
         alert("Unable to initialize WebGL. Your browser or machine may not support it.");
         return;
+    }
+
+    // @ts-ignore 
+    if (temp_gl.getContextAttributes().stencil == false) {
+        alert("Your Browser does not fully support this application (Stencil Attribute Missing) Please try another browser");
     }
 
     //Create, compile and link shaders
