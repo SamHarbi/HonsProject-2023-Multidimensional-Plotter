@@ -603,8 +603,8 @@ function RenderStructure(global_model: glmath.mat4) {
     // ________________
 
     // | DRAW STENCIL CUBE |
-    gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
-    gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
+    //gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
+    //gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
 
     gl.uniform1i(lightToggleUniformID[0], 0); // Don't Use Light
 
@@ -716,7 +716,7 @@ function init() {
 
     //Get canvas and initalise it 
     canvas = <HTMLCanvasElement>document.querySelector("#glCanvas");
-    const temp_gl = canvas.getContext("webgl", { stencil: true });
+    const temp_gl = canvas.getContext("webgl", { stencil: false });
 
     // Only continue if WebGL is available and working
     if (temp_gl === null) {
@@ -725,9 +725,9 @@ function init() {
     }
 
     // @ts-ignore 
-    if (temp_gl.getContextAttributes().stencil == false) {
-        alert("Your Browser does not fully support this application (Stencil Attribute Missing) Please try another browser");
-    }
+    //if (temp_gl.getContextAttributes().stencil == false) {
+    //alert("Your Browser does not fully support this application (Stencil Attribute Missing) Please try another browser");
+    //}
 
     //Create, compile and link shaders
     let vertex = [createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource_1),
