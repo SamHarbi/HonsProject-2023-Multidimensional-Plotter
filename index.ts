@@ -50,8 +50,9 @@ let z_move;
 let mouse_x;
 let mouse_y;
 
-let zoom; // At what zoom level is the view
-let viewsize;
+let zoom; // At what zoom level is the view, controls zoom of data points 
+let viewsize; //Camera position, controls camera zoom outside chart
+let pointsize; //Size of a data point 
 
 let Point;
 let Cube;
@@ -85,6 +86,11 @@ let negativeColour = [1, 0.4, 0.4];
 (<HTMLElement>document.getElementById("viewsize")).addEventListener("input", function () {
     // @ts-ignore 1 1
     viewsize = <Number>document.getElementById("viewsize").value / 10;
+});
+
+(<HTMLElement>document.getElementById("pointsize")).addEventListener("input", function () {
+    // @ts-ignore 1 1
+    pointsize = <Number>document.getElementById("pointsize").value / 10;
 });
 
 (<HTMLElement>document.getElementById("glCanvas")).addEventListener("mousemove", function (event) {
@@ -199,6 +205,7 @@ async function main() {
 
     zoom = 1;
     viewsize = 0.4;
+    pointsize = 1;
 
     mouse_x = 1;
     mouse_y = 1;
@@ -396,7 +403,13 @@ function RenderData(global_model: glmath.mat4) {
         let y = Number(Object.values(DATASET[i])[1]) * 2;
         let x = (Number(Object.values(DATASET[i])[2]) * 2);
 
-        if (x * zoom > 20 || y * zoom > 20 || z * zoom > 20) {
+        //Check that points are not beyond the view cube on +ve side
+        if (x * zoom - 2 * z_move > 20 || y * zoom - 2 * y_move > 20 || z * zoom - 2 * x_move > 20) {
+            continue;
+        }
+
+        //Check that points are not beyond the view cube on -ve side
+        if (x * zoom - 2 * z_move < 0 || y * zoom - 2 * y_move < 0 || z * zoom - 2 * x_move < 0) {
             continue;
         }
 
@@ -404,6 +417,7 @@ function RenderData(global_model: glmath.mat4) {
         glmath.mat4.copy(point_model, global_point_model);
         glmath.mat4.translate(point_model, point_model, [x * zoom, y * zoom, z * zoom]);
         glmath.mat4.scale(point_model, point_model, [1 * zoom, 1 * zoom, 1 * zoom]);
+        glmath.mat4.scale(point_model, point_model, [pointsize, pointsize, pointsize]);
         gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
         Point.render();
     }
