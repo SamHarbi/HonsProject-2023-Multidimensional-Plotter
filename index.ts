@@ -396,6 +396,10 @@ function RenderData(global_model: glmath.mat4) {
         let y = Number(Object.values(DATASET[i])[1]) * 2;
         let x = (Number(Object.values(DATASET[i])[2]) * 2);
 
+        if (x * zoom > 20 || y * zoom > 20 || z * zoom > 20) {
+            continue;
+        }
+
         let point_model = glmath.mat4.create();
         glmath.mat4.copy(point_model, global_point_model);
         glmath.mat4.translate(point_model, point_model, [x * zoom, y * zoom, z * zoom]);
@@ -614,13 +618,7 @@ function RenderStructure(global_model: glmath.mat4) {
     Cube.render();
     gl.cullFace(gl.FRONT);
 
-    gl.stencilFunc(gl.EQUAL, 1, 0xFF);
-    gl.stencilOp(gl.REPLACE, gl.REPLACE, gl.REPLACE);
-
     // | ALL OTHER POLYGONS WITHIN BOUNDING CUBE START |
-
-    gl.stencilFunc(gl.EQUAL, 1, 0xFF);
-    gl.stencilOp(gl.REPLACE, gl.KEEP, gl.REPLACE);
 
     gl.uniform1i(lightToggleUniformID[0], 1); // Use Light
 
@@ -642,6 +640,11 @@ function RenderStructure(global_model: glmath.mat4) {
     let Axismodel = glmath.mat4.create();
 
     for (let i = 0; i < 11; i++) {
+
+        if (i > (10 * zoom)) {
+            continue;
+        }
+
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / (10 * zoom))]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
@@ -660,6 +663,10 @@ function RenderStructure(global_model: glmath.mat4) {
     glmath.mat4.translate(globalAxisModel, globalAxisModel, [0, 0, -1]);
 
     for (let i = 0; i < 11; i++) {
+
+        if (i > (10 * zoom)) {
+            continue;
+        }
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / (10 * zoom))]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
@@ -680,6 +687,10 @@ function RenderStructure(global_model: glmath.mat4) {
     glmath.mat4.translate(globalAxisModel, globalAxisModel, [0, 0, 0]);
 
     for (let i = 0; i < 11; i++) {
+
+        if (i > (10 * zoom)) {
+            continue;
+        }
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / (10 * zoom))]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
@@ -695,7 +706,6 @@ function RenderStructure(global_model: glmath.mat4) {
 
         Axis.render();
     }
-
 
 }
 

@@ -20,6 +20,10 @@
     }
 }
 
+body {
+    overflow: hidden;
+}
+
 article {
     margin: 1vh;
     padding: 3vh;
@@ -42,7 +46,8 @@ a {
 #row-small {
     flex: 1;
     flex-grow: 1;
-    overflow-y: auto;
+    overflow-y: scroll;
+    height: 1000px;
 }
 
 #invisible {
