@@ -50,8 +50,9 @@ let z_move;
 let mouse_x;
 let mouse_y;
 
-let zoom; // At what zoom level is the view
-let viewsize;
+let zoom; // At what zoom level is the view, controls zoom of data points 
+let viewsize; //Camera position, controls camera zoom outside chart
+let pointsize; //Size of a data point 
 
 let Point;
 let Cube;
@@ -63,11 +64,6 @@ let Fonts; // Generator for Font Texture Data
 let AxisLabels: Model[];
 let AxisValues: Model[][];
 let AxisMap: Number[]; //data describing the nature of the axis values, negative or positive 
-
-//Axis Options
-let xLength;
-let yLength;
-let zLength;
 
 //Colours of Axis
 let positiveColour = [1, 1, 1];
@@ -85,6 +81,11 @@ let negativeColour = [1, 0.4, 0.4];
 (<HTMLElement>document.getElementById("viewsize")).addEventListener("input", function () {
     // @ts-ignore 1 1
     viewsize = <Number>document.getElementById("viewsize").value / 10;
+});
+
+(<HTMLElement>document.getElementById("pointsize")).addEventListener("input", function () {
+    // @ts-ignore 1 1
+    pointsize = <Number>document.getElementById("pointsize").value / 10;
 });
 
 (<HTMLElement>document.getElementById("glCanvas")).addEventListener("mousemove", function (event) {
@@ -149,6 +150,9 @@ async function main() {
     // gl has already been checked so cannot be undefined- safe to cast
     gl = <WebGLRenderingContext>init();
 
+    /*
+        Link Attributes and Locations
+    */
     modelUniformID = [];
     viewUniformID = [];
     projectionUniformID = [];
@@ -168,7 +172,9 @@ async function main() {
     cameraRightWorldSpaceUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "camRight_WS");
     cameraUpWorldSpaceUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "camUp_WS");
 
-    // Define and Init all Models to render
+    /*
+        Define and Init all Models to render
+    */
     let axisData = await load_OBJ("Axis");
     Axis = new Model(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.LINES);
     Axis.init(axisData[0], axisData[1], axisData[2], axisData[3], gl);
@@ -181,14 +187,13 @@ async function main() {
     Cube = new Model(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.TRIANGLES);
     Cube.init(CubeData[0], CubeData[1], CubeData[2], CubeData[3], gl);
 
+    /* 
+        Init general variables 
+    */
     AxisLabels = [];
     AxisValues = [[]];
     AxisMap = [];
     Fonts = new Font(0, gl); // Create a Font Object
-
-    xLength = 1;
-    yLength = 1;
-    zLength = 1;
 
     x_rotation = 0;
     y_rotation = 0;
@@ -199,32 +204,38 @@ async function main() {
 
     zoom = 1;
     viewsize = 0.4;
+    pointsize = 1;
 
     mouse_x = 1;
     mouse_y = 1;
 
-    //Prepare Label 
+    /*
+        Prepare all Label types
+    */
     glyph = await load_OBJ("Glyph");
     short_glyph = await load_OBJ("ShortGlyph");
 
-    // Define 3 glyph based letter labels for each axis 
-    let LetterData = await load_OBJ("Glyph");
-
+    /*
+        Define 3 glyph based letter labels for each axis 
+    */
     Fonts.init('z');
     AxisLabels[0] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-    AxisLabels[0].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+    AxisLabels[0].init(glyph[0], glyph[1], glyph[2], Fonts.getTextureCords(), gl, Fonts.getImage());
     Fonts.init('y');
     AxisLabels[1] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-    AxisLabels[1].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+    AxisLabels[1].init(glyph[0], glyph[1], glyph[2], Fonts.getTextureCords(), gl, Fonts.getImage());
     Fonts.init('x');
     AxisLabels[2] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-    AxisLabels[2].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+    AxisLabels[2].init(glyph[0], glyph[1], glyph[2], Fonts.getTextureCords(), gl, Fonts.getImage());
 
-    await setAxisValues(); //This is not great performance wise, but it's alright
+    await setAxisValues(); // Init Axis Labels
 
     //Init HTML based label
     //label = new Text("div", gl.canvas.width, gl.canvas.height);
 
+    /*
+        WebGL settings set
+    */
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.FRONT);
 
@@ -233,7 +244,7 @@ async function main() {
 
     gl.frontFace(gl.CW);
 
-    gl.enable(gl.STENCIL_TEST);
+    //gl.enable(gl.STENCIL_TEST); Stencil usage was removed 
 
     // Listen for a file upload 
     await read_CSV();
@@ -245,6 +256,11 @@ async function main() {
 
 /*
     Helper Function used by setAxisValues
+    Method: 
+        1- Calculate the Axis Value, example 245
+        2- Split this into an array, example [2, 4, 5]
+        3- Save and init glyph render data for each digit 
+
 */
 function generateAxisValuesAt(i, mod, controller) {
     AxisValues[i] = [];
@@ -255,9 +271,10 @@ function generateAxisValuesAt(i, mod, controller) {
         zoom_mod = 25
     }
 
-    let rawAxisValue = (i - mod) + controller;
-    var digit = String(Math.abs(rawAxisValue) * zoom_mod).split('').map(Number); // Calculate the Axis value, then get array of digits
+    let rawAxisValue = (i - mod) + controller; // Axis Value that can be +ve or -ve 
+    var digit = String(Math.abs(rawAxisValue) * zoom_mod).split('').map(Number); // Get Array of +ve digits that represent the value 
 
+    // No way to know if a label is negative or positive from within the code, store it in an array for each axis glyph
     if (rawAxisValue > 0) // Positive Number 
     {
         AxisMap[i] = 1;
@@ -280,13 +297,12 @@ function generateAxisValuesAt(i, mod, controller) {
         AxisValues[i][j].init(glyph[0], glyph[1], glyph[2], Fonts.getTextureCords(), gl, Fonts.getImage());
     }
 
+    // If the glyph is negative, push a negative sign glyph at the start 
     if (rawAxisValue < 0) {
 
         Fonts.init('-');
-
         let temp_val = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
         temp_val.init(short_glyph[0], short_glyph[1], short_glyph[2], Fonts.getTextureCords(), gl, Fonts.getImage());
-
         AxisValues[i].unshift(temp_val);
     }
 
@@ -306,9 +322,7 @@ async function setAxisValues() {
         } else if (i <= 31) {
             generateAxisValuesAt(i, 20, y_move);
         }
-
     }
-
 }
 
 /*
@@ -392,14 +406,25 @@ function RenderData(global_model: glmath.mat4) {
     glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * z_move * 1 / zoom, 0 - 2 * y_move * 1 / zoom, 0 - 2 * x_move * 1 / zoom]);
 
     for (let i = 0; i < DATASET.length; i++) {
-        let x = Number(Object.values(DATASET[i])[0]) * 2;
+        let z = Number(Object.values(DATASET[i])[0]) * 2;
         let y = Number(Object.values(DATASET[i])[1]) * 2;
-        let z = (Number(Object.values(DATASET[i])[2]) * 2);
+        let x = (Number(Object.values(DATASET[i])[2]) * 2);
+
+        //Check that points are not beyond the view cube on +ve side
+        if (x * zoom - 2 * z_move > 20 || y * zoom - 2 * y_move > 20 || z * zoom - 2 * x_move > 20) {
+            continue;
+        }
+
+        //Check that points are not beyond the view cube on -ve side
+        if (x * zoom - 2 * z_move < 0 || y * zoom - 2 * y_move < 0 || z * zoom - 2 * x_move < 0) {
+            continue;
+        }
 
         let point_model = glmath.mat4.create();
         glmath.mat4.copy(point_model, global_point_model);
         glmath.mat4.translate(point_model, point_model, [x * zoom, y * zoom, z * zoom]);
         glmath.mat4.scale(point_model, point_model, [1 * zoom, 1 * zoom, 1 * zoom]);
+        glmath.mat4.scale(point_model, point_model, [pointsize, pointsize, pointsize]);
         gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
         Point.render();
     }
@@ -542,7 +567,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         for (let i = 21; i < zoom_factor + 20; i++) {
             let loopModel = glmath.mat4.create();
             glmath.mat4.copy(loopModel, singleAxisModel);
-            glmath.mat4.translate(loopModel, loopModel, [-2 * xLength, (5.0 * (i - 20)) / zoom, 0]);
+            glmath.mat4.translate(loopModel, loopModel, [-2, (5.0 * (i - 20)) / zoom, 0]);
             for (let j = 0; j <= AxisValues[i].length; j++) {
                 if (j > 0) {
                     glmath.mat4.translate(loopModel, loopModel, [2, 0, 0]);
@@ -599,8 +624,8 @@ function RenderStructure(global_model: glmath.mat4) {
     // ________________
 
     // | DRAW STENCIL CUBE |
-    gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
-    gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
+    //gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
+    //gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
 
     gl.uniform1i(lightToggleUniformID[0], 0); // Don't Use Light
 
@@ -614,13 +639,7 @@ function RenderStructure(global_model: glmath.mat4) {
     Cube.render();
     gl.cullFace(gl.FRONT);
 
-    gl.stencilFunc(gl.EQUAL, 1, 0xFF);
-    gl.stencilOp(gl.REPLACE, gl.REPLACE, gl.REPLACE);
-
     // | ALL OTHER POLYGONS WITHIN BOUNDING CUBE START |
-
-    gl.stencilFunc(gl.EQUAL, 1, 0xFF);
-    gl.stencilOp(gl.REPLACE, gl.KEEP, gl.REPLACE);
 
     gl.uniform1i(lightToggleUniformID[0], 1); // Use Light
 
@@ -642,6 +661,11 @@ function RenderStructure(global_model: glmath.mat4) {
     let Axismodel = glmath.mat4.create();
 
     for (let i = 0; i < 11; i++) {
+
+        if (i > (10 * zoom)) {
+            continue;
+        }
+
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / (10 * zoom))]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
@@ -660,6 +684,10 @@ function RenderStructure(global_model: glmath.mat4) {
     glmath.mat4.translate(globalAxisModel, globalAxisModel, [0, 0, -1]);
 
     for (let i = 0; i < 11; i++) {
+
+        if (i > (10 * zoom)) {
+            continue;
+        }
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / (10 * zoom))]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
@@ -680,6 +708,10 @@ function RenderStructure(global_model: glmath.mat4) {
     glmath.mat4.translate(globalAxisModel, globalAxisModel, [0, 0, 0]);
 
     for (let i = 0; i < 11; i++) {
+
+        if (i > (10 * zoom)) {
+            continue;
+        }
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / (10 * zoom))]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
@@ -696,7 +728,6 @@ function RenderStructure(global_model: glmath.mat4) {
         Axis.render();
     }
 
-
 }
 
 /*
@@ -706,7 +737,7 @@ function init() {
 
     //Get canvas and initalise it 
     canvas = <HTMLCanvasElement>document.querySelector("#glCanvas");
-    const temp_gl = canvas.getContext("webgl", { stencil: true });
+    const temp_gl = canvas.getContext("webgl", { stencil: false });
 
     // Only continue if WebGL is available and working
     if (temp_gl === null) {
@@ -715,9 +746,9 @@ function init() {
     }
 
     // @ts-ignore 
-    if (temp_gl.getContextAttributes().stencil == false) {
-        alert("Your Browser does not fully support this application (Stencil Attribute Missing) Please try another browser");
-    }
+    //if (temp_gl.getContextAttributes().stencil == false) {
+    //alert("Your Browser does not fully support this application (Stencil Attribute Missing) Please try another browser");
+    //}
 
     //Create, compile and link shaders
     let vertex = [createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource_1),
