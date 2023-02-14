@@ -65,11 +65,6 @@ let AxisLabels: Model[];
 let AxisValues: Model[][];
 let AxisMap: Number[]; //data describing the nature of the axis values, negative or positive 
 
-//Axis Options
-let xLength;
-let yLength;
-let zLength;
-
 //Colours of Axis
 let positiveColour = [1, 1, 1];
 let negativeColour = [1, 0.4, 0.4];
@@ -155,6 +150,9 @@ async function main() {
     // gl has already been checked so cannot be undefined- safe to cast
     gl = <WebGLRenderingContext>init();
 
+    /*
+        Link Attributes and Locations
+    */
     modelUniformID = [];
     viewUniformID = [];
     projectionUniformID = [];
@@ -174,7 +172,9 @@ async function main() {
     cameraRightWorldSpaceUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "camRight_WS");
     cameraUpWorldSpaceUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "camUp_WS");
 
-    // Define and Init all Models to render
+    /*
+        Define and Init all Models to render
+    */
     let axisData = await load_OBJ("Axis");
     Axis = new Model(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.LINES);
     Axis.init(axisData[0], axisData[1], axisData[2], axisData[3], gl);
@@ -187,14 +187,13 @@ async function main() {
     Cube = new Model(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.TRIANGLES);
     Cube.init(CubeData[0], CubeData[1], CubeData[2], CubeData[3], gl);
 
+    /* 
+        Init general variables 
+    */
     AxisLabels = [];
     AxisValues = [[]];
     AxisMap = [];
     Fonts = new Font(0, gl); // Create a Font Object
-
-    xLength = 1;
-    yLength = 1;
-    zLength = 1;
 
     x_rotation = 0;
     y_rotation = 0;
@@ -210,28 +209,33 @@ async function main() {
     mouse_x = 1;
     mouse_y = 1;
 
-    //Prepare Label 
+    /*
+        Prepare all Label types
+    */
     glyph = await load_OBJ("Glyph");
     short_glyph = await load_OBJ("ShortGlyph");
 
-    // Define 3 glyph based letter labels for each axis 
-    let LetterData = await load_OBJ("Glyph");
-
+    /*
+        Define 3 glyph based letter labels for each axis 
+    */
     Fonts.init('z');
     AxisLabels[0] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-    AxisLabels[0].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+    AxisLabels[0].init(glyph[0], glyph[1], glyph[2], Fonts.getTextureCords(), gl, Fonts.getImage());
     Fonts.init('y');
     AxisLabels[1] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-    AxisLabels[1].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+    AxisLabels[1].init(glyph[0], glyph[1], glyph[2], Fonts.getTextureCords(), gl, Fonts.getImage());
     Fonts.init('x');
     AxisLabels[2] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-    AxisLabels[2].init(LetterData[0], LetterData[1], LetterData[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+    AxisLabels[2].init(glyph[0], glyph[1], glyph[2], Fonts.getTextureCords(), gl, Fonts.getImage());
 
-    await setAxisValues(); //This is not great performance wise, but it's alright
+    await setAxisValues(); // Init Axis Labels
 
     //Init HTML based label
     //label = new Text("div", gl.canvas.width, gl.canvas.height);
 
+    /*
+        WebGL settings set
+    */
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.FRONT);
 
@@ -240,7 +244,7 @@ async function main() {
 
     gl.frontFace(gl.CW);
 
-    gl.enable(gl.STENCIL_TEST);
+    //gl.enable(gl.STENCIL_TEST); Stencil usage was removed 
 
     // Listen for a file upload 
     await read_CSV();
@@ -252,6 +256,11 @@ async function main() {
 
 /*
     Helper Function used by setAxisValues
+    Method: 
+        1- Calculate the Axis Value, example 245
+        2- Split this into an array, example [2, 4, 5]
+        3- Save and init glyph render data for each digit 
+
 */
 function generateAxisValuesAt(i, mod, controller) {
     AxisValues[i] = [];
@@ -262,9 +271,10 @@ function generateAxisValuesAt(i, mod, controller) {
         zoom_mod = 25
     }
 
-    let rawAxisValue = (i - mod) + controller;
-    var digit = String(Math.abs(rawAxisValue) * zoom_mod).split('').map(Number); // Calculate the Axis value, then get array of digits
+    let rawAxisValue = (i - mod) + controller; // Axis Value that can be +ve or -ve 
+    var digit = String(Math.abs(rawAxisValue) * zoom_mod).split('').map(Number); // Get Array of +ve digits that represent the value 
 
+    // No way to know if a label is negative or positive from within the code, store it in an array for each axis glyph
     if (rawAxisValue > 0) // Positive Number 
     {
         AxisMap[i] = 1;
@@ -287,13 +297,12 @@ function generateAxisValuesAt(i, mod, controller) {
         AxisValues[i][j].init(glyph[0], glyph[1], glyph[2], Fonts.getTextureCords(), gl, Fonts.getImage());
     }
 
+    // If the glyph is negative, push a negative sign glyph at the start 
     if (rawAxisValue < 0) {
 
         Fonts.init('-');
-
         let temp_val = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
         temp_val.init(short_glyph[0], short_glyph[1], short_glyph[2], Fonts.getTextureCords(), gl, Fonts.getImage());
-
         AxisValues[i].unshift(temp_val);
     }
 
@@ -313,9 +322,7 @@ async function setAxisValues() {
         } else if (i <= 31) {
             generateAxisValuesAt(i, 20, y_move);
         }
-
     }
-
 }
 
 /*
@@ -560,7 +567,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         for (let i = 21; i < zoom_factor + 20; i++) {
             let loopModel = glmath.mat4.create();
             glmath.mat4.copy(loopModel, singleAxisModel);
-            glmath.mat4.translate(loopModel, loopModel, [-2 * xLength, (5.0 * (i - 20)) / zoom, 0]);
+            glmath.mat4.translate(loopModel, loopModel, [-2, (5.0 * (i - 20)) / zoom, 0]);
             for (let j = 0; j <= AxisValues[i].length; j++) {
                 if (j > 0) {
                     glmath.mat4.translate(loopModel, loopModel, [2, 0, 0]);
