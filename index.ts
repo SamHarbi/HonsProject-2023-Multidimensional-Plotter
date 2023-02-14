@@ -50,8 +50,9 @@ let z_move;
 let mouse_x;
 let mouse_y;
 
-let zoom; // At what zoom level is the view
-let viewsize;
+let zoom; // At what zoom level is the view, controls zoom of data points 
+let viewsize; //Camera position, controls camera zoom outside chart
+let pointsize; //Size of a data point 
 
 let Point;
 let Cube;
@@ -85,6 +86,11 @@ let negativeColour = [1, 0.4, 0.4];
 (<HTMLElement>document.getElementById("viewsize")).addEventListener("input", function () {
     // @ts-ignore 1 1
     viewsize = <Number>document.getElementById("viewsize").value / 10;
+});
+
+(<HTMLElement>document.getElementById("pointsize")).addEventListener("input", function () {
+    // @ts-ignore 1 1
+    pointsize = <Number>document.getElementById("pointsize").value / 10;
 });
 
 (<HTMLElement>document.getElementById("glCanvas")).addEventListener("mousemove", function (event) {
@@ -199,6 +205,7 @@ async function main() {
 
     zoom = 1;
     viewsize = 0.4;
+    pointsize = 1;
 
     mouse_x = 1;
     mouse_y = 1;
@@ -392,14 +399,25 @@ function RenderData(global_model: glmath.mat4) {
     glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * z_move * 1 / zoom, 0 - 2 * y_move * 1 / zoom, 0 - 2 * x_move * 1 / zoom]);
 
     for (let i = 0; i < DATASET.length; i++) {
-        let x = Number(Object.values(DATASET[i])[0]) * 2;
+        let z = Number(Object.values(DATASET[i])[0]) * 2;
         let y = Number(Object.values(DATASET[i])[1]) * 2;
-        let z = (Number(Object.values(DATASET[i])[2]) * 2);
+        let x = (Number(Object.values(DATASET[i])[2]) * 2);
+
+        //Check that points are not beyond the view cube on +ve side
+        if (x * zoom - 2 * z_move > 20 || y * zoom - 2 * y_move > 20 || z * zoom - 2 * x_move > 20) {
+            continue;
+        }
+
+        //Check that points are not beyond the view cube on -ve side
+        if (x * zoom - 2 * z_move < 0 || y * zoom - 2 * y_move < 0 || z * zoom - 2 * x_move < 0) {
+            continue;
+        }
 
         let point_model = glmath.mat4.create();
         glmath.mat4.copy(point_model, global_point_model);
         glmath.mat4.translate(point_model, point_model, [x * zoom, y * zoom, z * zoom]);
         glmath.mat4.scale(point_model, point_model, [1 * zoom, 1 * zoom, 1 * zoom]);
+        glmath.mat4.scale(point_model, point_model, [pointsize, pointsize, pointsize]);
         gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
         Point.render();
     }
@@ -599,8 +617,8 @@ function RenderStructure(global_model: glmath.mat4) {
     // ________________
 
     // | DRAW STENCIL CUBE |
-    gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
-    gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
+    //gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
+    //gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
 
     gl.uniform1i(lightToggleUniformID[0], 0); // Don't Use Light
 
@@ -614,13 +632,7 @@ function RenderStructure(global_model: glmath.mat4) {
     Cube.render();
     gl.cullFace(gl.FRONT);
 
-    gl.stencilFunc(gl.EQUAL, 1, 0xFF);
-    gl.stencilOp(gl.REPLACE, gl.REPLACE, gl.REPLACE);
-
     // | ALL OTHER POLYGONS WITHIN BOUNDING CUBE START |
-
-    gl.stencilFunc(gl.EQUAL, 1, 0xFF);
-    gl.stencilOp(gl.REPLACE, gl.KEEP, gl.REPLACE);
 
     gl.uniform1i(lightToggleUniformID[0], 1); // Use Light
 
@@ -642,6 +654,11 @@ function RenderStructure(global_model: glmath.mat4) {
     let Axismodel = glmath.mat4.create();
 
     for (let i = 0; i < 11; i++) {
+
+        if (i > (10 * zoom)) {
+            continue;
+        }
+
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / (10 * zoom))]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
@@ -660,6 +677,10 @@ function RenderStructure(global_model: glmath.mat4) {
     glmath.mat4.translate(globalAxisModel, globalAxisModel, [0, 0, -1]);
 
     for (let i = 0; i < 11; i++) {
+
+        if (i > (10 * zoom)) {
+            continue;
+        }
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / (10 * zoom))]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
@@ -680,6 +701,10 @@ function RenderStructure(global_model: glmath.mat4) {
     glmath.mat4.translate(globalAxisModel, globalAxisModel, [0, 0, 0]);
 
     for (let i = 0; i < 11; i++) {
+
+        if (i > (10 * zoom)) {
+            continue;
+        }
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / (10 * zoom))]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
@@ -696,7 +721,6 @@ function RenderStructure(global_model: glmath.mat4) {
         Axis.render();
     }
 
-
 }
 
 /*
@@ -706,7 +730,7 @@ function init() {
 
     //Get canvas and initalise it 
     canvas = <HTMLCanvasElement>document.querySelector("#glCanvas");
-    const temp_gl = canvas.getContext("webgl", { stencil: true });
+    const temp_gl = canvas.getContext("webgl", { stencil: false });
 
     // Only continue if WebGL is available and working
     if (temp_gl === null) {
@@ -715,9 +739,9 @@ function init() {
     }
 
     // @ts-ignore 
-    if (temp_gl.getContextAttributes().stencil == false) {
-        alert("Your Browser does not fully support this application (Stencil Attribute Missing) Please try another browser");
-    }
+    //if (temp_gl.getContextAttributes().stencil == false) {
+    //alert("Your Browser does not fully support this application (Stencil Attribute Missing) Please try another browser");
+    //}
 
     //Create, compile and link shaders
     let vertex = [createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource_1),
