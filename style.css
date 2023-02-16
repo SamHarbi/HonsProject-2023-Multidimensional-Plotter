@@ -8,6 +8,14 @@
         flex-flow: wrap;
         align-items: flex-start;
     }
+
+    body {
+        overflow: hidden;
+    }
+
+    #row-small {
+        overflow-y: scroll;
+    }
 }
 
 @media screen and (max-width: 800px) {
@@ -18,10 +26,14 @@
         flex-flow: column;
         align-items: flex-start;
     }
-}
 
-body {
-    overflow: hidden;
+    body {
+        overflow: visible;
+    }
+
+    #row-small {
+        overflow: hidden;
+    }
 }
 
 article {
@@ -46,7 +58,6 @@ a {
 #row-small {
     flex: 1;
     flex-grow: 1;
-    overflow-y: scroll;
     height: 1000px;
 }
 
