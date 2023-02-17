@@ -32,6 +32,7 @@ let lightToggleUniformID: WebGLUniformLocation;
 let colourUniformID: WebGLUniformLocation;
 let cameraRightWorldSpaceUniformID: WebGLUniformLocation;
 let cameraUpWorldSpaceUniformID: WebGLUniformLocation;
+let viewmodUniformID: WebGLUniformLocation;
 
 let positionAttributeID: GLint[];
 let normalAttributeID: GLint[];
@@ -179,6 +180,7 @@ async function main() {
     //Uniforms only in shader program 1
     cameraRightWorldSpaceUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "camRight_WS");
     cameraUpWorldSpaceUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "camUp_WS");
+    viewmodUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "viewmod");
 
     /*
         Define and Init all Models to render
@@ -503,6 +505,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     gl.uniform3f(cameraRightWorldSpaceUniformID, view[0][0], view[1][0], view[2][0]);
     gl.uniform3f(cameraUpWorldSpaceUniformID, view[0][1], view[1][1], view[2][1]);
     gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
+    gl.uniform1i(viewmodUniformID, 1 / viewsize);
 
     gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
 
