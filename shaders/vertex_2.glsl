@@ -18,9 +18,9 @@
   // all shaders have a main function
   void main() {
  
-    gl_Position = projection * (view * model * vec4(a_position, 5) + vec4(a_position.x * 0.05, a_position.y * 0.05, a_position.z * 0.05, 1));
+    gl_Position = projection * (view * model * vec4(a_position, 10) + vec4(a_position.x * 0.15, a_position.y * 0.15, a_position.z * 0.15, 1));
 
-    position = projection * view * model * vec4(a_position, 1);
+    //position = projection * view * model * vec4(a_position, 1);
     
     colour = vec4(in_colour, 1.0);
     v_normal = a_normal;

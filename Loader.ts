@@ -11,9 +11,9 @@ import fs from "fs";
 import path from "path";
 
 // @ts-ignore
-var csv = require('jquery-csv'); //Not actually jquery, just a parser with jquery compliant syntax
+var csv = require('jquery-csv'); // Not actually jquery, just a parser with jquery compliant syntax
 
-//Global Dataset Variable of currently last imported (valid) data
+// Global Dataset Variable of currently last imported (valid) data
 export var DATASET: number[][];
 DATASET = [];
 

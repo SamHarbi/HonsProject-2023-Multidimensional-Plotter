@@ -39,20 +39,20 @@ let textureAttributeID: GLint[];
 
 let iter = 0; // For a simple movement demo
 
-//User controlled rotation
+// User controlled rotation
 let x_rotation;
 let y_rotation;
 let x_move;
 let y_move;
 let z_move;
 
-//Position modififed by mouse controls
+// Position modififed by mouse controls
 let mouse_x;
 let mouse_y;
 
 let zoom; // At what zoom level is the view, controls zoom of data points 
-let viewsize; //Camera position, controls camera zoom outside chart
-let pointsize; //Size of a data point 
+let viewsize; // Camera position, controls camera zoom outside chart
+let pointsize; // Size of a data point 
 
 let Point;
 let Cube;
@@ -63,13 +63,21 @@ let Fonts; // Generator for Font Texture Data
 
 let AxisLabels: Model[];
 let AxisValues: Model[][];
-let AxisMap: Number[]; //data describing the nature of the axis values, negative or positive 
+let AxisMap: Number[]; // data describing the nature of the axis values, negative or positive 
+
+let AxisNames: Model[][]; // Names of data columns, i.e keys from DATASET var
+let updateNames; // Check if names need to be re-init
 
 //Colours of Axis
 let positiveColour = [1, 1, 1];
 let negativeColour = [1, 0.4, 0.4];
 
 // Event Listeners for user controls
+(<HTMLElement>document.getElementById("input")).addEventListener("input", function () {
+    updateNames = true;
+});
+
+
 (<HTMLElement>document.getElementById("zoom")).addEventListener("input", function () {
     // @ts-ignore 1
     let change = <Number>document.getElementById("zoom").value;
@@ -192,6 +200,7 @@ async function main() {
     */
     AxisLabels = [];
     AxisValues = [[]];
+    AxisNames = [[]];
     AxisMap = [];
     Fonts = new Font(0, gl); // Create a Font Object
 
@@ -208,6 +217,8 @@ async function main() {
 
     mouse_x = 1;
     mouse_y = 1;
+
+    updateNames = true;
 
     /*
         Prepare all Label types
@@ -228,7 +239,7 @@ async function main() {
     AxisLabels[2] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
     AxisLabels[2].init(glyph[0], glyph[1], glyph[2], Fonts.getTextureCords(), gl, Fonts.getImage());
 
-    await setAxisValues(); // Init Axis Labels
+    setAxisValues(); // Init Axis Labels
 
     //Init HTML based label
     //label = new Text("div", gl.canvas.width, gl.canvas.height);
@@ -252,6 +263,22 @@ async function main() {
     //Start render loop 
     window.requestAnimationFrame(Render);
 
+}
+
+function setAxisNames() {
+    // !! NOTE !! This limits to three columns names only 
+    let names = Object.keys(DATASET[0]); //Array of names 
+
+    for (let i = 0; i < 3; i++) {
+        AxisNames[i] = [];
+        let charArray = names[i].split('');
+
+        for (let j = 0; j < charArray.length; j++) {
+            Fonts.init(charArray[j]);
+            AxisNames[i][j] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+            AxisNames[i][j].init(glyph[0], glyph[1], glyph[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        }
+    }
 }
 
 /*
@@ -312,7 +339,7 @@ function generateAxisValuesAt(i, mod, controller) {
     Set the values on the axis
     10 value labels on each axis
 */
-async function setAxisValues() {
+function setAxisValues() {
 
     for (let i = 0; i < 31; i++) {
         if (i <= 10) {
@@ -331,6 +358,11 @@ async function setAxisValues() {
 */
 function Render(timestamp) {
     // | Setup |
+
+    if (DATASET[0] != undefined && updateNames == true) {
+        setAxisNames(); // Init Axis Names
+        updateNames = false;
+    }
 
     //Create a top level model
     let GLOBAL_MODEL = glmath.mat4.create();
@@ -490,6 +522,19 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[0].render();
 
+    if (AxisNames[0][0] != undefined) {
+
+        let AxisNameModel = glmath.mat4.create();
+        glmath.mat4.copy(AxisNameModel, LetterModel);
+        glmath.mat4.translate(AxisNameModel, AxisNameModel, [0, 5, 0]);
+
+        for (let j = 0; j < AxisNames[0].length; j++) {
+            glmath.mat4.translate(AxisNameModel, AxisNameModel, [2.5, 0, 0]);
+            gl.uniformMatrix4fv(modelUniformID[1], false, AxisNameModel);
+            AxisNames[0][j].render();
+        }
+    }
+
     let singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [0, 0.6, 0]);
@@ -527,6 +572,19 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
     AxisLabels[1].render();
 
+    if (AxisNames[0][0] != undefined) {
+
+        let AxisNameModel = glmath.mat4.create();
+        glmath.mat4.copy(AxisNameModel, LetterModel);
+        glmath.mat4.translate(AxisNameModel, AxisNameModel, [0, 5, 0]);
+
+        for (let j = 0; j < AxisNames[1].length; j++) {
+            glmath.mat4.translate(AxisNameModel, AxisNameModel, [2.5, 0, 0]);
+            gl.uniformMatrix4fv(modelUniformID[1], false, AxisNameModel);
+            AxisNames[1][j].render();
+        }
+    }
+
     singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [1, 0.6, 1]);
@@ -557,6 +615,19 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
     AxisLabels[2].render();
+
+    if (AxisNames[0][0] != undefined) {
+
+        let AxisNameModel = glmath.mat4.create();
+        glmath.mat4.copy(AxisNameModel, LetterModel);
+        glmath.mat4.translate(AxisNameModel, AxisNameModel, [0, -5, 0]);
+
+        for (let j = 0; j < AxisNames[2].length; j++) {
+            glmath.mat4.translate(AxisNameModel, AxisNameModel, [2.5, 0, 0]);
+            gl.uniformMatrix4fv(modelUniformID[1], false, AxisNameModel);
+            AxisNames[2][j].render();
+        }
+    }
 
     singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
