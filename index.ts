@@ -18,6 +18,7 @@ import * as glmath from 'gl-matrix';
 
 let glyph; // Loaded WebGL Label Skeleton
 let short_glyph;
+let thin_glyph;
 
 let gl: WebGLRenderingContext;
 let canvas: HTMLCanvasElement;
@@ -227,6 +228,7 @@ async function main() {
     */
     glyph = await load_OBJ("Glyph");
     short_glyph = await load_OBJ("ShortGlyph");
+    thin_glyph = await load_OBJ("LongGlyph");
 
     /*
         Define 3 glyph based letter labels for each axis 

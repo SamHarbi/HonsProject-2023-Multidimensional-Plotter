@@ -12,9 +12,13 @@ import Arial_Bold from './fonts/Atlas/Arial-Bold.json'
 
 // @ts-ignore
 import Arial_Atlas from "./fonts/Atlas/Arial.png"
-import ArialBold_Atlas from "./fonts/Atlas/Arial-Bold.json"
+// @ts-ignore
+import ArialBold_Atlas from "./fonts/Atlas/Arial-Bold.png"
 
 import { load_OBJ } from './Loader';
+import { Model } from './Model';
+
+
 
 export class Font {
 
@@ -27,6 +31,10 @@ export class Font {
     image: HTMLImageElement;
     gl: WebGLRenderingContext;
 
+    glyph: number[][];
+    short_glyph: number[][];
+    thin_glyph: number[][];
+
     constructor(set_font_option: number, set_gl: WebGLRenderingContext) {
         this.font_pointers = [Arial_Atlas, ArialBold_Atlas];
         this.font_data_pointers = [Arial, Arial_Bold];
@@ -36,6 +44,8 @@ export class Font {
 
         this.image = new Image();
         this.image.src = this.font_pointers[this.font_option];
+
+        console.log(this.font_data_pointers[this.font_option]);
     }
 
     init(num: string, custom_height?: number) {
@@ -46,23 +56,32 @@ export class Font {
         let width = this.font_data_pointers[this.font_option].characters[num].width;
         let height = this.font_data_pointers[this.font_option].characters[num].height;
 
+        let font_height = this.font_data_pointers[this.font_option].height;
+        let font_width = this.font_data_pointers[this.font_option].width;
+
         if (typeof custom_height !== 'undefined') {
             height = custom_height;
         }
 
         //Single Letter consists of 4 vertex points -> thus 4 texture cord pairs
-        this.textureCord.push(x / 341);
-        this.textureCord.push(y / 125);
+        this.textureCord.push(x / font_width);
+        this.textureCord.push(y / font_height);
 
-        this.textureCord.push(x / 341);
-        this.textureCord.push((y + height) / 125);
+        this.textureCord.push(x / font_width);
+        this.textureCord.push((y + height) / font_height);
 
-        this.textureCord.push((x + width) / 341);
-        this.textureCord.push((y + height) / 125);
+        this.textureCord.push((x + width) / font_width);
+        this.textureCord.push((y + height) / font_height);
 
-        this.textureCord.push((x + width) / 341);
-        this.textureCord.push(y / 125);
+        this.textureCord.push((x + width) / font_width);
+        this.textureCord.push(y / font_height);
 
+    }
+
+    private async loadModels() {
+        this.glyph = await load_OBJ("Glyph");
+        this.short_glyph = await load_OBJ("ShortGlyph");
+        this.thin_glyph = await load_OBJ("LongGlyph");
     }
 
     getTextureCords() {
@@ -73,6 +92,10 @@ export class Font {
         return this.image.src;
     }
 
-
+    getModelName(char: string) {
+        if (this.font_data_pointers[this.font_option].characters[char].x < 100) {
+            return this.thin_glyph;
+        }
+    }
 
 }
