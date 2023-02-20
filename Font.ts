@@ -74,12 +74,11 @@ export class Font {
         this.textureCord.push(y / font_height);
 
         // Directly Modify Glyph geometry to avoid stretched letters
-        this.glyph[0][6] = width / 30;
-        this.glyph[0][9] = width / 30;
+        this.glyph[0][6] = width / 20;
+        this.glyph[0][9] = width / 20;
 
-        this.glyph[0][1] = height / 30;
-        this.glyph[0][10] = height / 30;
-
+        this.glyph[0][1] = height / 20;
+        this.glyph[0][10] = height / 20;
 
     }
 
