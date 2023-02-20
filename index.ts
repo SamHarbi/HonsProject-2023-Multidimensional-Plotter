@@ -71,8 +71,9 @@ let AxisNames: Model[][]; // Names of data columns, i.e keys from DATASET var
 let updateNames; // Check if names need to be re-init
 
 //Colours of Axis
-let positiveColour = [1, 1, 1];
+let positiveColour = [0.1, 0.1, 0.1];
 let negativeColour = [1, 0.4, 0.4];
+let altColour = [0.9, 0.9, 0.9];
 
 // Event Listeners for user controls
 (<HTMLElement>document.getElementById("input")).addEventListener("input", function () {
@@ -506,7 +507,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     gl.uniform1i(lightToggleUniformID[1], 1); // Use Light
     gl.uniform3f(cameraRightWorldSpaceUniformID, view[0][0], view[1][0], view[2][0]);
     gl.uniform3f(cameraUpWorldSpaceUniformID, view[0][1], view[1][1], view[2][1]);
-    gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
+    gl.uniform3f(colourUniformID[1], altColour[0], altColour[1], altColour[2]);
     gl.uniform1i(viewmodUniformID, 1 / viewsize);
 
     gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
@@ -574,7 +575,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
 
     glmath.mat4.translate(LetterModel, LetterModel, [-40, 40, 0]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
-    gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
+    gl.uniform3f(colourUniformID[1], altColour[0], altColour[1], altColour[2]);
     AxisLabels[1].render();
 
     if (AxisNames[0][0] != undefined) {
@@ -618,7 +619,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
 
     glmath.mat4.translate(LetterModel, LetterModel, [-5, -45, 1]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
-    gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
+    gl.uniform3f(colourUniformID[1], altColour[0], altColour[1], altColour[2]);
     AxisLabels[2].render();
 
     if (AxisNames[0][0] != undefined) {

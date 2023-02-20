@@ -18,8 +18,6 @@ import ArialBold_Atlas from "./fonts/Atlas/Arial-Bold.png"
 import { load_OBJ } from './Loader';
 import { Model } from './Model';
 
-
-
 export class Font {
 
     font_option: number;
@@ -92,9 +90,11 @@ export class Font {
         return this.image.src;
     }
 
-    getModelName(char: string) {
+    getGlyph(char: string) {
         if (this.font_data_pointers[this.font_option].characters[char].x < 100) {
             return this.thin_glyph;
+        } else if (this.font_data_pointers[this.font_option].characters[char].x < this.font_data_pointers[this.font_option].width / 5) {
+
         }
     }
 
