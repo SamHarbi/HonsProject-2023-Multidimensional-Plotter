@@ -15,8 +15,6 @@ import Arial_Atlas from "./fonts/Atlas/Arial.png"
 // @ts-ignore
 import ArialBold_Atlas from "./fonts/Atlas/Arial-Bold.png"
 
-import { load_OBJ } from './Loader';
-import { Model } from './Model';
 
 export class Font {
 
@@ -33,7 +31,7 @@ export class Font {
     short_glyph: number[][];
     thin_glyph: number[][];
 
-    constructor(set_font_option: number, set_gl: WebGLRenderingContext) {
+    constructor(set_font_option: number, set_gl: WebGLRenderingContext, loadedGlyph: number[][]) {
         this.font_pointers = [Arial_Atlas, ArialBold_Atlas];
         this.font_data_pointers = [Arial, Arial_Bold];
         this.font_option = set_font_option;
@@ -43,7 +41,7 @@ export class Font {
         this.image = new Image();
         this.image.src = this.font_pointers[this.font_option];
 
-        console.log(this.font_data_pointers[this.font_option]);
+        this.glyph = loadedGlyph; // Cannot use async here, thus must be init
     }
 
     init(num: string, custom_height?: number) {
@@ -56,6 +54,7 @@ export class Font {
 
         let font_height = this.font_data_pointers[this.font_option].height;
         let font_width = this.font_data_pointers[this.font_option].width;
+        let font_size = this.font_data_pointers[this.font_option].size;
 
         if (typeof custom_height !== 'undefined') {
             height = custom_height;
@@ -74,12 +73,14 @@ export class Font {
         this.textureCord.push((x + width) / font_width);
         this.textureCord.push(y / font_height);
 
-    }
+        // Directly Modify Glyph geometry to avoid stretched letters
+        this.glyph[0][6] = width / 30;
+        this.glyph[0][9] = width / 30;
 
-    private async loadModels() {
-        this.glyph = await load_OBJ("Glyph");
-        this.short_glyph = await load_OBJ("ShortGlyph");
-        this.thin_glyph = await load_OBJ("LongGlyph");
+        this.glyph[0][1] = height / 30;
+        this.glyph[0][10] = height / 30;
+
+
     }
 
     getTextureCords() {
@@ -91,11 +92,7 @@ export class Font {
     }
 
     getGlyph(char: string) {
-        if (this.font_data_pointers[this.font_option].characters[char].x < 100) {
-            return this.thin_glyph;
-        } else if (this.font_data_pointers[this.font_option].characters[char].x < this.font_data_pointers[this.font_option].width / 5) {
-
-        }
+        return this.glyph;
     }
 
 }

@@ -17,8 +17,6 @@ import { Font } from './Font';
 import * as glmath from 'gl-matrix';
 
 let glyph; // Loaded WebGL Label Skeleton
-let short_glyph;
-let thin_glyph;
 
 let gl: WebGLRenderingContext;
 let canvas: HTMLCanvasElement;
@@ -206,7 +204,6 @@ async function main() {
     AxisValues = [[]];
     AxisNames = [[]];
     AxisMap = [];
-    Fonts = new Font(0, gl); // Create a Font Object
 
     x_rotation = 0;
     y_rotation = 0;
@@ -228,8 +225,8 @@ async function main() {
         Prepare all Label types
     */
     glyph = await load_OBJ("Glyph");
-    short_glyph = await load_OBJ("ShortGlyph");
-    thin_glyph = await load_OBJ("LongGlyph");
+
+    Fonts = new Font(1, gl, glyph); // Create a Font Object
 
     /*
         Define 3 glyph based letter labels for each axis 
@@ -334,7 +331,7 @@ function generateAxisValuesAt(i, mod, controller) {
 
         Fonts.init('-');
         let temp_val = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-        temp_val.init(short_glyph[0], short_glyph[1], short_glyph[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        temp_val.init(glyph[0], glyph[1], glyph[2], Fonts.getTextureCords(), gl, Fonts.getImage());
         AxisValues[i].unshift(temp_val);
     }
 
