@@ -19,7 +19,15 @@
   // all shaders have a main function
   void main() {
  
-    gl_Position = projection * (view * model * vec4(a_position, 5 * viewmod) + vec4(a_position.x * 0.15, a_position.y * 0.15, a_position.z * 0.15, 1));
+    if(viewmod >= 0) // Render with Billboarding
+    {
+      gl_Position = projection * (view * model * vec4(a_position, 5 * viewmod) + vec4(a_position.x * 0.15, a_position.y * 0.15, a_position.z * 0.15, 1));
+    }
+    else // No Billboarding
+    {
+      gl_Position = projection * view * model * vec4(a_position, 1);
+    }
+    
 
     //position = projection * view * model * vec4(a_position, 1);
     
