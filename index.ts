@@ -17,7 +17,6 @@ import { Font } from './Font';
 import * as glmath from 'gl-matrix';
 
 let glyph; // Loaded WebGL Label Skeleton
-let short_glyph;
 
 let gl: WebGLRenderingContext;
 let canvas: HTMLCanvasElement;
@@ -32,6 +31,7 @@ let lightToggleUniformID: WebGLUniformLocation;
 let colourUniformID: WebGLUniformLocation;
 let cameraRightWorldSpaceUniformID: WebGLUniformLocation;
 let cameraUpWorldSpaceUniformID: WebGLUniformLocation;
+let viewmodUniformID: WebGLUniformLocation;
 
 let positionAttributeID: GLint[];
 let normalAttributeID: GLint[];
@@ -39,20 +39,24 @@ let textureAttributeID: GLint[];
 
 let iter = 0; // For a simple movement demo
 
-//User controlled rotation
+// User controlled rotation
 let x_rotation;
 let y_rotation;
 let x_move;
 let y_move;
 let z_move;
 
-//Position modififed by mouse controls
+// At what rotation value the view is at, combined mouse + button
+let current_x_rotation;
+let current_y_rotation;
+
+// Position modififed by mouse controls
 let mouse_x;
 let mouse_y;
 
 let zoom; // At what zoom level is the view, controls zoom of data points 
-let viewsize; //Camera position, controls camera zoom outside chart
-let pointsize; //Size of a data point 
+let viewsize; // Camera position, controls camera zoom outside chart
+let pointsize; // Size of a data point 
 
 let Point;
 let Cube;
@@ -63,13 +67,22 @@ let Fonts; // Generator for Font Texture Data
 
 let AxisLabels: Model[];
 let AxisValues: Model[][];
-let AxisMap: Number[]; //data describing the nature of the axis values, negative or positive 
+let AxisMap: Number[]; // data describing the nature of the axis values, negative or positive 
+
+let AxisNames: Model[][]; // Names of data columns, i.e keys from DATASET var
+let updateNames; // Check if names need to be re-init
 
 //Colours of Axis
-let positiveColour = [1, 1, 1];
+let positiveColour = [0.1, 0.1, 0.1];
 let negativeColour = [1, 0.4, 0.4];
+let altColour = [0.9, 0.9, 0.9];
 
 // Event Listeners for user controls
+(<HTMLElement>document.getElementById("input")).addEventListener("input", function () {
+    updateNames = true;
+});
+
+
 (<HTMLElement>document.getElementById("zoom")).addEventListener("input", function () {
     // @ts-ignore 1
     let change = <Number>document.getElementById("zoom").value;
@@ -171,6 +184,7 @@ async function main() {
     //Uniforms only in shader program 1
     cameraRightWorldSpaceUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "camRight_WS");
     cameraUpWorldSpaceUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "camUp_WS");
+    viewmodUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "viewmod");
 
     /*
         Define and Init all Models to render
@@ -192,8 +206,8 @@ async function main() {
     */
     AxisLabels = [];
     AxisValues = [[]];
+    AxisNames = [[]];
     AxisMap = [];
-    Fonts = new Font(0, gl); // Create a Font Object
 
     x_rotation = 0;
     y_rotation = 0;
@@ -209,11 +223,14 @@ async function main() {
     mouse_x = 1;
     mouse_y = 1;
 
+    updateNames = true;
+
     /*
         Prepare all Label types
     */
     glyph = await load_OBJ("Glyph");
-    short_glyph = await load_OBJ("ShortGlyph");
+
+    Fonts = new Font(0, gl, glyph); // Create a Font Object
 
     /*
         Define 3 glyph based letter labels for each axis 
@@ -228,7 +245,7 @@ async function main() {
     AxisLabels[2] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
     AxisLabels[2].init(glyph[0], glyph[1], glyph[2], Fonts.getTextureCords(), gl, Fonts.getImage());
 
-    await setAxisValues(); // Init Axis Labels
+    setAxisValues(); // Init Axis Labels
 
     //Init HTML based label
     //label = new Text("div", gl.canvas.width, gl.canvas.height);
@@ -252,6 +269,22 @@ async function main() {
     //Start render loop 
     window.requestAnimationFrame(Render);
 
+}
+
+function setAxisNames() {
+    // !! NOTE !! This limits to three columns names only 
+    let names = Object.keys(DATASET[0]); //Array of names 
+
+    for (let i = 0; i < 3; i++) {
+        AxisNames[i] = [];
+        let charArray = names[i].split('');
+
+        for (let j = 0; j < charArray.length; j++) {
+            Fonts.init(charArray[j]);
+            AxisNames[i][j] = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
+            AxisNames[i][j].init(glyph[0], glyph[1], glyph[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        }
+    }
 }
 
 /*
@@ -302,7 +335,7 @@ function generateAxisValuesAt(i, mod, controller) {
 
         Fonts.init('-');
         let temp_val = new Model(positionAttributeID[1], normalAttributeID[1], textureAttributeID[1], gl.TRIANGLES);
-        temp_val.init(short_glyph[0], short_glyph[1], short_glyph[2], Fonts.getTextureCords(), gl, Fonts.getImage());
+        temp_val.init(glyph[0], glyph[1], glyph[2], Fonts.getTextureCords(), gl, Fonts.getImage());
         AxisValues[i].unshift(temp_val);
     }
 
@@ -312,7 +345,7 @@ function generateAxisValuesAt(i, mod, controller) {
     Set the values on the axis
     10 value labels on each axis
 */
-async function setAxisValues() {
+function setAxisValues() {
 
     for (let i = 0; i < 31; i++) {
         if (i <= 10) {
@@ -332,6 +365,11 @@ async function setAxisValues() {
 function Render(timestamp) {
     // | Setup |
 
+    if (DATASET[0] != undefined && updateNames == true) {
+        setAxisNames(); // Init Axis Names
+        updateNames = false;
+    }
+
     //Create a top level model
     let GLOBAL_MODEL = glmath.mat4.create();
     glmath.mat4.scale(GLOBAL_MODEL, GLOBAL_MODEL, [viewsize, viewsize, viewsize]);
@@ -340,8 +378,19 @@ function Render(timestamp) {
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * (Math.PI / 180), [0, -1, 0]);
 
     //User controlled rotation applied
-    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, x_rotation + mouse_x / 100, [0, 1, 0]);
-    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, y_rotation + mouse_y / 100, [1, 0, 0]);
+    current_x_rotation = x_rotation + mouse_x / 100;
+    current_y_rotation = y_rotation + mouse_y / 100;
+
+    if (current_x_rotation > 360 * (Math.PI / 180) || current_x_rotation < -360 * (Math.PI / 180)) {
+        current_x_rotation = 0;
+        mouse_x = 0;
+        x_rotation = 0;
+    }
+
+    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, current_x_rotation, [0, 1, 0]);
+    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, current_y_rotation, [1, 0, 0]);
+
+    console.log(current_x_rotation);
 
     // Setup View
     let view = glmath.mat4.create()
@@ -427,6 +476,7 @@ function RenderData(global_model: glmath.mat4) {
         glmath.mat4.scale(point_model, point_model, [pointsize, pointsize, pointsize]);
         gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
         Point.render();
+
     }
 }
 
@@ -470,7 +520,8 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     gl.uniform1i(lightToggleUniformID[1], 1); // Use Light
     gl.uniform3f(cameraRightWorldSpaceUniformID, view[0][0], view[1][0], view[2][0]);
     gl.uniform3f(cameraUpWorldSpaceUniformID, view[0][1], view[1][1], view[2][1]);
-    gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
+    gl.uniform3f(colourUniformID[1], altColour[0], altColour[1], altColour[2]);
+    gl.uniform1i(viewmodUniformID, 1 / viewsize);
 
     gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
 
@@ -490,6 +541,26 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[0].render();
 
+    if (AxisNames[0][0] != undefined) {
+
+        let AxisNameModel = glmath.mat4.create();
+        glmath.mat4.copy(AxisNameModel, LetterModel);
+
+        if ((current_x_rotation < -1.34 && current_x_rotation > -4.20) || (current_x_rotation > 2 && current_x_rotation < 5)) {
+            glmath.mat4.rotateY(AxisNameModel, AxisNameModel, 180 * (Math.PI / 180));
+            glmath.mat4.translate(AxisNameModel, AxisNameModel, [0, -10, 0]);
+        }
+        glmath.mat4.translate(AxisNameModel, AxisNameModel, [0, 5, 0]);
+
+        for (let j = 0; j < AxisNames[0].length; j++) {
+            glmath.mat4.translate(AxisNameModel, AxisNameModel, [2.5, 0, 0]);
+            gl.uniform1i(viewmodUniformID, -1);
+            gl.uniformMatrix4fv(modelUniformID[1], false, AxisNameModel);
+            AxisNames[0][j].render();
+        }
+    }
+
+    gl.uniform1i(viewmodUniformID, 1 / viewsize);
     let singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [0, 0.6, 0]);
@@ -524,9 +595,29 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
 
     glmath.mat4.translate(LetterModel, LetterModel, [-40, 40, 0]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
-    gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
+    gl.uniform3f(colourUniformID[1], altColour[0], altColour[1], altColour[2]);
     AxisLabels[1].render();
 
+    if (AxisNames[0][0] != undefined) {
+
+        let AxisNameModel = glmath.mat4.create();
+        glmath.mat4.copy(AxisNameModel, LetterModel);
+        //console.log(current_x_rotation);
+        if ((current_x_rotation < -1.34 && current_x_rotation > -4.20) || (current_x_rotation > 2 && current_x_rotation < 5)) {
+            glmath.mat4.rotateY(AxisNameModel, AxisNameModel, 180 * (Math.PI / 180));
+            glmath.mat4.translate(AxisNameModel, AxisNameModel, [0, -10, 0]);
+        }
+        glmath.mat4.translate(AxisNameModel, AxisNameModel, [0, 5, 0]);
+
+        for (let j = 0; j < AxisNames[1].length; j++) {
+            glmath.mat4.translate(AxisNameModel, AxisNameModel, [2.5, 0, 0]);
+            gl.uniform1i(viewmodUniformID, -1);
+            gl.uniformMatrix4fv(modelUniformID[1], false, AxisNameModel);
+            AxisNames[1][j].render();
+        }
+    }
+
+    gl.uniform1i(viewmodUniformID, 1 / viewsize);
     singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [1, 0.6, 1]);
@@ -555,8 +646,27 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
 
     glmath.mat4.translate(LetterModel, LetterModel, [-5, -45, 1]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
-    gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
+    gl.uniform3f(colourUniformID[1], altColour[0], altColour[1], altColour[2]);
     AxisLabels[2].render();
+
+    if (AxisNames[0][0] != undefined) {
+
+        let AxisNameModel = glmath.mat4.create();
+        glmath.mat4.copy(AxisNameModel, LetterModel);
+
+        if ((current_x_rotation < -1 && current_x_rotation > -4.20) || (current_x_rotation > 2 && current_x_rotation < 5)) {
+            glmath.mat4.rotateY(AxisNameModel, AxisNameModel, 180 * (Math.PI / 180));
+            glmath.mat4.translate(AxisNameModel, AxisNameModel, [0, -2, 0]);
+        }
+        //glmath.mat4.translate(AxisNameModel, AxisNameModel, [0, -5, 0]);
+
+        for (let j = 0; j < AxisNames[2].length; j++) {
+            glmath.mat4.translate(AxisNameModel, AxisNameModel, [2.5, 0, 0]);
+            gl.uniform1i(viewmodUniformID, -1);
+            gl.uniformMatrix4fv(modelUniformID[1], false, AxisNameModel);
+            AxisNames[2][j].render();
+        }
+    }
 
     singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
@@ -805,10 +915,10 @@ function createProgram(gl, vertexShader, fragmentShader) {
 */
 function eraseRotation(matrix: glmath.mat4) {
     return glmath.mat4.fromValues(
-        1, 0, 0, matrix[0][3],
-        0, 1, 0, matrix[1][3],
-        0, 0, 1, matrix[2][3],
-        matrix[3][0], matrix[3][1], matrix[3][2], matrix[3][3]
+        1, 0, matrix[2], matrix[3],
+        0, 1, 0, matrix[7],
+        0, 0, 1, matrix[11],
+        matrix[12], matrix[13], matrix[14], matrix[15]
     );
 }
 
