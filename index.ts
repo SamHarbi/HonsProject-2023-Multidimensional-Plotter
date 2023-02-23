@@ -73,7 +73,7 @@ let AxisNames: Model[][]; // Names of data columns, i.e keys from DATASET var
 let updateNames; // Check if names need to be re-init
 
 //Colours of Axis
-let positiveColour = [1, 1, 1];
+let positiveColour = [0.1, 0.1, 0.1];
 let negativeColour = [1, 0.4, 0.4];
 let altColour = [0.9, 0.9, 0.9];
 
