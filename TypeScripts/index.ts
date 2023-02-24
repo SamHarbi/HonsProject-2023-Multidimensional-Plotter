@@ -11,13 +11,16 @@ import vertexSource_2 from '../shaders/vertex_2.glsl'
 
 import { Model } from './Model';
 import { DATASET, load_OBJ, read_CSV } from './Loader';
-import { Text } from './Text';
 import { Font } from './Font';
+import { App } from './App';
 
+// Math Library for Graphics 
 import * as glmath from 'gl-matrix';
 
 let glyph; // Loaded WebGL Label Skeleton
+let Fonts; // Generator for Font Texture Data
 
+// WebGL required refs
 let gl: WebGLRenderingContext;
 let canvas: HTMLCanvasElement;
 
@@ -36,8 +39,6 @@ let viewmodUniformID: WebGLUniformLocation;
 let positionAttributeID: GLint[];
 let normalAttributeID: GLint[];
 let textureAttributeID: GLint[];
-
-let iter = 0; // For a simple movement demo
 
 // User controlled rotation
 let x_rotation;
@@ -58,12 +59,10 @@ let zoom; // At what zoom level is the view, controls zoom of data points
 let viewsize; // Camera position, controls camera zoom outside chart
 let pointsize; // Size of a data point 
 
+// Ref to 3D models
 let Point;
 let Cube;
 let Axis;
-
-let label; // For testing HTML based Text overlay
-let Fonts; // Generator for Font Texture Data
 
 let AxisLabels: Model[];
 let AxisValues: Model[][];
@@ -163,6 +162,8 @@ async function main() {
     // gl has already been checked so cannot be undefined- safe to cast
     gl = <WebGLRenderingContext>init();
 
+    let a = new App();
+
     /*
         Link Attributes and Locations
     */
@@ -247,9 +248,6 @@ async function main() {
 
     setAxisValues(); // Init Axis Labels
 
-    //Init HTML based label
-    //label = new Text("div", gl.canvas.width, gl.canvas.height);
-
     /*
         WebGL settings set
     */
@@ -271,6 +269,9 @@ async function main() {
 
 }
 
+/*
+    Function for preparing models and textures for the names of each axis
+*/
 function setAxisNames() {
     // !! NOTE !! This limits to three columns names only 
     let names = Object.keys(DATASET[0]); //Array of names 
@@ -523,13 +524,10 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     gl.uniform3f(colourUniformID[1], altColour[0], altColour[1], altColour[2]);
     gl.uniform1i(viewmodUniformID, 1 / viewsize);
 
-    gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
-
     // _____________
     // +++ Render +++
     // _____________
 
-    //global_model = eraseRotation(global_model);
     glmath.mat4.scale(global_model, global_model, [1.8, 1.8, 1.8]);
     glmath.mat4.translate(global_model, global_model, [-0.55, -0.55, -0.55]);
 
@@ -602,7 +600,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
 
         let AxisNameModel = glmath.mat4.create();
         glmath.mat4.copy(AxisNameModel, LetterModel);
-        //console.log(current_x_rotation);
+
         if ((current_x_rotation < -1.34 && current_x_rotation > -4.20) || (current_x_rotation > 2 && current_x_rotation < 5)) {
             glmath.mat4.rotateY(AxisNameModel, AxisNameModel, 180 * (Math.PI / 180));
             glmath.mat4.translate(AxisNameModel, AxisNameModel, [0, -10, 0]);
@@ -706,12 +704,6 @@ function RenderStructure(global_model: glmath.mat4) {
     // +++ SETUP +++
     // _____________
 
-    //Simple Iterator for animation
-    iter = iter + 0.01;
-    if (iter > 100) {
-        iter = 0;
-    }
-
     // Clear Canvas and Set Background Color 
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -733,16 +725,11 @@ function RenderStructure(global_model: glmath.mat4) {
     // +++ Render +++
     // ________________
 
-    // | DRAW STENCIL CUBE |
-    //gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
-    //gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
-
     gl.uniform1i(lightToggleUniformID[0], 0); // Don't Use Light
 
     // Bounding Cube
     let cubeModel = glmath.mat4.create();
     glmath.mat4.copy(cubeModel, global_model);
-    //glmath.mat4.rotate(cubeModel, cubeModel, iter, [0, 1, 0]);
     gl.uniformMatrix4fv(modelUniformID[0], false, cubeModel);
 
     gl.cullFace(gl.BACK);
@@ -758,7 +745,6 @@ function RenderStructure(global_model: glmath.mat4) {
 
     //Apply global transformations
     glmath.mat4.copy(globalAxisModel, global_model);
-    //glmath.mat4.rotate(globalAxisModel, globalAxisModel, iter, [0, 1, 0]);
     glmath.mat4.scale(globalAxisModel, globalAxisModel, [1.8, 1.8, 1.8]);
     glmath.mat4.translate(globalAxisModel, globalAxisModel, [-0.55, -0.55, -0.55]);
 
