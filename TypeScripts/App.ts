@@ -8,7 +8,7 @@ let updateNames; // Check if names need to be re-init
 export class App {
 
     App() {
-        window.addEventListener("input", this.updateAxisNames);
+        window.addEventListener("input", this.updateAxisNames, false);
     }
 
     updateAxisNames() {

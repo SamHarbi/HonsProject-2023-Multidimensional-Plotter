@@ -391,8 +391,6 @@ function Render(timestamp) {
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, current_x_rotation, [0, 1, 0]);
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, current_y_rotation, [1, 0, 0]);
 
-    console.log(current_x_rotation);
-
     // Setup View
     let view = glmath.mat4.create()
     let viewPos = glmath.vec3.create();
