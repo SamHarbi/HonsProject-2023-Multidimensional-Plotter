@@ -13,6 +13,7 @@ import { Model } from './Model';
 import { DATASET, load_OBJ, read_CSV } from './Loader';
 import { Font } from './Font';
 import { App } from './App';
+import { Controls } from './Controls';
 
 // Math Library for Graphics 
 import * as glmath from 'gl-matrix';
@@ -110,9 +111,6 @@ let altColour = [0.9, 0.9, 0.9];
 
 });
 
-(<HTMLElement>document.getElementById("left")).addEventListener("click", function () {
-    x_rotation -= 0.1;
-});
 
 (<HTMLElement>document.getElementById("right")).addEventListener("click", function () {
     x_rotation += 0.1;
@@ -162,7 +160,8 @@ async function main() {
     // gl has already been checked so cannot be undefined- safe to cast
     gl = <WebGLRenderingContext>init();
 
-    let a = new App();
+    let c = new Controls();
+    c.Controls();
 
     /*
         Link Attributes and Locations
