@@ -43,60 +43,20 @@ export class Controls {
         this.updateNames = true;
 
         // Event Listeners for user controls
-        (<HTMLElement>document.getElementById("input")).addEventListener("input", this.updateNames);
+        (<HTMLElement>document.getElementById("input")).addEventListener("input", this.UpdateNames);
+        (<HTMLElement>document.getElementById("zoom")).addEventListener("input", this.Zoom);
+        (<HTMLElement>document.getElementById("viewsize")).addEventListener("input", this.ViewSize);
+        (<HTMLElement>document.getElementById("pointsize")).addEventListener("input", this.PointSize);
+        (<HTMLElement>document.getElementById("glCanvas")).addEventListener("mousemove", this.MouseMove);
 
+        (<HTMLElement>document.getElementById("up")).addEventListener("click", this.Rotation);
+        (<HTMLElement>document.getElementById("down")).addEventListener("click", this.Rotation);
 
-        (<HTMLElement>document.getElementById("zoom")).addEventListener("input", function () {
-            // @ts-ignore 1
-            let change = <Number>document.getElementById("zoom").value;
-            // @ts-ignore 1
-            zoom = change / 10;
-            setAxisValues();
-        });
+        (<HTMLElement>document.getElementById("right")).addEventListener("click", this.Rotation);
+        (<HTMLElement>document.getElementById("left")).addEventListener("click", this.Rotation);
 
-        (<HTMLElement>document.getElementById("viewsize")).addEventListener("input", function () {
-            // @ts-ignore 1 1
-            viewsize = <Number>document.getElementById("viewsize").value / 10;
-        });
-
-        (<HTMLElement>document.getElementById("pointsize")).addEventListener("input", function () {
-            // @ts-ignore 1 1
-            pointsize = <Number>document.getElementById("pointsize").value / 10;
-        });
-
-        (<HTMLElement>document.getElementById("glCanvas")).addEventListener("mousemove", function (event) {
-
-            if (event.buttons == 1) {
-                mouse_x += event.movementX;
-                mouse_y += event.movementY;
-                //mouse_held = true;
-            }
-
-        });
-
-
-        (<HTMLElement>document.getElementById("right")).addEventListener("click", function () {
-            x_rotation += 0.1;
-        });
-
-        (<HTMLElement>document.getElementById("up")).addEventListener("click", function () {
-            y_rotation += 0.1;
-        });
-
-        (<HTMLElement>document.getElementById("down")).addEventListener("click", function () {
-            y_rotation -= 0.1;
-        });
-
-
-        (<HTMLElement>document.getElementById("back-Move")).addEventListener("click", function () {
-            x_move += 2;
-            setAxisValues();
-        });
-
-        (<HTMLElement>document.getElementById("forward-Move")).addEventListener("click", function () {
-            x_move -= 2;
-            setAxisValues();
-        });
+        (<HTMLElement>document.getElementById("back-Move")).addEventListener("click", this.MoveSlice);
+        (<HTMLElement>document.getElementById("forward-Move")).addEventListener("click", this.MoveSlice);
 
         (<HTMLElement>document.getElementById("up-Move")).addEventListener("click", function () {
             y_move += 2;
@@ -122,5 +82,66 @@ export class Controls {
 
     private UpdateNames() {
         this.updateNames = true;
+    }
+
+    private Zoom() {
+        // @ts-ignore 1
+        let change = <Number>document.getElementById("zoom").value;
+        // @ts-ignore 1
+        zoom = change / 10;
+        //setAxisValues();
+    }
+
+    private ViewSize() {
+        // @ts-ignore 1 1
+        viewsize = <Number>document.getElementById("viewsize").value / 10;
+    }
+
+    private PointSize() {
+        // @ts-ignore 1 1
+        pointsize = <Number>document.getElementById("pointsize").value / 10;
+    }
+
+    private MouseMove(event) {
+        if (event.buttons == 1) {
+            this.mouse_x += event.movementX;
+            this.mouse_y += event.movementY;
+            //mouse_held = true;
+        }
+    }
+
+    private Rotation(event) {
+
+        if (event.currentTarget.id == "right") {
+            this.x_rotation += 0.1;
+        }
+        else if (event.currentTarget.id == "left") {
+            this.x_rotation -= 0.1;
+        }
+        else if (event.currentTarget.id == "down") {
+            this.y_rotation -= 0.1;
+        }
+        else if (event.currentTarget.id == "up") {
+            this.y_rotation += 0.1;
+        }
+
+        console.log(event);
+
+    }
+
+    private MoveSlice(event) {
+        if (event.currentTarget.id == "back-Move") {
+            this.x_move += 2;
+            //setAxisValues();
+        }
+        else if (event.currentTarget.id == "forward-Move") {
+            this.x_move -= 2;;
+        }
+        else if (event.currentTarget.id == "down") {
+            this.y_rotation -= 0.1;
+        }
+        else if (event.currentTarget.id == "up") {
+            this.y_rotation += 0.1;
+        }
     }
 }
