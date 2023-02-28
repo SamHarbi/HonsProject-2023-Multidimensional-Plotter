@@ -41,6 +41,8 @@ let positionAttributeID: GLint[];
 let normalAttributeID: GLint[];
 let textureAttributeID: GLint[];
 
+let c: Controls;
+
 // User controlled rotation
 let x_rotation;
 let y_rotation;
@@ -53,8 +55,7 @@ let current_x_rotation;
 let current_y_rotation;
 
 // Position modififed by mouse controls
-let mouse_x;
-let mouse_y;
+
 
 let zoom; // At what zoom level is the view, controls zoom of data points 
 let viewsize; // Camera position, controls camera zoom outside chart
@@ -77,91 +78,13 @@ let positiveColour = [0.1, 0.1, 0.1];
 let negativeColour = [1, 0.4, 0.4];
 let altColour = [0.9, 0.9, 0.9];
 
-// Event Listeners for user controls
-(<HTMLElement>document.getElementById("input")).addEventListener("input", function () {
-    updateNames = true;
-});
-
-
-(<HTMLElement>document.getElementById("zoom")).addEventListener("input", function () {
-    // @ts-ignore 1
-    let change = <Number>document.getElementById("zoom").value;
-    // @ts-ignore 1
-    zoom = change / 10;
-    setAxisValues();
-});
-
-(<HTMLElement>document.getElementById("viewsize")).addEventListener("input", function () {
-    // @ts-ignore 1 1
-    viewsize = <Number>document.getElementById("viewsize").value / 10;
-});
-
-(<HTMLElement>document.getElementById("pointsize")).addEventListener("input", function () {
-    // @ts-ignore 1 1
-    pointsize = <Number>document.getElementById("pointsize").value / 10;
-});
-
-(<HTMLElement>document.getElementById("glCanvas")).addEventListener("mousemove", function (event) {
-
-    if (event.buttons == 1) {
-        mouse_x += event.movementX;
-        mouse_y += event.movementY;
-        //mouse_held = true;
-    }
-
-});
-
-
-(<HTMLElement>document.getElementById("right")).addEventListener("click", function () {
-    x_rotation += 0.1;
-});
-
-(<HTMLElement>document.getElementById("up")).addEventListener("click", function () {
-    y_rotation += 0.1;
-});
-
-(<HTMLElement>document.getElementById("down")).addEventListener("click", function () {
-    y_rotation -= 0.1;
-});
-
-
-(<HTMLElement>document.getElementById("back-Move")).addEventListener("click", function () {
-    x_move += 2;
-    setAxisValues();
-});
-
-(<HTMLElement>document.getElementById("forward-Move")).addEventListener("click", function () {
-    x_move -= 2;
-    setAxisValues();
-});
-
-(<HTMLElement>document.getElementById("up-Move")).addEventListener("click", function () {
-    y_move += 2;
-    setAxisValues();
-});
-
-(<HTMLElement>document.getElementById("down-Move")).addEventListener("click", function () {
-    y_move -= 2;
-    setAxisValues();
-});
-
-(<HTMLElement>document.getElementById("right-Move")).addEventListener("click", function () {
-    z_move += 2;
-    setAxisValues();
-});
-
-(<HTMLElement>document.getElementById("left-Move")).addEventListener("click", function () {
-    z_move -= 2;
-    setAxisValues();
-});
-
 async function main() {
 
     // gl has already been checked so cannot be undefined- safe to cast
     gl = <WebGLRenderingContext>init();
 
-    let c = new Controls();
-    c.Controls();
+    c = new Controls();
+    c.Controls(setAxisValues);
 
     /*
         Link Attributes and Locations
@@ -219,9 +142,6 @@ async function main() {
     zoom = 1;
     viewsize = 0.4;
     pointsize = 1;
-
-    mouse_x = 1;
-    mouse_y = 1;
 
     updateNames = true;
 
@@ -378,12 +298,12 @@ function Render(timestamp) {
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * (Math.PI / 180), [0, -1, 0]);
 
     //User controlled rotation applied
-    current_x_rotation = x_rotation + mouse_x / 100;
-    current_y_rotation = y_rotation + mouse_y / 100;
+    current_x_rotation = x_rotation + c.mouse_x / 100;
+    current_y_rotation = y_rotation + c.mouse_y / 100;
 
     if (current_x_rotation > 360 * (Math.PI / 180) || current_x_rotation < -360 * (Math.PI / 180)) {
         current_x_rotation = 0;
-        mouse_x = 0;
+        c.mouse_x = 0;
         x_rotation = 0;
     }
 
