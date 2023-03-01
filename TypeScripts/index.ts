@@ -262,16 +262,6 @@ function Render(timestamp) {
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 15 * (Math.PI / 180), [1, 0, 0]);
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * (Math.PI / 180), [0, -1, 0]);
 
-    //User controlled rotation applied
-    c.current_x_rotation = c.x_rotation + c.mouse_x / 100;
-    c.current_y_rotation = c.y_rotation + c.mouse_y / 100;
-
-    if (c.current_x_rotation > 360 * (Math.PI / 180) || c.current_x_rotation < -360 * (Math.PI / 180)) {
-        c.current_x_rotation = 0;
-        c.mouse_x = 0;
-        c.x_rotation = 0;
-    }
-
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, c.current_x_rotation, [0, 1, 0]);
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, c.current_y_rotation, [1, 0, 0]);
 

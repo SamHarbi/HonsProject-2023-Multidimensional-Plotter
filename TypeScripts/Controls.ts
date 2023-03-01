@@ -76,6 +76,16 @@ export class Controls {
             this.updateAxisNamesFunc(); // Init Axis Names
             this.updateNames = false;
         }
+
+        //User controlled rotation applied
+        this.current_x_rotation = this.x_rotation + this.mouse_x / 100;
+        this.current_y_rotation = this.y_rotation + this.mouse_y / 100;
+
+        if (this.current_x_rotation > 360 * (Math.PI / 180) || this.current_x_rotation < -360 * (Math.PI / 180)) {
+            this.current_x_rotation = 0;
+            this.mouse_x = 0;
+            this.x_rotation = 0;
+        }
     }
 
     private UpdateNames() {
