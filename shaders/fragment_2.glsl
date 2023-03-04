@@ -21,6 +21,13 @@
 
     if(light_toggle == 1)
     {
+          vec4 col = texture2D(u_texture, v_texcoord) * colour;
+          if(col == vec4(0, 0, 0, 1))
+          {
+              discard;
+          }
+
+
           gl_FragColor = texture2D(u_texture, v_texcoord) * colour;
     }
     else

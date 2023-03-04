@@ -11,9 +11,9 @@ import fs from "fs";
 import path from "path";
 
 // @ts-ignore
-var csv = require('jquery-csv'); //Not actually jquery, just a parser with jquery compliant syntax
+var csv = require('jquery-csv'); // Not actually jquery, just a parser with jquery compliant syntax
 
-//Global Dataset Variable of currently last imported (valid) data
+// Global Dataset Variable of currently last imported (valid) data
 export var DATASET: number[][];
 DATASET = [];
 
@@ -130,31 +130,31 @@ export async function read_CSV() {
 async function ReadFile(model: string) {
 
     if (model === "Monkey") {
-        var raw = fs.readFileSync(path.join(__dirname, "./models/Monkey.obj"), "utf8");
+        var raw = fs.readFileSync(path.join(__dirname, "../models/Monkey.obj"), "utf8");
         return raw;
     }
     else if (model === "Triangle") {
-        var raw = fs.readFileSync(path.join(__dirname, "./models/Triangle.obj"), "utf8");
+        var raw = fs.readFileSync(path.join(__dirname, "../models/Triangle.obj"), "utf8");
         return raw;
     }
     else if (model == "Axis") {
-        var raw = fs.readFileSync(path.join(__dirname, "./models/AxisLine.obj"), "utf8");
+        var raw = fs.readFileSync(path.join(__dirname, "../models/AxisLine.obj"), "utf8");
         return raw;
     }
     else if (model == "Glyph") {
-        var raw = fs.readFileSync(path.join(__dirname, "./models/Glyph.obj"), "utf-8");
+        var raw = fs.readFileSync(path.join(__dirname, "../models/Glyph.obj"), "utf-8");
         return raw;
     }
     else if (model == "ShortGlyph") {
-        var raw = fs.readFileSync(path.join(__dirname, "./models/ShortGlyph.obj"), "utf-8");
+        var raw = fs.readFileSync(path.join(__dirname, "../models/ShortGlyph.obj"), "utf-8");
         return raw;
     }
     else if (model == "Dice") {
-        var raw = fs.readFileSync(path.join(__dirname, "./models/Dice.obj"), "utf-8");
+        var raw = fs.readFileSync(path.join(__dirname, "../models/Dice.obj"), "utf-8");
         return raw;
     }
     else {
-        var raw = fs.readFileSync(path.join(__dirname, "./models/Cube3.obj"), "utf8");
+        var raw = fs.readFileSync(path.join(__dirname, "../models/Cube3.obj"), "utf8");
         return raw;
     }
 }

@@ -9,6 +9,7 @@
   uniform mat4 model, projection, view;
   uniform vec3 camRight_WS, camUp_WS;
   uniform vec3 in_colour;
+  uniform int viewmod;
 
   varying vec4 colour;
   varying vec3 v_normal;
@@ -18,9 +19,17 @@
   // all shaders have a main function
   void main() {
  
-    gl_Position = projection * (view * model * vec4(a_position, 5) + vec4(a_position.x * 0.05, a_position.y * 0.05, a_position.z * 0.05, 1));
+    if(viewmod >= 0) // Render with Billboarding
+    {
+      gl_Position = projection * (view * model * vec4(a_position, 5 * viewmod) + vec4(a_position.x * 0.15, a_position.y * 0.15, a_position.z * 0.15, 1));
+    }
+    else // No Billboarding
+    {
+      gl_Position = projection * view * model * vec4(a_position, 1);
+    }
+    
 
-    position = projection * view * model * vec4(a_position, 1);
+    //position = projection * view * model * vec4(a_position, 1);
     
     colour = vec4(in_colour, 1.0);
     v_normal = a_normal;
