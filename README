@@ -1,5 +1,4 @@
-# Refactor Branch
+### v1.0 Web Plotter
 
-This is where code from the development branch is pushed once a task or user story is implemented. General cleanup or generally putting together the final app
-which will be pushed to production is done here
-
+This is a watched branch that hosts the v1.0 of the application for user testing and documentation purposes, a copy of this branch can also be seen in the main branch 
+under the subdirectory of the same name 
