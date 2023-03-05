@@ -2,9 +2,9 @@
     This is a class definition for a Model Object, Which act's as a store and renderer for a 3D object
 */
 
-import Arial from './fonts/Atlas/Arial.json' //Needs refactoring for sure
+import Arial from '../fonts/Atlas/Arial.json' //Needs refactoring for sure
 // @ts-ignore
-import Arial_Atlas from "./fonts/Atlas/no_texture.png"
+import Arial_Atlas from "../fonts/Atlas/no_texture.png"
 
 export class Model {
 
@@ -21,7 +21,6 @@ export class Model {
     image: HTMLImageElement;
     gl: WebGLRenderingContext;
     drawmode: number;
-
 
     constructor(newPositionAttributeID: GLint, newNormalAttributeID: GLint, newTextureAttributeID: GLint, newDrawMode: number) {
         this.positionAttributeID = newPositionAttributeID;

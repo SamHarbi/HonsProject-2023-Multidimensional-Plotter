@@ -7,13 +7,13 @@
     A Single letter consists of a 2 triangle rect geometery with the glyph texture applied
 */
 
-import Arial from './fonts/Atlas/Arial.json'
-import Arial_Bold from './fonts/Atlas/Arial-Bold.json'
+import Arial from '../fonts/Atlas/Arial.json'
+import Arial_Bold from '../fonts/Atlas/Arial-Bold.json'
 
 // @ts-ignore
-import Arial_Atlas from "./fonts/Atlas/Arial.png"
+import Arial_Atlas from "../fonts/Atlas/Arial.png"
 // @ts-ignore
-import ArialBold_Atlas from "./fonts/Atlas/Arial-Bold.png"
+import ArialBold_Atlas from "../fonts/Atlas/Arial-Bold.png"
 
 
 export class Font {
