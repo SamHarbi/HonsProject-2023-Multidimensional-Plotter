@@ -538,6 +538,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         }
     }
 
+    gl.uniform1i(viewmodUniformID, 1 / c.viewsize);
     singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [2, 0, 0]);
