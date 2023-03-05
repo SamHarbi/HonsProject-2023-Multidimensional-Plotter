@@ -92,7 +92,7 @@ export class Controls {
         this.updateNames = true;
     }
 
-    private Zoom() {
+    private Zoom(event) {
         // @ts-ignore 1
         let change = <Number>document.getElementById("zoom").value;
         // @ts-ignore 1
