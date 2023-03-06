@@ -50,8 +50,10 @@
                 <h4>Camera Controls</h4>
                 <p>These change camera positions within the data chart and outside respectively</p>
                 <h6>Data Zoom</h6>
-                <input type="range" id="zoom" min="2" max="10">
-                <div class="grid"><p>Max Shown Value</p><input type="number" id="valueDifference"></div>
+                <input type="range" id="zoom" min="2" max="10" disabled="">
+                <article>
+                    <div class="grid"><p>Difference per Line</p><input type="number" id="valueDifference" min="0"></div>
+                </article>
                 <h6>View Zoom</h6>
                 <input type="range" id="viewsize" min="1" max="10">
             </article>
