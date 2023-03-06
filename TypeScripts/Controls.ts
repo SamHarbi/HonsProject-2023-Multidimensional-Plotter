@@ -22,6 +22,7 @@ export class Controls {
     public mouse_y;
 
     public zoom; // At what zoom level is the view, controls zoom of data points 
+    public valueDifference; // What the maximum value of the zoom should be 
     public viewsize; // Camera position, controls camera zoom outside chart
     public pointsize; // Size of a data point 
 
@@ -39,6 +40,7 @@ export class Controls {
         this.z_move = 0;
 
         this.zoom = 1;
+        this.valueDifference = 1;
         this.viewsize = 0.4;
         this.pointsize = 1;
 
@@ -56,6 +58,7 @@ export class Controls {
         (<HTMLElement>document.getElementById("viewsize")).addEventListener("input", this.ViewSize.bind(this));
         (<HTMLElement>document.getElementById("pointsize")).addEventListener("input", this.PointSize.bind(this));
         (<HTMLElement>document.getElementById("glCanvas")).addEventListener("mousemove", this.MouseMove.bind(this));
+        (<HTMLElement>document.getElementById("valueDifference")).addEventListener("input", this.setvalueDifference.bind(this));
 
         (<HTMLElement>document.getElementById("up")).addEventListener("click", this.Rotation.bind(this));
         (<HTMLElement>document.getElementById("down")).addEventListener("click", this.Rotation.bind(this));
@@ -100,6 +103,18 @@ export class Controls {
         this.updateAxisFunc();
     }
 
+    private setvalueDifference() {
+        // @ts-ignore 1
+        let change = <Number>document.getElementById("valueDifference").value;
+        if (change <= 1) {
+            this.valueDifference = 1;
+        } else {
+            this.valueDifference = change;
+        }
+        this.updateAxisFunc();
+
+    }
+
     private ViewSize() {
         // @ts-ignore 1 1
         this.viewsize = <Number>document.getElementById("viewsize").value / 10;
@@ -110,7 +125,7 @@ export class Controls {
         this.pointsize = <Number>document.getElementById("pointsize").value / 10;
     }
 
-    MouseMove(event) {
+    private MouseMove(event) {
         if (event.buttons == 1) {
             this.mouse_x += event.movementX;
             this.mouse_y += event.movementY;
