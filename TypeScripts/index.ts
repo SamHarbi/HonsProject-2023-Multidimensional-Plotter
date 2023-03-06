@@ -146,6 +146,8 @@ async function main() {
 
     gl.frontFace(gl.CW);
 
+    gl.enable(gl.STENCIL_TEST);
+
     //gl.enable(gl.STENCIL_TEST); Stencil usage was removed 
 
     // Listen for a file upload 
@@ -186,14 +188,9 @@ function setAxisNames() {
 function generateAxisValuesAt(i, mod, controller) {
     AxisValues[i] = [];
 
-    // Dual zoom level, this could be made better with more zoom levels
-    let zoom_mod = 1;
-    if (c.zoom <= 0.2) {
-        zoom_mod = 25
-    }
-
     let rawAxisValue = (i - mod) + controller; // Axis Value that can be +ve or -ve 
-    var digit = String(Math.abs(rawAxisValue) * zoom_mod).split('').map(Number); // Get Array of +ve digits that represent the value 
+    rawAxisValue = rawAxisValue * (c.valueDifference); // Apply difference between each value
+    var digit = String((Math.abs(rawAxisValue))).split('').map(Number); // Get Array of +ve digits that represent the value 
 
     // No way to know if a label is negative or positive from within the code, store it in an array for each axis glyph
     if (rawAxisValue > 0) // Positive Number 
@@ -284,9 +281,15 @@ function Render(timestamp) {
 
     // | Helper Functions Start |
 
+    gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
+    gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
+
     RenderStructure(GLOBAL_MODEL);
 
     RenderAxisText(GLOBAL_MODEL, view);
+
+    gl.enable(gl.SCISSOR_BOX);
+    gl.scissor(0, 0, 10, 10);
 
     RenderData(GLOBAL_MODEL);
 
@@ -325,15 +328,16 @@ function RenderData(global_model: glmath.mat4) {
     let global_point_model = glmath.mat4.create();
     glmath.mat4.copy(global_point_model, global_model);
     glmath.mat4.scale(global_point_model, global_point_model, [0.05, 0.05, 0.05]);
-    glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * c.z_move * 1 / c.zoom, 0 - 2 * c.y_move * 1 / c.zoom, 0 - 2 * c.x_move * 1 / c.zoom]);
+    //glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * c.z_move * c.zoom, 0 - 2 * c.y_move * c.zoom, 0 - 2 * c.x_move * c.zoom]);
+    glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * c.z_move * c.zoom, 0 - 2 * c.y_move * c.zoom, 0 - 2 * c.x_move * c.zoom]);
 
     for (let i = 0; i < DATASET.length; i++) {
-        let z = Number(Object.values(DATASET[i])[0]) * 2;
-        let y = Number(Object.values(DATASET[i])[1]) * 2;
-        let x = (Number(Object.values(DATASET[i])[2]) * 2);
+        let z = Number(Object.values(DATASET[i])[0]) * 2 / c.valueDifference;
+        let y = Number(Object.values(DATASET[i])[1]) * 2 / c.valueDifference;
+        let x = (Number(Object.values(DATASET[i])[2]) * 2) / c.valueDifference;
 
         //Check that points are not beyond the view cube on +ve side
-        if (x * c.zoom - 2 * c.z_move > 20 || y * c.zoom - 2 * c.y_move > 20 || z * c.zoom - 2 * c.x_move > 20) {
+        if ((x * c.zoom - 2 * c.z_move > 20) || y * c.zoom - 2 * c.y_move > 20 || z * c.zoom - 2 * c.x_move > 20) {
             continue;
         }
 
@@ -344,9 +348,9 @@ function RenderData(global_model: glmath.mat4) {
 
         let point_model = glmath.mat4.create();
         glmath.mat4.copy(point_model, global_point_model);
-        glmath.mat4.translate(point_model, point_model, [x * c.zoom, y * c.zoom, z * c.zoom]);
-        glmath.mat4.scale(point_model, point_model, [1 * c.zoom, 1 * c.zoom, 1 * c.zoom]);
-        glmath.mat4.scale(point_model, point_model, [c.pointsize, c.pointsize, c.pointsize]);
+        glmath.mat4.translate(point_model, point_model, [x / c.zoom, y / c.zoom, z / c.zoom]);
+        glmath.mat4.scale(point_model, point_model, [1 / c.zoom, 1 / c.zoom, 1 / c.zoom]);
+        glmath.mat4.scale(point_model, point_model, [c.pointsize / c.valueDifference, c.pointsize / c.valueDifference, c.pointsize / c.valueDifference]);
         gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
         Point.render();
 
@@ -440,28 +444,26 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     */
     let zoom_factor = c.zoom * 10
 
-    if (c.zoom <= 0.2 || c.zoom == 1) {
-        for (let i = 1; i < zoom_factor; i++) {
-            let loopModel = glmath.mat4.create();
-            glmath.mat4.copy(loopModel, singleAxisModel);
-            glmath.mat4.translate(loopModel, loopModel, [5 * i / c.zoom, 0, 0]);
-            for (let j = 0; j <= AxisValues[i].length; j++) {
-                if (j > 0) {
-                    glmath.mat4.translate(loopModel, loopModel, [2, -2, 0]);
+    for (let i = 1; i < zoom_factor; i++) {
+        let loopModel = glmath.mat4.create();
+        glmath.mat4.copy(loopModel, singleAxisModel);
+        glmath.mat4.translate(loopModel, loopModel, [5 * i / c.zoom, 0, 0]);
+        for (let j = 0; j <= AxisValues[i].length; j++) {
+            if (j > 0) {
+                glmath.mat4.translate(loopModel, loopModel, [2, -2, 0]);
+            }
+            gl.uniformMatrix4fv(modelUniformID[1], false, loopModel);
+            if (AxisValues[i][j] != undefined) {
+                if (AxisMap[i] == 0) {
+                    gl.uniform3f(colourUniformID[1], negativeColour[0], negativeColour[1], negativeColour[2]);
+                } else {
+                    gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
                 }
-                gl.uniformMatrix4fv(modelUniformID[1], false, loopModel);
-                if (AxisValues[i][j] != undefined) {
-                    if (AxisMap[i] == 0) {
-                        gl.uniform3f(colourUniformID[1], negativeColour[0], negativeColour[1], negativeColour[2]);
-                    } else {
-                        gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
-                    }
-                    AxisValues[i][j].render();
-                }
+                AxisValues[i][j].render();
             }
         }
-
     }
+
 
     glmath.mat4.translate(LetterModel, LetterModel, [-40, 40, 0]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
@@ -492,27 +494,26 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [1, 0.6, 1]);
 
-    if (c.zoom <= 0.2 || c.zoom == 1) {
-        for (let i = 11; i < zoom_factor + 10; i++) {
-            let loopModel = glmath.mat4.create();
-            glmath.mat4.copy(loopModel, singleAxisModel);
-            glmath.mat4.translate(loopModel, loopModel, [0, 0, (0.1 * (i - 10)) / c.zoom - 1]);
-            for (let j = 0; j <= AxisValues[i].length; j++) {
-                if (j > 0) {
-                    glmath.mat4.translate(loopModel, loopModel, [2, 0, 0]);
+    for (let i = 11; i < zoom_factor + 10; i++) {
+        let loopModel = glmath.mat4.create();
+        glmath.mat4.copy(loopModel, singleAxisModel);
+        glmath.mat4.translate(loopModel, loopModel, [0, 0, (0.1 * (i - 10)) / c.zoom - 1]);
+        for (let j = 0; j <= AxisValues[i].length; j++) {
+            if (j > 0) {
+                glmath.mat4.translate(loopModel, loopModel, [2, 0, 0]);
+            }
+            gl.uniformMatrix4fv(modelUniformID[1], false, loopModel);
+            if (AxisValues[i][j] != undefined) {
+                if (AxisMap[i] == 0) {
+                    gl.uniform3f(colourUniformID[1], negativeColour[0], negativeColour[1], negativeColour[2]);
+                } else {
+                    gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
                 }
-                gl.uniformMatrix4fv(modelUniformID[1], false, loopModel);
-                if (AxisValues[i][j] != undefined) {
-                    if (AxisMap[i] == 0) {
-                        gl.uniform3f(colourUniformID[1], negativeColour[0], negativeColour[1], negativeColour[2]);
-                    } else {
-                        gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
-                    }
-                    AxisValues[i][j].render();
-                }
+                AxisValues[i][j].render();
             }
         }
     }
+
 
     glmath.mat4.translate(LetterModel, LetterModel, [-5, -45, 1]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
@@ -538,29 +539,28 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         }
     }
 
+    gl.uniform1i(viewmodUniformID, 1 / c.viewsize);
     singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [2, 0, 0]);
     //glmath.mat4.translate(singleAxisModel, singleAxisModel, [-3.0, -1.0, 0]);
 
-    if (c.zoom <= 0.2 || c.zoom == 1) {
-        for (let i = 21; i < zoom_factor + 20; i++) {
-            let loopModel = glmath.mat4.create();
-            glmath.mat4.copy(loopModel, singleAxisModel);
-            glmath.mat4.translate(loopModel, loopModel, [-2, (5.0 * (i - 20)) / c.zoom, 0]);
-            for (let j = 0; j <= AxisValues[i].length; j++) {
-                if (j > 0) {
-                    glmath.mat4.translate(loopModel, loopModel, [2, 0, 0]);
+    for (let i = 21; i < zoom_factor + 20; i++) {
+        let loopModel = glmath.mat4.create();
+        glmath.mat4.copy(loopModel, singleAxisModel);
+        glmath.mat4.translate(loopModel, loopModel, [-2, (5.0 * (i - 20)) / c.zoom, 0]);
+        for (let j = 0; j <= AxisValues[i].length; j++) {
+            if (j > 0) {
+                glmath.mat4.translate(loopModel, loopModel, [2, 0, 0]);
+            }
+            gl.uniformMatrix4fv(modelUniformID[1], false, loopModel);
+            if (AxisValues[i][j] != undefined) {
+                if (AxisMap[i] == 0) {
+                    gl.uniform3f(colourUniformID[1], negativeColour[0], negativeColour[1], negativeColour[2]);
+                } else {
+                    gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
                 }
-                gl.uniformMatrix4fv(modelUniformID[1], false, loopModel);
-                if (AxisValues[i][j] != undefined) {
-                    if (AxisMap[i] == 0) {
-                        gl.uniform3f(colourUniformID[1], negativeColour[0], negativeColour[1], negativeColour[2]);
-                    } else {
-                        gl.uniform3f(colourUniformID[1], positiveColour[0], positiveColour[1], positiveColour[2]);
-                    }
-                    AxisValues[i][j].render();
-                }
+                AxisValues[i][j].render();
             }
         }
     }
@@ -705,7 +705,7 @@ function init() {
 
     //Get canvas and initalise it 
     canvas = <HTMLCanvasElement>document.querySelector("#glCanvas");
-    const temp_gl = canvas.getContext("webgl", { stencil: false });
+    const temp_gl = canvas.getContext("webgl", { stencil: true });
 
     // Only continue if WebGL is available and working
     if (temp_gl === null) {
@@ -713,10 +713,10 @@ function init() {
         return;
     }
 
-    // @ts-ignore 
-    //if (temp_gl.getContextAttributes().stencil == false) {
-    //alert("Your Browser does not fully support this application (Stencil Attribute Missing) Please try another browser");
-    //}
+    //@ts-ignore 
+    if (temp_gl.getContextAttributes().stencil == false) {
+        alert("Your Browser does not fully support this application (Stencil Attribute Missing) Please try another browser");
+    }
 
     //Create, compile and link shaders
     let vertex = [createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource_1),
