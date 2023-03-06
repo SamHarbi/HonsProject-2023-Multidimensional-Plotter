@@ -106,8 +106,8 @@ export class Controls {
     private setvalueDifference() {
         // @ts-ignore 1
         let change = <Number>document.getElementById("valueDifference").value;
-        if (change <= 1) {
-            this.valueDifference = 1;
+        if (change <= 0) {
+            this.valueDifference = 0.1;
         } else {
             this.valueDifference = change;
         }
