@@ -288,8 +288,8 @@ function Render(timestamp) {
 
     RenderAxisText(GLOBAL_MODEL, view);
 
-    //gl.stencilFunc(gl.EQUAL, 0, 0xFF);
-    //gl.stencilOp(gl.ZERO, gl.ZERO, gl.ZERO);
+    gl.enable(gl.SCISSOR_BOX);
+    gl.scissor(0, 0, 10, 10);
 
     RenderData(GLOBAL_MODEL);
 
@@ -327,14 +327,14 @@ function RenderData(global_model: glmath.mat4) {
 
     let global_point_model = glmath.mat4.create();
     glmath.mat4.copy(global_point_model, global_model);
-    glmath.mat4.scale(global_point_model, global_point_model, [0.05 / c.valueDifference, 0.05 / c.valueDifference, 0.05 / c.valueDifference]);
+    glmath.mat4.scale(global_point_model, global_point_model, [0.05, 0.05, 0.05]);
     //glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * c.z_move * c.zoom, 0 - 2 * c.y_move * c.zoom, 0 - 2 * c.x_move * c.zoom]);
     glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * c.z_move * c.zoom, 0 - 2 * c.y_move * c.zoom, 0 - 2 * c.x_move * c.zoom]);
 
     for (let i = 0; i < DATASET.length; i++) {
-        let z = Number(Object.values(DATASET[i])[0]) * 2;
-        let y = Number(Object.values(DATASET[i])[1]) * 2;
-        let x = (Number(Object.values(DATASET[i])[2]) * 2);
+        let z = Number(Object.values(DATASET[i])[0]) * 2 / c.valueDifference;
+        let y = Number(Object.values(DATASET[i])[1]) * 2 / c.valueDifference;
+        let x = (Number(Object.values(DATASET[i])[2]) * 2) / c.valueDifference;
 
         //Check that points are not beyond the view cube on +ve side
         if (x * c.zoom - 2 * c.z_move > 20 || y * c.zoom - 2 * c.y_move > 20 || z * c.zoom - 2 * c.x_move > 20) {
@@ -350,7 +350,7 @@ function RenderData(global_model: glmath.mat4) {
         glmath.mat4.copy(point_model, global_point_model);
         glmath.mat4.translate(point_model, point_model, [x / c.zoom, y / c.zoom, z / c.zoom]);
         glmath.mat4.scale(point_model, point_model, [1 / c.zoom, 1 / c.zoom, 1 / c.zoom]);
-        glmath.mat4.scale(point_model, point_model, [c.pointsize, c.pointsize, c.pointsize]);
+        glmath.mat4.scale(point_model, point_model, [c.pointsize / c.valueDifference, c.pointsize / c.valueDifference, c.pointsize / c.valueDifference]);
         gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
         Point.render();
 
