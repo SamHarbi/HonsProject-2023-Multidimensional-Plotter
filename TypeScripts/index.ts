@@ -336,12 +336,12 @@ function RenderData(global_model: glmath.mat4) {
         let x = (Number(Object.values(DATASET[i])[2]) * 2) / c.combinedZoom;
 
         //Check that points are not beyond the view cube on +ve side
-        if ((x * c.combinedZoom * - 2 * c.z_move > 20) || y * c.combinedZoom * - 2 * c.y_move > 20 || z * c.combinedZoom * - 2 * c.x_move > 20) {
+        if ((x - 2 * c.z_move > 20) || y - 2 * c.y_move > 20 || z - 2 * c.x_move > 20) {
             continue;
         }
 
         //Check that points are not beyond the view cube on -ve side
-        if (x * - 2 * c.z_move < 0 || y * - 2 * c.y_move < 0 || z * - 2 * c.x_move < 0) {
+        if (x - 2 * c.z_move < 0 || y - 2 * c.y_move < 0 || z - 2 * c.x_move < 0) {
             continue;
         }
 
