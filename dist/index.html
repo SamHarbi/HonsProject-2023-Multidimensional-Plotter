@@ -1,1 +1,67 @@
-<html><head><link rel="stylesheet" href="/v2/index.3477a46f.css"><title>Web Plotter</title></head><body> <div id="grid"> <div id="row-large"> <article style="align-self:center"> <canvas id="glCanvas" style="width:100%;height:60%" width="1600" height="900"></canvas> </article> <article> <h4>Multidimensional Web Plotter</h4> <p>An Honours Project by Sameer Al Harbi</p> </article> </div> <div id="row-small"> <article> <h4>File Upload</h4> <p>Only .CSV files are supported</p> <input type="file" id="input" multiple> </article> <article> <h4>Data Point Settings</h4> <p>These control the look of data points </p> <h6>Data Point Size</h6> <input type="range" id="pointsize" min="1" max="10"> </article> <article> <h4>Rotation Controls</h4> <p>Mouse Dragging across the chart is also supported</p> <a href="#" id="left" role="button">Left</a> <a href="#" id="up" role="button">Up</a> <a href="#" id="down" role="button">Down</a> <a href="#" id="right" role="button">Right</a> </article> <article> <h4>Movement Controls</h4> <p>These change what "slice" of the dataset is visible</p> <a href="#" id="back-Move" role="button">Back</a> <a href="#" id="up-Move" role="button">Up</a> <a href="#" id="down-Move" role="button">Down</a> <a href="#" id="forward-Move" role="button">Forward</a> <a href="#" id="left-Move" role="button">Left</a> <a href="#" id="right-Move" role="button">Right</a> </article> <article> <h4>Camera Controls</h4> <p>These change camera positions within the data chart and outside respectively</p> <h6>Data Zoom</h6> <input type="range" id="zoom" min="2" max="10"> <h6>View Zoom</h6> <input type="range" id="viewsize" min="1" max="10"> </article> </div> </div> </body></html><script src="/v2/index.d8bc5461.js" type="module"></script><script src="/v2/index.3e66f134.js" type="module"></script>
+<html>
+
+<head>
+    <link rel="stylesheet" href="/index.3a01df49.css">
+    <title>Web Plotter</title>
+</head>
+
+<body>
+    <div id="grid">
+        <div id="row-large">
+        <article style="align-self: center">
+            <canvas id="glCanvas" style="width: 100%; height: 60%" width="1600" height="900"></canvas>
+        </article>
+            <article>
+                <h4>Multidimensional Web Plotter</h4>
+                <p>An Honours Project by Sameer Al Harbi</p>
+            </article>
+        </div>
+        <div id="row-small">
+            <article>
+                <h4>File Upload</h4>
+                <p>Only .CSV files are supported</p>
+                <input type="file" id="input" multiple="">
+            </article>
+            <article>
+                <h4>Data Point Settings</h4>
+                <p>These control the look of data points </p>
+                <h6>Data Point Size</h6>
+                <input type="range" id="pointsize" min="1" max="10">
+            </article>
+            <article>
+                <h4>Rotation Controls</h4>
+                <p>Mouse Dragging across the chart is also supported</p>
+                <a href="#" id="left" role="button">Left</a>
+                <a href="#" id="up" role="button">Up</a>
+                <a href="#" id="down" role="button">Down</a>
+                <a href="#" id="right" role="button">Right</a>
+            </article>
+            <article>
+                <h4>Movement Controls</h4>
+                <p>These change what "slice" of the dataset is visible</p>
+                <a href="#" id="back-Move" role="button">Back</a>
+                <a href="#" id="up-Move" role="button">Up</a>
+                <a href="#" id="down-Move" role="button">Down</a>
+                <a href="#" id="forward-Move" role="button">Forward</a>
+                <a href="#" id="left-Move" role="button">Left</a>
+                <a href="#" id="right-Move" role="button">Right</a>
+            </article>
+            <article>
+                <h4>Camera Controls</h4>
+                <p>These change camera positions within the data chart and outside respectively</p>
+                <article>
+                    <h6>Data Zoom</h6>
+                    <input type="range" id="zoom" min="1" max="10">
+                    <div class="grid"><p>Zoom Multiplier</p><input type="number" id="zoomMultiplier" min="0"></div>
+                </article>
+                <h6>View Zoom</h6>
+                <input type="range" id="viewsize" min="1" max="10">
+            </article>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script src="/index.6e0202ec.js" defer=""></script>
+<script src="/index.394c06c4.js" defer=""></script>
