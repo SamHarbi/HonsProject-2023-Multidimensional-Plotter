@@ -146,8 +146,6 @@ async function main() {
 
     gl.frontFace(gl.CW);
 
-    gl.enable(gl.STENCIL_TEST);
-
     //gl.enable(gl.STENCIL_TEST); Stencil usage was removed 
 
     // Listen for a file upload 
@@ -189,7 +187,7 @@ function generateAxisValuesAt(i, mod, controller) {
     AxisValues[i] = [];
 
     let rawAxisValue = (i - mod) + controller; // Axis Value that can be +ve or -ve 
-    rawAxisValue = rawAxisValue * (c.valueDifference); // Apply difference between each value
+    rawAxisValue = rawAxisValue * (c.combinedZoom); // Apply difference between each value
     var digit = String((Math.abs(rawAxisValue))).split('').map(Number); // Get Array of +ve digits that represent the value 
 
     // No way to know if a label is negative or positive from within the code, store it in an array for each axis glyph
@@ -281,15 +279,9 @@ function Render(timestamp) {
 
     // | Helper Functions Start |
 
-    gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
-    gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
-
     RenderStructure(GLOBAL_MODEL);
 
     RenderAxisText(GLOBAL_MODEL, view);
-
-    gl.enable(gl.SCISSOR_BOX);
-    gl.scissor(0, 0, 10, 10);
 
     RenderData(GLOBAL_MODEL);
 
@@ -318,9 +310,6 @@ function RenderData(global_model: glmath.mat4) {
 
     gl.uniform1i(lightToggleUniformID[0], 1); // Use Light
 
-    gl.stencilFunc(gl.EQUAL, 1, 0xFF);
-    gl.stencilOp(gl.REPLACE, gl.KEEP, gl.REPLACE);
-
     // _____________
     // +++ Render +++
     // _____________
@@ -328,29 +317,28 @@ function RenderData(global_model: glmath.mat4) {
     let global_point_model = glmath.mat4.create();
     glmath.mat4.copy(global_point_model, global_model);
     glmath.mat4.scale(global_point_model, global_point_model, [0.05, 0.05, 0.05]);
-    //glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * c.z_move * c.zoom, 0 - 2 * c.y_move * c.zoom, 0 - 2 * c.x_move * c.zoom]);
-    glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * c.z_move * c.zoom, 0 - 2 * c.y_move * c.zoom, 0 - 2 * c.x_move * c.zoom]);
+    glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * c.z_move, 0 - 2 * c.y_move, 0 - 2 * c.x_move]);
 
     for (let i = 0; i < DATASET.length; i++) {
-        let z = Number(Object.values(DATASET[i])[0]) * 2 / c.valueDifference;
-        let y = Number(Object.values(DATASET[i])[1]) * 2 / c.valueDifference;
-        let x = (Number(Object.values(DATASET[i])[2]) * 2) / c.valueDifference;
+        let z = Number(Object.values(DATASET[i])[0]) * 2 / c.combinedZoom;
+        let y = Number(Object.values(DATASET[i])[1]) * 2 / c.combinedZoom;
+        let x = (Number(Object.values(DATASET[i])[2]) * 2) / c.combinedZoom;
 
         //Check that points are not beyond the view cube on +ve side
-        if ((x * c.zoom - 2 * c.z_move > 20) || y * c.zoom - 2 * c.y_move > 20 || z * c.zoom - 2 * c.x_move > 20) {
+        if ((x - 2 * c.z_move > 20) || y - 2 * c.y_move > 20 || z - 2 * c.x_move > 20) {
             continue;
         }
 
         //Check that points are not beyond the view cube on -ve side
-        if (x * c.zoom - 2 * c.z_move < 0 || y * c.zoom - 2 * c.y_move < 0 || z * c.zoom - 2 * c.x_move < 0) {
+        if (x - 2 * c.z_move < 0 || y - 2 * c.y_move < 0 || z - 2 * c.x_move < 0) {
             continue;
         }
 
         let point_model = glmath.mat4.create();
         glmath.mat4.copy(point_model, global_point_model);
-        glmath.mat4.translate(point_model, point_model, [x / c.zoom, y / c.zoom, z / c.zoom]);
-        glmath.mat4.scale(point_model, point_model, [1 / c.zoom, 1 / c.zoom, 1 / c.zoom]);
-        glmath.mat4.scale(point_model, point_model, [c.pointsize / c.valueDifference, c.pointsize / c.valueDifference, c.pointsize / c.valueDifference]);
+        glmath.mat4.translate(point_model, point_model, [x, y, z]);
+        glmath.mat4.scale(point_model, point_model, [1, 1, 1]);
+        glmath.mat4.scale(point_model, point_model, [c.pointsize / c.combinedZoom, c.pointsize / c.combinedZoom, c.pointsize / c.combinedZoom]);
         gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
         Point.render();
 
@@ -442,12 +430,11 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     /*
         This affects how many glyphs are rendered based on the zoom level
     */
-    let zoom_factor = c.zoom * 10
 
-    for (let i = 1; i < zoom_factor; i++) {
+    for (let i = 1; i < 10; i++) {
         let loopModel = glmath.mat4.create();
         glmath.mat4.copy(loopModel, singleAxisModel);
-        glmath.mat4.translate(loopModel, loopModel, [5 * i / c.zoom, 0, 0]);
+        glmath.mat4.translate(loopModel, loopModel, [5 * i, 0, 0]);
         for (let j = 0; j <= AxisValues[i].length; j++) {
             if (j > 0) {
                 glmath.mat4.translate(loopModel, loopModel, [2, -2, 0]);
@@ -494,10 +481,10 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [1, 0.6, 1]);
 
-    for (let i = 11; i < zoom_factor + 10; i++) {
+    for (let i = 11; i < 10 + 10; i++) {
         let loopModel = glmath.mat4.create();
         glmath.mat4.copy(loopModel, singleAxisModel);
-        glmath.mat4.translate(loopModel, loopModel, [0, 0, (0.1 * (i - 10)) / c.zoom - 1]);
+        glmath.mat4.translate(loopModel, loopModel, [0, 0, (0.1 * (i - 10)) - 1]);
         for (let j = 0; j <= AxisValues[i].length; j++) {
             if (j > 0) {
                 glmath.mat4.translate(loopModel, loopModel, [2, 0, 0]);
@@ -545,10 +532,10 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [2, 0, 0]);
     //glmath.mat4.translate(singleAxisModel, singleAxisModel, [-3.0, -1.0, 0]);
 
-    for (let i = 21; i < zoom_factor + 20; i++) {
+    for (let i = 21; i < 10 + 20; i++) {
         let loopModel = glmath.mat4.create();
         glmath.mat4.copy(loopModel, singleAxisModel);
-        glmath.mat4.translate(loopModel, loopModel, [-2, (5.0 * (i - 20)) / c.zoom, 0]);
+        glmath.mat4.translate(loopModel, loopModel, [-2, (5.0 * (i - 20)), 0]);
         for (let j = 0; j <= AxisValues[i].length; j++) {
             if (j > 0) {
                 glmath.mat4.translate(loopModel, loopModel, [2, 0, 0]);
@@ -630,19 +617,19 @@ function RenderStructure(global_model: glmath.mat4) {
 
     for (let i = 0; i < 11; i++) {
 
-        if (i > (10 * c.zoom)) {
+        if (i > 10) {
             continue;
         }
 
         glmath.mat4.copy(Axismodel, globalAxisModel);
-        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / (10 * c.zoom))]);
+        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / 10)]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
         Axis.render();
 
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.rotate(Axismodel, Axismodel, 1.5708, [0, 1, 0]);
-        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i / (10 * c.zoom))]);
+        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i / 10)]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 0]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
         Axis.render();
@@ -653,11 +640,11 @@ function RenderStructure(global_model: glmath.mat4) {
 
     for (let i = 0; i < 11; i++) {
 
-        if (i > (10 * c.zoom)) {
+        if (i > 10) {
             continue;
         }
         glmath.mat4.copy(Axismodel, globalAxisModel);
-        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / (10 * c.zoom))]);
+        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / 10)]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
 
@@ -665,7 +652,7 @@ function RenderStructure(global_model: glmath.mat4) {
 
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.rotate(Axismodel, Axismodel, 90 * (Math.PI / 180), [0, 1, 0]);
-        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i / (10 * c.zoom))]);
+        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i / 10)]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 0]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
 
@@ -677,11 +664,11 @@ function RenderStructure(global_model: glmath.mat4) {
 
     for (let i = 0; i < 11; i++) {
 
-        if (i > (10 * c.zoom)) {
+        if (i > 10) {
             continue;
         }
         glmath.mat4.copy(Axismodel, globalAxisModel);
-        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / (10 * c.zoom))]);
+        glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / 10)]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
 
@@ -689,7 +676,7 @@ function RenderStructure(global_model: glmath.mat4) {
 
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.rotate(Axismodel, Axismodel, 90 * (Math.PI / 180), [0, 1, 0]);
-        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i / (10 * c.zoom))]);
+        glmath.mat4.translate(Axismodel, Axismodel, [-0.5, 0, (i / 10)]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 0]);
         gl.uniformMatrix4fv(modelUniformID[0], false, Axismodel);
 
@@ -705,7 +692,7 @@ function init() {
 
     //Get canvas and initalise it 
     canvas = <HTMLCanvasElement>document.querySelector("#glCanvas");
-    const temp_gl = canvas.getContext("webgl", { stencil: true });
+    const temp_gl = canvas.getContext("webgl", { stencil: false });
 
     // Only continue if WebGL is available and working
     if (temp_gl === null) {
@@ -714,9 +701,9 @@ function init() {
     }
 
     //@ts-ignore 
-    if (temp_gl.getContextAttributes().stencil == false) {
+    /*if (temp_gl.getContextAttributes().stencil == false) {
         alert("Your Browser does not fully support this application (Stencil Attribute Missing) Please try another browser");
-    }
+    }*/
 
     //Create, compile and link shaders
     let vertex = [createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource_1),

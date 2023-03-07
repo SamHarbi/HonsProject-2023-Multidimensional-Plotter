@@ -22,7 +22,8 @@ export class Controls {
     public mouse_y;
 
     public zoom; // At what zoom level is the view, controls zoom of data points 
-    public valueDifference; // What the maximum value of the zoom should be 
+    public zoomMultiplier; // Changes how large the range of zoom is on the draggable field 
+    public combinedZoom; // Zoom * Multiplier 
     public viewsize; // Camera position, controls camera zoom outside chart
     public pointsize; // Size of a data point 
 
@@ -40,7 +41,8 @@ export class Controls {
         this.z_move = 0;
 
         this.zoom = 1;
-        this.valueDifference = 1;
+        this.zoomMultiplier = 1;
+        this.combinedZoom = 1;
         this.viewsize = 0.4;
         this.pointsize = 1;
 
@@ -58,7 +60,7 @@ export class Controls {
         (<HTMLElement>document.getElementById("viewsize")).addEventListener("input", this.ViewSize.bind(this));
         (<HTMLElement>document.getElementById("pointsize")).addEventListener("input", this.PointSize.bind(this));
         (<HTMLElement>document.getElementById("glCanvas")).addEventListener("mousemove", this.MouseMove.bind(this));
-        (<HTMLElement>document.getElementById("valueDifference")).addEventListener("input", this.setvalueDifference.bind(this));
+        (<HTMLElement>document.getElementById("zoomMultiplier")).addEventListener("input", this.setZoomMultiplier.bind(this));
 
         (<HTMLElement>document.getElementById("up")).addEventListener("click", this.Rotation.bind(this));
         (<HTMLElement>document.getElementById("down")).addEventListener("click", this.Rotation.bind(this));
@@ -95,24 +97,32 @@ export class Controls {
         this.updateNames = true;
     }
 
-    private Zoom() {
+    private Zoom(event) {
         // @ts-ignore 1
         let change = <Number>document.getElementById("zoom").value;
-        // @ts-ignore 1
-        this.zoom = change / 10;
+        if (change < 0) {
+            this.zoom = 1;
+        } else {
+            this.zoom = change;
+        }
+        this.calculateCombinedZoom();
         this.updateAxisFunc();
     }
 
-    private setvalueDifference() {
+    private setZoomMultiplier() {
         // @ts-ignore 1
-        let change = <Number>document.getElementById("valueDifference").value;
-        if (change <= 0) {
-            this.valueDifference = 0.1;
+        let change = <Number>document.getElementById("zoomMultiplier").value;
+        if (change < 0) {
+            this.zoomMultiplier = 1;
         } else {
-            this.valueDifference = change;
+            this.zoomMultiplier = change;
         }
+        this.calculateCombinedZoom();
         this.updateAxisFunc();
+    }
 
+    private calculateCombinedZoom() {
+        this.combinedZoom = this.zoom * this.zoomMultiplier // Apply multiplier 
     }
 
     private ViewSize() {
