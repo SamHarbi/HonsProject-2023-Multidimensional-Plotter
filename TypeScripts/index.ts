@@ -767,4 +767,13 @@ function eraseRotation(matrix: glmath.mat4) {
     );
 }
 
+// http://webglfactory.blogspot.com/2011/05/how-to-convert-world-to-screen.html
+// https://stackoverflow.com/questions/13745334/understanding-shader-mat4-vec4-calculation
+function getWorld2Screen(x, y, z, view, projection) {
+    let viewProjection = glmath.mat4.create();
+    let point = glmath.vec4.fromValues(x, y, z, 1);
+}
+
+
+
 window.onload = main;
