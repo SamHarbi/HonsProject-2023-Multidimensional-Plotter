@@ -146,8 +146,6 @@ async function main() {
 
     gl.frontFace(gl.CW);
 
-    gl.enable(gl.STENCIL_TEST);
-
     //gl.enable(gl.STENCIL_TEST); Stencil usage was removed 
 
     // Listen for a file upload 
@@ -281,15 +279,9 @@ function Render(timestamp) {
 
     // | Helper Functions Start |
 
-    gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
-    gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
-
     RenderStructure(GLOBAL_MODEL);
 
     RenderAxisText(GLOBAL_MODEL, view);
-
-    gl.enable(gl.SCISSOR_BOX);
-    gl.scissor(0, 0, 10, 10);
 
     RenderData(GLOBAL_MODEL);
 
@@ -317,9 +309,6 @@ function RenderData(global_model: glmath.mat4) {
     gl.uniformMatrix4fv(projectionUniformID[0], false, projection);
 
     gl.uniform1i(lightToggleUniformID[0], 1); // Use Light
-
-    gl.stencilFunc(gl.EQUAL, 1, 0xFF);
-    gl.stencilOp(gl.REPLACE, gl.KEEP, gl.REPLACE);
 
     // _____________
     // +++ Render +++
@@ -703,7 +692,7 @@ function init() {
 
     //Get canvas and initalise it 
     canvas = <HTMLCanvasElement>document.querySelector("#glCanvas");
-    const temp_gl = canvas.getContext("webgl", { stencil: true });
+    const temp_gl = canvas.getContext("webgl", { stencil: false });
 
     // Only continue if WebGL is available and working
     if (temp_gl === null) {
@@ -712,9 +701,9 @@ function init() {
     }
 
     //@ts-ignore 
-    if (temp_gl.getContextAttributes().stencil == false) {
+    /*if (temp_gl.getContextAttributes().stencil == false) {
         alert("Your Browser does not fully support this application (Stencil Attribute Missing) Please try another browser");
-    }
+    }*/
 
     //Create, compile and link shaders
     let vertex = [createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource_1),
