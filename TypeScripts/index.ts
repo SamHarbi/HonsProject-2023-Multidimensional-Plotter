@@ -12,7 +12,7 @@ import vertexSource_2 from '../shaders/vertex_2.glsl'
 import { Model } from './Model';
 import { DATASET, load_OBJ, read_CSV } from './Loader';
 import { Font } from './Font';
-import { App } from './App';
+import { Text } from './Text';
 import { Controls } from './Controls';
 
 // Math Library for Graphics 
@@ -42,6 +42,7 @@ let normalAttributeID: GLint[];
 let textureAttributeID: GLint[];
 
 let c: Controls;
+let t: Text;
 
 // Ref to 3D models
 let Point;
@@ -65,7 +66,9 @@ async function main() {
     gl = <WebGLRenderingContext>init();
 
     c = new Controls();
-    c.Controls(setAxisValues, setAxisNames);
+    c.Controls(setAxisValues, setAxisNames, getPixelsAtClick);
+
+    //t = new Text(0, gl.canvas.width, gl.canvas.height);
 
     /*
         Link Attributes and Locations
@@ -248,6 +251,12 @@ function setAxisValues() {
 function Render(timestamp) {
     // | Setup |
 
+    resizeCanvasToDisplaySize(gl.canvas);
+
+    // Clear Canvas and Set Background Color 
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
+
     c.RenderUpdateControls();
 
     //Create a top level model
@@ -284,6 +293,8 @@ function Render(timestamp) {
     RenderAxisText(GLOBAL_MODEL, view);
 
     RenderData(GLOBAL_MODEL);
+
+    //getPixelsAtClick(c.mouseClickX, c.mouseClickY);
 
     window.requestAnimationFrame(Render);
 }
@@ -563,10 +574,6 @@ function RenderStructure(global_model: glmath.mat4) {
     // +++ SETUP +++
     // _____________
 
-    // Clear Canvas and Set Background Color 
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-
     //Set Shader to use 
     gl.useProgram(programs[0]);
     gl.enableVertexAttribArray(positionAttributeID[0]);
@@ -692,7 +699,7 @@ function init() {
 
     //Get canvas and initalise it 
     canvas = <HTMLCanvasElement>document.querySelector("#glCanvas");
-    const temp_gl = canvas.getContext("webgl", { stencil: false });
+    const temp_gl = canvas.getContext("webgl", { stencil: false, preserveDrawingBuffer: true });
 
     // Only continue if WebGL is available and working
     if (temp_gl === null) {
@@ -728,6 +735,9 @@ function init() {
 
 }
 
+/*
+    Function copied from https://webglfundamentals.org/webgl/
+*/
 function createShader(gl, type, source) {
     var shader = gl.createShader(type);
     gl.shaderSource(shader, source);
@@ -741,6 +751,9 @@ function createShader(gl, type, source) {
     gl.deleteShader(shader);
 }
 
+/*
+    Function copied from https://webglfundamentals.org/webgl/
+*/
 function createProgram(gl, vertexShader, fragmentShader) {
     var program = gl.createProgram();
     gl.attachShader(program, vertexShader);
@@ -772,6 +785,37 @@ function eraseRotation(matrix: glmath.mat4) {
 function getWorld2Screen(x, y, z, view, projection) {
     let viewProjection = glmath.mat4.create();
     let point = glmath.vec4.fromValues(x, y, z, 1);
+}
+/*
+    Function copied from https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+*/
+function resizeCanvasToDisplaySize(canvas) {
+    // Lookup the size the browser is displaying the canvas in CSS pixels.
+    const displayWidth = canvas.clientWidth;
+    const displayHeight = canvas.clientHeight;
+
+    // Check if the canvas is not the same size.
+    const needResize = canvas.width !== displayWidth ||
+        canvas.height !== displayHeight;
+
+    if (needResize) {
+        // Make the canvas the same size
+        canvas.width = displayWidth;
+        canvas.height = displayHeight;
+    }
+
+    return needResize;
+}
+
+function getPixelsAtClick(x, y) {
+
+    const rect = canvas.getBoundingClientRect();
+    // let finX = (x - rect.left) * gl.canvas.width / gl.canvas.clientWidth;
+
+    let depth = new Uint8Array(4);
+    gl.readPixels(x, gl.drawingBufferHeight - y - 1, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, depth);
+
+    console.log(depth);
 }
 
 

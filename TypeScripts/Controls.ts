@@ -35,8 +35,9 @@ export class Controls {
 
     updateAxisFunc: Function; // Function to run after axis values change
     updateAxisNamesFunc: Function; // FUnction to run when names need to be updated 
+    getPixelsFunc: Function; // On mouse click, get pixel data from screen 
 
-    Controls(functionToRunOnAxisUpdate: Function, functionToRunOnAxisNamesUpdate: Function) {
+    Controls(functionToRunOnAxisUpdate: Function, functionToRunOnAxisNamesUpdate: Function, functionToRunOnMouseClick: Function) {
         this.x_rotation = 0;
         this.y_rotation = 0;
 
@@ -57,6 +58,7 @@ export class Controls {
 
         this.updateAxisFunc = functionToRunOnAxisUpdate;
         this.updateAxisNamesFunc = functionToRunOnAxisNamesUpdate;
+        this.getPixelsFunc = functionToRunOnMouseClick;
 
         // Event Listeners for user controls
         (<HTMLElement>document.getElementById("input")).addEventListener("input", this.UpdateNames.bind(this));
@@ -144,6 +146,7 @@ export class Controls {
     private MouseClick(event) {
         this.mouseClickX = event.clientX;
         this.mouseClickY = event.clientY;
+        this.getPixelsFunc(this.mouseClickX, this.mouseClickY);
     }
 
     private MouseMove(event) {
