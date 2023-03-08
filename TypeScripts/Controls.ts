@@ -146,7 +146,7 @@ export class Controls {
     private MouseClick(event) {
         this.mouseClickX = event.clientX;
         this.mouseClickY = event.clientY;
-        this.getPixelsFunc(this.mouseClickX, this.mouseClickY);
+        //this.getPixelsFunc(this.mouseClickX, this.mouseClickY);
     }
 
     private MouseMove(event) {

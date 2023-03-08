@@ -28,6 +28,9 @@ let canvas: HTMLCanvasElement;
 let programs: WebGLProgram[];
 const num_of_programs = 2;
 
+let pickingBuffer;
+let pickingTexture;
+
 let modelUniformID: WebGLUniformLocation;
 let viewUniformID: WebGLUniformLocation;
 let projectionUniformID: WebGLUniformLocation;
@@ -150,6 +153,26 @@ async function main() {
     gl.frontFace(gl.CW);
 
     //gl.enable(gl.STENCIL_TEST); Stencil usage was removed 
+
+    /*
+        Setup FrameBuffer for picking
+    */
+
+    pickingTexture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, pickingTexture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.canvas.width, gl.canvas.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+    pickingBuffer = gl.createFramebuffer();
+    gl.bindFramebuffer(gl.FRAMEBUFFER, pickingBuffer);
+
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, pickingTexture, 0);
+
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
 
     // Listen for a file upload 
     await read_CSV();
@@ -292,9 +315,12 @@ function Render(timestamp) {
 
     RenderAxisText(GLOBAL_MODEL, view);
 
+    gl.bindFramebuffer(gl.FRAMEBUFFER, pickingBuffer);
+
     RenderData(GLOBAL_MODEL);
 
     //getPixelsAtClick(c.mouseClickX, c.mouseClickY);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
     window.requestAnimationFrame(Render);
 }
