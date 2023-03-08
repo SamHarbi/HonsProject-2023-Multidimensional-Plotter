@@ -26,10 +26,11 @@ let gl: WebGLRenderingContext;
 let canvas: HTMLCanvasElement;
 
 let programs: WebGLProgram[];
-const num_of_programs = 2;
+const num_of_programs = 3;
 
 let pickingBuffer;
 let pickingTexture;
+let rect;
 
 let modelUniformID: WebGLUniformLocation;
 let viewUniformID: WebGLUniformLocation;
@@ -58,6 +59,8 @@ let AxisMap: Number[]; // data describing the nature of the axis values, negativ
 
 let AxisNames: Model[][]; // Names of data columns, i.e keys from DATASET var
 
+let PointIDs: Number[]; // ID numbers of each data point, used for picking
+
 //Colours of Axis
 let positiveColour = [0.1, 0.1, 0.1];
 let negativeColour = [1, 0.4, 0.4];
@@ -70,6 +73,8 @@ async function main() {
 
     c = new Controls();
     c.Controls(setAxisValues, setAxisNames, getPixelsAtClick);
+
+    rect = canvas.getBoundingClientRect();
 
     //t = new Text(0, gl.canvas.width, gl.canvas.height);
 
@@ -118,6 +123,7 @@ async function main() {
     AxisValues = [[]];
     AxisNames = [[]];
     AxisMap = [];
+    PointIDs = [];
 
     /*
         Prepare all Label types
@@ -315,12 +321,13 @@ function Render(timestamp) {
 
     RenderAxisText(GLOBAL_MODEL, view);
 
+    // Render to Texture and get clicks 
     gl.bindFramebuffer(gl.FRAMEBUFFER, pickingBuffer);
-
-    RenderData(GLOBAL_MODEL);
-
-    //getPixelsAtClick(c.mouseClickX, c.mouseClickY);
+    RenderData(GLOBAL_MODEL, true);
+    getPixelsAtClick(c.mouseClickX, c.mouseClickY);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
+    RenderData(GLOBAL_MODEL, false);
 
     window.requestAnimationFrame(Render);
 }
@@ -328,16 +335,24 @@ function Render(timestamp) {
 /*
     Renders Imported Data Points that need shader program 1
 */
-function RenderData(global_model: glmath.mat4) {
+function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
     // _____________
     // +++ SETUP +++
     // _____________
 
-    //Set Shader to use 
-    gl.useProgram(programs[0]);
-    gl.enableVertexAttribArray(positionAttributeID[0]);
-    gl.enableVertexAttribArray(normalAttributeID[0]);
-    gl.enableVertexAttribArray(textureAttributeID[0]);
+    if (pickingPass == false) {
+        //Set Shader to use 
+        gl.useProgram(programs[0]);
+        gl.enableVertexAttribArray(positionAttributeID[0]);
+        gl.enableVertexAttribArray(normalAttributeID[0]);
+        gl.enableVertexAttribArray(textureAttributeID[0]);
+    } else {
+        //Set Shader to use 
+        gl.useProgram(programs[0]);
+        gl.enableVertexAttribArray(positionAttributeID[0]);
+        gl.enableVertexAttribArray(normalAttributeID[0]);
+        gl.enableVertexAttribArray(textureAttributeID[0]);
+    }
 
     // Setup Projection 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -378,6 +393,8 @@ function RenderData(global_model: glmath.mat4) {
         glmath.mat4.scale(point_model, point_model, [c.pointsize / c.combinedZoom, c.pointsize / c.combinedZoom, c.pointsize / c.combinedZoom]);
         gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
         Point.render();
+
+        PointIDs[i] = i; // Save ID for point
 
     }
 }
@@ -740,9 +757,9 @@ function init() {
 
     //Create, compile and link shaders
     let vertex = [createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource_1),
-    createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource_2)];
+    createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource_2), createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource_2)];
     let fragment = [createShader(temp_gl, temp_gl.FRAGMENT_SHADER, fragmentSource_1),
-    createShader(temp_gl, temp_gl.FRAGMENT_SHADER, fragmentSource_2)];
+    createShader(temp_gl, temp_gl.FRAGMENT_SHADER, fragmentSource_2), createShader(temp_gl, temp_gl.FRAGMENT_SHADER, fragmentSource_2)];
 
     programs = [];
     positionAttributeID = [];
@@ -837,14 +854,13 @@ function resizeCanvasToDisplaySize(canvas) {
 
 function getPixelsAtClick(x, y) {
 
-    const rect = canvas.getBoundingClientRect();
     let finX = (x - rect.left);
     let finY = gl.canvas.height - (y - rect.top) - 1;
 
     let depth = new Uint8Array(4);
     gl.readPixels(finX, finY, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, depth);
 
-    console.log(depth);
+    //console.log(depth);
 }
 
 
