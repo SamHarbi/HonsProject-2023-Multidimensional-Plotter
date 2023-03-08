@@ -810,10 +810,11 @@ function resizeCanvasToDisplaySize(canvas) {
 function getPixelsAtClick(x, y) {
 
     const rect = canvas.getBoundingClientRect();
-    // let finX = (x - rect.left) * gl.canvas.width / gl.canvas.clientWidth;
+    let finX = (x - rect.left);
+    let finY = gl.canvas.height - (y - rect.top) - 1;
 
     let depth = new Uint8Array(4);
-    gl.readPixels(x, gl.drawingBufferHeight - y - 1, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, depth);
+    gl.readPixels(finX, finY, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, depth);
 
     console.log(depth);
 }
