@@ -786,8 +786,10 @@ function getWorld2Screen(x, y, z, view, projection) {
     let viewProjection = glmath.mat4.create();
     let point = glmath.vec4.fromValues(x, y, z, 1);
 }
+
 /*
     Function copied from https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+    Ensures drawingbuffer is the same size as the canvas 
 */
 function resizeCanvasToDisplaySize(canvas) {
     // Lookup the size the browser is displaying the canvas in CSS pixels.
