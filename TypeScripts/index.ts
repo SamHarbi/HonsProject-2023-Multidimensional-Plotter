@@ -8,6 +8,8 @@ import vertexSource_1 from '../shaders/vertex_1.glsl'
 import fragmentSource_2 from '../shaders/fragment_2.glsl'
 // @ts-ignore
 import vertexSource_2 from '../shaders/vertex_2.glsl'
+//@ts-ignore
+import fragmentSource_3 from '../shaders/fragment_3.glsl'
 
 import { Model } from './Model';
 import { DATASET, load_OBJ, read_CSV } from './Loader';
@@ -31,6 +33,7 @@ const num_of_programs = 3;
 let pickingBuffer;
 let pickingTexture;
 let rect;
+let selectedCubeID;
 
 let modelUniformID: WebGLUniformLocation;
 let viewUniformID: WebGLUniformLocation;
@@ -40,6 +43,7 @@ let colourUniformID: WebGLUniformLocation;
 let cameraRightWorldSpaceUniformID: WebGLUniformLocation;
 let cameraUpWorldSpaceUniformID: WebGLUniformLocation;
 let viewmodUniformID: WebGLUniformLocation;
+let idUniformID: WebGLUniformLocation;
 
 let positionAttributeID: GLint[];
 let normalAttributeID: GLint[];
@@ -59,7 +63,6 @@ let AxisMap: Number[]; // data describing the nature of the axis values, negativ
 
 let AxisNames: Model[][]; // Names of data columns, i.e keys from DATASET var
 
-let PointIDs: Number[]; // ID numbers of each data point, used for picking
 
 //Colours of Axis
 let positiveColour = [0.1, 0.1, 0.1];
@@ -96,7 +99,10 @@ async function main() {
         colourUniformID[i] = <WebGLUniformLocation>gl.getUniformLocation(programs[i], "in_colour");
     }
 
-    //Uniforms only in shader program 1
+    // Uniforms only in shader program 0
+    idUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[0], "id");
+
+    // Uniforms only in shader program 1
     cameraRightWorldSpaceUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "camRight_WS");
     cameraUpWorldSpaceUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "camUp_WS");
     viewmodUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "viewmod");
@@ -123,7 +129,8 @@ async function main() {
     AxisValues = [[]];
     AxisNames = [[]];
     AxisMap = [];
-    PointIDs = [];
+
+    selectedCubeID = 0;
 
     /*
         Prepare all Label types
@@ -336,23 +343,15 @@ function Render(timestamp) {
     Renders Imported Data Points that need shader program 1
 */
 function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
+
     // _____________
     // +++ SETUP +++
     // _____________
 
-    if (pickingPass == false) {
-        //Set Shader to use 
-        gl.useProgram(programs[0]);
-        gl.enableVertexAttribArray(positionAttributeID[0]);
-        gl.enableVertexAttribArray(normalAttributeID[0]);
-        gl.enableVertexAttribArray(textureAttributeID[0]);
-    } else {
-        //Set Shader to use 
-        gl.useProgram(programs[0]);
-        gl.enableVertexAttribArray(positionAttributeID[0]);
-        gl.enableVertexAttribArray(normalAttributeID[0]);
-        gl.enableVertexAttribArray(textureAttributeID[0]);
-    }
+    gl.useProgram(programs[0]);
+    gl.enableVertexAttribArray(positionAttributeID[0]);
+    gl.enableVertexAttribArray(normalAttributeID[0]);
+    gl.enableVertexAttribArray(textureAttributeID[0]);
 
     // Setup Projection 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -360,7 +359,14 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
     projection = glmath.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
     gl.uniformMatrix4fv(projectionUniformID[0], false, projection);
 
-    gl.uniform1i(lightToggleUniformID[0], 1); // Use Light
+    if (pickingPass == true) {
+        gl.uniform1i(lightToggleUniformID[0], 0); // Don't Use Light
+    }
+    else {
+        gl.uniform1i(lightToggleUniformID[0], 1);
+    }
+
+    let pointColour = [1, 1, 1];
 
     // _____________
     // +++ Render +++
@@ -391,10 +397,24 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
         glmath.mat4.translate(point_model, point_model, [x, y, z]);
         glmath.mat4.scale(point_model, point_model, [1, 1, 1]);
         glmath.mat4.scale(point_model, point_model, [c.pointsize / c.combinedZoom, c.pointsize / c.combinedZoom, c.pointsize / c.combinedZoom]);
+
+
+        if (pickingPass == true) {
+            gl.uniform1f(idUniformID, i);
+        } else {
+            gl.uniform1f(idUniformID, -1);
+        }
+
+        if (selectedCubeID === i) {
+            pointColour = [0, 0, 0];
+        }
+
+        gl.uniform3f(colourUniformID[0], pointColour[0], pointColour[1], pointColour[2]);
+        pointColour = [1, 1, 1];
         gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
         Point.render();
 
-        PointIDs[i] = i; // Save ID for point
+        //PointIDs[i] = i; // Save ID for point
 
     }
 }
@@ -629,6 +649,7 @@ function RenderStructure(global_model: glmath.mat4) {
     projection = glmath.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
     gl.uniformMatrix4fv(projectionUniformID[0], false, projection);
     gl.uniform3f(colourUniformID[0], 1, 1, 1);
+    gl.uniform1f(idUniformID, -1);
 
     // ________________
     // +++ Render +++
@@ -757,9 +778,9 @@ function init() {
 
     //Create, compile and link shaders
     let vertex = [createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource_1),
-    createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource_2), createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource_2)];
+    createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource_2), createShader(temp_gl, temp_gl.VERTEX_SHADER, vertexSource_1)];
     let fragment = [createShader(temp_gl, temp_gl.FRAGMENT_SHADER, fragmentSource_1),
-    createShader(temp_gl, temp_gl.FRAGMENT_SHADER, fragmentSource_2), createShader(temp_gl, temp_gl.FRAGMENT_SHADER, fragmentSource_2)];
+    createShader(temp_gl, temp_gl.FRAGMENT_SHADER, fragmentSource_2), createShader(temp_gl, temp_gl.FRAGMENT_SHADER, fragmentSource_3)];
 
     programs = [];
     positionAttributeID = [];
@@ -857,10 +878,12 @@ function getPixelsAtClick(x, y) {
     let finX = (x - rect.left);
     let finY = gl.canvas.height - (y - rect.top) - 1;
 
-    let depth = new Uint8Array(4);
-    gl.readPixels(finX, finY, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, depth);
+    let colour = new Uint8Array(4);
+    gl.readPixels(finX, finY, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, colour);
 
-    //console.log(depth);
+    selectedCubeID = colour[0];
+
+    console.log(selectedCubeID);
 }
 
 

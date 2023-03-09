@@ -5,6 +5,7 @@
 
   uniform mat4 model, projection, view;
   uniform vec3 in_colour;
+  uniform float id;
 
   varying vec4 colour;
   varying vec3 v_normal;
@@ -20,7 +21,14 @@
 
     position = gl_Position;
     
-    colour = vec4(in_colour, 1.0);
+    if(id == -1.0)
+    {
+      colour = vec4(in_colour, 1.0);
+    }
+    else
+    {
+      colour = vec4(mod(id,256.0) / 255.0, 256.0, 256.0, 0);
+    }
     v_normal = a_normal;
     v_texcoord = a_texture;
   }
