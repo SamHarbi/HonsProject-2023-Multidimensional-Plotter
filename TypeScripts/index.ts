@@ -27,13 +27,18 @@ let Fonts; // Generator for Font Texture Data
 let gl: WebGLRenderingContext;
 let canvas: HTMLCanvasElement;
 
+// ref to article with canvas
+let screen: HTMLElement;
+
 let programs: WebGLProgram[];
 const num_of_programs = 3;
 
 let pickingBuffer;
 let pickingTexture;
 let rect;
-let selectedCubeID;
+let prevselectedPointID;
+let selectedPointID;
+let selectedPos;
 
 let modelUniformID: WebGLUniformLocation;
 let viewUniformID: WebGLUniformLocation;
@@ -78,6 +83,7 @@ async function main() {
     c.Controls(setAxisValues, setAxisNames, getPixelsAtClick);
 
     rect = canvas.getBoundingClientRect();
+    screen = <HTMLElement>document.getElementById("PlotScreen");
 
     //t = new Text(0, gl.canvas.width, gl.canvas.height);
 
@@ -130,7 +136,8 @@ async function main() {
     AxisNames = [[]];
     AxisMap = [];
 
-    selectedCubeID = 0;
+    selectedPointID = 0;
+    prevselectedPointID = -1;
 
     /*
         Prepare all Label types
@@ -285,6 +292,20 @@ function setAxisValues() {
     upon helper function to render some logical part of the scene using those values
 */
 function Render(timestamp) {
+
+    // | Data Tasks |
+
+    if (selectedPointID != prevselectedPointID && DATASET.length > 0) {
+        prevselectedPointID = selectedPointID;
+
+        let x = (Number(Object.values(DATASET[selectedPointID])[2])) / c.combinedZoom;
+        let y = (Number(Object.values(DATASET[selectedPointID])[1])) / c.combinedZoom;
+        let z = (Number(Object.values(DATASET[selectedPointID])[0])) / c.combinedZoom;
+
+        selectedPos = [x, y, z];
+    }
+
+
     // | Setup |
 
     resizeCanvasToDisplaySize(gl.canvas);
@@ -405,7 +426,7 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
             gl.uniform1f(idUniformID, -1);
         }
 
-        if (selectedCubeID === i) {
+        if (selectedPointID === i) {
             pointColour = [0, 0, 0];
         }
 
@@ -881,9 +902,13 @@ function getPixelsAtClick(x, y) {
     let colour = new Uint8Array(4);
     gl.readPixels(finX, finY, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, colour);
 
-    selectedCubeID = colour[0];
+    selectedPointID = colour[0];
 
-    console.log(selectedCubeID);
+    if (DATASET.length > 0) {
+        screen.innerHTML = "ID of Point Selected: " + selectedPointID + " | Position: "
+            + "X: " + selectedPos[0] + " Y: " + selectedPos[1] + " Z: " + selectedPos[2];
+    }
+
 }
 
 

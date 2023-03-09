@@ -68,7 +68,7 @@ export class Controls {
         (<HTMLElement>document.getElementById("zoomMultiplier")).addEventListener("input", this.setZoomMultiplier.bind(this));
 
         (<HTMLElement>document.getElementById("glCanvas")).addEventListener("mousemove", this.MouseMove.bind(this));
-        (<HTMLElement>document.getElementById("glCanvas")).addEventListener("click", this.MouseClick.bind(this));
+        (<HTMLElement>document.getElementById("glCanvas")).addEventListener("mousemove", this.MouseClick.bind(this));
 
         (<HTMLElement>document.getElementById("up")).addEventListener("click", this.Rotation.bind(this));
         (<HTMLElement>document.getElementById("down")).addEventListener("click", this.Rotation.bind(this));
