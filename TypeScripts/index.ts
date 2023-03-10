@@ -421,9 +421,9 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
 
 
         if (pickingPass == true) {
-            gl.uniform1f(idUniformID, i);
+            gl.uniform3fv(idUniformID, [i & 0x000000FF, i & 0x0000FF00, i & 0x00FF0000]);
         } else {
-            gl.uniform1f(idUniformID, -1);
+            gl.uniform3fv(idUniformID, [-1, -1, -1]);
         }
 
         if (selectedPointID === i) {
@@ -670,7 +670,7 @@ function RenderStructure(global_model: glmath.mat4) {
     projection = glmath.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
     gl.uniformMatrix4fv(projectionUniformID[0], false, projection);
     gl.uniform3f(colourUniformID[0], 1, 1, 1);
-    gl.uniform1f(idUniformID, -1);
+    gl.uniform3fv(idUniformID, [-1, -1, -1]);
 
     // ________________
     // +++ Render +++
@@ -902,11 +902,18 @@ function getPixelsAtClick(x, y) {
     let colour = new Uint8Array(4);
     gl.readPixels(finX, finY, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, colour);
 
+    //console.log(colour);
+
     selectedPointID = colour[0];
+    //console.log(colour[0] * colour[1] * colour[2]);
+
+    if (colour[3] == 255) {
+
+    }
 
     if (DATASET.length > 0) {
         screen.innerHTML = "ID of Point Selected: " + selectedPointID + " | Position: "
-            + "X: " + selectedPos[0] + " Y: " + selectedPos[1] + " Z: " + selectedPos[2];
+            + "X: " + selectedPos[2] + " Y: " + selectedPos[1] + " Z: " + selectedPos[0];
     }
 
 }
