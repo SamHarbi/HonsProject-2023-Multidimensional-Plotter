@@ -292,20 +292,6 @@ function setAxisValues() {
     upon helper function to render some logical part of the scene using those values
 */
 function Render(timestamp) {
-
-    // | Data Tasks |
-
-    if (selectedPointID != prevselectedPointID && DATASET.length > 0) {
-        prevselectedPointID = selectedPointID;
-
-        let x = (Number(Object.values(DATASET[selectedPointID])[2])) / c.combinedZoom;
-        let y = (Number(Object.values(DATASET[selectedPointID])[1])) / c.combinedZoom;
-        let z = (Number(Object.values(DATASET[selectedPointID])[0])) / c.combinedZoom;
-
-        selectedPos = [x, y, z];
-    }
-
-
     // | Setup |
 
     resizeCanvasToDisplaySize(gl.canvas);
@@ -365,6 +351,21 @@ function Render(timestamp) {
 */
 function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
 
+    // | Data Tasks |
+
+    if (selectedPointID != prevselectedPointID && DATASET[0] != undefined) {
+
+        if (selectedPointID <= DATASET.length) {
+            prevselectedPointID = selectedPointID;
+            let x = (Number(Object.values(DATASET[selectedPointID])[2])) / c.combinedZoom;
+            let y = (Number(Object.values(DATASET[selectedPointID])[1])) / c.combinedZoom;
+            let z = (Number(Object.values(DATASET[selectedPointID])[0])) / c.combinedZoom;
+
+            selectedPos = [x, y, z];
+        }
+
+    }
+
     // _____________
     // +++ SETUP +++
     // _____________
@@ -421,17 +422,18 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
 
 
         if (pickingPass == true) {
-            gl.uniform3fv(idUniformID, [i & 0x000000FF, i & 0x0000FF00, i & 0x00FF0000]);
+            gl.uniform3fv(idUniformID, [(i & 0x000000FF) >> 0, (i & 0x0000FF00) >> 8, (i & 0x00FF0000) >> 16]);
         } else {
             gl.uniform3fv(idUniformID, [-1, -1, -1]);
         }
 
-        if (selectedPointID === i) {
-            pointColour = [0, 0, 0];
+        if (selectedPointID == i && pickingPass == false) {
+            gl.uniform3f(colourUniformID[0], 0, 0, 0);
+        }
+        else {
+            gl.uniform3f(colourUniformID[0], 1, 1, 1);
         }
 
-        gl.uniform3f(colourUniformID[0], pointColour[0], pointColour[1], pointColour[2]);
-        pointColour = [1, 1, 1];
         gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
         Point.render();
 
@@ -903,15 +905,12 @@ function getPixelsAtClick(x, y) {
     gl.readPixels(finX, finY, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, colour);
 
     //console.log(colour);
-
-    selectedPointID = colour[0];
+    //selectedPointID = colour[0];
     //console.log(colour[0] * colour[1] * colour[2]);
 
-    if (colour[3] == 255) {
+    selectedPointID = colour[0] + (colour[1] * 256) + (colour[2] * 256 * 256);
 
-    }
-
-    if (DATASET.length > 0) {
+    if (DATASET[0] != undefined) {
         screen.innerHTML = "ID of Point Selected: " + selectedPointID + " | Position: "
             + "X: " + selectedPos[2] + " Y: " + selectedPos[1] + " Z: " + selectedPos[0];
     }

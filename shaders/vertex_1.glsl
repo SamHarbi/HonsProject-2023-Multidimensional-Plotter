@@ -29,7 +29,7 @@
     {
       // https://stackoverflow.com/questions/16905302/webgl-and-glsl-picking
       // http://www.opengl-tutorial.org/miscellaneous/clicking-on-objects/picking-with-an-opengl-hack/
-      colour = vec4(id[0] / 255.0, id[1] / 255.0, id[2] / 255.0, 255);
+      colour = vec4(id[0]/255.0, id[1]/255.0, id[2]/255.0, 256);
     }
     v_normal = a_normal;
     v_texcoord = a_texture;
