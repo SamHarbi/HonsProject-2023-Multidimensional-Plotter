@@ -5,6 +5,7 @@
 
   uniform mat4 model, projection, view;
   uniform vec3 in_colour;
+  uniform vec3 id;
 
   varying vec4 colour;
   varying vec3 v_normal;
@@ -20,7 +21,16 @@
 
     position = gl_Position;
     
-    colour = vec4(in_colour, 1.0);
+    if(id.x == -1.0)
+    {
+      colour = vec4(in_colour, 1.0);
+    }
+    else
+    {
+      // https://stackoverflow.com/questions/16905302/webgl-and-glsl-picking
+      // http://www.opengl-tutorial.org/miscellaneous/clicking-on-objects/picking-with-an-opengl-hack/
+      colour = vec4(id[0]/255.0, id[1]/255.0, id[2]/255.0, 256);
+    }
     v_normal = a_normal;
     v_texcoord = a_texture;
   }

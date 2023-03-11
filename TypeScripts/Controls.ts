@@ -21,6 +21,10 @@ export class Controls {
     public mouse_x;
     public mouse_y;
 
+    // Mouse Click Values
+    public mouseClickX;
+    public mouseClickY;
+
     public zoom; // At what zoom level is the view, controls zoom of data points 
     public zoomMultiplier; // Changes how large the range of zoom is on the draggable field 
     public combinedZoom; // Zoom * Multiplier 
@@ -31,8 +35,9 @@ export class Controls {
 
     updateAxisFunc: Function; // Function to run after axis values change
     updateAxisNamesFunc: Function; // FUnction to run when names need to be updated 
+    getPixelsFunc: Function; // On mouse click, get pixel data from screen 
 
-    Controls(functionToRunOnAxisUpdate: Function, functionToRunOnAxisNamesUpdate: Function) {
+    Controls(functionToRunOnAxisUpdate: Function, functionToRunOnAxisNamesUpdate: Function, functionToRunOnMouseClick: Function) {
         this.x_rotation = 0;
         this.y_rotation = 0;
 
@@ -53,14 +58,17 @@ export class Controls {
 
         this.updateAxisFunc = functionToRunOnAxisUpdate;
         this.updateAxisNamesFunc = functionToRunOnAxisNamesUpdate;
+        this.getPixelsFunc = functionToRunOnMouseClick;
 
         // Event Listeners for user controls
         (<HTMLElement>document.getElementById("input")).addEventListener("input", this.UpdateNames.bind(this));
         (<HTMLElement>document.getElementById("zoom")).addEventListener("input", this.Zoom.bind(this));
         (<HTMLElement>document.getElementById("viewsize")).addEventListener("input", this.ViewSize.bind(this));
         (<HTMLElement>document.getElementById("pointsize")).addEventListener("input", this.PointSize.bind(this));
-        (<HTMLElement>document.getElementById("glCanvas")).addEventListener("mousemove", this.MouseMove.bind(this));
         (<HTMLElement>document.getElementById("zoomMultiplier")).addEventListener("input", this.setZoomMultiplier.bind(this));
+
+        (<HTMLElement>document.getElementById("glCanvas")).addEventListener("mousemove", this.MouseMove.bind(this));
+        (<HTMLElement>document.getElementById("glCanvas")).addEventListener("mousemove", this.MouseClick.bind(this));
 
         (<HTMLElement>document.getElementById("up")).addEventListener("click", this.Rotation.bind(this));
         (<HTMLElement>document.getElementById("down")).addEventListener("click", this.Rotation.bind(this));
@@ -133,6 +141,12 @@ export class Controls {
     private PointSize() {
         // @ts-ignore 1 1
         this.pointsize = <Number>document.getElementById("pointsize").value / 10;
+    }
+
+    private MouseClick(event) {
+        this.mouseClickX = event.clientX;
+        this.mouseClickY = event.clientY;
+        //this.getPixelsFunc(this.mouseClickX, this.mouseClickY);
     }
 
     private MouseMove(event) {

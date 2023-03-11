@@ -1,6 +1,6 @@
 // fragment shaders don't have a default precision so we need
   // to pick one. mediump is a good default
-  precision highp float;
+  precision mediump float;
 
   uniform int light_toggle;
   uniform sampler2D u_texture;
@@ -16,10 +16,11 @@
     // gl_FragColor is a special variable a fragment shader
     // is responsible for setting
 
+    vec3 normal = normalize(v_normal);
+    float light = dot(normal, lightdir);
+
     if(light_toggle == 1)
     {
-          vec3 normal = normalize(v_normal);
-          float light = dot(normal, lightdir);
           gl_FragColor = vec4(colour.x, colour.y, position.z, 1) * texture2D(u_texture, v_texcoord);
           gl_FragColor.rgb *= light;
           //gl_FragColor = texture2D(u_texture, v_texcoord);
