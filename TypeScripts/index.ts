@@ -1,5 +1,6 @@
 // Note: Adapted from https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html
 // Imports will give errors if not using parcel
+// Shader File Imports - These were adapted from the basic shaders seen here: https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html
 // @ts-ignore
 import fragmentSource_1 from '../shaders/fragment_1.glsl'
 // @ts-ignore
@@ -8,8 +9,6 @@ import vertexSource_1 from '../shaders/vertex_1.glsl'
 import fragmentSource_2 from '../shaders/fragment_2.glsl'
 // @ts-ignore
 import vertexSource_2 from '../shaders/vertex_2.glsl'
-//@ts-ignore
-import fragmentSource_3 from '../shaders/fragment_3.glsl'
 
 import { Model } from './Model';
 import { DATASET, load_OBJ, read_CSV } from './Loader';
