@@ -1,5 +1,6 @@
 // Note: Adapted from https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html
 // Imports will give errors if not using parcel
+// Shader File Imports - These were adapted from the basic shaders seen here: https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html
 // @ts-ignore
 import fragmentSource_1 from '../shaders/fragment_1.glsl'
 // @ts-ignore
@@ -12,7 +13,7 @@ import vertexSource_2 from '../shaders/vertex_2.glsl'
 import { Model } from './Model';
 import { DATASET, load_OBJ, read_CSV } from './Loader';
 import { Font } from './Font';
-import { App } from './App';
+import { Text } from './Text';
 import { Controls } from './Controls';
 
 // Math Library for Graphics 
@@ -25,9 +26,21 @@ let Fonts; // Generator for Font Texture Data
 let gl: WebGLRenderingContext;
 let canvas: HTMLCanvasElement;
 
+// ref to article with canvas
+let screen: HTMLElement;
+
 let programs: WebGLProgram[];
 const num_of_programs = 2;
 
+// Picking Required Variables
+let pickingBuffer; // Off screen buffer to render picking view
+let pickingTexture; // Texture being rendered to for picking 
+let rect; // used to calculate canvas relative position, inspired by https://webglfundamentals.org/webgl/lessons/webgl-picking.html
+let prevselectedPointID; // Previously Selected Point, quick fix to ignore picking when mouse has not hovered over anything 
+let selectedPointID; // Currently Selected Point
+let selectedPos; // Position of Selected Point 
+
+// Uniform Adressess 
 let modelUniformID: WebGLUniformLocation;
 let viewUniformID: WebGLUniformLocation;
 let projectionUniformID: WebGLUniformLocation;
@@ -36,11 +49,13 @@ let colourUniformID: WebGLUniformLocation;
 let cameraRightWorldSpaceUniformID: WebGLUniformLocation;
 let cameraUpWorldSpaceUniformID: WebGLUniformLocation;
 let viewmodUniformID: WebGLUniformLocation;
+let idUniformID: WebGLUniformLocation;
 
 let positionAttributeID: GLint[];
 let normalAttributeID: GLint[];
 let textureAttributeID: GLint[];
 
+// Controller Class of MVC structure
 let c: Controls;
 
 // Ref to 3D models
@@ -59,13 +74,24 @@ let positiveColour = [0.1, 0.1, 0.1];
 let negativeColour = [1, 0.4, 0.4];
 let altColour = [0.9, 0.9, 0.9];
 
+/*
+    Set up the entire application and start rendering
+    Also Entry point to application
+*/
 async function main() {
 
     // gl has already been checked so cannot be undefined- safe to cast
     gl = <WebGLRenderingContext>init();
 
+    // Create Controller class and pass control functions (these will be called by control on user input)
     c = new Controls();
-    c.Controls(setAxisValues, setAxisNames);
+    c.Controls(setAxisValues, setAxisNames, getPixelsAtClick);
+
+    // See Comment above where rect is defined 
+    rect = canvas.getBoundingClientRect();
+
+    // HTML Element containing canvas, for direct HTML modification 
+    screen = <HTMLElement>document.getElementById("PlotScreen");
 
     /*
         Link Attributes and Locations
@@ -85,7 +111,10 @@ async function main() {
         colourUniformID[i] = <WebGLUniformLocation>gl.getUniformLocation(programs[i], "in_colour");
     }
 
-    //Uniforms only in shader program 1
+    // Uniforms only in shader program 0
+    idUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[0], "id");
+
+    // Uniforms only in shader program 1
     cameraRightWorldSpaceUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "camRight_WS");
     cameraUpWorldSpaceUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "camUp_WS");
     viewmodUniformID = <WebGLUniformLocation>gl.getUniformLocation(programs[1], "viewmod");
@@ -112,6 +141,9 @@ async function main() {
     AxisValues = [[]];
     AxisNames = [[]];
     AxisMap = [];
+
+    selectedPointID = 0;
+    prevselectedPointID = -1;
 
     /*
         Prepare all Label types
@@ -147,6 +179,34 @@ async function main() {
     gl.frontFace(gl.CW);
 
     //gl.enable(gl.STENCIL_TEST); Stencil usage was removed 
+
+    /*
+        Setup FrameBuffer for picking
+    */
+
+    // Create picking Texture
+    pickingTexture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, pickingTexture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.canvas.width, gl.canvas.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+
+    // Set important parameters for accuracy inspired by this: https://webglfundamentals.org/webgl/lessons/webgl-picking.html
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+    // Create Picking Buffer
+    pickingBuffer = gl.createFramebuffer();
+    gl.bindFramebuffer(gl.FRAMEBUFFER, pickingBuffer);
+
+    // Bind texture to picking buffer
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, pickingTexture, 0);
+
+    // Unbind picking buffer, use default screen as the render destination 
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
+    /*
+        Setup Finished, Now do things
+    */
 
     // Listen for a file upload 
     await read_CSV();
@@ -248,6 +308,12 @@ function setAxisValues() {
 function Render(timestamp) {
     // | Setup |
 
+    resizeCanvasToDisplaySize(gl.canvas);
+
+    // Clear Canvas and Set Background Color 
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
+
     c.RenderUpdateControls();
 
     //Create a top level model
@@ -283,7 +349,13 @@ function Render(timestamp) {
 
     RenderAxisText(GLOBAL_MODEL, view);
 
-    RenderData(GLOBAL_MODEL);
+    // Render to Texture and get mouse hover position from it 
+    gl.bindFramebuffer(gl.FRAMEBUFFER, pickingBuffer);
+    RenderData(GLOBAL_MODEL, true);
+    getPixelsAtClick(c.mouseClickX, c.mouseClickY);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
+    RenderData(GLOBAL_MODEL, false);
 
     window.requestAnimationFrame(Render);
 }
@@ -291,12 +363,28 @@ function Render(timestamp) {
 /*
     Renders Imported Data Points that need shader program 1
 */
-function RenderData(global_model: glmath.mat4) {
+function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
+
+    // | Data Tasks |
+
+    //Check if a valid point was selected, and get it's position 
+    if (selectedPointID != prevselectedPointID && DATASET[0] != undefined) {
+
+        if (selectedPointID <= DATASET.length) {
+            prevselectedPointID = selectedPointID;
+            let x = (Number(Object.values(DATASET[selectedPointID])[2]));
+            let y = (Number(Object.values(DATASET[selectedPointID])[1]));
+            let z = (Number(Object.values(DATASET[selectedPointID])[0]));
+
+            selectedPos = [x, y, z];
+        }
+
+    }
+
     // _____________
     // +++ SETUP +++
     // _____________
 
-    //Set Shader to use 
     gl.useProgram(programs[0]);
     gl.enableVertexAttribArray(positionAttributeID[0]);
     gl.enableVertexAttribArray(normalAttributeID[0]);
@@ -308,7 +396,12 @@ function RenderData(global_model: glmath.mat4) {
     projection = glmath.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
     gl.uniformMatrix4fv(projectionUniformID[0], false, projection);
 
-    gl.uniform1i(lightToggleUniformID[0], 1); // Use Light
+    if (pickingPass == true) {
+        gl.uniform1i(lightToggleUniformID[0], 0); // Don't Use Light
+    }
+    else {
+        gl.uniform1i(lightToggleUniformID[0], 1);
+    }
 
     // _____________
     // +++ Render +++
@@ -339,6 +432,22 @@ function RenderData(global_model: glmath.mat4) {
         glmath.mat4.translate(point_model, point_model, [x, y, z]);
         glmath.mat4.scale(point_model, point_model, [1, 1, 1]);
         glmath.mat4.scale(point_model, point_model, [c.pointsize / c.combinedZoom, c.pointsize / c.combinedZoom, c.pointsize / c.combinedZoom]);
+
+
+        if (pickingPass == true) {
+            gl.uniform3fv(idUniformID, [(i & 0x000000FF) >> 0, (i & 0x0000FF00) >> 8, (i & 0x00FF0000) >> 16]);
+        } else {
+            gl.uniform3fv(idUniformID, [-1, -1, -1]);
+        }
+
+        if (selectedPointID == i && pickingPass == false) {
+            gl.uniform3f(colourUniformID[0], 0, 0, 0);
+            glmath.mat4.scale(point_model, point_model, [1.2, 1.2, 1.2]);
+        }
+        else {
+            gl.uniform3f(colourUniformID[0], 1, 1, 1);
+        }
+
         gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
         Point.render();
 
@@ -563,10 +672,6 @@ function RenderStructure(global_model: glmath.mat4) {
     // +++ SETUP +++
     // _____________
 
-    // Clear Canvas and Set Background Color 
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-
     //Set Shader to use 
     gl.useProgram(programs[0]);
     gl.enableVertexAttribArray(positionAttributeID[0]);
@@ -579,6 +684,7 @@ function RenderStructure(global_model: glmath.mat4) {
     projection = glmath.mat4.perspective(projection, 0.5, gl.canvas.width / gl.canvas.height, 0.1, 700);
     gl.uniformMatrix4fv(projectionUniformID[0], false, projection);
     gl.uniform3f(colourUniformID[0], 1, 1, 1);
+    gl.uniform3fv(idUniformID, [-1, -1, -1]);
 
     // ________________
     // +++ Render +++
@@ -617,10 +723,6 @@ function RenderStructure(global_model: glmath.mat4) {
 
     for (let i = 0; i < 11; i++) {
 
-        if (i > 10) {
-            continue;
-        }
-
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / 10)]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
@@ -640,9 +742,6 @@ function RenderStructure(global_model: glmath.mat4) {
 
     for (let i = 0; i < 11; i++) {
 
-        if (i > 10) {
-            continue;
-        }
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / 10)]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
@@ -664,9 +763,6 @@ function RenderStructure(global_model: glmath.mat4) {
 
     for (let i = 0; i < 11; i++) {
 
-        if (i > 10) {
-            continue;
-        }
         glmath.mat4.copy(Axismodel, globalAxisModel);
         glmath.mat4.translate(Axismodel, Axismodel, [0.5, 0, (i / 10)]);
         glmath.mat4.scale(Axismodel, Axismodel, [0.5, 1, 1]);
@@ -686,13 +782,13 @@ function RenderStructure(global_model: glmath.mat4) {
 }
 
 /*
-    Initialise WebGL Context and setup everything before render loop
+    Initialise WebGL Context and setups WebGL before render loop
 */
 function init() {
 
     //Get canvas and initalise it 
     canvas = <HTMLCanvasElement>document.querySelector("#glCanvas");
-    const temp_gl = canvas.getContext("webgl", { stencil: false });
+    const temp_gl = canvas.getContext("webgl", { stencil: false, preserveDrawingBuffer: true });
 
     // Only continue if WebGL is available and working
     if (temp_gl === null) {
@@ -728,6 +824,10 @@ function init() {
 
 }
 
+/*
+    Function copied from https://webglfundamentals.org/webgl/
+    Creates a Shader
+*/
 function createShader(gl, type, source) {
     var shader = gl.createShader(type);
     gl.shaderSource(shader, source);
@@ -741,6 +841,10 @@ function createShader(gl, type, source) {
     gl.deleteShader(shader);
 }
 
+/*
+    Function copied from https://webglfundamentals.org/webgl/
+    Creates a Program from shaders
+*/
 function createProgram(gl, vertexShader, fragmentShader) {
     var program = gl.createProgram();
     gl.attachShader(program, vertexShader);
@@ -766,5 +870,57 @@ function eraseRotation(matrix: glmath.mat4) {
         matrix[12], matrix[13], matrix[14], matrix[15]
     );
 }
+
+/*
+    Function copied from https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+    Ensures drawingbuffer is the same size as the canvas 
+*/
+function resizeCanvasToDisplaySize(canvas) {
+    // Lookup the size the browser is displaying the canvas in CSS pixels.
+    const displayWidth = canvas.clientWidth;
+    const displayHeight = canvas.clientHeight;
+
+    // Check if the canvas is not the same size.
+    const needResize = canvas.width !== displayWidth ||
+        canvas.height !== displayHeight;
+
+    if (needResize) {
+        // Make the canvas the same size
+        canvas.width = displayWidth;
+        canvas.height = displayHeight;
+    }
+
+    return needResize;
+}
+
+/*
+    Get what pixel on the screen is the mouse hovering over 
+
+    Inspired by solutions shown here: 
+    https://stackoverflow.com/questions/16905302/webgl-and-glsl-picking
+    http://www.opengl-tutorial.org/miscellaneous/clicking-on-objects/picking-with-an-opengl-hack/
+*/
+function getPixelsAtClick(x, y) {
+
+    // Calculate x and y on canvas 
+    let finX = (x - rect.left);
+    let finY = gl.canvas.height - (y - rect.top) - 1;
+
+    // Get 4 component colour of pixel
+    let colour = new Uint8Array(4);
+    gl.readPixels(finX, finY, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, colour);
+
+    // Encode what point (if any) has been selected 
+    selectedPointID = colour[0] + (colour[1] * 256) + (colour[2] * 256 * 256);
+
+    // Record the data in HTML view
+    if (DATASET[0] != undefined) {
+        screen.innerHTML = "ID of Point Selected: " + selectedPointID + " | Position: "
+            + "X: " + selectedPos[2] + " Y: " + selectedPos[1] + " Z: " + selectedPos[0];
+    }
+
+}
+
+
 
 window.onload = main;
