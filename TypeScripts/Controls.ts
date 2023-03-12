@@ -6,6 +6,16 @@ import { DATASET } from './Loader';
 
 export class Controls {
 
+    currentTab: number; //What Tab is the application on 
+
+    viewTab: HTMLDivElement;
+    dataTab: HTMLDivElement;
+    helpTab: HTMLDivElement;
+
+    table: string; // HTML with data table
+
+    canvas;
+
     // User controlled rotation
     x_rotation;
     y_rotation;
@@ -60,6 +70,14 @@ export class Controls {
         this.updateAxisNamesFunc = functionToRunOnAxisNamesUpdate;
         this.getPixelsFunc = functionToRunOnMouseClick;
 
+        this.viewTab = <HTMLDivElement>document.getElementById("view");
+        this.dataTab = <HTMLDivElement>document.getElementById("data");
+        this.helpTab = <HTMLDivElement>document.getElementById("help");
+
+        this.canvas = document.getElementById("glCanvas");
+
+        this.table = "";
+
         // Event Listeners for user controls
         (<HTMLElement>document.getElementById("input")).addEventListener("input", this.UpdateNames.bind(this));
         (<HTMLElement>document.getElementById("zoom")).addEventListener("input", this.Zoom.bind(this));
@@ -83,6 +101,9 @@ export class Controls {
         (<HTMLElement>document.getElementById("right-Move")).addEventListener("click", this.MoveSlice.bind(this));
         (<HTMLElement>document.getElementById("left-Move")).addEventListener("click", this.MoveSlice.bind(this));
 
+        (<HTMLElement>document.getElementById("viewTab")).addEventListener("click", this.changeTabView.bind(this));
+        (<HTMLElement>document.getElementById("dataTab")).addEventListener("click", this.changeTabData.bind(this));
+        (<HTMLElement>document.getElementById("helpTab")).addEventListener("click", this.changeTabHelp.bind(this));
     }
 
     public RenderUpdateControls() {
@@ -102,6 +123,59 @@ export class Controls {
         }
     }
 
+    private changeTabView(event) {
+        this.dataTab.hidden = true;
+        this.viewTab.hidden = false;
+        this.helpTab.hidden = true;
+
+        // Reset size of canvas 
+        this.canvas.width = 1600;
+        this.canvas.height = 800;
+    }
+
+    private changeTabData() {
+        this.dataTab.hidden = false;
+        this.viewTab.hidden = true;
+        this.helpTab.hidden = true;
+
+
+        this.updateTabData();
+
+    }
+
+    private updateTabData() {
+        if (DATASET[0] != undefined) {
+            if (this.table == "") {
+                // Heading 
+                this.table = "<table><thead><tr><th scope='col'>#</th>"
+                let names = Object.keys(DATASET[0]);
+                let columns = names.length;
+
+                for (let i = 0; i < names.length; i++) {
+                    this.table = this.table + '<th scope="col">' + names[i] + '</th>';
+                }
+
+                this.table = this.table + "</tr></thead><tbody>";
+
+                // Body
+                for (let i = 0; i < DATASET.length; i++) {
+                    this.table = this.table + "<tr><th scope='row'>" + i + "</th>";
+                    for (let j = 0; j < columns; j++) {
+                        this.table = this.table + "<td>" + Number(Object.values(DATASET[i])[j]) + "<td>";
+                    }
+                    this.table = this.table + "</tr>"
+                }
+            }
+            this.dataTab.innerHTML = this.table;
+        }
+    }
+
+    private changeTabHelp(event) {
+        this.dataTab.hidden = true;
+        this.viewTab.hidden = true;
+        this.helpTab.hidden = false;
+    }
+
     private resetRotation(event) {
         this.x_rotation = 0;
         this.y_rotation = 0;
@@ -111,6 +185,9 @@ export class Controls {
 
     private UpdateNames() {
         this.updateNames = true;
+        if (this.dataTab.hidden == false) {
+            this.updateTabData();
+        }
     }
 
     private Zoom(event) {

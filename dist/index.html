@@ -9,9 +9,23 @@
 <body>
     <div id="grid">
         <div id="row-large">
+            <div id="tabs" class="grid">
+                <button id="viewTab" class="secondary outline tab">Graph View</button>
+                <button id="dataTab" class="secondary outline tab">Data Managment</button>
+                <button id="helpTab" class="secondary outline tab">Help</button>
+            </div>
         <article style="align-self: center">
-            <canvas id="glCanvas" style="width: 100%; height: 60%" width="1600" height="900"></canvas>
-            <div id="PlotScreen"></div>
+            <div id="view">
+                <canvas id="glCanvas" style="width: 100%; height: 60%" width="1600" height="800"></canvas>
+                <div id="PlotScreen"></div>
+            </div>
+            <div id="data" hidden="">
+                <h4>This section shows raw uploaded data</h4>
+                <h5>See Sidebar on the right to upload a file</h5>
+            </div>
+            <div id="help" hidden="">
+                <td>help</td>
+            </div>
         </article>
             <article>
                 <h4>Multidimensional Web Plotter</h4>
