@@ -49,6 +49,10 @@ a {
     margin: 1%;
 }
 
+#half-button {
+    width: 50%;
+}
+
 #row-large {
     flex: 2;
     flex-grow: 2;

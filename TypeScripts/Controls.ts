@@ -74,6 +74,7 @@ export class Controls {
         (<HTMLElement>document.getElementById("down")).addEventListener("click", this.Rotation.bind(this));
         (<HTMLElement>document.getElementById("right")).addEventListener("click", this.Rotation.bind(this));
         (<HTMLElement>document.getElementById("left")).addEventListener("click", this.Rotation.bind(this));
+        (<HTMLElement>document.getElementById("resetRotation")).addEventListener("click", this.resetRotation.bind(this));
 
         (<HTMLElement>document.getElementById("back-Move")).addEventListener("click", this.MoveSlice.bind(this));
         (<HTMLElement>document.getElementById("forward-Move")).addEventListener("click", this.MoveSlice.bind(this));
@@ -99,6 +100,13 @@ export class Controls {
             this.mouse_x = 0;
             this.x_rotation = 0;
         }
+    }
+
+    private resetRotation(event) {
+        this.x_rotation = 0;
+        this.y_rotation = 0;
+        this.mouse_x = 0;
+        this.mouse_y = 0;
     }
 
     private UpdateNames() {
@@ -170,8 +178,6 @@ export class Controls {
         else if (event.currentTarget.id == "up") {
             this.y_rotation += 0.1;
         }
-
-        console.log(event);
 
     }
 
