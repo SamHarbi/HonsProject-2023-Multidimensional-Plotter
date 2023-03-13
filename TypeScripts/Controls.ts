@@ -13,6 +13,14 @@ export class Controls {
     helpTab: HTMLDivElement;
 
     table: string; // HTML with data table
+    tableElement: HTMLDivElement; // HTML element where table should go
+    dimensionOptions: string[]; // Record of Headers from the dataset
+
+    xSelect;
+    ySelect;
+    zSelect;
+    cSelect;
+    aSelect;
 
     canvas;
 
@@ -74,9 +82,18 @@ export class Controls {
         this.dataTab = <HTMLDivElement>document.getElementById("data");
         this.helpTab = <HTMLDivElement>document.getElementById("help");
 
+        this.xSelect = <HTMLDivElement>document.getElementById("x");
+        this.ySelect = <HTMLDivElement>document.getElementById("y");
+        this.zSelect = <HTMLDivElement>document.getElementById("z");
+        this.cSelect = <HTMLDivElement>document.getElementById("c");
+        this.aSelect = <HTMLDivElement>document.getElementById("a");
+
+        this.dimensionOptions = [];
+
         this.canvas = document.getElementById("glCanvas");
 
         this.table = "";
+        this.tableElement = <HTMLDivElement>document.getElementById("table");
 
         // Event Listeners for user controls
         (<HTMLElement>document.getElementById("input")).addEventListener("input", this.UpdateNames.bind(this));
@@ -153,6 +170,8 @@ export class Controls {
 
                 for (let i = 0; i < names.length; i++) {
                     this.table = this.table + '<th scope="col">' + names[i] + '</th>';
+                    //this.xSelect.innerHTML = this.xSelect.innerHTML + "<option value='" + names[i] + "'>" + names[i] + "</option>";
+                    this.dimensionOptions[i] = names[i];
                 }
 
                 this.table = this.table + "</tr></thead><tbody>";
@@ -165,8 +184,20 @@ export class Controls {
                     }
                     this.table = this.table + "</tr>"
                 }
+
             }
-            this.dataTab.innerHTML = this.table;
+            this.tableElement.innerHTML = this.table;
+            this.updateSelectors();
+        }
+    }
+
+    private updateSelectors() {
+        for (let i = 0; i < this.dimensionOptions.length; i++) {
+            this.xSelect.innerHTML = this.xSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "'>" + this.dimensionOptions[i] + "</option>";
+            this.ySelect.innerHTML = this.ySelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "'>" + this.dimensionOptions[i] + "</option>";
+            this.zSelect.innerHTML = this.zSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "'>" + this.dimensionOptions[i] + "</option>";
+            this.cSelect.innerHTML = this.cSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "'>" + this.dimensionOptions[i] + "</option>";
+            this.aSelect.innerHTML = this.aSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "'>" + this.dimensionOptions[i] + "</option>";
         }
     }
 
