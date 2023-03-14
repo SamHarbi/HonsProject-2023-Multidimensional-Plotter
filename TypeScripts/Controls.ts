@@ -134,6 +134,10 @@ export class Controls {
         (<HTMLElement>document.getElementById("viewTab")).addEventListener("click", this.changeTabView.bind(this));
         (<HTMLElement>document.getElementById("dataTab")).addEventListener("click", this.changeTabData.bind(this));
         (<HTMLElement>document.getElementById("helpTab")).addEventListener("click", this.changeTabHelp.bind(this));
+
+        (<HTMLElement>document.getElementById("render")).addEventListener("click", this.selectDimensions.bind(this));
+
+
     }
 
     public RenderUpdateControls() {
@@ -173,6 +177,17 @@ export class Controls {
 
     }
 
+    private selectDimensions() {
+        if (DATASET[0] != undefined) {
+            this.xIndex = this.xSelect.value;
+            this.yIndex = this.xSelect.value;
+            this.zIndex = this.zSelect.value;
+            this.cIndex = this.cSelect.value;
+            this.aIndex = this.aSelect.value;
+            console.log(this.xIndex);
+        }
+    }
+
     private updateTabData() {
         if (DATASET[0] != undefined) {
             if (this.table == "") {
@@ -208,38 +223,38 @@ export class Controls {
         for (let i = 0; i < this.dimensionOptions.length; i++) {
 
             if (i == this.xIndex) {
-                this.xSelect.innerHTML = this.xSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "' selected>" + this.dimensionOptions[i] + "</option>";
+                this.xSelect.innerHTML = this.xSelect.innerHTML + "<option value='" + i + "' selected>" + this.dimensionOptions[i] + "</option>";
             }
             else {
-                this.xSelect.innerHTML = this.xSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "'>" + this.dimensionOptions[i] + "</option>";
+                this.xSelect.innerHTML = this.xSelect.innerHTML + "<option value='" + i + "'>" + this.dimensionOptions[i] + "</option>";
             }
 
             if (i == this.yIndex) {
-                this.ySelect.innerHTML = this.ySelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "' selected>" + this.dimensionOptions[i] + "</option>";
+                this.ySelect.innerHTML = this.ySelect.innerHTML + "<option value='" + i + "' selected>" + this.dimensionOptions[i] + "</option>";
             }
             else {
-                this.ySelect.innerHTML = this.ySelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "'>" + this.dimensionOptions[i] + "</option>";
+                this.ySelect.innerHTML = this.ySelect.innerHTML + "<option value='" + i + "'>" + this.dimensionOptions[i] + "</option>";
             }
 
             if (i == this.zIndex) {
-                this.zSelect.innerHTML = this.zSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "' selected>" + this.dimensionOptions[i] + "</option>";
+                this.zSelect.innerHTML = this.zSelect.innerHTML + "<option value='" + i + "' selected>" + this.dimensionOptions[i] + "</option>";
             }
             else {
-                this.zSelect.innerHTML = this.zSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "'>" + this.dimensionOptions[i] + "</option>";
+                this.zSelect.innerHTML = this.zSelect.innerHTML + "<option value='" + i + "'>" + this.dimensionOptions[i] + "</option>";
             }
 
             if (i == this.cIndex) {
-                this.cSelect.innerHTML = this.cSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "' selected>" + this.dimensionOptions[i] + "</option>";
+                this.cSelect.innerHTML = this.cSelect.innerHTML + "<option value='" + i + "' selected>" + this.dimensionOptions[i] + "</option>";
             }
             else {
-                this.cSelect.innerHTML = this.cSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "'>" + this.dimensionOptions[i] + "</option>";
+                this.cSelect.innerHTML = this.cSelect.innerHTML + "<option value='" + i + "'>" + this.dimensionOptions[i] + "</option>";
             }
 
             if (i == this.aIndex) {
-                this.aSelect.innerHTML = this.aSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "' selected>" + this.dimensionOptions[i] + "</option>";
+                this.aSelect.innerHTML = this.aSelect.innerHTML + "<option value='" + i + "' selected>" + this.dimensionOptions[i] + "</option>";
             }
             else {
-                this.aSelect.innerHTML = this.aSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "'>" + this.dimensionOptions[i] + "</option>";
+                this.aSelect.innerHTML = this.aSelect.innerHTML + "<option value='" + i + "'>" + this.dimensionOptions[i] + "</option>";
             }
         }
     }
