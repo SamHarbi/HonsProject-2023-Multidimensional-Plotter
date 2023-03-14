@@ -372,9 +372,9 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
 
         if (selectedPointID <= DATASET.length) {
             prevselectedPointID = selectedPointID;
-            let x = (Number(Object.values(DATASET[selectedPointID])[2]));
-            let y = (Number(Object.values(DATASET[selectedPointID])[1]));
-            let z = (Number(Object.values(DATASET[selectedPointID])[0]));
+            let x = (Number(Object.values(DATASET[selectedPointID])[c.xIndex]));
+            let y = (Number(Object.values(DATASET[selectedPointID])[c.yIndex]));
+            let z = (Number(Object.values(DATASET[selectedPointID])[c.zIndex]));
 
             selectedPos = [x, y, z];
         }
@@ -413,9 +413,9 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
     glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * c.z_move, 0 - 2 * c.y_move, 0 - 2 * c.x_move]);
 
     for (let i = 0; i < DATASET.length; i++) {
-        let z = Number(Object.values(DATASET[i])[0]) * 2 / c.combinedZoom;
-        let y = Number(Object.values(DATASET[i])[1]) * 2 / c.combinedZoom;
-        let x = (Number(Object.values(DATASET[i])[2]) * 2) / c.combinedZoom;
+        let z = Number(Object.values(DATASET[i])[c.zIndex]) * 2 / c.combinedZoom;
+        let y = Number(Object.values(DATASET[i])[c.yIndex]) * 2 / c.combinedZoom;
+        let x = (Number(Object.values(DATASET[i])[c.xIndex]) * 2) / c.combinedZoom;
 
         //Check that points are not beyond the view cube on +ve side
         if ((x - 2 * c.z_move > 20) || y - 2 * c.y_move > 20 || z - 2 * c.x_move > 20) {

@@ -16,11 +16,11 @@ export class Controls {
     tableElement: HTMLDivElement; // HTML element where table should go
     dimensionOptions: string[]; // Record of Headers from the dataset
 
-    xSelect;
-    ySelect;
-    zSelect;
-    cSelect;
-    aSelect;
+    xSelect; // Drop down for X column
+    ySelect; // Drop down for Y column
+    zSelect; // Drop down for Z column
+    cSelect; // Drop down for C column
+    aSelect; // Drop down for A column
 
     canvas;
 
@@ -30,6 +30,13 @@ export class Controls {
     public x_move;
     public y_move;
     public z_move;
+
+    // At which index position in DATASET is the x, y, z, c and a value
+    public xIndex;
+    public yIndex;
+    public zIndex;
+    public cIndex;
+    public aIndex;
 
     // At what rotation value the view is at, combined mouse + button
     current_x_rotation;
@@ -68,6 +75,12 @@ export class Controls {
         this.combinedZoom = 1;
         this.viewsize = 0.4;
         this.pointsize = 1;
+
+        this.xIndex = 2;
+        this.yIndex = 1;
+        this.zIndex = 0;
+        this.cIndex = 4;
+        this.aIndex = 5;
 
         this.mouse_x = 1;
         this.mouse_y = 1;
@@ -193,11 +206,41 @@ export class Controls {
 
     private updateSelectors() {
         for (let i = 0; i < this.dimensionOptions.length; i++) {
-            this.xSelect.innerHTML = this.xSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "'>" + this.dimensionOptions[i] + "</option>";
-            this.ySelect.innerHTML = this.ySelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "'>" + this.dimensionOptions[i] + "</option>";
-            this.zSelect.innerHTML = this.zSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "'>" + this.dimensionOptions[i] + "</option>";
-            this.cSelect.innerHTML = this.cSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "'>" + this.dimensionOptions[i] + "</option>";
-            this.aSelect.innerHTML = this.aSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "'>" + this.dimensionOptions[i] + "</option>";
+
+            if (i == this.xIndex) {
+                this.xSelect.innerHTML = this.xSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "' selected>" + this.dimensionOptions[i] + "</option>";
+            }
+            else {
+                this.xSelect.innerHTML = this.xSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "'>" + this.dimensionOptions[i] + "</option>";
+            }
+
+            if (i == this.yIndex) {
+                this.ySelect.innerHTML = this.ySelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "' selected>" + this.dimensionOptions[i] + "</option>";
+            }
+            else {
+                this.ySelect.innerHTML = this.ySelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "'>" + this.dimensionOptions[i] + "</option>";
+            }
+
+            if (i == this.zIndex) {
+                this.zSelect.innerHTML = this.zSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "' selected>" + this.dimensionOptions[i] + "</option>";
+            }
+            else {
+                this.zSelect.innerHTML = this.zSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "'>" + this.dimensionOptions[i] + "</option>";
+            }
+
+            if (i == this.cIndex) {
+                this.cSelect.innerHTML = this.cSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "' selected>" + this.dimensionOptions[i] + "</option>";
+            }
+            else {
+                this.cSelect.innerHTML = this.cSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "'>" + this.dimensionOptions[i] + "</option>";
+            }
+
+            if (i == this.aIndex) {
+                this.aSelect.innerHTML = this.aSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "' selected>" + this.dimensionOptions[i] + "</option>";
+            }
+            else {
+                this.aSelect.innerHTML = this.aSelect.innerHTML + "<option value='" + this.dimensionOptions[i] + "'>" + this.dimensionOptions[i] + "</option>";
+            }
         }
     }
 

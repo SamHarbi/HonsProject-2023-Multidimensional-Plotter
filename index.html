@@ -10,9 +10,9 @@
     <div id="grid">
         <div id="row-large">
             <div id="tabs" class="grid">
-                <button id="viewTab" class="secondary outline tab">Graph View</button>
-                <button id="dataTab" class="secondary outline tab">Data Managment</button>
-                <button id="helpTab" class="secondary outline tab">Help</button>
+                <button id="viewTab" class="secondary outline tab"><i class="bi bi-fullscreen"></i> Graph View</button>
+                <button id="dataTab" class="secondary outline tab"><i class="bi bi-filetype-css"></i> Data Managment</button>
+                <button id="helpTab" class="secondary outline tab"><i class="bi bi-info-circle"></i> Help</button>
             </div>
         <article style="align-self: center">
             <div id="view">
@@ -23,24 +23,38 @@
                 <article>
                     <div class="grid">
                         <div>
-                            <h4>X Dimension</h4>
-                            <select name="x" id="x"></select>
+                            <h4>X Dimension *</h4>
+                            <select name="x" id="x" required>
+                                <option>None</option>
+                            </select>
                         </div>
                         <div>
-                            <h4>Y Dimension</h4>
-                            <select name="y" id="y"></select>
+                            <h4>Y Dimension *</h4>
+                            <select name="y" id="y" required>
+                                <option>None</option>
+                            </select>
                         </div>
                         <div>
-                            <h4>Z Dimension</h4>
-                            <select name="z" id="z"></select>
+                            <h4>Z Dimension *</h4>
+                            <select name="z" id="z" required>
+                                <option>None</option>
+                            </select>
                         </div>
                         <div>
                             <h4>C Dimension</h4>
-                            <select name="c" id="c"></select>
+                            <select name="c" id="c">
+                                <option>None</option>
+                            </select>
                         </div>
                         <div>
                             <h4>A Dimension</h4>
-                            <select name="a" id="a"></select>
+                            <select name="a" id="a">
+                                <option>None</option>
+                            </select>
+                        </div>
+                        <div>
+                            <h4>Render</h4>
+                            <button><i class="bi bi-bounding-box"></i></button>
                         </div>
                     </div>
                 </article>

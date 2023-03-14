@@ -1,4 +1,5 @@
 @import 'npm:@picocss/pico';
+@import 'npm:bootstrap-icons/font/bootstrap-icons';
 
 @media screen and (min-width: 1000px) {
     #grid {
