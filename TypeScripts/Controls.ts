@@ -187,10 +187,12 @@ export class Controls {
     private selectDimensions() {
         if (DATASET[0] != undefined) {
             this.xIndex = this.xSelect.value;
-            this.yIndex = this.xSelect.value;
+            this.yIndex = this.ySelect.value;
             this.zIndex = this.zSelect.value;
             this.cIndex = this.cSelect.value;
             this.aIndex = this.aSelect.value;
+            this.updateNames = true;
+            this.changeTabView();
         }
     }
 
@@ -206,6 +208,8 @@ export class Controls {
                 //this.xSelect.innerHTML = this.xSelect.innerHTML + "<option value='" + names[i] + "'>" + names[i] + "</option>";
                 this.dimensionOptions[i] = names[i];
             }
+
+            console.log(this.dimensionOptions);
 
             this.table = this.table + "</tr></thead><tbody>";
 

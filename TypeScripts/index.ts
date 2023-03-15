@@ -223,9 +223,11 @@ function setAxisNames() {
     // !! NOTE !! This limits to three columns names only 
     let names = Object.keys(DATASET[0]); //Array of names 
 
+    let axisIndex = [c.zIndex, c.yIndex, c.xIndex, c.cIndex, c.aIndex];
+
     for (let i = 0; i < 3; i++) {
         AxisNames[i] = [];
-        let charArray = names[i].split('');
+        let charArray = names[axisIndex[i]].split('');
 
         for (let j = 0; j < charArray.length; j++) {
             Fonts.init(charArray[j]);
@@ -429,7 +431,7 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
 
         let point_model = glmath.mat4.create();
         glmath.mat4.copy(point_model, global_point_model);
-        glmath.mat4.translate(point_model, point_model, [x, y, z]);
+        glmath.mat4.translate(point_model, point_model, [z, y, x]);
         glmath.mat4.scale(point_model, point_model, [1, 1, 1]);
         glmath.mat4.scale(point_model, point_model, [c.pointsize / c.combinedZoom, c.pointsize / c.combinedZoom, c.pointsize / c.combinedZoom]);
 
@@ -916,7 +918,7 @@ function getPixelsAtClick(x, y) {
     // Record the data in HTML view
     if (DATASET[0] != undefined) {
         screen.innerHTML = "ID of Point Selected: " + selectedPointID + " | Position: "
-            + "X: " + selectedPos[2] + " Y: " + selectedPos[1] + " Z: " + selectedPos[0];
+            + "X: " + selectedPos[0] + " Y: " + selectedPos[1] + " Z: " + selectedPos[2];
     }
 
 }
