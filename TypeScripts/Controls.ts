@@ -2,7 +2,7 @@
     This is a class defining a Store of User Controls 
 */
 
-import { DATASET } from './Loader';
+import { DATASET, InstantReadCSV } from './Loader';
 
 export class Controls {
 
@@ -11,6 +11,8 @@ export class Controls {
     viewTab: HTMLDivElement;
     dataTab: HTMLDivElement;
     helpTab: HTMLDivElement;
+
+    updateNeedDataTab: boolean;
 
     table: string; // HTML with data table
     tableElement: HTMLDivElement; // HTML element where table should go
@@ -86,6 +88,7 @@ export class Controls {
         this.mouse_y = 1;
 
         this.updateNames = true;
+        this.updateNeedDataTab = false;
 
         this.updateAxisFunc = functionToRunOnAxisUpdate;
         this.updateAxisNamesFunc = functionToRunOnAxisNamesUpdate;
@@ -109,7 +112,7 @@ export class Controls {
         this.tableElement = <HTMLDivElement>document.getElementById("table");
 
         // Event Listeners for user controls
-        (<HTMLElement>document.getElementById("input")).addEventListener("input", this.UpdateNames.bind(this));
+        (<HTMLElement>document.getElementById("input")).addEventListener("input", this.fileInput.bind(this));
         (<HTMLElement>document.getElementById("zoom")).addEventListener("input", this.Zoom.bind(this));
         (<HTMLElement>document.getElementById("viewsize")).addEventListener("input", this.ViewSize.bind(this));
         (<HTMLElement>document.getElementById("pointsize")).addEventListener("input", this.PointSize.bind(this));
@@ -136,6 +139,7 @@ export class Controls {
         (<HTMLElement>document.getElementById("helpTab")).addEventListener("click", this.changeTabHelp.bind(this));
 
         (<HTMLElement>document.getElementById("render")).addEventListener("click", this.selectDimensions.bind(this));
+
 
 
     }
@@ -172,8 +176,11 @@ export class Controls {
         this.viewTab.hidden = true;
         this.helpTab.hidden = true;
 
+        if (this.updateNeedDataTab == true) {
+            this.updateTabData()
+            this.updateNeedDataTab = false;
+        }
 
-        this.updateTabData();
 
     }
 
@@ -184,42 +191,46 @@ export class Controls {
             this.zIndex = this.zSelect.value;
             this.cIndex = this.cSelect.value;
             this.aIndex = this.aSelect.value;
-            console.log(this.xIndex);
         }
     }
 
     private updateTabData() {
         if (DATASET[0] != undefined) {
-            if (this.table == "") {
-                // Heading 
-                this.table = "<table><thead><tr><th scope='col'>#</th>"
-                let names = Object.keys(DATASET[0]);
-                let columns = names.length;
+            // Heading 
+            this.table = "<table><thead><tr><th scope='col'>#</th>"
+            let names = Object.keys(DATASET[0]);
+            let columns = names.length;
 
-                for (let i = 0; i < names.length; i++) {
-                    this.table = this.table + '<th scope="col">' + names[i] + '</th>';
-                    //this.xSelect.innerHTML = this.xSelect.innerHTML + "<option value='" + names[i] + "'>" + names[i] + "</option>";
-                    this.dimensionOptions[i] = names[i];
-                }
-
-                this.table = this.table + "</tr></thead><tbody>";
-
-                // Body
-                for (let i = 0; i < DATASET.length; i++) {
-                    this.table = this.table + "<tr><th scope='row'>" + i + "</th>";
-                    for (let j = 0; j < columns; j++) {
-                        this.table = this.table + "<td>" + Number(Object.values(DATASET[i])[j]) + "<td>";
-                    }
-                    this.table = this.table + "</tr>"
-                }
-
+            for (let i = 0; i < names.length; i++) {
+                this.table = this.table + '<th scope="col">' + names[i] + '</th>';
+                //this.xSelect.innerHTML = this.xSelect.innerHTML + "<option value='" + names[i] + "'>" + names[i] + "</option>";
+                this.dimensionOptions[i] = names[i];
             }
-            this.tableElement.innerHTML = this.table;
-            this.updateSelectors();
+
+            this.table = this.table + "</tr></thead><tbody>";
+
+            // Body
+            for (let i = 0; i < DATASET.length; i++) {
+                this.table = this.table + "<tr><th scope='row'>" + i + "</th>";
+                for (let j = 0; j < columns; j++) {
+                    this.table = this.table + "<td>" + Number(Object.values(DATASET[i])[j]) + "<td>";
+                }
+                this.table = this.table + "</tr>"
+            }
+
         }
+        this.tableElement.innerHTML = this.table;
+        this.updateSelectors();
     }
 
     private updateSelectors() {
+
+        this.xSelect.innerHTML = '';
+        this.ySelect.innerHTML = '';
+        this.zSelect.innerHTML = '';
+        this.cSelect.innerHTML = '';
+        this.aSelect.innerHTML = '';
+
         for (let i = 0; i < this.dimensionOptions.length; i++) {
 
             if (i == this.xIndex) {
@@ -274,9 +285,15 @@ export class Controls {
 
     private UpdateNames() {
         this.updateNames = true;
+        this.updateNeedDataTab = true;
+
         if (this.dataTab.hidden == false) {
             this.updateTabData();
         }
+    }
+
+    private fileInput() {
+        InstantReadCSV();
     }
 
     private Zoom(event) {

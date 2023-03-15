@@ -209,7 +209,7 @@ async function main() {
     */
 
     // Listen for a file upload 
-    await read_CSV();
+    // await read_CSV();
 
     //Start render loop 
     window.requestAnimationFrame(Render);
