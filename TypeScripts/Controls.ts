@@ -161,7 +161,7 @@ export class Controls {
         }
     }
 
-    private changeTabView(event) {
+    private changeTabView() {
         this.dataTab.hidden = true;
         this.viewTab.hidden = false;
         this.helpTab.hidden = true;
@@ -283,17 +283,11 @@ export class Controls {
         this.mouse_y = 0;
     }
 
-    private UpdateNames() {
-        this.updateNames = true;
-        this.updateNeedDataTab = true;
-
-        if (this.dataTab.hidden == false) {
-            this.updateTabData();
-        }
-    }
-
     private fileInput() {
         InstantReadCSV();
+        this.changeTabView();
+        this.updateNeedDataTab = true;
+        this.updateNames = true;
     }
 
     private Zoom(event) {
