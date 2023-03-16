@@ -421,8 +421,11 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
         let y = Number(Object.values(DATASET[i])[C.yIndex]) * 2 / C.combinedZoom;
         let x = (Number(Object.values(DATASET[i])[C.xIndex]) * 2) / C.combinedZoom;
 
-        let a = Number(Object.values(DATASET[i])[C.cIndex]) * 2 / C.combinedZoom;
+        let a = Number(Object.values(DATASET[i])[C.cIndex]);
         let t = (Number(Object.values(DATASET[i])[C.aIndex]) * 2) / C.combinedZoom;
+
+        console.log(typeof (a));
+        console.log(a);
 
         //Check that points are not beyond the view cube on +ve side
         if ((x - 2 * C.z_move > 20) || y - 2 * C.y_move > 20 || z - 2 * C.x_move > 20) {
@@ -452,9 +455,12 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
             gl.uniform3f(colourUniformID[0], 0, 0, 0);
             glmath.mat4.scale(point_model, point_model, [1.2, 1.2, 1.2]);
         }
-        else if (a != undefined) {
+        else if (!Number.isNaN(a) && pickingPass == false) {
             gl.uniform1i(lightToggleUniformID[0], 0); // Don't Use Light
             gl.uniform3f(colourUniformID[0], SquashNumber(a), SquashNumber(a), SquashNumber(a));
+        } else if (pickingPass == false) {
+            gl.uniform1i(lightToggleUniformID[0], 1);
+            gl.uniform3f(colourUniformID[0], 1.0, 1.0, 1.0);
         }
 
         gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
