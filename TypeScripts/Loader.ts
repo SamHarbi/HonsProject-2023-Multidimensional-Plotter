@@ -126,6 +126,27 @@ export async function read_CSV() {
 
 }
 
+/*
+    This is an alternative way to read in CSV which offloads the waiting for a file to the caller
+    Uses jquery-csv to read in a csv file (compliant with IETF RFC 4180) and save it into DATASET as a JS Object
+*/
+export function InstantReadCSV() {
+    const fileInput = <HTMLInputElement>document.querySelector("input[type=file]");
+
+    let [file] = <FileList>fileInput.files;
+    if (file) {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+            try {
+                DATASET = csv.toObjects(reader.result); //Save to Object
+            } catch (error) {
+                alert("Wrong file format, Please Uplaod a .csv file");
+            }
+        });
+        reader.readAsText(file);
+    }
+}
+
 //Read a file 
 async function ReadFile(model: string) {
 
@@ -151,6 +172,10 @@ async function ReadFile(model: string) {
     }
     else if (model == "Dice") {
         var raw = fs.readFileSync(path.join(__dirname, "../models/Dice.obj"), "utf-8");
+        return raw;
+    }
+    else if (model == "Cone") {
+        var raw = fs.readFileSync(path.join(__dirname, "../models/Cone.obj"), "utf-8");
         return raw;
     }
     else {
