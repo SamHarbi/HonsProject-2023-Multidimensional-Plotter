@@ -474,7 +474,7 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
         }
 
         gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
-        Dice.render();
+        Point.render();
 
     }
 }
