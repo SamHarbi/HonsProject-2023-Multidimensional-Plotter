@@ -174,6 +174,10 @@ async function ReadFile(model: string) {
         var raw = fs.readFileSync(path.join(__dirname, "../models/Dice.obj"), "utf-8");
         return raw;
     }
+    else if (model == "Cone") {
+        var raw = fs.readFileSync(path.join(__dirname, "../models/Cone.obj"), "utf-8");
+        return raw;
+    }
     else {
         var raw = fs.readFileSync(path.join(__dirname, "../models/Cube3.obj"), "utf8");
         return raw;

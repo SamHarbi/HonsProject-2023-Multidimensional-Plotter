@@ -61,6 +61,8 @@ let C: Controls;
 // Ref to 3D models
 let Point;
 let Cube;
+let Dice;
+let Cone;
 let Axis;
 
 let AxisLabels: Model[];
@@ -133,6 +135,14 @@ async function main() {
     let CubeData = await load_OBJ("Cube3");
     Cube = new Model(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.TRIANGLES);
     Cube.init(CubeData[0], CubeData[1], CubeData[2], CubeData[3], gl);
+
+    let ConeData = await load_OBJ("Cone");
+    Cone = new Model(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.TRIANGLES);
+    Cone.init(ConeData[0], ConeData[1], ConeData[2], ConeData[3], gl);
+
+    let DiceData = await load_OBJ("Dice");
+    Dice = new Model(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.TRIANGLES);
+    Dice.init(DiceData[0], DiceData[1], DiceData[2], DiceData[3], gl);
 
     /* 
         Init general variables 
@@ -464,7 +474,7 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
         }
 
         gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
-        Point.render();
+        Dice.render();
 
     }
 }
@@ -944,6 +954,7 @@ function getPixelsAtClick(x, y) {
     }
 
 }
+
 
 
 
