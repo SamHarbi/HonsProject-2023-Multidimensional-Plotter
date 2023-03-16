@@ -81,8 +81,8 @@ export class Controls {
         this.xIndex = 2;
         this.yIndex = 1;
         this.zIndex = 0;
-        this.cIndex = 4;
-        this.aIndex = 5;
+        this.cIndex = 3;
+        this.aIndex = 4;
 
         this.mouse_x = 1;
         this.mouse_y = 1;
