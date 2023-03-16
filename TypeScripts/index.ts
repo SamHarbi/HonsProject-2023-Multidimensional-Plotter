@@ -956,6 +956,4 @@ function getPixelsAtClick(x, y) {
 }
 
 
-
-
 window.onload = main;
