@@ -233,7 +233,8 @@ function setAxisNames() {
     // !! NOTE !! This limits to three columns names only 
     let names = Object.keys(DATASET[0]); //Array of names 
 
-    let axisIndex = [C.zIndex, C.yIndex, C.xIndex, C.cIndex, C.aIndex];
+    let indexVals = C.getIndexValues();
+    let axisIndex = [indexVals[2], indexVals[1], indexVals[0], indexVals[3], indexVals[4]];
 
     for (let i = 0; i < 3; i++) {
         AxisNames[i] = [];
@@ -259,7 +260,7 @@ function generateAxisValuesAt(i, mod, controller) {
     AxisValues[i] = [];
 
     let rawAxisValue = (i - mod) + controller; // Axis Value that can be +ve or -ve 
-    rawAxisValue = rawAxisValue * (C.combinedZoom); // Apply difference between each value
+    rawAxisValue = rawAxisValue * (C.getCombinedZoom()); // Apply difference between each value
     var digit = String((Math.abs(rawAxisValue))).split('').map(Number); // Get Array of +ve digits that represent the value 
 
     // No way to know if a label is negative or positive from within the code, store it in an array for each axis glyph
@@ -302,13 +303,15 @@ function generateAxisValuesAt(i, mod, controller) {
 */
 function setAxisValues() {
 
+    let moveAxis = C.getMoveAxis();
+
     for (let i = 0; i < 31; i++) {
         if (i <= 10) {
-            generateAxisValuesAt(i, 0, C.z_move);
+            generateAxisValuesAt(i, 0, moveAxis[2]);
         } else if (i <= 20) {
-            generateAxisValuesAt(i, 10, C.x_move);
+            generateAxisValuesAt(i, 10, moveAxis[0]);
         } else if (i <= 31) {
-            generateAxisValuesAt(i, 20, C.y_move);
+            generateAxisValuesAt(i, 20, moveAxis[1]);
         }
     }
 }
@@ -330,7 +333,7 @@ function Render(timestamp) {
 
     //Create a top level model
     let GLOBAL_MODEL = glmath.mat4.create();
-    glmath.mat4.scale(GLOBAL_MODEL, GLOBAL_MODEL, [C.viewsize, C.viewsize, C.viewsize]);
+    glmath.mat4.scale(GLOBAL_MODEL, GLOBAL_MODEL, [C.getViewSize(), C.getViewSize(), C.getViewSize()]);
     glmath.mat4.translate(GLOBAL_MODEL, GLOBAL_MODEL, [0.2, 0.2, 1]);
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 15 * (Math.PI / 180), [1, 0, 0]);
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * (Math.PI / 180), [0, -1, 0]);

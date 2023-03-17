@@ -413,4 +413,38 @@ export class Controls {
 
         this.updateAxisFunc();
     }
+
+    /*
+        *
+        * GETTERS AND SETTERS
+        *
+    */
+
+    public getMoveAxis() {
+        return [this.x_move, this.y_move, this.z_move];
+    }
+
+    getIndexValues() {
+        return [this.xIndex, this.yIndex, this.zIndex, this.cIndex, this.aIndex];
+    }
+
+    getMouseClicks() {
+        return [this.mouseClickX, this.mouseClickY];
+    }
+
+    getCombinedZoom() {
+        return this.combinedZoom;
+    }
+
+    getCurrentRotation() {
+        return [this.current_x_rotation, this.current_y_rotation];
+    }
+
+    getViewSize() {
+        return this.viewsize;
+    }
+
+    getPointSize() {
+        return this.pointsize;
+    }
 }
