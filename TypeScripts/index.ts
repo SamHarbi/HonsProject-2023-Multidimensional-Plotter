@@ -901,7 +901,7 @@ function eraseRotation(matrix: glmath.mat4) {
     Based on https://stats.stackexchange.com/questions/1112/how-to-represent-an-unbounded-variable-as-number-between-0-and-1
 */
 function SquashNumber(value) {
-    let mod = 0.1;
+    let mod = C.colourMod;
     return (1 / (1 + Math.pow(Math.E, -(mod * value)))) * 2 - 1;
 }
 
