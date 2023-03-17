@@ -434,16 +434,13 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
         let a = Number(Object.values(DATASET[i])[C.cIndex]);
         let t = (Number(Object.values(DATASET[i])[C.aIndex]) * 2) / C.combinedZoom;
 
-        console.log(typeof (a));
-        console.log(a);
-
         //Check that points are not beyond the view cube on +ve side
-        if ((x - 2 * C.z_move > 20) || y - 2 * C.y_move > 20 || z - 2 * C.x_move > 20) {
+        if ((x - 2 * C.x_move > 20) || y - 2 * C.y_move > 20 || z - 2 * C.z_move > 20) {
             continue;
         }
 
         //Check that points are not beyond the view cube on -ve side
-        if (x - 2 * C.z_move < 0 || y - 2 * C.y_move < 0 || z - 2 * C.x_move < 0) {
+        if (x - 2 * C.x_move < 0 || y - 2 * C.y_move < 0 || z - 2 * C.z_move < 0) {
             continue;
         }
 
