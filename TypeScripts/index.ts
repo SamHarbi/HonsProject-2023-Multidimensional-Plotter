@@ -56,11 +56,13 @@ let normalAttributeID: GLint[];
 let textureAttributeID: GLint[];
 
 // Controller Class of MVC structure
-let c: Controls;
+let C: Controls;
 
 // Ref to 3D models
 let Point;
 let Cube;
+let Dice;
+let Cone;
 let Axis;
 
 let AxisLabels: Model[];
@@ -84,8 +86,8 @@ async function main() {
     gl = <WebGLRenderingContext>init();
 
     // Create Controller class and pass control functions (these will be called by control on user input)
-    c = new Controls();
-    c.Controls(setAxisValues, setAxisNames, getPixelsAtClick);
+    C = new Controls();
+    C.Controls(setAxisValues, setAxisNames, getPixelsAtClick);
 
     // See Comment above where rect is defined 
     rect = canvas.getBoundingClientRect();
@@ -133,6 +135,14 @@ async function main() {
     let CubeData = await load_OBJ("Cube3");
     Cube = new Model(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.TRIANGLES);
     Cube.init(CubeData[0], CubeData[1], CubeData[2], CubeData[3], gl);
+
+    let ConeData = await load_OBJ("Cone");
+    Cone = new Model(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.TRIANGLES);
+    Cone.init(ConeData[0], ConeData[1], ConeData[2], ConeData[3], gl);
+
+    let DiceData = await load_OBJ("Dice");
+    Dice = new Model(positionAttributeID[0], normalAttributeID[0], textureAttributeID[0], gl.TRIANGLES);
+    Dice.init(DiceData[0], DiceData[1], DiceData[2], DiceData[3], gl);
 
     /* 
         Init general variables 
@@ -208,8 +218,8 @@ async function main() {
         Setup Finished, Now do things
     */
 
-    // Listen for a file upload 
-    await read_CSV();
+    // Listen for a file upload, This is no longer done here but managed by Controller 
+    // await read_CSV();
 
     //Start render loop 
     window.requestAnimationFrame(Render);
@@ -223,9 +233,12 @@ function setAxisNames() {
     // !! NOTE !! This limits to three columns names only 
     let names = Object.keys(DATASET[0]); //Array of names 
 
+    let indexVals = C.getIndexValues(); // 0:x 1:y 2:z 3:c 4:a
+    let axisIndex = [indexVals[2], indexVals[1], indexVals[0], indexVals[3], indexVals[4]];
+
     for (let i = 0; i < 3; i++) {
         AxisNames[i] = [];
-        let charArray = names[i].split('');
+        let charArray = names[axisIndex[i]].split('');
 
         for (let j = 0; j < charArray.length; j++) {
             Fonts.init(charArray[j]);
@@ -247,7 +260,7 @@ function generateAxisValuesAt(i, mod, controller) {
     AxisValues[i] = [];
 
     let rawAxisValue = (i - mod) + controller; // Axis Value that can be +ve or -ve 
-    rawAxisValue = rawAxisValue * (c.combinedZoom); // Apply difference between each value
+    rawAxisValue = rawAxisValue * (C.getCombinedZoom()); // Apply difference between each value
     var digit = String((Math.abs(rawAxisValue))).split('').map(Number); // Get Array of +ve digits that represent the value 
 
     // No way to know if a label is negative or positive from within the code, store it in an array for each axis glyph
@@ -290,13 +303,15 @@ function generateAxisValuesAt(i, mod, controller) {
 */
 function setAxisValues() {
 
+    let moveAxis = C.getMoveAxis(); // 0:x 1:y 2:z
+
     for (let i = 0; i < 31; i++) {
         if (i <= 10) {
-            generateAxisValuesAt(i, 0, c.z_move);
+            generateAxisValuesAt(i, 0, moveAxis[2]);
         } else if (i <= 20) {
-            generateAxisValuesAt(i, 10, c.x_move);
+            generateAxisValuesAt(i, 10, moveAxis[0]);
         } else if (i <= 31) {
-            generateAxisValuesAt(i, 20, c.y_move);
+            generateAxisValuesAt(i, 20, moveAxis[1]);
         }
     }
 }
@@ -314,17 +329,18 @@ function Render(timestamp) {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
 
-    c.RenderUpdateControls();
+    C.RenderUpdateControls();
 
     //Create a top level model
     let GLOBAL_MODEL = glmath.mat4.create();
-    glmath.mat4.scale(GLOBAL_MODEL, GLOBAL_MODEL, [c.viewsize, c.viewsize, c.viewsize]);
+    glmath.mat4.scale(GLOBAL_MODEL, GLOBAL_MODEL, [C.getViewSize(), C.getViewSize(), C.getViewSize()]);
     glmath.mat4.translate(GLOBAL_MODEL, GLOBAL_MODEL, [0.2, 0.2, 1]);
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 15 * (Math.PI / 180), [1, 0, 0]);
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * (Math.PI / 180), [0, -1, 0]);
 
-    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, c.current_x_rotation, [0, 1, 0]);
-    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, c.current_y_rotation, [1, 0, 0]);
+    let currRotation = C.getCurrentRotation(); // x = index 0, y = 1
+    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, currRotation[0], [0, 1, 0]);
+    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, currRotation[1], [1, 0, 0]);
 
     // Setup View
     let view = glmath.mat4.create()
@@ -352,9 +368,12 @@ function Render(timestamp) {
     // Render to Texture and get mouse hover position from it 
     gl.bindFramebuffer(gl.FRAMEBUFFER, pickingBuffer);
     RenderData(GLOBAL_MODEL, true);
-    getPixelsAtClick(c.mouseClickX, c.mouseClickY);
+
+    let mouseClicks = C.getMouseClicks(); // x = index 0, y = 1
+    getPixelsAtClick(mouseClicks[0], mouseClicks[1]);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
+    // Render to Screen
     RenderData(GLOBAL_MODEL, false);
 
     window.requestAnimationFrame(Render);
@@ -372,11 +391,14 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
 
         if (selectedPointID <= DATASET.length) {
             prevselectedPointID = selectedPointID;
-            let x = (Number(Object.values(DATASET[selectedPointID])[2]));
-            let y = (Number(Object.values(DATASET[selectedPointID])[1]));
-            let z = (Number(Object.values(DATASET[selectedPointID])[0]));
+            let indexVals = C.getIndexValues(); // 0:x 1:y 2:z 3:c 4:a
+            let x = (Number(Object.values(DATASET[selectedPointID])[indexVals[0]]));
+            let y = (Number(Object.values(DATASET[selectedPointID])[indexVals[1]]));
+            let z = (Number(Object.values(DATASET[selectedPointID])[indexVals[2]]));
+            let c = (Number(Object.values(DATASET[selectedPointID])[indexVals[3]]));
+            let a = (Number(Object.values(DATASET[selectedPointID])[indexVals[4]]));
 
-            selectedPos = [x, y, z];
+            selectedPos = [x, y, z, c, a];
         }
 
     }
@@ -410,28 +432,36 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
     let global_point_model = glmath.mat4.create();
     glmath.mat4.copy(global_point_model, global_model);
     glmath.mat4.scale(global_point_model, global_point_model, [0.05, 0.05, 0.05]);
-    glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * c.z_move, 0 - 2 * c.y_move, 0 - 2 * c.x_move]);
+
+    let moveAxis = C.getMoveAxis(); // 0:x y:1 z:2
+    glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * moveAxis[2], 0 - 2 * moveAxis[1], 0 - 2 * moveAxis[0]]);
 
     for (let i = 0; i < DATASET.length; i++) {
-        let z = Number(Object.values(DATASET[i])[0]) * 2 / c.combinedZoom;
-        let y = Number(Object.values(DATASET[i])[1]) * 2 / c.combinedZoom;
-        let x = (Number(Object.values(DATASET[i])[2]) * 2) / c.combinedZoom;
+
+        let indexVals = C.getIndexValues(); // 0:x 1:y 2:z 3:c 4:a
+        let z = Number(Object.values(DATASET[i])[indexVals[2]]) * 2 / C.getCombinedZoom();
+        let y = Number(Object.values(DATASET[i])[indexVals[1]]) * 2 / C.getCombinedZoom();
+        let x = (Number(Object.values(DATASET[i])[indexVals[0]]) * 2) / C.getCombinedZoom();
+
+        let a = Number(Object.values(DATASET[i])[indexVals[3]]);
+        let t = (Number(Object.values(DATASET[i])[indexVals[4]]) * 2) / C.getCombinedZoom();
 
         //Check that points are not beyond the view cube on +ve side
-        if ((x - 2 * c.z_move > 20) || y - 2 * c.y_move > 20 || z - 2 * c.x_move > 20) {
+        if ((x - 2 * moveAxis[0] > 20) || y - 2 * moveAxis[1] > 20 || z - 2 * moveAxis[2] > 20) {
             continue;
         }
 
         //Check that points are not beyond the view cube on -ve side
-        if (x - 2 * c.z_move < 0 || y - 2 * c.y_move < 0 || z - 2 * c.x_move < 0) {
+        if (x - 2 * moveAxis[0] < 0 || y - 2 * moveAxis[1] < 0 || z - 2 * moveAxis[2] < 0) {
             continue;
         }
 
         let point_model = glmath.mat4.create();
         glmath.mat4.copy(point_model, global_point_model);
-        glmath.mat4.translate(point_model, point_model, [x, y, z]);
+        glmath.mat4.translate(point_model, point_model, [z, y, x]);
         glmath.mat4.scale(point_model, point_model, [1, 1, 1]);
-        glmath.mat4.scale(point_model, point_model, [c.pointsize / c.combinedZoom, c.pointsize / c.combinedZoom, c.pointsize / c.combinedZoom]);
+        let scaledSize = C.getPointSize() / C.getCombinedZoom();
+        glmath.mat4.scale(point_model, point_model, [scaledSize, scaledSize, scaledSize]);
 
 
         if (pickingPass == true) {
@@ -441,11 +471,16 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
         }
 
         if (selectedPointID == i && pickingPass == false) {
+            gl.uniform1i(lightToggleUniformID[0], 1);
             gl.uniform3f(colourUniformID[0], 0, 0, 0);
             glmath.mat4.scale(point_model, point_model, [1.2, 1.2, 1.2]);
         }
-        else {
-            gl.uniform3f(colourUniformID[0], 1, 1, 1);
+        else if (!Number.isNaN(a) && pickingPass == false) {
+            gl.uniform1i(lightToggleUniformID[0], 0); // Don't Use Light
+            gl.uniform3f(colourUniformID[0], SquashNumber(a), SquashNumber(a), SquashNumber(a));
+        } else if (pickingPass == false) {
+            gl.uniform1i(lightToggleUniformID[0], 1);
+            gl.uniform3f(colourUniformID[0], 1.0, 1.0, 1.0);
         }
 
         gl.uniformMatrix4fv(modelUniformID[0], false, point_model);
@@ -495,7 +530,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     gl.uniform3f(cameraRightWorldSpaceUniformID, view[0][0], view[1][0], view[2][0]);
     gl.uniform3f(cameraUpWorldSpaceUniformID, view[0][1], view[1][1], view[2][1]);
     gl.uniform3f(colourUniformID[1], altColour[0], altColour[1], altColour[2]);
-    gl.uniform1i(viewmodUniformID, 1 / c.viewsize);
+    gl.uniform1i(viewmodUniformID, 1 / C.getViewSize());
 
     // _____________
     // +++ Render +++
@@ -517,7 +552,8 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         let AxisNameModel = glmath.mat4.create();
         glmath.mat4.copy(AxisNameModel, LetterModel);
 
-        if ((c.current_x_rotation < -1.34 && c.current_x_rotation > -4.20) || (c.current_x_rotation > 2 && c.current_x_rotation < 5)) {
+        let currRotation = C.getCurrentRotation() // x:0 y:1
+        if ((currRotation[0] < -1.34 && currRotation[0] > -4.20) || (currRotation[0] > 2 && currRotation[0] < 5)) {
             glmath.mat4.rotateY(AxisNameModel, AxisNameModel, 180 * (Math.PI / 180));
             glmath.mat4.translate(AxisNameModel, AxisNameModel, [0, -10, 0]);
         }
@@ -531,7 +567,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         }
     }
 
-    gl.uniform1i(viewmodUniformID, 1 / c.viewsize);
+    gl.uniform1i(viewmodUniformID, 1 / C.getViewSize());
     let singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [0, 0.6, 0]);
@@ -571,7 +607,8 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         let AxisNameModel = glmath.mat4.create();
         glmath.mat4.copy(AxisNameModel, LetterModel);
 
-        if ((c.current_x_rotation < -1.34 && c.current_x_rotation > -4.20) || (c.current_x_rotation > 2 && c.current_x_rotation < 5)) {
+        let currRotation = C.getCurrentRotation() // x:0 y:1
+        if ((currRotation[0] < -1.34 && currRotation[0] > -4.20) || (currRotation[0] > 2 && currRotation[0] < 5)) {
             glmath.mat4.rotateY(AxisNameModel, AxisNameModel, 180 * (Math.PI / 180));
             glmath.mat4.translate(AxisNameModel, AxisNameModel, [0, -10, 0]);
         }
@@ -585,7 +622,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         }
     }
 
-    gl.uniform1i(viewmodUniformID, 1 / c.viewsize);
+    gl.uniform1i(viewmodUniformID, 1 / C.getViewSize());
     singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [1, 0.6, 1]);
@@ -621,7 +658,8 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         let AxisNameModel = glmath.mat4.create();
         glmath.mat4.copy(AxisNameModel, LetterModel);
 
-        if ((c.current_x_rotation < -1 && c.current_x_rotation > -4.20) || (c.current_x_rotation > 2 && c.current_x_rotation < 5)) {
+        let currRotation = C.getCurrentRotation(); // x:0 y:1
+        if ((currRotation[0] < -1 && currRotation[0] > -4.20) || (currRotation[0] > 2 && currRotation[0] < 5)) {
             glmath.mat4.rotateY(AxisNameModel, AxisNameModel, 180 * (Math.PI / 180));
             glmath.mat4.translate(AxisNameModel, AxisNameModel, [0, -2, 0]);
         }
@@ -635,7 +673,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         }
     }
 
-    gl.uniform1i(viewmodUniformID, 1 / c.viewsize);
+    gl.uniform1i(viewmodUniformID, 1 / C.getViewSize());
     singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [2, 0, 0]);
@@ -872,6 +910,15 @@ function eraseRotation(matrix: glmath.mat4) {
 }
 
 /*
+    Takes an unbounded number and distributes it to be between 0 and 1
+    Based on https://stats.stackexchange.com/questions/1112/how-to-represent-an-unbounded-variable-as-number-between-0-and-1
+*/
+function SquashNumber(value) {
+    let mod = C.getColourMod();
+    return (1 / (1 + Math.pow(Math.E, -(mod * value)))) * 2 - 1;
+}
+
+/*
     Function copied from https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
     Ensures drawingbuffer is the same size as the canvas 
 */
@@ -916,11 +963,10 @@ function getPixelsAtClick(x, y) {
     // Record the data in HTML view
     if (DATASET[0] != undefined) {
         screen.innerHTML = "ID of Point Selected: " + selectedPointID + " | Position: "
-            + "X: " + selectedPos[2] + " Y: " + selectedPos[1] + " Z: " + selectedPos[0];
+            + "X: " + selectedPos[0] + " Y: " + selectedPos[1] + " Z: " + selectedPos[2] + " C: " + selectedPos[3];
     }
 
 }
-
 
 
 window.onload = main;
