@@ -424,27 +424,31 @@ export class Controls {
         return [this.x_move, this.y_move, this.z_move];
     }
 
-    getIndexValues() {
+    public getIndexValues() {
         return [this.xIndex, this.yIndex, this.zIndex, this.cIndex, this.aIndex];
     }
 
-    getMouseClicks() {
+    public getMouseClicks() {
         return [this.mouseClickX, this.mouseClickY];
     }
 
-    getCombinedZoom() {
+    public getCombinedZoom() {
         return this.combinedZoom;
     }
 
-    getCurrentRotation() {
+    public getCurrentRotation() {
         return [this.current_x_rotation, this.current_y_rotation];
     }
 
-    getViewSize() {
+    public getViewSize() {
         return this.viewsize;
     }
 
-    getPointSize() {
+    public getPointSize() {
         return this.pointsize;
+    }
+
+    public getColourMod() {
+        return this.colourMod;
     }
 }

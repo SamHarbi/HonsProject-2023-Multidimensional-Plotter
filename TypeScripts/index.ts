@@ -233,7 +233,7 @@ function setAxisNames() {
     // !! NOTE !! This limits to three columns names only 
     let names = Object.keys(DATASET[0]); //Array of names 
 
-    let indexVals = C.getIndexValues();
+    let indexVals = C.getIndexValues(); // 0:x 1:y 2:z 3:c 4:a
     let axisIndex = [indexVals[2], indexVals[1], indexVals[0], indexVals[3], indexVals[4]];
 
     for (let i = 0; i < 3; i++) {
@@ -303,7 +303,7 @@ function generateAxisValuesAt(i, mod, controller) {
 */
 function setAxisValues() {
 
-    let moveAxis = C.getMoveAxis();
+    let moveAxis = C.getMoveAxis(); // 0:x 1:y 2:z
 
     for (let i = 0; i < 31; i++) {
         if (i <= 10) {
@@ -338,8 +338,9 @@ function Render(timestamp) {
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 15 * (Math.PI / 180), [1, 0, 0]);
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * (Math.PI / 180), [0, -1, 0]);
 
-    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, C.current_x_rotation, [0, 1, 0]);
-    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, C.current_y_rotation, [1, 0, 0]);
+    let currRotation = C.getCurrentRotation(); // x = index 0, y = 1
+    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, currRotation[0], [0, 1, 0]);
+    glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, currRotation[1], [1, 0, 0]);
 
     // Setup View
     let view = glmath.mat4.create()
@@ -367,9 +368,12 @@ function Render(timestamp) {
     // Render to Texture and get mouse hover position from it 
     gl.bindFramebuffer(gl.FRAMEBUFFER, pickingBuffer);
     RenderData(GLOBAL_MODEL, true);
-    getPixelsAtClick(C.mouseClickX, C.mouseClickY);
+
+    let mouseClicks = C.getMouseClicks(); // x = index 0, y = 1
+    getPixelsAtClick(mouseClicks[0], mouseClicks[1]);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
+    // Render to Screen
     RenderData(GLOBAL_MODEL, false);
 
     window.requestAnimationFrame(Render);
@@ -387,11 +391,12 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
 
         if (selectedPointID <= DATASET.length) {
             prevselectedPointID = selectedPointID;
-            let x = (Number(Object.values(DATASET[selectedPointID])[C.xIndex]));
-            let y = (Number(Object.values(DATASET[selectedPointID])[C.yIndex]));
-            let z = (Number(Object.values(DATASET[selectedPointID])[C.zIndex]));
-            let c = (Number(Object.values(DATASET[selectedPointID])[C.cIndex]));
-            let a = (Number(Object.values(DATASET[selectedPointID])[C.aIndex]));
+            let indexVals = C.getIndexValues(); // 0:x 1:y 2:z 3:c 4:a
+            let x = (Number(Object.values(DATASET[selectedPointID])[indexVals[0]]));
+            let y = (Number(Object.values(DATASET[selectedPointID])[indexVals[1]]));
+            let z = (Number(Object.values(DATASET[selectedPointID])[indexVals[2]]));
+            let c = (Number(Object.values(DATASET[selectedPointID])[indexVals[3]]));
+            let a = (Number(Object.values(DATASET[selectedPointID])[indexVals[4]]));
 
             selectedPos = [x, y, z, c, a];
         }
@@ -427,23 +432,27 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
     let global_point_model = glmath.mat4.create();
     glmath.mat4.copy(global_point_model, global_model);
     glmath.mat4.scale(global_point_model, global_point_model, [0.05, 0.05, 0.05]);
-    glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * C.z_move, 0 - 2 * C.y_move, 0 - 2 * C.x_move]);
+
+    let moveAxis = C.getMoveAxis(); // 0:x y:1 z:2
+    glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * moveAxis[2], 0 - 2 * moveAxis[1], 0 - 2 * moveAxis[0]]);
 
     for (let i = 0; i < DATASET.length; i++) {
-        let z = Number(Object.values(DATASET[i])[C.zIndex]) * 2 / C.combinedZoom;
-        let y = Number(Object.values(DATASET[i])[C.yIndex]) * 2 / C.combinedZoom;
-        let x = (Number(Object.values(DATASET[i])[C.xIndex]) * 2) / C.combinedZoom;
 
-        let a = Number(Object.values(DATASET[i])[C.cIndex]);
-        let t = (Number(Object.values(DATASET[i])[C.aIndex]) * 2) / C.combinedZoom;
+        let indexVals = C.getIndexValues(); // 0:x 1:y 2:z 3:c 4:a
+        let z = Number(Object.values(DATASET[i])[indexVals[2]]) * 2 / C.getCombinedZoom();
+        let y = Number(Object.values(DATASET[i])[indexVals[1]]) * 2 / C.getCombinedZoom();
+        let x = (Number(Object.values(DATASET[i])[indexVals[0]]) * 2) / C.getCombinedZoom();
+
+        let a = Number(Object.values(DATASET[i])[indexVals[3]]);
+        let t = (Number(Object.values(DATASET[i])[indexVals[4]]) * 2) / C.getCombinedZoom();
 
         //Check that points are not beyond the view cube on +ve side
-        if ((x - 2 * C.x_move > 20) || y - 2 * C.y_move > 20 || z - 2 * C.z_move > 20) {
+        if ((x - 2 * moveAxis[0] > 20) || y - 2 * moveAxis[1] > 20 || z - 2 * moveAxis[2] > 20) {
             continue;
         }
 
         //Check that points are not beyond the view cube on -ve side
-        if (x - 2 * C.x_move < 0 || y - 2 * C.y_move < 0 || z - 2 * C.z_move < 0) {
+        if (x - 2 * moveAxis[0] < 0 || y - 2 * moveAxis[1] < 0 || z - 2 * moveAxis[2] < 0) {
             continue;
         }
 
@@ -451,7 +460,8 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
         glmath.mat4.copy(point_model, global_point_model);
         glmath.mat4.translate(point_model, point_model, [z, y, x]);
         glmath.mat4.scale(point_model, point_model, [1, 1, 1]);
-        glmath.mat4.scale(point_model, point_model, [C.pointsize / C.combinedZoom, C.pointsize / C.combinedZoom, C.pointsize / C.combinedZoom]);
+        let scaledSize = C.getPointSize() / C.getCombinedZoom();
+        glmath.mat4.scale(point_model, point_model, [scaledSize, scaledSize, scaledSize]);
 
 
         if (pickingPass == true) {
@@ -520,7 +530,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     gl.uniform3f(cameraRightWorldSpaceUniformID, view[0][0], view[1][0], view[2][0]);
     gl.uniform3f(cameraUpWorldSpaceUniformID, view[0][1], view[1][1], view[2][1]);
     gl.uniform3f(colourUniformID[1], altColour[0], altColour[1], altColour[2]);
-    gl.uniform1i(viewmodUniformID, 1 / C.viewsize);
+    gl.uniform1i(viewmodUniformID, 1 / C.getViewSize());
 
     // _____________
     // +++ Render +++
@@ -542,7 +552,8 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         let AxisNameModel = glmath.mat4.create();
         glmath.mat4.copy(AxisNameModel, LetterModel);
 
-        if ((C.current_x_rotation < -1.34 && C.current_x_rotation > -4.20) || (C.current_x_rotation > 2 && C.current_x_rotation < 5)) {
+        let currRotation = C.getCurrentRotation() // x:0 y:1
+        if ((currRotation[0] < -1.34 && currRotation[0] > -4.20) || (currRotation[0] > 2 && currRotation[0] < 5)) {
             glmath.mat4.rotateY(AxisNameModel, AxisNameModel, 180 * (Math.PI / 180));
             glmath.mat4.translate(AxisNameModel, AxisNameModel, [0, -10, 0]);
         }
@@ -556,7 +567,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         }
     }
 
-    gl.uniform1i(viewmodUniformID, 1 / C.viewsize);
+    gl.uniform1i(viewmodUniformID, 1 / C.getViewSize());
     let singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [0, 0.6, 0]);
@@ -596,7 +607,8 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         let AxisNameModel = glmath.mat4.create();
         glmath.mat4.copy(AxisNameModel, LetterModel);
 
-        if ((C.current_x_rotation < -1.34 && C.current_x_rotation > -4.20) || (C.current_x_rotation > 2 && C.current_x_rotation < 5)) {
+        let currRotation = C.getCurrentRotation() // x:0 y:1
+        if ((currRotation[0] < -1.34 && currRotation[0] > -4.20) || (currRotation[0] > 2 && currRotation[0] < 5)) {
             glmath.mat4.rotateY(AxisNameModel, AxisNameModel, 180 * (Math.PI / 180));
             glmath.mat4.translate(AxisNameModel, AxisNameModel, [0, -10, 0]);
         }
@@ -610,7 +622,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         }
     }
 
-    gl.uniform1i(viewmodUniformID, 1 / C.viewsize);
+    gl.uniform1i(viewmodUniformID, 1 / C.getViewSize());
     singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [1, 0.6, 1]);
@@ -646,7 +658,8 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         let AxisNameModel = glmath.mat4.create();
         glmath.mat4.copy(AxisNameModel, LetterModel);
 
-        if ((C.current_x_rotation < -1 && C.current_x_rotation > -4.20) || (C.current_x_rotation > 2 && C.current_x_rotation < 5)) {
+        let currRotation = C.getCurrentRotation(); // x:0 y:1
+        if ((currRotation[0] < -1 && currRotation[0] > -4.20) || (currRotation[0] > 2 && currRotation[0] < 5)) {
             glmath.mat4.rotateY(AxisNameModel, AxisNameModel, 180 * (Math.PI / 180));
             glmath.mat4.translate(AxisNameModel, AxisNameModel, [0, -2, 0]);
         }
@@ -660,7 +673,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         }
     }
 
-    gl.uniform1i(viewmodUniformID, 1 / C.viewsize);
+    gl.uniform1i(viewmodUniformID, 1 / C.getViewSize());
     singleAxisModel = glmath.mat4.copy((glmath.mat4.create()), global_model);
     glmath.mat4.scale(singleAxisModel, singleAxisModel, [0.02, 0.02, 1]);
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [2, 0, 0]);
@@ -901,7 +914,7 @@ function eraseRotation(matrix: glmath.mat4) {
     Based on https://stats.stackexchange.com/questions/1112/how-to-represent-an-unbounded-variable-as-number-between-0-and-1
 */
 function SquashNumber(value) {
-    let mod = C.colourMod;
+    let mod = C.getColourMod();
     return (1 / (1 + Math.pow(Math.E, -(mod * value)))) * 2 - 1;
 }
 
