@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <link rel="stylesheet" href="/index.3a01df49.css">
     <title>Web Plotter</title>
@@ -14,59 +15,59 @@
                 <button id="dataTab" class="secondary outline tab"><i class="bi bi-table"></i> Data Managment</button>
                 <button id="helpTab" class="secondary outline tab"><i class="bi bi-info-circle"></i> Help</button>
             </div>
-        <article style="align-self: center">
-            <div id="view">
-                <canvas id="glCanvas" style="width: 100%; height: 60%" width="1600" height="800"></canvas>
-                <div id="PlotScreen"></div>
-            </div>
-            <div id="data" hidden="">
-                <article>
-                    <div class="grid">
-                        <div>
-                            <h4>X Dimension *</h4>
-                            <select name="x" id="x" required="">
-                                <option>None</option>
-                            </select>
-                        </div>
-                        <div>
-                            <h4>Y Dimension *</h4>
-                            <select name="y" id="y" required="">
-                                <option>None</option>
-                            </select>
-                        </div>
-                        <div>
-                            <h4>Z Dimension *</h4>
-                            <select name="z" id="z" required="">
-                                <option>None</option>
-                            </select>
-                        </div>
-                        <div>
-                            <h4>C Dimension</h4>
-                            <select name="c" id="c">
-                                <option>None</option>
-                            </select>
-                        </div>
-                        <div>
-                            <h4>A Dimension</h4>
-                            <select name="a" id="a">
-                                <option>None</option>
-                            </select>
-                        </div>
-                        <div>
-                            <h4>Render</h4>
-                            <button id="render"><i class="bi bi-bounding-box"></i></button>
-                        </div>
-                    </div>
-                </article>
-                <div id="table">
-                    <h4>This section shows raw uploaded data</h4>
-                    <h5>See Sidebar on the right to upload a file</h5>
+            <article style="align-self: center">
+                <div id="view">
+                    <canvas id="glCanvas" style="width: 100%; height: 60%" width="1600" height="800"></canvas>
+                    <div id="PlotScreen"></div>
                 </div>
-            </div>
-            <div id="help" hidden="">
-                <td>help</td>
-            </div>
-        </article>
+                <div id="data" hidden="">
+                    <article>
+                        <div class="grid">
+                            <div>
+                                <h4>X Dimension *</h4>
+                                <select name="x" id="x" required="">
+                                    <option>None</option>
+                                </select>
+                            </div>
+                            <div>
+                                <h4>Y Dimension *</h4>
+                                <select name="y" id="y" required="">
+                                    <option>None</option>
+                                </select>
+                            </div>
+                            <div>
+                                <h4>Z Dimension *</h4>
+                                <select name="z" id="z" required="">
+                                    <option>None</option>
+                                </select>
+                            </div>
+                            <div>
+                                <h4>C Dimension</h4>
+                                <select name="c" id="c">
+                                    <option>None</option>
+                                </select>
+                            </div>
+                            <div>
+                                <h4>A Dimension</h4>
+                                <select name="a" id="a">
+                                    <option>None</option>
+                                </select>
+                            </div>
+                            <div>
+                                <h4>Render</h4>
+                                <button id="render"><i class="bi bi-bounding-box"></i></button>
+                            </div>
+                        </div>
+                    </article>
+                    <div id="table">
+                        <h4>This section shows raw uploaded data</h4>
+                        <h5>See Sidebar on the right to upload a file</h5>
+                    </div>
+                </div>
+                <div id="help" hidden="">
+                    <td>help</td>
+                </div>
+            </article>
             <article>
                 <h4>Multidimensional Web Plotter</h4>
                 <p>An Honours Project by Sameer Al Harbi</p>
@@ -86,7 +87,8 @@
             </article>
             <article>
                 <h4>4th Dimension (colour) Control</h4>
-                <p>Control how colour is used to represent your data, see data managment tab above to set colour dimension</p>
+                <p>Control how colour is used to represent your data, see data managment tab above to set colour
+                    dimension</p>
                 <img src="/gradient.ac6c606b.png">
                 <p></p>
                 <div class="grid">
@@ -107,10 +109,15 @@
             <article>
                 <h4>Rotation Controls</h4>
                 <p>Mouse Dragging across the chart is also supported</p>
-                <a href="#" id="left" role="button">Left</a>
-                <a href="#" id="up" role="button">Up</a>
-                <a href="#" id="down" role="button">Down</a>
-                <a href="#" id="right" role="button">Right</a>
+                <div class="grid">
+                    <a href="#" id="left" role="button">Left</a>
+                    <a href="#" id="up" role="button">Up</a>
+                    <a href="#" id="right" role="button">Right</a>
+                </div>
+                <div class="grid">
+                    <a href="#" id="down" role="button">Down</a>
+                </div>
+
                 <a href="#" id="resetRotation" role="button" class="outline">Reset</a>
             </article>
             <article>
@@ -129,7 +136,9 @@
                 <article>
                     <h6>Data Zoom</h6>
                     <input type="range" id="zoom" min="1" max="10">
-                    <div class="grid"><p>Zoom Multiplier</p><input type="number" id="zoomMultiplier" min="0"></div>
+                    <div class="grid">
+                        <p>Zoom Multiplier</p><input type="number" id="zoomMultiplier" min="0">
+                    </div>
                 </article>
                 <h6>View Zoom</h6>
                 <input type="range" id="viewsize" min="1" max="10">
