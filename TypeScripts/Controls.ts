@@ -24,6 +24,8 @@ export class Controls {
     cSelect; // Drop down for C column
     aSelect; // Drop down for A column
 
+    colourMod;
+
     canvas;
 
     // User controlled rotation
@@ -111,12 +113,16 @@ export class Controls {
         this.table = "";
         this.tableElement = <HTMLDivElement>document.getElementById("table");
 
+        this.colourMod = 0.1;
+
         // Event Listeners for user controls
         (<HTMLElement>document.getElementById("input")).addEventListener("input", this.fileInput.bind(this));
         (<HTMLElement>document.getElementById("zoom")).addEventListener("input", this.Zoom.bind(this));
         (<HTMLElement>document.getElementById("viewsize")).addEventListener("input", this.ViewSize.bind(this));
         (<HTMLElement>document.getElementById("pointsize")).addEventListener("input", this.PointSize.bind(this));
         (<HTMLElement>document.getElementById("zoomMultiplier")).addEventListener("input", this.setZoomMultiplier.bind(this));
+
+        (<HTMLElement>document.getElementById("colourMod")).addEventListener("input", this.setColourMod.bind(this));
 
         (<HTMLElement>document.getElementById("glCanvas")).addEventListener("mousemove", this.MouseMove.bind(this));
         (<HTMLElement>document.getElementById("glCanvas")).addEventListener("mousemove", this.MouseClick.bind(this));
@@ -159,6 +165,28 @@ export class Controls {
             this.mouse_x = 0;
             this.x_rotation = 0;
         }
+    }
+
+    private setColourMod() {
+        // @ts-ignore 1
+        let change = <Number>document.getElementById("colourMod").value;
+        if (change < 0) {
+            this.colourMod = 0;
+        } else {
+            this.colourMod = change;
+        }
+
+        this.displayColourBounds();
+    }
+
+    private displayColourBounds() {
+        let max = document.getElementById("maxSquash");
+        let min = document.getElementById("minSquash");
+
+        // @ts-ignore 1
+        max.innerHTML = Math.round(1 / this.colourMod * 6) + " Aprox.";
+        // @ts-ignore 1
+        min.innerHTML = Math.round(1 / this.colourMod * -6) + " Aprox. ";
     }
 
     private changeTabView() {
@@ -289,6 +317,7 @@ export class Controls {
 
     private fileInput() {
         InstantReadCSV();
+        this.displayColourBounds();
         this.changeTabView();
         this.updateNeedDataTab = true;
         this.updateNames = true;
@@ -383,5 +412,43 @@ export class Controls {
         }
 
         this.updateAxisFunc();
+    }
+
+    /*
+        *
+        * GETTERS AND SETTERS
+        *
+    */
+
+    public getMoveAxis() {
+        return [this.x_move, this.y_move, this.z_move];
+    }
+
+    public getIndexValues() {
+        return [this.xIndex, this.yIndex, this.zIndex, this.cIndex, this.aIndex];
+    }
+
+    public getMouseClicks() {
+        return [this.mouseClickX, this.mouseClickY];
+    }
+
+    public getCombinedZoom() {
+        return this.combinedZoom;
+    }
+
+    public getCurrentRotation() {
+        return [this.current_x_rotation, this.current_y_rotation];
+    }
+
+    public getViewSize() {
+        return this.viewsize;
+    }
+
+    public getPointSize() {
+        return this.pointsize;
+    }
+
+    public getColourMod() {
+        return this.colourMod;
     }
 }
