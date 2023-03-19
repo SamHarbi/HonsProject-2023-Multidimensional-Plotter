@@ -117,15 +117,18 @@ export class Controls {
 
         // Event Listeners for user controls
         (<HTMLElement>document.getElementById("input")).addEventListener("input", this.fileInput.bind(this));
+
         (<HTMLElement>document.getElementById("zoom")).addEventListener("input", this.Zoom.bind(this));
-        (<HTMLElement>document.getElementById("viewsize")).addEventListener("input", this.ViewSize.bind(this));
-        (<HTMLElement>document.getElementById("pointsize")).addEventListener("input", this.PointSize.bind(this));
+        (<HTMLElement>document.getElementById("zoom")).addEventListener("input", this.Zoom.bind(this));
         (<HTMLElement>document.getElementById("zoomMultiplier")).addEventListener("input", this.setZoomMultiplier.bind(this));
 
+        (<HTMLElement>document.getElementById("viewsize")).addEventListener("input", this.ViewSize.bind(this));
+        (<HTMLElement>document.getElementById("pointsize")).addEventListener("input", this.PointSize.bind(this));
         (<HTMLElement>document.getElementById("colourMod")).addEventListener("input", this.setColourMod.bind(this));
 
         (<HTMLElement>document.getElementById("glCanvas")).addEventListener("mousemove", this.MouseMove.bind(this));
         (<HTMLElement>document.getElementById("glCanvas")).addEventListener("mousemove", this.MouseClick.bind(this));
+        (<HTMLElement>document.getElementById("glCanvas")).addEventListener("wheel", this.MouseWheel.bind(this));
 
         (<HTMLElement>document.getElementById("up")).addEventListener("click", this.Rotation.bind(this));
         (<HTMLElement>document.getElementById("down")).addEventListener("click", this.Rotation.bind(this));
@@ -365,6 +368,21 @@ export class Controls {
         this.mouseClickX = event.clientX;
         this.mouseClickY = event.clientY;
         //this.getPixelsFunc(this.mouseClickX, this.mouseClickY);
+    }
+
+    private MouseWheel(event) {
+        if (event.deltaY > 0) {
+            this.viewsize += 0.1;
+        } else if (event.deltaY < 0) {
+            this.viewsize -= 0.1;
+        }
+
+        if (this.viewsize > 1) {
+            this.viewsize = 1;
+        } else if (this.viewsize <= 0.1) {
+            this.viewsize = 0.1;
+        }
+
     }
 
     private MouseMove(event) {
