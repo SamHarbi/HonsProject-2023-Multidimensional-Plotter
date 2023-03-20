@@ -34,6 +34,7 @@ export class Controls {
     public x_move;
     public y_move;
     public z_move;
+    align;
 
     // At which index position in DATASET is the x, y, z, c and a value
     public xIndex;
@@ -115,6 +116,8 @@ export class Controls {
 
         this.colourMod = 0.1;
 
+        this.align = 0;
+
         // Event Listeners for user controls
         (<HTMLElement>document.getElementById("input")).addEventListener("input", this.fileInput.bind(this));
 
@@ -135,6 +138,7 @@ export class Controls {
         (<HTMLElement>document.getElementById("right")).addEventListener("click", this.Rotation.bind(this));
         (<HTMLElement>document.getElementById("left")).addEventListener("click", this.Rotation.bind(this));
         (<HTMLElement>document.getElementById("resetRotation")).addEventListener("click", this.resetRotation.bind(this));
+        (<HTMLElement>document.getElementById("align")).addEventListener("click", this.Align.bind(this));
 
         (<HTMLElement>document.getElementById("back-Move")).addEventListener("click", this.MoveSlice.bind(this));
         (<HTMLElement>document.getElementById("forward-Move")).addEventListener("click", this.MoveSlice.bind(this));
@@ -311,11 +315,39 @@ export class Controls {
         this.helpTab.hidden = false;
     }
 
-    private resetRotation(event) {
+    private resetRotation() {
         this.x_rotation = 0;
         this.y_rotation = 0;
         this.mouse_x = 0;
         this.mouse_y = 0;
+    }
+
+    /*
+        Move graph to preset positions 
+    */
+    private Align() {
+        if (this.align == 0) {
+            this.align = 1;
+            this.resetRotation();
+            this.x_rotation = 25 * (Math.PI / 180);
+            this.y_rotation = 0 * (Math.PI / 180);
+        } else if (this.align == 1) {
+            this.align = 2;
+            this.resetRotation();
+            this.x_rotation = 115 * (Math.PI / 180);
+            this.y_rotation = 0 * (Math.PI / 180);
+        } else if (this.align == 2) {
+            this.align = 3;
+            this.resetRotation();
+            this.x_rotation = 205 * (Math.PI / 180);
+            this.y_rotation = 0 * (Math.PI / 180);
+        }
+        else if (this.align == 3) {
+            this.align = 0;
+            this.resetRotation();
+            this.x_rotation = 295 * (Math.PI / 180);
+            this.y_rotation = 0 * (Math.PI / 180);
+        }
     }
 
     private fileInput() {

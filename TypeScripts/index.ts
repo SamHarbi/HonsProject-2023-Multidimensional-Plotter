@@ -335,6 +335,7 @@ function Render(timestamp) {
     let GLOBAL_MODEL = glmath.mat4.create();
     glmath.mat4.scale(GLOBAL_MODEL, GLOBAL_MODEL, [C.getViewSize(), C.getViewSize(), C.getViewSize()]);
     glmath.mat4.translate(GLOBAL_MODEL, GLOBAL_MODEL, [0.2, 0.2, 1]);
+    let rotation = C.getCurrentRotation(); // x:0 y:1
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 15 * (Math.PI / 180), [1, 0, 0]);
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * (Math.PI / 180), [0, -1, 0]);
 
