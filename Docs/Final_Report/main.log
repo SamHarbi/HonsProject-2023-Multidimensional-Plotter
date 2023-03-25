@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  25 MAR 2023 20:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  25 MAR 2023 21:35
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -857,16 +857,16 @@ Overfull \hbox (5.68741pt too wide) in paragraph at lines 55--56
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
 (Font)              scaled to size 7.0pt on input line 69.
 [2.2] [3.3]) (./author-files/sections/specification.tex [4.4]
-<author-files/figures/SingleStoryPath2.png, id=137, 617.30624pt x 222.8325pt>
+<author-files/figures/SingleStoryPath2.png, id=141, 617.30624pt x 222.8325pt>
 File: author-files/figures/SingleStoryPath2.png Graphic file (type png)
 <use author-files/figures/SingleStoryPath2.png>
-Package pdftex.def Info: author-files/figures/SingleStoryPath2.png  used on input line 43.
+Package pdftex.def Info: author-files/figures/SingleStoryPath2.png  used on input line 53.
 (pdftex.def)             Requested size: 241.14749pt x 87.04712pt.
 
 
-Class acmart Warning: A possible image without description on input line 46.
+Class acmart Warning: A possible image without description on input line 56.
 
-) (./author-files/sections/progress.tex) (./author-files/sections/reflections.tex) (./author-files/sections/conclusion.tex [5.5 <./author-files/figures/SingleStoryPath2.png>])) (./main.bbl
+) (./author-files/sections/progress.tex) (./author-files/sections/reflections.tex [5.5 <./author-files/figures/SingleStoryPath2.png>]) (./author-files/sections/conclusion.tex)) (./main.bbl
 
 Package natbib Warning: Empty `thebibliography' environment on input line 40.
 
@@ -884,21 +884,21 @@ File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
 File: se-utf8.def 2019/11/29 v1.12 stringenc: UTF-8
 ) [6.6] (./main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: CDCED3F751C0DDE603D57FEB151A7C3A;2639.
+(rerunfilecheck)             Checksum: F9752812F638E43248E4DF9410AFAE88;2846.
  ) 
 Here is how much of TeX's memory you used:
- 22009 strings out of 476025
- 360946 string characters out of 5792019
+ 22013 strings out of 476025
+ 361014 string characters out of 5792019
  1877382 words of memory out of 5000000
- 41517 multiletter control sequences out of 15000+600000
+ 41518 multiletter control sequences out of 15000+600000
  635718 words of font info for 259 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
  90i,12n,131p,1087b,673s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/newtx/txsys.pfb>
-Output written on main.pdf (6 pages, 444036 bytes).
+Output written on main.pdf (6 pages, 446233 bytes).
 PDF statistics:
- 199 PDF objects out of 1000 (max. 8388607)
- 170 compressed objects within 2 object streams
- 58 named destinations out of 1000 (max. 500000)
- 59566 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 206 PDF objects out of 1000 (max. 8388607)
+ 177 compressed objects within 2 object streams
+ 61 named destinations out of 1000 (max. 500000)
+ 59574 words of extra memory for PDF output out of 61914 (max. 10000000)
 
