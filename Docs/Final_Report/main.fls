@@ -1,8 +1,8 @@
-PWD c:/Users/Sam/Desktop/Latex
+PWD c:/Users/Sam/Desktop/Main/HonsProject-2023-Multidimensional-Plotter/Docs/Final_Report
 INPUT d:/TEX/texlive/2023/texmf.cnf
 INPUT d:/TEX/texlive/2023/texmf-dist/web2c/texmf.cnf
 INPUT d:/TEX/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT c:/Users/Sam/Desktop/Latex/main.tex
+INPUT c:/Users/Sam/Desktop/Main/HonsProject-2023-Multidimensional-Plotter/Docs/Final_Report/main.tex
 OUTPUT main.log
 INPUT ./acmart.cls
 INPUT ./acmart.cls
@@ -1250,6 +1250,11 @@ INPUT author-files/sections/specification.tex
 INPUT ./author-files/sections/specification.tex
 INPUT ./author-files/sections/specification.tex
 INPUT author-files/sections/specification.tex
+INPUT ./author-files/figures/SingleStoryPath2.png
+INPUT ./author-files/figures/SingleStoryPath2.png
+INPUT author-files/figures/SingleStoryPath2.png
+INPUT ./author-files/figures/SingleStoryPath2.png
+INPUT ./author-files/figures/SingleStoryPath2.png
 INPUT ./author-files/sections/progress.tex
 INPUT ./author-files/sections/progress.tex
 INPUT ./author-files/sections/progress.tex
