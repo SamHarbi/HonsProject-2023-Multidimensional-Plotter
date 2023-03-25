@@ -1,0 +1,30 @@
+INFO:  latexindent.exe version 3.20.4, 2023-03-15, a script to indent .tex files
+       latexindent.exe lives here: D:/TEX/texlive/2023/bin/windows/
+       Sat Mar 25 17:31:33 2023
+       Filename: c:/Users/Sam/Desktop/Latex/author-files/sections/__latexindent_temp_specification.tex
+INFO:  Processing switches:
+       -y|--yaml: YAML settings specified via command line
+       -c|--cruft: cruft directory
+INFO:  Directory for backup files and c:/Users/Sam/Desktop/Latex//indent.log:
+       c:/Users/Sam/Desktop/Latex/
+INFO:  YAML settings read: defaultSettings.yaml
+       Reading defaultSettings.yaml from D:/TEX/texlive/2023/bin/windows/defaultSettings.yaml
+       Reading defaultSettings.yaml (2nd attempt) from D:/TEX/texlive/2023/bin/windows/../../texmf-dist/scripts/latexindent/defaultSettings.yaml
+       and then, if necessary, D:/TEX/texlive/2023/bin/windows/LatexIndent/defaultSettings.yaml
+INFO:  YAML reading settings
+       Home directory is C:\Users\Sam
+       latexindent.pl didn't find indentconfig.yaml or .indentconfig.yaml
+       see all possible locations: https://latexindentpl.readthedocs.io/en/latest/sec-appendices.html#indentconfig-options)
+INFO:  YAML settings read: -y switch
+       YAML setting: defaultIndent:'    '
+       single-quoted string found in -y switch: '    ', substitute to     
+       Updating mainSettings with defaultIndent:     
+INFO:  Phase 1: searching for objects
+INFO:  Phase 2: finding surrounding indentation
+INFO:  Phase 3: indenting objects
+INFO:  Phase 4: final indentation check
+INFO:  Output routine:
+       Not outputting to file; see -w and -o switches for more options.
+       --------------
+INFO:  Please direct all communication/issues to:
+        https://github.com/cmhughes/latexindent.pl
