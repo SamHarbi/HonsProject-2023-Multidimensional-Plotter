@@ -1,0 +1,37 @@
+\section{Design}
+An initial design phase was undergone by the student before development started. Although it should be noted that the work done there did not constitute the final design as a waterfall methodology would require but was more akin to setting the scene for the start of development. The majority of design on how something should be coded, look and such was done on a story by story basis during sprints.
+The initial design phase itself consisted of the following key parts:
+
+\subsection{Technology Stack}
+The student decided to settle on a technology stack during this phase. Which although would still be open to changes should they be needed, nevertheless set what the stack should be otherwise. This decision was done by comparing valid options built up from those identified during the research phase mentioned here X.
+The stack then, which was initially chosen and ended up remaining unchanged throughout the project is as follows
+
+\paragraph{Client-Side run application}
+This project was not expected to require any server resources such as central database access. As such, client-side only was chosen to allow the student to focus on a single code base.
+
+\paragraph{Browser Run Enviroment}
+Chosen for its greater accessibility over downloaded options and extensive support among devices without the need for any extra environment download by the user. Only a browser is needed which is usually preinstalled on most internet capable Operating Systems.
+
+\paragraph{Rendering Solution}
+WebGL, no other rendering API is as widely supported by major browsers that is capable of 3D graphics. WebGL1 is further picked as the target version to further increase compatibility.
+
+\paragraph{Optional Abstractions for Rendering Solutions}
+None, The student wanted to gain experience in how underlying low-level APIs worked, and did not want to sacrifice performance and flexibility of what was possible to create.
+
+\paragraph{Languages}
+With the browser set as the environment, the choice was limited to JavaScript, TypeScript or another language through Web Assembly. To ensure the best support among existent web tooling though, TypeScript was chosen which has the wide support of JavaScript while providing useful language features not available in JavaScript. One of those features, types, were found to be particularly important as OpenGL and by extension WebGL is very heavily dependant on correct types being used at all times, which would have been very hard to do with only JavaScript.
+
+\subsection{Tooling}
+After the Technology Stack was identified, the next step was to identify the development process for that stack. The following were selected for the project:
+
+\paragraph{IDE or Code Editor}
+Visual Studio Code (VScode) was selected for all writing tasks (Both for code and written information). This decision came down to what the student was comfortable with using through previous experience but also had a practical factor for it's selection. With that mainly being a great selection of packages to help with development and great integration with GitHub.
+
+\paragraph{Development Server}
+Node.js was used as a development and build server due to it's straightforward ability to download and manage npm packages while also running development tools such as parcel, which in addition to it's usage below, also acted as a development server with hot reloading.
+
+\paragraph{Compiler and Build Tool}
+As a compiler, Parcel was used to compile and optimize TypeScript into runnable by the browser JavaScript. As a build tool, parcel build all npm packages and the usage of some node.js only features into a handful of static client-side only files that could be hosted. This was crucial and allowed some code designs to be implmented that otherwise would not have been possible (See somewhere).
+
+\paragraph{Hosting Provider}
+Digital Ocean's App Platform was used to host and build the application from the production branch of the code repository. It was chosen due to the student having previous experience hosting resources on the platform, simple setup with minimal networking on the students part, support for building on a node.js environment (The same as the development environment) and the availability of free credits to do all this. The site hosted here allowed user testers to access the application from anywhere at their own time.

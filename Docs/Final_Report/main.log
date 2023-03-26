@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  26 MAR 2023 14:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  26 MAR 2023 21:06
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -866,39 +866,40 @@ Package pdftex.def Info: author-files/figures/SingleStoryPath2.png  used on inpu
 
 Class acmart Warning: A possible image without description on input line 59.
 
-) (./author-files/sections/progress.tex [5.5 <./author-files/figures/SingleStoryPath2.png>]) (./author-files/sections/reflections.tex) (./author-files/sections/conclusion.tex)) (./main.bbl
+) (./author-files/sections/design.tex [5.5 <./author-files/figures/SingleStoryPath2.png>]
+Overfull \hbox (2.21016pt too wide) in paragraph at lines 34--35
+\T1/LinuxLibertineT-TLF/m/n/9 (-20) pile and op-ti-mize Type-Script into runnable by the browser JavaScript.
+ []
+
+) (./author-files/sections/reflections.tex) (./author-files/sections/conclusion.tex)) (./main.bbl
 
 Package natbib Warning: Empty `thebibliography' environment on input line 40.
 
-) (./author-files/appendices.tex)
+) (./author-files/appendices.tex [6.6])
 
 Class acmart Warning: Some images may lack descriptions.
-
-
-Package balance Warning: You have called \balance in second column
-(balance)                Columns might not be balanced.
 
 (d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-pdfdoc.def
 File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
 ) (d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-utf8.def
 File: se-utf8.def 2019/11/29 v1.12 stringenc: UTF-8
-) [6.6] (./main.aux)
+) [7.7] (./main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: F9752812F638E43248E4DF9410AFAE88;2846.
+(rerunfilecheck)             Checksum: A065F657202D3896CAE15A875ED7FCF0;2771.
  ) 
 Here is how much of TeX's memory you used:
- 22014 strings out of 476025
- 361033 string characters out of 5792019
+ 22030 strings out of 476025
+ 361282 string characters out of 5792019
  1877382 words of memory out of 5000000
  41518 multiletter control sequences out of 15000+600000
- 635718 words of font info for 259 fonts, out of 8000000 for 9000
+ 636460 words of font info for 263 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
- 90i,12n,131p,1087b,673s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,12n,131p,1087b,681s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/newtx/txsys.pfb>
-Output written on main.pdf (6 pages, 447120 bytes).
+Output written on main.pdf (7 pages, 450639 bytes).
 PDF statistics:
- 208 PDF objects out of 1000 (max. 8388607)
- 179 compressed objects within 2 object streams
- 62 named destinations out of 1000 (max. 500000)
+ 224 PDF objects out of 1000 (max. 8388607)
+ 194 compressed objects within 2 object streams
+ 72 named destinations out of 1000 (max. 500000)
  59574 words of extra memory for PDF output out of 61914 (max. 10000000)
 
