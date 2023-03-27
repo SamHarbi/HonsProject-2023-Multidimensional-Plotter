@@ -149,7 +149,7 @@ async function main() {
     */
     AxisLabels = [];
     AxisValues = [[]];
-    AxisNames = [[]];
+    AxisNames = [[], [], []];
     AxisMap = [];
 
     selectedPointID = 0;
@@ -232,11 +232,15 @@ async function main() {
 function setAxisNames() {
     // !! NOTE !! This limits to three columns names only 
     let names = Object.keys(DATASET[0]); //Array of names 
+    let namLen = names.length;
+    if (namLen > 3) {
+        namLen = 3;
+    }
 
     let indexVals = C.getIndexValues(); // 0:x 1:y 2:z 3:c 4:a
     let axisIndex = [indexVals[2], indexVals[1], indexVals[0], indexVals[3], indexVals[4]];
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < namLen; i++) {
         AxisNames[i] = [];
         let charArray = names[axisIndex[i]].split('');
 
@@ -603,7 +607,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     gl.uniform3f(colourUniformID[1], altColour[0], altColour[1], altColour[2]);
     AxisLabels[1].render();
 
-    if (AxisNames[0][0] != undefined) {
+    if (AxisNames[1][0] != undefined) {
 
         let AxisNameModel = glmath.mat4.create();
         glmath.mat4.copy(AxisNameModel, LetterModel);
@@ -654,7 +658,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     gl.uniform3f(colourUniformID[1], altColour[0], altColour[1], altColour[2]);
     AxisLabels[2].render();
 
-    if (AxisNames[0][0] != undefined) {
+    if (AxisNames[2][0] != undefined) {
 
         let AxisNameModel = glmath.mat4.create();
         glmath.mat4.copy(AxisNameModel, LetterModel);
