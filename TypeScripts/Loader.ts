@@ -141,7 +141,7 @@ export function InstantReadCSV() {
                 DATASET = csv.toObjects(reader.result); //Save to Object
                 console.log(DATASET);
             } catch (error) {
-                alert("Wrong file format, Please Uplaod a .csv file");
+                alert("Wrong file format, Please Upload a .csv file");
             }
         });
         reader.readAsText(file);

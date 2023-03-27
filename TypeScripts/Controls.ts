@@ -161,6 +161,12 @@ export class Controls {
         if (DATASET[0] != undefined && this.updateNames == true) {
             this.updateAxisNamesFunc(); // Init Axis Names
             this.updateNames = false;
+            console.log(this.cSelect.value);
+            if (Object.keys(DATASET[0]).length > 3 || this.cSelect.value != "None") {
+                this.ShowColourControls(true);
+            } else {
+                this.ShowColourControls(false);
+            }
         }
 
         //User controlled rotation applied
@@ -219,6 +225,18 @@ export class Controls {
 
     }
 
+    private ShowColourControls(x: Boolean) {
+        if (x == true) {
+            // @ts-ignore 1
+            document.getElementById("4dimension").hidden = false;
+        } else {
+            // @ts-ignore 1
+            document.getElementById("4dimension").hidden = true;
+        }
+
+
+    }
+
     private selectDimensions() {
         if (DATASET[0] != undefined) {
             this.xIndex = this.xSelect.value;
@@ -227,8 +245,6 @@ export class Controls {
             this.cIndex = this.cSelect.value;
             this.aIndex = this.aSelect.value;
             this.updateNames = true;
-            // @ts-ignore 1
-            document.getElementById("4dimension").hidden = false;
             this.changeTabView();
         }
     }
@@ -266,11 +282,11 @@ export class Controls {
 
     private updateSelectors() {
 
-        this.xSelect.innerHTML = '<option selected>None</option>';
-        this.ySelect.innerHTML = '<option selected>None</option>';
-        this.zSelect.innerHTML = '<option selected>None</option>';
-        this.cSelect.innerHTML = '<option selected>None</option>';
-        this.aSelect.innerHTML = '<option selected>None</option>';
+        this.xSelect.innerHTML = '<option selected value="None">None</option>';
+        this.ySelect.innerHTML = '<option selected value="None">None</option>';
+        this.zSelect.innerHTML = '<option selected value="None">None</option>';
+        this.cSelect.innerHTML = '<option selected value="None">None</option>';
+        this.aSelect.innerHTML = '<option selected value="None">None</option>';
 
         for (let i = 0; i < this.dimensionOptions.length; i++) {
 
