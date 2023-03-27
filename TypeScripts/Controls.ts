@@ -153,7 +153,7 @@ export class Controls {
 
         (<HTMLElement>document.getElementById("render")).addEventListener("click", this.selectDimensions.bind(this));
 
-
+        this.setColourMod();
 
     }
 
@@ -227,6 +227,8 @@ export class Controls {
             this.cIndex = this.cSelect.value;
             this.aIndex = this.aSelect.value;
             this.updateNames = true;
+            // @ts-ignore 1
+            document.getElementById("4dimension").hidden = false;
             this.changeTabView();
         }
     }
@@ -264,11 +266,11 @@ export class Controls {
 
     private updateSelectors() {
 
-        this.xSelect.innerHTML = '';
-        this.ySelect.innerHTML = '';
-        this.zSelect.innerHTML = '';
-        this.cSelect.innerHTML = '';
-        this.aSelect.innerHTML = '';
+        this.xSelect.innerHTML = '<option selected>None</option>';
+        this.ySelect.innerHTML = '<option selected>None</option>';
+        this.zSelect.innerHTML = '<option selected>None</option>';
+        this.cSelect.innerHTML = '<option selected>None</option>';
+        this.aSelect.innerHTML = '<option selected>None</option>';
 
         for (let i = 0; i < this.dimensionOptions.length; i++) {
 
@@ -300,12 +302,6 @@ export class Controls {
                 this.cSelect.innerHTML = this.cSelect.innerHTML + "<option value='" + i + "'>" + this.dimensionOptions[i] + "</option>";
             }
 
-            if (i == this.aIndex) {
-                this.aSelect.innerHTML = this.aSelect.innerHTML + "<option value='" + i + "' selected>" + this.dimensionOptions[i] + "</option>";
-            }
-            else {
-                this.aSelect.innerHTML = this.aSelect.innerHTML + "<option value='" + i + "'>" + this.dimensionOptions[i] + "</option>";
-            }
         }
     }
 

@@ -44,10 +44,10 @@
                             <div>
                                 <h4>C Dimension</h4>
                                 <select name="c" id="c">
-                                    <option>None</option>
+                                    <option selected>None</option>
                                 </select>
                             </div>
-                            <div>
+                            <div hidden>
                                 <h4>A Dimension</h4>
                                 <select name="a" id="a">
                                     <option>None</option>
@@ -79,15 +79,9 @@
                 <p>Only .CSV files are supported</p>
                 <div><input type="file" id="input"></div>
             </article>
-            <article>
-                <h4>Data Point Settings</h4>
-                <p>These control the look of data points </p>
-                <h6>Data Point Size</h6>
-                <input type="range" id="pointsize" min="1" max="10">
-            </article>
-            <article>
-                <h4>4th Dimension (colour) Control</h4>
-                <p>Control how colour is used to represent your data, see data managment tab above to set colour
+            <article hidden="true" id="4dimension">
+                <h4>4th Dimension (Saturation) Control</h4>
+                <p>Control how Saturation is used to represent your data, see data management tab above to set Saturation
                     dimension</p>
                 <img src="images/gradient.png"></img>
                 <p></p>
@@ -103,8 +97,14 @@
                 </div>
                 <div class="grid">
                     <div>Modifier: </div>
-                    <div><input type="number" id="colourMod"></div>
+                    <div><input type="number" id="colourMod" step="0.1"></div>
                 </div>
+            </article>
+            <article>
+                <h4>Data Point Settings</h4>
+                <p>These control the look of data points </p>
+                <h6>Data Point Size</h6>
+                <input type="range" id="pointsize" min="1" max="10">
             </article>
             <article>
                 <h4>Rotation Controls</h4>
