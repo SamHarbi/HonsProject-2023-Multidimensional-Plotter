@@ -482,7 +482,7 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
         }
         else if (!Number.isNaN(a) && pickingPass == false) {
             gl.uniform1i(lightToggleUniformID[0], 0); // Don't Use Light
-            gl.uniform3f(colourUniformID[0], SquashNumber(a), SquashNumber(a), SquashNumber(a));
+            gl.uniform3f(colourUniformID[0], Math.abs(SquashNumber(a)), Math.abs(SquashNumber(a)), Math.abs(SquashNumber(a)));
         } else if (pickingPass == false) {
             gl.uniform1i(lightToggleUniformID[0], 1);
             gl.uniform3f(colourUniformID[0], 1.0, 1.0, 1.0);

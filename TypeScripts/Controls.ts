@@ -199,7 +199,8 @@ export class Controls {
         // @ts-ignore 1
         max.innerHTML = Math.round(1 / this.colourMod * 6) + " Aprox.";
         // @ts-ignore 1
-        min.innerHTML = Math.round(1 / this.colourMod * -6) + " Aprox. ";
+        //min.innerHTML = Math.round(1 / this.colourMod * -6) + " Aprox. ";
+        min.innerHTML = 0 + " Aprox. ";
     }
 
     private changeTabView() {
