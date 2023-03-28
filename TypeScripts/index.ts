@@ -920,7 +920,7 @@ function eraseRotation(matrix: glmath.mat4) {
 */
 function SquashNumber(value) {
     let mod = C.getColourMod();
-    return (1 / (1 + Math.pow(Math.E, -(mod * value)))) * 2 - 1;
+    return (1 / (1 + Math.pow(Math.E, -(mod * value)))) * 1;
 }
 
 /*
