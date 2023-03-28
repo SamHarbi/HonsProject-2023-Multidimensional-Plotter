@@ -98,3 +98,12 @@ a {
     z-index: 10;
     color: white;
 }
+
+#function {
+    background-color: aliceblue;
+    border: 15px;
+    border-color: aliceblue;
+    border-style: double;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}

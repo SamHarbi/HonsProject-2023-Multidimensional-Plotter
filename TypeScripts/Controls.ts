@@ -146,6 +146,7 @@ export class Controls {
         (<HTMLElement>document.getElementById("down-Move")).addEventListener("click", this.MoveSlice.bind(this));
         (<HTMLElement>document.getElementById("right-Move")).addEventListener("click", this.MoveSlice.bind(this));
         (<HTMLElement>document.getElementById("left-Move")).addEventListener("click", this.MoveSlice.bind(this));
+        (<HTMLElement>document.getElementById("resetMovement")).addEventListener("click", this.resetMovement.bind(this));
 
         (<HTMLElement>document.getElementById("viewTab")).addEventListener("click", this.changeTabView.bind(this));
         (<HTMLElement>document.getElementById("dataTab")).addEventListener("click", this.changeTabData.bind(this));
@@ -178,6 +179,13 @@ export class Controls {
             this.mouse_x = 0;
             this.x_rotation = 0;
         }
+    }
+
+    private resetMovement() {
+        this.x_move = 0;
+        this.y_move = 0;
+        this.z_move = 0;
+        this.updateAxisFunc();
     }
 
     private setColourMod() {
