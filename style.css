@@ -50,6 +50,11 @@ a {
     margin: 1%;
 }
 
+#help {
+    overflow-y: auto;
+    max-height: 60vh;
+}
+
 #data {
     overflow-y: auto;
     max-height: 60vh;
