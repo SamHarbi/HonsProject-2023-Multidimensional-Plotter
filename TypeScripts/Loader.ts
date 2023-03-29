@@ -139,8 +139,9 @@ export function InstantReadCSV() {
         reader.addEventListener("load", () => {
             try {
                 DATASET = csv.toObjects(reader.result); //Save to Object
+                console.log(DATASET);
             } catch (error) {
-                alert("Wrong file format, Please Uplaod a .csv file");
+                alert("Wrong file format, Please Upload a .csv file");
             }
         });
         reader.readAsText(file);
@@ -156,6 +157,10 @@ async function ReadFile(model: string) {
     }
     else if (model === "Triangle") {
         var raw = fs.readFileSync(path.join(__dirname, "../models/Triangle.obj"), "utf8");
+        return raw;
+    }
+    else if (model === "Point") {
+        var raw = fs.readFileSync(path.join(__dirname, "../models/Point.obj"), "utf8");
         return raw;
     }
     else if (model == "Axis") {

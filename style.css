@@ -50,6 +50,11 @@ a {
     margin: 1%;
 }
 
+#help {
+    overflow-y: auto;
+    max-height: 60vh;
+}
+
 #data {
     overflow-y: auto;
     max-height: 60vh;
@@ -92,4 +97,13 @@ a {
     top: 0;
     z-index: 10;
     color: white;
+}
+
+#function {
+    background-color: aliceblue;
+    border: 15px;
+    border-color: aliceblue;
+    border-style: double;
+    border-radius: 10px;
+    margin-bottom: 20px;
 }

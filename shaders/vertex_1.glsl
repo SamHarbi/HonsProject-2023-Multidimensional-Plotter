@@ -15,6 +15,7 @@ varying vec2 v_texcoord;
 void main() {
  
     gl_Position = projection * view * model * vec4(a_position, 1);
+    gl_PointSize = 15.0;
 
     position = gl_Position;
     
