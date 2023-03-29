@@ -34,6 +34,7 @@ export class Controls {
     public x_move;
     public y_move;
     public z_move;
+    align;
 
     // At which index position in DATASET is the x, y, z, c and a value
     public xIndex;
@@ -115,23 +116,29 @@ export class Controls {
 
         this.colourMod = 0.1;
 
+        this.align = 0;
+
         // Event Listeners for user controls
         (<HTMLElement>document.getElementById("input")).addEventListener("input", this.fileInput.bind(this));
+
         (<HTMLElement>document.getElementById("zoom")).addEventListener("input", this.Zoom.bind(this));
-        (<HTMLElement>document.getElementById("viewsize")).addEventListener("input", this.ViewSize.bind(this));
-        (<HTMLElement>document.getElementById("pointsize")).addEventListener("input", this.PointSize.bind(this));
+        (<HTMLElement>document.getElementById("zoom")).addEventListener("input", this.Zoom.bind(this));
         (<HTMLElement>document.getElementById("zoomMultiplier")).addEventListener("input", this.setZoomMultiplier.bind(this));
 
+        (<HTMLElement>document.getElementById("viewsize")).addEventListener("input", this.ViewSize.bind(this));
+        (<HTMLElement>document.getElementById("pointsize")).addEventListener("input", this.PointSize.bind(this));
         (<HTMLElement>document.getElementById("colourMod")).addEventListener("input", this.setColourMod.bind(this));
 
         (<HTMLElement>document.getElementById("glCanvas")).addEventListener("mousemove", this.MouseMove.bind(this));
         (<HTMLElement>document.getElementById("glCanvas")).addEventListener("mousemove", this.MouseClick.bind(this));
+        (<HTMLElement>document.getElementById("glCanvas")).addEventListener("wheel", this.MouseWheel.bind(this));
 
         (<HTMLElement>document.getElementById("up")).addEventListener("click", this.Rotation.bind(this));
         (<HTMLElement>document.getElementById("down")).addEventListener("click", this.Rotation.bind(this));
         (<HTMLElement>document.getElementById("right")).addEventListener("click", this.Rotation.bind(this));
         (<HTMLElement>document.getElementById("left")).addEventListener("click", this.Rotation.bind(this));
         (<HTMLElement>document.getElementById("resetRotation")).addEventListener("click", this.resetRotation.bind(this));
+        (<HTMLElement>document.getElementById("align")).addEventListener("click", this.Align.bind(this));
 
         (<HTMLElement>document.getElementById("back-Move")).addEventListener("click", this.MoveSlice.bind(this));
         (<HTMLElement>document.getElementById("forward-Move")).addEventListener("click", this.MoveSlice.bind(this));
@@ -139,6 +146,7 @@ export class Controls {
         (<HTMLElement>document.getElementById("down-Move")).addEventListener("click", this.MoveSlice.bind(this));
         (<HTMLElement>document.getElementById("right-Move")).addEventListener("click", this.MoveSlice.bind(this));
         (<HTMLElement>document.getElementById("left-Move")).addEventListener("click", this.MoveSlice.bind(this));
+        (<HTMLElement>document.getElementById("resetMovement")).addEventListener("click", this.resetMovement.bind(this));
 
         (<HTMLElement>document.getElementById("viewTab")).addEventListener("click", this.changeTabView.bind(this));
         (<HTMLElement>document.getElementById("dataTab")).addEventListener("click", this.changeTabData.bind(this));
@@ -146,7 +154,7 @@ export class Controls {
 
         (<HTMLElement>document.getElementById("render")).addEventListener("click", this.selectDimensions.bind(this));
 
-
+        this.setColourMod();
 
     }
 
@@ -154,6 +162,12 @@ export class Controls {
         if (DATASET[0] != undefined && this.updateNames == true) {
             this.updateAxisNamesFunc(); // Init Axis Names
             this.updateNames = false;
+            console.log(this.cSelect.value);
+            if (Object.keys(DATASET[0]).length > 3 || this.cSelect.value != "None") {
+                this.ShowColourControls(true);
+            } else {
+                this.ShowColourControls(false);
+            }
         }
 
         //User controlled rotation applied
@@ -165,6 +179,13 @@ export class Controls {
             this.mouse_x = 0;
             this.x_rotation = 0;
         }
+    }
+
+    private resetMovement() {
+        this.x_move = 0;
+        this.y_move = 0;
+        this.z_move = 0;
+        this.updateAxisFunc();
     }
 
     private setColourMod() {
@@ -207,6 +228,18 @@ export class Controls {
         if (this.updateNeedDataTab == true) {
             this.updateTabData()
             this.updateNeedDataTab = false;
+        }
+
+
+    }
+
+    private ShowColourControls(x: Boolean) {
+        if (x == true) {
+            // @ts-ignore 1
+            document.getElementById("4dimension").hidden = false;
+        } else {
+            // @ts-ignore 1
+            document.getElementById("4dimension").hidden = true;
         }
 
 
@@ -257,11 +290,11 @@ export class Controls {
 
     private updateSelectors() {
 
-        this.xSelect.innerHTML = '';
-        this.ySelect.innerHTML = '';
-        this.zSelect.innerHTML = '';
-        this.cSelect.innerHTML = '';
-        this.aSelect.innerHTML = '';
+        this.xSelect.innerHTML = '<option selected value="None">None</option>';
+        this.ySelect.innerHTML = '<option selected value="None">None</option>';
+        this.zSelect.innerHTML = '<option selected value="None">None</option>';
+        this.cSelect.innerHTML = '<option selected value="None">None</option>';
+        this.aSelect.innerHTML = '<option selected value="None">None</option>';
 
         for (let i = 0; i < this.dimensionOptions.length; i++) {
 
@@ -293,12 +326,6 @@ export class Controls {
                 this.cSelect.innerHTML = this.cSelect.innerHTML + "<option value='" + i + "'>" + this.dimensionOptions[i] + "</option>";
             }
 
-            if (i == this.aIndex) {
-                this.aSelect.innerHTML = this.aSelect.innerHTML + "<option value='" + i + "' selected>" + this.dimensionOptions[i] + "</option>";
-            }
-            else {
-                this.aSelect.innerHTML = this.aSelect.innerHTML + "<option value='" + i + "'>" + this.dimensionOptions[i] + "</option>";
-            }
         }
     }
 
@@ -308,11 +335,39 @@ export class Controls {
         this.helpTab.hidden = false;
     }
 
-    private resetRotation(event) {
+    private resetRotation() {
         this.x_rotation = 0;
         this.y_rotation = 0;
         this.mouse_x = 0;
         this.mouse_y = 0;
+    }
+
+    /*
+        Move graph to preset positions 
+    */
+    private Align() {
+        if (this.align == 0) {
+            this.align = 1;
+            this.resetRotation();
+            this.x_rotation = 25 * (Math.PI / 180);
+            this.y_rotation = 0 * (Math.PI / 180);
+        } else if (this.align == 1) {
+            this.align = 2;
+            this.resetRotation();
+            this.x_rotation = 115 * (Math.PI / 180);
+            this.y_rotation = 0 * (Math.PI / 180);
+        } else if (this.align == 2) {
+            this.align = 3;
+            this.resetRotation();
+            this.x_rotation = 205 * (Math.PI / 180);
+            this.y_rotation = 0 * (Math.PI / 180);
+        }
+        else if (this.align == 3) {
+            this.align = 0;
+            this.resetRotation();
+            this.x_rotation = 295 * (Math.PI / 180);
+            this.y_rotation = 0 * (Math.PI / 180);
+        }
     }
 
     private fileInput() {
@@ -365,6 +420,21 @@ export class Controls {
         this.mouseClickX = event.clientX;
         this.mouseClickY = event.clientY;
         //this.getPixelsFunc(this.mouseClickX, this.mouseClickY);
+    }
+
+    private MouseWheel(event) {
+        if (event.deltaY > 0) {
+            this.viewsize += 0.1;
+        } else if (event.deltaY < 0) {
+            this.viewsize -= 0.1;
+        }
+
+        if (this.viewsize > 1) {
+            this.viewsize = 1;
+        } else if (this.viewsize <= 0.1) {
+            this.viewsize = 0.1;
+        }
+
     }
 
     private MouseMove(event) {

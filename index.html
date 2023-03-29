@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <link rel="stylesheet" href="style.css">
     <title>Web Plotter</title>
@@ -14,59 +15,90 @@
                 <button id="dataTab" class="secondary outline tab"><i class="bi bi-table"></i> Data Managment</button>
                 <button id="helpTab" class="secondary outline tab"><i class="bi bi-info-circle"></i> Help</button>
             </div>
-        <article style="align-self: center">
-            <div id="view">
-                <canvas id="glCanvas" style="width: 100%; height: 60%;" width="1600" height="800"></canvas>
-                <div id="PlotScreen"></div>
-            </div>
-            <div id="data" hidden>
-                <article>
-                    <div class="grid">
-                        <div>
-                            <h4>X Dimension *</h4>
-                            <select name="x" id="x" required>
-                                <option>None</option>
-                            </select>
-                        </div>
-                        <div>
-                            <h4>Y Dimension *</h4>
-                            <select name="y" id="y" required>
-                                <option>None</option>
-                            </select>
-                        </div>
-                        <div>
-                            <h4>Z Dimension *</h4>
-                            <select name="z" id="z" required>
-                                <option>None</option>
-                            </select>
-                        </div>
-                        <div>
-                            <h4>C Dimension</h4>
-                            <select name="c" id="c">
-                                <option>None</option>
-                            </select>
-                        </div>
-                        <div>
-                            <h4>A Dimension</h4>
-                            <select name="a" id="a">
-                                <option>None</option>
-                            </select>
-                        </div>
-                        <div>
-                            <h4>Render</h4>
-                            <button id="render"><i class="bi bi-bounding-box"></i></button>
-                        </div>
-                    </div>
-                </article>
-                <div id="table">
-                    <h4>This section shows raw uploaded data</h4>
-                    <h5>See Sidebar on the right to upload a file</h5>
+            <article style="align-self: center">
+                <div id="view">
+                    <canvas id="glCanvas" style="width: 100%; height: 60%;" width="1600" height="800"></canvas>
+                    <div id="PlotScreen"></div>
                 </div>
-            </div>
-            <div id="help" hidden>
-                <td>help</td>
-            </div>
-        </article>
+                <div id="data" hidden>
+                    <article>
+                        <div class="grid">
+                            <div>
+                                <h4>X Dimension *</h4>
+                                <select name="x" id="x" required>
+                                    <option>None</option>
+                                </select>
+                            </div>
+                            <div>
+                                <h4>Y Dimension *</h4>
+                                <select name="y" id="y" required>
+                                    <option>None</option>
+                                </select>
+                            </div>
+                            <div>
+                                <h4>Z Dimension *</h4>
+                                <select name="z" id="z" required>
+                                    <option>None</option>
+                                </select>
+                            </div>
+                            <div>
+                                <h4>C Dimension</h4>
+                                <select name="c" id="c">
+                                    <option selected>None</option>
+                                </select>
+                            </div>
+                            <div hidden>
+                                <h4>A Dimension</h4>
+                                <select name="a" id="a">
+                                    <option>None</option>
+                                </select>
+                            </div>
+                            <div>
+                                <h4>Render</h4>
+                                <button id="render"><i class="bi bi-bounding-box"></i></button>
+                            </div>
+                        </div>
+                    </article>
+                    <div id="table">
+                        <h4>This section shows raw uploaded data</h4>
+                        <h5>See Sidebar on the right to upload a file</h5>
+                    </div>
+                </div>
+                <div id="help" hidden>
+                    <h3>Help Guide</h3>
+                    This is a section with some helpful information on how to use this application 
+                    <article>
+                        <h5>What kind of Data can be uploaded, and how?</h5>
+                        <p>Any .CSV file format data can be uploaded. To upload, view the top card on the right-hand column that says File Upload. </p>
+                        <p>Once you have uploaded you data, it should be plotted- If it isn't, you may not have enough columns to create a 3D view- See the Data Management tab above to set
+                            how your columns should be plotted. If the data appears to not be plotted correctly, see the same section to clarify what exact columns are plotted. 
+                        </p>
+                        <p>
+                            If your data has more than 3 columns, then the application will automatically start using the 4th dimension, saturation, for the fourth column. If you have more 
+                            than four columns, then they will not be shown unless applied to a dimension in the Data Management tab. 
+                        </p>
+                        <p>If you would like to test with some example data, here's a small data set: <a href="Test_Data/CoffeeTestData.csv" download> The Effect of Coffee on Programming - Example Data - 10 Points </a></p>
+                        
+                        <p>Please note that although technically decimal data is supported, the view is not optimized for it and scale values are going to break if trying to zoom in too far.
+                        </p>
+                    </article>
+                    <article>
+                        <h5>How exactly do the Movement and Zoom Controls work? </h5>
+                        <p>This application is based on a slice like approach to displaying data, instead of showing all data at once- Only a slice of designated proportions is shown and
+                            any data that falls within that slice. The Movement controls allow you to move the slice in 3D around your dataset showing the slice is different positions while the zoom 
+                            functions allow you to scale the slice up and down. 
+                        </p>
+                    </article>
+                    <article>
+                        <h5>How is the 4th dimension value of saturation displayed?</h5>
+                        <p>To calculate what saturation value a data point should be, The following squashing function with asymptotic qualities is used:</p>
+                        <div><img src="images/SquashFunction.svg" id="function" width="350px"></div>
+                        <p>Where mod is the user controlled variable and value is the value of the data point. The result of this function is used to shade the data point between
+                            black and white
+                        </p>
+                    </article>
+                </div>
+            </article>
             <article>
                 <h4>Multidimensional Web Plotter</h4>
                 <p>An Honours Project by Sameer Al Harbi</p>
@@ -78,15 +110,10 @@
                 <p>Only .CSV files are supported</p>
                 <div><input type="file" id="input"></div>
             </article>
-            <article>
-                <h4>Data Point Settings</h4>
-                <p>These control the look of data points </p>
-                <h6>Data Point Size</h6>
-                <input type="range" id="pointsize" min="1" max="10">
-            </article>
-            <article>
-                <h4>4th Dimension (colour) Control</h4>
-                <p>Control how colour is used to represent your data, see data managment tab above to set colour dimension</p>
+            <article hidden="true" id="4dimension">
+                <h4>4th Dimension (Saturation) Control</h4>
+                <p>Control how Saturation is used to represent your data, see data management tab above to set Saturation
+                    dimension</p>
                 <img src="images/gradient.png"></img>
                 <p></p>
                 <div class="grid">
@@ -101,27 +128,45 @@
                 </div>
                 <div class="grid">
                     <div>Modifier: </div>
-                    <div><input type="number" id="colourMod"></div>
+                    <div><input type="number" id="colourMod" step="0.1"></div>
                 </div>
+            </article>
+            <article>
+                <h4>Data Point Settings</h4>
+                <p>These control the look of data points </p>
+                <h6>Data Point Size</h6>
+                <input type="range" id="pointsize" min="1" max="10">
             </article>
             <article>
                 <h4>Rotation Controls</h4>
                 <p>Mouse Dragging across the chart is also supported</p>
-                <a href="#" id="left" role="button">Left</a>
-                <a href="#" id="up" role="button">Up</a>
-                <a href="#" id="down" role="button">Down</a>
-                <a href="#" id="right" role="button">Right</a>
-                <a href="#" id="resetRotation" role="button" class="outline">Reset</a>
+                <div class="grid">
+                    <a href="#" id="resetRotation" role="button" class="outline">Reset</a>
+                    <a href="#" id="up" role="button">Up</a>
+                    <a href="#" id="align" role="button" class="outline">Align</a>
+                </div>
+                <div class="grid">
+                    <a href="#" id="left" role="button">Left</a>
+                    <a href="#" id="down" role="button">Down</a>
+                    <a href="#" id="right" role="button">Right</a>
+                </div>
             </article>
             <article>
                 <h4>Movement Controls</h4>
                 <p>These change what "slice" of the dataset is visible</p>
-                <a href="#" id="back-Move" role="button">Back</a>
-                <a href="#" id="up-Move" role="button">Up</a>
-                <a href="#" id="down-Move" role="button">Down</a>
-                <a href="#" id="forward-Move" role="button">Forward</a>
-                <a href="#" id="left-Move" role="button">Left</a>
+                <div class="grid">
+                    <a href="#" id="back-Move" role="button" class="secondary">Backwards</a>
+                    <a href="#" id="up-Move" role="button" class="contrast">Up</a>
+                    <a href="#" id="forward-Move" role="button" class="secondary">Forwards</a>
+                </div>
+                <div class="grid">
+                    <a href="#" id="left-Move" role="button">Left</a>
+                    <a href="#" id="down-Move" role="button" class="contrast">Down</a>
                 <a href="#" id="right-Move" role="button">Right</a>
+                </div>
+                <div class="grid">
+                    <a href="#" id="resetMovement" role="button" class="outline">Reset to Origin</a>
+                </div>
             </article>
             <article>
                 <h4>Camera Controls</h4>
@@ -129,7 +174,9 @@
                 <article>
                     <h6>Data Zoom</h6>
                     <input type="range" id="zoom" min="1" max="10">
-                    <div class="grid"><p>Zoom Multiplier</p><input type="number" id="zoomMultiplier" min="0"></div>
+                    <div class="grid">
+                        <p>Zoom Multiplier</p><input type="number" id="zoomMultiplier" min="0">
+                    </div>
                 </article>
                 <h6>View Zoom</h6>
                 <input type="range" id="viewsize" min="1" max="10">

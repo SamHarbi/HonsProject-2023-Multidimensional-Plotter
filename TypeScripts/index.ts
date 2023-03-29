@@ -149,7 +149,7 @@ async function main() {
     */
     AxisLabels = [];
     AxisValues = [[]];
-    AxisNames = [[]];
+    AxisNames = [[], [], []];
     AxisMap = [];
 
     selectedPointID = 0;
@@ -232,11 +232,15 @@ async function main() {
 function setAxisNames() {
     // !! NOTE !! This limits to three columns names only 
     let names = Object.keys(DATASET[0]); //Array of names 
+    let namLen = names.length;
+    if (namLen > 3) {
+        namLen = 3;
+    }
 
     let indexVals = C.getIndexValues(); // 0:x 1:y 2:z 3:c 4:a
     let axisIndex = [indexVals[2], indexVals[1], indexVals[0], indexVals[3], indexVals[4]];
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < namLen; i++) {
         AxisNames[i] = [];
         let charArray = names[axisIndex[i]].split('');
 
@@ -335,6 +339,7 @@ function Render(timestamp) {
     let GLOBAL_MODEL = glmath.mat4.create();
     glmath.mat4.scale(GLOBAL_MODEL, GLOBAL_MODEL, [C.getViewSize(), C.getViewSize(), C.getViewSize()]);
     glmath.mat4.translate(GLOBAL_MODEL, GLOBAL_MODEL, [0.2, 0.2, 1]);
+    let rotation = C.getCurrentRotation(); // x:0 y:1
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 15 * (Math.PI / 180), [1, 0, 0]);
     glmath.mat4.rotate(GLOBAL_MODEL, GLOBAL_MODEL, 25 * (Math.PI / 180), [0, -1, 0]);
 
@@ -377,6 +382,7 @@ function Render(timestamp) {
     RenderData(GLOBAL_MODEL, false);
 
     window.requestAnimationFrame(Render);
+
 }
 
 /*
@@ -477,7 +483,7 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
         }
         else if (!Number.isNaN(a) && pickingPass == false) {
             gl.uniform1i(lightToggleUniformID[0], 0); // Don't Use Light
-            gl.uniform3f(colourUniformID[0], SquashNumber(a), SquashNumber(a), SquashNumber(a));
+            gl.uniform3f(colourUniformID[0], Math.abs(SquashNumber(a)), Math.abs(SquashNumber(a)), Math.abs(SquashNumber(a)));
         } else if (pickingPass == false) {
             gl.uniform1i(lightToggleUniformID[0], 1);
             gl.uniform3f(colourUniformID[0], 1.0, 1.0, 1.0);
@@ -602,7 +608,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     gl.uniform3f(colourUniformID[1], altColour[0], altColour[1], altColour[2]);
     AxisLabels[1].render();
 
-    if (AxisNames[0][0] != undefined) {
+    if (AxisNames[1][0] != undefined) {
 
         let AxisNameModel = glmath.mat4.create();
         glmath.mat4.copy(AxisNameModel, LetterModel);
@@ -653,7 +659,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     gl.uniform3f(colourUniformID[1], altColour[0], altColour[1], altColour[2]);
     AxisLabels[2].render();
 
-    if (AxisNames[0][0] != undefined) {
+    if (AxisNames[2][0] != undefined) {
 
         let AxisNameModel = glmath.mat4.create();
         glmath.mat4.copy(AxisNameModel, LetterModel);
@@ -915,7 +921,7 @@ function eraseRotation(matrix: glmath.mat4) {
 */
 function SquashNumber(value) {
     let mod = C.getColourMod();
-    return (1 / (1 + Math.pow(Math.E, -(mod * value)))) * 2 - 1;
+    return (1 / (1 + Math.pow(Math.E, -(mod * value)))) * 1;
 }
 
 /*
