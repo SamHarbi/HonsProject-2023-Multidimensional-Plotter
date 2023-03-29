@@ -159,6 +159,10 @@ async function ReadFile(model: string) {
         var raw = fs.readFileSync(path.join(__dirname, "../models/Triangle.obj"), "utf8");
         return raw;
     }
+    else if (model === "Point") {
+        var raw = fs.readFileSync(path.join(__dirname, "../models/Point.obj"), "utf8");
+        return raw;
+    }
     else if (model == "Axis") {
         var raw = fs.readFileSync(path.join(__dirname, "../models/AxisLine.obj"), "utf8");
         return raw;

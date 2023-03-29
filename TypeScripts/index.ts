@@ -382,6 +382,7 @@ function Render(timestamp) {
     RenderData(GLOBAL_MODEL, false);
 
     window.requestAnimationFrame(Render);
+
 }
 
 /*
