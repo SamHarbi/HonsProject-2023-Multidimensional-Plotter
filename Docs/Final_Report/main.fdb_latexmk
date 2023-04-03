@@ -1,25 +1,26 @@
 # Fdb version 4
-["bibtex main"] 1679860150 "main.aux" "main.bbl" "main" 1679861166 0
+["bibtex main"] 1680557390 "main.aux" "main.bbl" "main" 1680564258 0
   "./ACM-Reference-Format.bst" 1679765874 88297 68580d41bd279ee2c59d376cb377f3d6 ""
   "./bibliography.bib" 1679765874 645 dceff1d0174781c3b007572f10a156d3 ""
-  "main.aux" 1679861165 8057 73f0f55be931a92573891494de10b197 "pdflatex"
+  "main.aux" 1680564257 9502 ccdc01a90099831d39df874ffd4ada12 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1679861163 "c:/Users/Sam/Desktop/Main/HonsProject-2023-Multidimensional-Plotter/Docs/Final_Report/main.tex" "main.pdf" "main" 1679861166 0
+["pdflatex"] 1680564255 "c:/Users/Sam/Desktop/Main/HonsProject-2023-Multidimensional-Plotter/Docs/Final_Report/main.tex" "main.pdf" "main" 1680564258 0
   "acmart.cls" 1679765874 103409 33ab3db5699c475d5435e28b7021d6c1 ""
   "author-files/appendices.tex" 1679765874 106 1d08cd4c4de4c09a83ca317d62252461 ""
-  "author-files/body.tex" 1679837508 252 9c838b53e7dcf69f4f7fdeab43ab7a9a ""
+  "author-files/body.tex" 1679861653 169 f5cda647c418f1f6f6ebedc25cfc7116 ""
+  "author-files/figures/Monkey-Test2.PNG" 1680257056 26125 785bd2750aad62bdb586f6f85e952f25 ""
+  "author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png" 1680541429 14538 60e6d84a74d6dcccfcf58c38658a0f0b ""
   "author-files/figures/SingleStoryPath2.png" 1679775027 14406 37ae27cb52a50b74e6a4855cae1395b2 ""
+  "author-files/figures/tri.png" 1679866931 10652 e853798bbb909524521054759fdd0f5a ""
   "author-files/head.tex" 1679765874 645 47b3ef8e7bf4fff14fae02673f6386a7 ""
   "author-files/sections/background.tex" 1679766209 20170 a608b55e5b29d31a6b57dc39e1892aa3 ""
-  "author-files/sections/conclusion.tex" 1679765874 723 82cd1c083a2b8e4d6ed3577a3426585d ""
-  "author-files/sections/design.tex" 1679861164 4402 195af3f6968f5f3259e6789bf0f3c81a ""
+  "author-files/sections/design.tex" 1680564258 11343 c0aecbd490b1688711db812843fe258d ""
   "author-files/sections/introduction.tex" 1679765874 1508 862a6fc4d6d14cd5b627342a8c2f226c ""
-  "author-files/sections/reflections.tex" 1679765874 346 17ed719aa2959d09af035da76169a32c ""
   "author-files/sections/specification.tex" 1679837429 7972 9b9fc3fdd08fce683773d56ede14136e ""
-  "c:/Users/Sam/Desktop/Main/HonsProject-2023-Multidimensional-Plotter/Docs/Final_Report/main.tex" 1679765874 484 73f9b69dc0992855115d7e58f472ed63 ""
+  "c:/Users/Sam/Desktop/Main/HonsProject-2023-Multidimensional-Plotter/Docs/Final_Report/main.tex" 1680549157 508 e85833fa21da28847fab3d43cd649f30 ""
   "d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/libertine/lbtn_25tcsq.enc" 1679511099 2921 8ca0eb0831f9bc5da080d3697cfe67bf ""
   "d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/libertine/lbtn_76gpa5.enc" 1679511099 2933 9ad527ce78d7c5fa0a642dead095f172 ""
   "d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/libertine/lbtn_7grukw.enc" 1679511099 2934 a4a9158faed2e9e89c771b4e3b7fc12f ""
@@ -189,6 +190,8 @@
   "d:/TEX/texlive/2023/texmf-dist/tex/latex/preprint/balance.sty" 1679512131 3366 d938ad2440edc1ea1c9042843580ec42 ""
   "d:/TEX/texlive/2023/texmf-dist/tex/latex/refcount/refcount.sty" 1679512476 9878 9e94e8fa600d95f9c7731bb21dfb67a4 ""
   "d:/TEX/texlive/2023/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty" 1679512498 9714 ba3194bd52c8499b3f1e3eb91d409670 ""
+  "d:/TEX/texlive/2023/texmf-dist/tex/latex/subfigure/subfigure.cfg" 1679512873 2062 a0e7d66e09e508f51289a656aec06ed2 ""
+  "d:/TEX/texlive/2023/texmf-dist/tex/latex/subfigure/subfigure.sty" 1679512873 15188 91281c7ddbccfa54a8e0c3b56ab5aa72 ""
   "d:/TEX/texlive/2023/texmf-dist/tex/latex/textcase/textcase.sty" 1679513081 2405 93dca770d0598d835703b5d004a641b7 ""
   "d:/TEX/texlive/2023/texmf-dist/tex/latex/totpages/totpages.sty" 1679513305 7670 b07e668265cf485332abe582e7ed306e ""
   "d:/TEX/texlive/2023/texmf-dist/tex/latex/trimspaces/trimspaces.sty" 1679513334 1380 971a51b00a14503ddf754cab24c3f209 ""
@@ -200,10 +203,10 @@
   "d:/TEX/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1679513860 4662209 2dad468923ab70bb080cfa8776e90b5e ""
   "d:/TEX/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt" 1679514079 7883346 8e3429cb30b688a90aec9eb0a861a9ce ""
   "d:/TEX/texlive/2023/texmf.cnf" 1679513837 713 e69b156964470283e0530f5060668171 ""
-  "main.aux" 1679861165 8057 73f0f55be931a92573891494de10b197 "pdflatex"
-  "main.bbl" 1679860150 1785 8ed37e936ba16de73718c10d329b7108 "bibtex main"
-  "main.out" 1679861165 2771 a065f657202d3896cae15a875ed7fcf0 "pdflatex"
-  "main.tex" 1679765874 484 73f9b69dc0992855115d7e58f472ed63 ""
+  "main.aux" 1680564257 9502 ccdc01a90099831d39df874ffd4ada12 "pdflatex"
+  "main.bbl" 1680557390 1785 8ed37e936ba16de73718c10d329b7108 "bibtex main"
+  "main.out" 1680564257 2436 4e55ca084eb88bb49e8814d52917ca14 "pdflatex"
+  "main.tex" 1680549157 508 e85833fa21da28847fab3d43cd649f30 ""
   (generated)
   "main.aux"
   "main.log"

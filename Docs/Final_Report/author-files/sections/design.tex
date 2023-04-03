@@ -22,7 +22,7 @@ None, The student wanted to gain experience in how underlying low-level APIs wor
 With the browser set as the environment, the choice was limited to JavaScript, TypeScript or another language through Web Assembly. To ensure the best support among existent web tooling though, TypeScript was chosen which has the wide support of JavaScript while providing useful language features not available in JavaScript. One of those features, types, were found to be particularly important as OpenGL and by extension WebGL is very heavily dependant on correct types being used at all times, which would have been very hard to do with only JavaScript.
 
 \subsection{Tooling}
-After the Technology Stack was identified, the next step was to identify the development process for that stack. The following were selected for the project:
+After the Technology Stack was identified, the next step was to identify the development tools for that stack. The following were selected for the project:
 
 \paragraph{IDE or Code Editor}
 Visual Studio Code (VScode) was selected for all writing tasks (Both for code and written information). This decision came down to what the student was comfortable with using through previous experience but also had a practical factor for it's selection. With that mainly being a great selection of packages to help with development and great integration with GitHub.
@@ -31,7 +31,81 @@ Visual Studio Code (VScode) was selected for all writing tasks (Both for code an
 Node.js was used as a development and build server due to it's straightforward ability to download and manage npm packages while also running development tools such as parcel, which in addition to it's usage below, also acted as a development server with hot reloading.
 
 \paragraph{Compiler and Build Tool}
-As a compiler, Parcel was used to compile and optimize TypeScript into runnable by the browser JavaScript. As a build tool, parcel build all npm packages and the usage of some node.js only features into a handful of static client-side only files that could be hosted. This was crucial and allowed some code designs to be implmented that otherwise would not have been possible (See somewhere).
+As a compiler, Parcel was used to compile and optimize TypeScript into runnable by the browser JavaScript. As a build tool, parcel build all npm packages and the usage of some node.js only features into a handful of static client-side only files that could be hosted. This was crucial and allowed some code designs to be implemented that otherwise would not have been possible (See somewhere).
 
 \paragraph{Hosting Provider}
 Digital Ocean's App Platform was used to host and build the application from the production branch of the code repository. It was chosen due to the student having previous experience hosting resources on the platform, simple setup with minimal networking on the students part, support for building on a node.js environment (The same as the development environment) and the availability of free credits to do all this. The site hosted here allowed user testers to access the application from anywhere at their own time.
+
+\subsubsection{Additional Libraries}
+Some of the mentioned npm packages used are recorded here and the reason for their use.
+
+\paragraph{Pico.css}
+Simple CSS framework to do the heavy lifting for styling the application UI. This allowed the student to focus more on rendering work.
+
+\paragraph{gl-matrix}
+Pre-made functions for the math very commonly used in graphics development. Allowed the student to bypass creating these basic functions from scratch in turn saving time.
+
+\paragraph{jquery-csv}
+A jquery syntax compliant .csv parser. No particular reason to select this particularly from other alternatives. Covers a lot of edge cases in parsing .csv files that would have taken a while to implement and test from scratch.
+
+\subsection{Prototyping}
+An important part of the initial design stage was creating simple prototype applications using the technology stack to give the student experience with using the stack and to identify any critical issues that may need the stack to be redesigned or tools to be changed. These were in a sense mock sprint runs to smooth out the process and prepare for when development would officially start. The prototypes created also turned out general enough that they were able to be reused for the development of the actual application, in particular prototype 2.
+
+\subsubsection {Prototype 1}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\columnwidth]{author-files/figures/tri.png}
+    \caption{Prototype 1 - A simple 2D triangle drawn using the defined Technology Stack}
+    \label{fig:prototype1}
+\end{figure}
+
+This was an important milestone in proving the validity of the development process identified. All of the tools and technologies mentioned thus far were setup and used to create a valid WebGL context and render a triangle. It was found that this process was well defined and no changes were done.
+
+\subsubsection {Prototype 2}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\columnwidth]{author-files/figures/Monkey-Test2.png}
+    \caption{Prototype 2 - A 3D rendering engine}
+    \label{fig:Monkey}
+\end{figure}
+
+WebGL is a low level API and considerable work needs to be done just to render a 3D model. With this prototype, the aim was both to further test the tech stacks suitability by doing more involved work, but also to see if a general purpose rendering engine could be created that implemented all of the critical functions for the application to be developed. It was considered important to create this as quickly as possible to identify any shortcomings as soon as possible that may bottleneck the project when development starts. Creating this prototype took approximately a month and yielded in the creation of a successful rendering engine with a charting focused design.
+
+To be more specific, the features implemented by this engine were the following:
+\begin{itemize}
+    \item 3D Mathematics and View, Projection and model system for rendering
+    \item Multiple Models Rendered at the same time
+    \item Model Object Abstraction for storing and rendering a 3D model. Implements a prototype pattern where one object can be rendered multiple times. This is particularly useful as a memory saving measure for rendering lot's of models. Something that was considered a very likely scenario for a plotting application with likely many data points.
+    \item Simple Flat Shading based on a preset light direction.
+    \item Loader Object for loading and organizing data that is passed to Model. Allows .OBJ models to be loaded into the renderer to be displayed.
+\end{itemize}
+
+Like previously mentioned, This prototype then set the basis from which development was started.
+
+\subsection{UX Design}
+
+As mentioned in the research phase- Ease of use and accessibility for non-programmers was a priority for this project. One that had to also dictate design decisions around how a user would interact with the application and how that application would communicate with the user. Those key decisions are mentioned here.
+
+\subsubsection{Visualisation Design}
+"How should data be plotted and shown to the user?" as a question encapsulates a range of design problems that apply to this section. Specifically, any chart component for this application must embody the following properties to be suitable for completing the application goals:
+\begin{itemize}
+    \item Must be a common chart type that doesn't require specialist knowledge to understand nor is limited to very specific types of data.
+    \item Must be suitable for 3D data and preferably extendable to beyond three dimensions. The more the better.
+    \item Chart can be rendered with 3D graphics and preferably that provides some value to the visualizations with the chart type.
+\end{itemize}
+
+The chart type that in the end embodied these requirements best was a scatterplot chart. It is a chart that is commonly implemented in 3D by other plotting applications looked at. A scatterplot also naturally fits very well in a 3D rendered environment as it's relatively straight forward to encode plotted data into world coordinates that can be extensively navigated in a 3D environment. Further dimensions can also be encoded by modifying each data point further through colour, saturation, shape of data points, opacity and more.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\columnwidth]{author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png}
+    \caption{A 3D scatterplot generated through MATLAB}
+    \label{fig:MatlabPlot}
+\end{figure}
+
+To render the scatterplot, two main ideas were identified.
+\begin{itemize}
+    \item Unlimited Axis Values, World View. The scatterplot would be rendered into a 3D world by directly translating data values into world coordinates. The resultant graph could then be navigated by the user akin to 3D modelling software or a video game (first-person camera). Axis lines would be part of that world and would extend to infinity from origin. This is a very easy to implement design but might be difficult to navigate for an inexperienced user.
+    \item Classic cut-off figure. This is directly inspired by the way the majority of applications seen implement scatterplot. As a user of those systems, you would load in some data and set aspects such as the position, view angle and zoom programmatically which would generate an  image as seen in Figure \ref*{fig:MatlabPlot}. This kind of view is not much harder to render but is much more concise as all data can be made to fit in a predefined visual space. This also allows greater control on how the graph is rendered allowing for a more consistent user experience to be tailored. But, this option has a severe disadvantage- where unlike the previous option, it is not commonly navigated but generated for specific parameters- making exploration not an obvious feature to implement.
+\end{itemize}
+
