@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  4 APR 2023 00:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  4 APR 2023 13:01
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -912,10 +912,10 @@ Class acmart Warning: A possible image without description on input line 70.
 <author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png, id=167, 562.1pt x 421.575pt>
 File: author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png Graphic file (type png)
 <use author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png>
-Package pdftex.def Info: author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png  used on input line 101.
+Package pdftex.def Info: author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png  used on input line 118.
 (pdftex.def)             Requested size: 241.14749pt x 180.86201pt.
 
-Class acmart Warning: A possible image without description on input line 104.
+Class acmart Warning: A possible image without description on input line 121.
 
 [7.7 <./author-files/figures/Monkey-Test2.PNG> <./author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png>])) (./main.bbl
 
@@ -935,21 +935,21 @@ File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
 File: se-utf8.def 2019/11/29 v1.12 stringenc: UTF-8
 ) [8.8] (./main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 4E55CA084EB88BB49E8814D52917CA14;2436.
+(rerunfilecheck)             Checksum: 8A19F9FCE11674E68B5D41762625BCF2;2436.
  ) 
 Here is how much of TeX's memory you used:
- 22225 strings out of 476025
- 364778 string characters out of 5792019
+ 22234 strings out of 476025
+ 364947 string characters out of 5792019
  1877382 words of memory out of 5000000
- 41695 multiletter control sequences out of 15000+600000
- 637123 words of font info for 267 fonts, out of 8000000 for 9000
+ 41699 multiletter control sequences out of 15000+600000
+ 637521 words of font info for 269 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
- 90i,12n,131p,1087b,673s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,12n,131p,1087b,675s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/newtx/txsys.pfb>
-Output written on main.pdf (8 pages, 505674 bytes).
+Output written on main.pdf (8 pages, 507300 bytes).
 PDF statistics:
- 241 PDF objects out of 1000 (max. 8388607)
- 203 compressed objects within 3 object streams
- 81 named destinations out of 1000 (max. 500000)
+ 243 PDF objects out of 1000 (max. 8388607)
+ 205 compressed objects within 3 object streams
+ 83 named destinations out of 1000 (max. 500000)
  59573 words of extra memory for PDF output out of 61914 (max. 10000000)
 

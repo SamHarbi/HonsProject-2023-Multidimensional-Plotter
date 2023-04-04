@@ -82,10 +82,27 @@ To be more specific, the features implemented by this engine were the following:
 
 Like previously mentioned, This prototype then set the basis from which development was started.
 
+\begin{table*}[t]
+    \begin{tabular}{ | l | l | }
+        \hline
+        Original                                             & Modified                                                    \\
+        \hline
+        Write chart properties programmatically              & change properties through UI controls                       \\
+        \hline
+        Static chart image rendered once code written is run & Dynamically update rendered image as properties are changed \\
+        \hline
+        Exploration to explore                               & Exploration possible                                        \\
+        \hline
+    \end{tabular}
+    \caption{Comparison of design changes to how figures are created in the application developed compared to programmatic market alternatives}
+    \label{}
+\end{table*}
+
 \subsection{UX Design}
 
 As mentioned in the research phase- Ease of use and accessibility for non-programmers was a priority for this project. One that had to also dictate design decisions around how a user would interact with the application and how that application would communicate with the user. Those key decisions are mentioned here.
 
+%mention 7 basic tools of quality charts 
 \subsubsection{Visualisation Design}
 "How should data be plotted and shown to the user?" as a question encapsulates a range of design problems that apply to this section. Specifically, any chart component for this application must embody the following properties to be suitable for completing the application goals:
 \begin{itemize}
@@ -108,4 +125,9 @@ To render the scatterplot, two main ideas were identified.
     \item Unlimited Axis Values, World View. The scatterplot would be rendered into a 3D world by directly translating data values into world coordinates. The resultant graph could then be navigated by the user akin to 3D modelling software or a video game (first-person camera). Axis lines would be part of that world and would extend to infinity from origin. This is a very easy to implement design but might be difficult to navigate for an inexperienced user.
     \item Classic cut-off figure. This is directly inspired by the way the majority of applications seen implement scatterplot. As a user of those systems, you would load in some data and set aspects such as the position, view angle and zoom programmatically which would generate an  image as seen in Figure \ref*{fig:MatlabPlot}. This kind of view is not much harder to render but is much more concise as all data can be made to fit in a predefined visual space. This also allows greater control on how the graph is rendered allowing for a more consistent user experience to be tailored. But, this option has a severe disadvantage- where unlike the previous option, it is not commonly navigated but generated for specific parameters- making exploration not an obvious feature to implement.
 \end{itemize}
+
+In the end, the student decided to go with a modified option two. That modification was to replace the programmatic controls that have been seen to be used to compose / generate the chart in applications such as MATLAB with instead similar, although limited UI controls. In a sense, the design that the student came up with abstracts the programming into user controls instead, which are much easier to use (which is the guiding goal for this project) even if they are more limited in their capability.
+
+\subsubsection{User Controls}
+The design created by the student in the last section requires a robust design of user controls. With an agile approach, those controls were looked at as the rendering solution improved and opened up possibility for modification.
 
