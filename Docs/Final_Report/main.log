@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  4 APR 2023 13:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  4 APR 2023 21:08
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -877,7 +877,7 @@ Overfull \hbox (5.68741pt too wide) in paragraph at lines 55--56
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
 (Font)              scaled to size 7.0pt on input line 69.
 [2.2] [3.3]) (./author-files/sections/specification.tex [4.4]
-<author-files/figures/SingleStoryPath2.png, id=133, 617.30624pt x 222.8325pt>
+<author-files/figures/SingleStoryPath2.png, id=141, 617.30624pt x 222.8325pt>
 File: author-files/figures/SingleStoryPath2.png Graphic file (type png)
 <use author-files/figures/SingleStoryPath2.png>
 Package pdftex.def Info: author-files/figures/SingleStoryPath2.png  used on input line 56.
@@ -891,7 +891,7 @@ Overfull \hbox (2.21016pt too wide) in paragraph at lines 34--35
 \T1/LinuxLibertineT-TLF/m/n/9 (-20) pile and op-ti-mize Type-Script into runnable by the browser JavaScript.
  []
 
-<author-files/figures/tri.png, id=144, 735.49782pt x 472.76625pt>
+<author-files/figures/tri.png, id=152, 735.49782pt x 472.76625pt>
 File: author-files/figures/tri.png Graphic file (type png)
 <use author-files/figures/tri.png>
 Package pdftex.def Info: author-files/figures/tri.png  used on input line 57.
@@ -900,7 +900,7 @@ Package pdftex.def Info: author-files/figures/tri.png  used on input line 57.
 Class acmart Warning: A possible image without description on input line 60.
 
 [6.6 <./author-files/figures/tri.png>]
-<author-files/figures/Monkey-Test2.png, id=166, 500.62032pt x 314.67563pt>
+<author-files/figures/Monkey-Test2.png, id=174, 500.62032pt x 314.67563pt>
 File: author-files/figures/Monkey-Test2.png Graphic file (type png)
 <use author-files/figures/Monkey-Test2.png>
 Package pdftex.def Info: author-files/figures/Monkey-Test2.png  used on input line 67.
@@ -909,47 +909,43 @@ Package pdftex.def Info: author-files/figures/Monkey-Test2.png  used on input li
 
 Class acmart Warning: A possible image without description on input line 70.
 
-<author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png, id=167, 562.1pt x 421.575pt>
+<author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png, id=175, 562.1pt x 421.575pt>
 File: author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png Graphic file (type png)
 <use author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png>
-Package pdftex.def Info: author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png  used on input line 118.
+Package pdftex.def Info: author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png  used on input line 119.
 (pdftex.def)             Requested size: 241.14749pt x 180.86201pt.
 
-Class acmart Warning: A possible image without description on input line 121.
+Class acmart Warning: A possible image without description on input line 122.
 
-[7.7 <./author-files/figures/Monkey-Test2.PNG> <./author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png>])) (./main.bbl
+[7.7 <./author-files/figures/Monkey-Test2.PNG> <./author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png>]) (./author-files/sections/implementation.tex)) (./main.bbl
 
 Package natbib Warning: Empty `thebibliography' environment on input line 40.
 
-) (./author-files/appendices.tex)
+) (./author-files/appendices.tex [8.8])
 
 Class acmart Warning: Some images may lack descriptions.
-
-
-Package balance Warning: You have called \balance in second column
-(balance)                Columns might not be balanced.
 
 (d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-pdfdoc.def
 File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
 ) (d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-utf8.def
 File: se-utf8.def 2019/11/29 v1.12 stringenc: UTF-8
-) [8.8] (./main.aux)
+) [9.9] (./main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 8A19F9FCE11674E68B5D41762625BCF2;2436.
+(rerunfilecheck)             Checksum: F5528B99095F81BB3E7D42B76EE4179E;2809.
  ) 
 Here is how much of TeX's memory you used:
- 22234 strings out of 476025
- 364947 string characters out of 5792019
+ 22246 strings out of 476025
+ 365229 string characters out of 5792019
  1877382 words of memory out of 5000000
- 41699 multiletter control sequences out of 15000+600000
+ 41703 multiletter control sequences out of 15000+600000
  637521 words of font info for 269 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
- 90i,12n,131p,1087b,675s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,12n,131p,1087b,681s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/newtx/txsys.pfb>
-Output written on main.pdf (8 pages, 507300 bytes).
+Output written on main.pdf (9 pages, 510166 bytes).
 PDF statistics:
- 243 PDF objects out of 1000 (max. 8388607)
- 205 compressed objects within 3 object streams
- 83 named destinations out of 1000 (max. 500000)
- 59573 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 258 PDF objects out of 1000 (max. 8388607)
+ 219 compressed objects within 3 object streams
+ 88 named destinations out of 1000 (max. 500000)
+ 59589 words of extra memory for PDF output out of 61914 (max. 10000000)
 

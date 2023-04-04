@@ -1,0 +1,18 @@
+\section{Implementation}
+This project was developed over 8 sprints of between 7-10 days each with the first one started on the 26th of December, 2022 and the last one stared on March 19, 2023. What follows is a detailed summary of the work done during those sprints divided into three subsections:
+\begin{itemize}
+    \item Plan - Highlights what user stories were chosen to be implemented during the sprint and how long that sprint was.
+    \item Implementation - How the features were implemented, any design decisions and any issues
+    \item Summary - Have all user stories been completed? What went wrong? Anything learned and moved to next sprint
+\end{itemize}
+
+\subsection{Sprint 1 - Start 26th December}
+
+\subsubsection{Plan}
+This was the first sprint undertaken for the project and so the focus was to test everything out and ensure that the process was right for the student. The initial MVP feature set was chosen for development and two user stories were planned for. Those being user stories 3 and 11 with a total workload estimate of 6.
+The main goal for this sprint was to create a labelled scatterplot graph with some pre-set test data.
+
+\subsubsection{Implementation}
+Prototype 2 was chosen to be extended into the application being developed. It was copied into the development branch and work started on implementing the user stories mentioned. A 3D Cube with axis lines was created as the chart and an origin position was set from which data points would be rendered. This was not as difficult as expected as the model matrix used could be copied and modified by each data point to ensure that they were always at a correct position relative to the cube and axis lines.
+
+The next step was to label the axis lines (also relative to the chart using it's model matrix). This caused some difficulty as test labels would not align properly even if they were supposed to based on their coordinates. This was particularly troublesome with perspective lines that had a considerable z change in position. This was found to be a result of inaccurate placement by the browser (browsers favors flexibility over screen sizes instead of rigid pixel-perfect placement) and not fully correct world to screen coordinate calculation. Instead,

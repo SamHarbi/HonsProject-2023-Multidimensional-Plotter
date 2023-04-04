@@ -1292,6 +1292,10 @@ INPUT ./author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png
 INPUT author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png
 INPUT ./author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png
 INPUT ./author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png
+INPUT ./author-files/sections/implementation.tex
+INPUT author-files/sections/implementation.tex
+INPUT ./author-files/sections/implementation.tex
+INPUT author-files/sections/implementation.tex
 INPUT ./main.bbl
 INPUT main.bbl
 INPUT ./main.bbl
