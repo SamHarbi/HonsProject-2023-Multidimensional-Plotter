@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  5 APR 2023 00:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  5 APR 2023 17:42
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -948,18 +948,18 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 13E93722B2EFE88980C165DD4F9B0FB9;3045.
  ) 
 Here is how much of TeX's memory you used:
- 22265 strings out of 476025
- 365716 string characters out of 5792019
+ 22270 strings out of 476025
+ 365829 string characters out of 5792019
  1877382 words of memory out of 5000000
  41711 multiletter control sequences out of 15000+600000
- 638317 words of font info for 273 fonts, out of 8000000 for 9000
+ 638715 words of font info for 275 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
  90i,12n,131p,1087b,673s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/newtx/txsys.pfb>
-Output written on main.pdf (9 pages, 523111 bytes).
+Output written on main.pdf (9 pages, 524449 bytes).
 PDF statistics:
- 268 PDF objects out of 1000 (max. 8388607)
- 227 compressed objects within 3 object streams
- 92 named destinations out of 1000 (max. 500000)
+ 270 PDF objects out of 1000 (max. 8388607)
+ 229 compressed objects within 3 object streams
+ 94 named destinations out of 1000 (max. 500000)
  59602 words of extra memory for PDF output out of 61914 (max. 10000000)
 
