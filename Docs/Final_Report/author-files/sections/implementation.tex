@@ -97,3 +97,44 @@ With this, the application could now zoom up to a maximum of 5x showing values f
 \subsubsection{Summary}
 This was one of the most important sprints undertaken in terms of extending chart capabilities. All mentioned user stories were completed and the application was pushed to production on February 9th. At the end of this sprint the application was starting to become ready for user testing and could technically handle most data- Further information on user testing is mentioned in section X.
 
+\subsection{Sprint 4 - Start February 10th}
+\subsubsection{Plan}
+This was the fourth sprint. The main driving factor during this sprint was to prepare the application for user testers. To that end, 4 user stories were selected with a total workload of 10. These all focused on critical UI accessibility problems that would likely otherwise dominate user feedback. The sprint was planned to run for 6 days.
+
+\subsubsection{Implementation}
+This was a relatively straight forward sprint. No major systems or additions were added and most work used the UI Observer pattern using Event listeners as previously defined for UI needs. Although it was starting to become noticeable that adding more controls was starting to affect code quality and maintainability. A refactoring task was added to the backlog to look at opportunities to restructure the app.
+
+\subsubsection{Summary}
+The sprint was completed in record time. All user stories were implemented and the app was pushed to production on Feb 12, two days after the sprint started. The remaining time was instead reallocated to plan for user testing. At this point, the application could not only render most data but had reasonable ability to display that data correctly and provide basic user controls to that end. It would now be important to get user feedback to drive the application forward beyond it's most basic state.
+
+\subsection{Sprint 5 - Start February 19th}
+\subsubsection{Plan}
+This was the fifth sprint. User testing 1 has already started at this point in time and the student was waiting results to finish come in before analysis could start.
+In this relative downtime. A 7 day sprint was planned with 2 user stories for a workload of 9 points. These were task based stories that arose during development in previous sprints, and the student thought they would be important additions to have.
+
+\subsubsection{Implementation}
+The first story was to display names for each axis taken from the first row of the dataset. This was pretty straight forward thanks to the Font + Model Abstraction and was promptly implemented.
+
+The next user story though was to look at new ways to structure the app to increase maintainability. The main areas of opportunity thus found were as follow:
+\begin{itemize}
+    \item Restructure application to be fully Object-Oriented - At the moment the application is a script that extensively uses Objects (From classes such as Model and Loader) to implement the chart in a high level as a result of the abstractions provided by those objects. This is fine and probably the best design for a single chart to be rendered but there may be potential for further abstraction to allow multiple charts per page that can interact with each other.
+    \item Find a way to better manage UI state. This is currently not a problem with the relatively simple user controls but may become cumbersome when more controls are added and if some controls might start being dependant on other controls.
+    \item Find an overarching architecture to manage UI and Rendering code.At the moment user controls are highly coupled to rendering which is not ideal. It would be best to decouple them in some way to make adding more UI components easier.
+\end{itemize}
+
+Each of these points were researched in turn and prototyped with in turn. Although time was a very limited factor as the student considered it important to provide value to the user first and foremost.Which meant refactoring would likely not be able to continue beyond this 7 day sprint as requirements extracted from user testing would then be higher prioritized.
+
+
+From research, it was found that the MVC (Model View Controller) pattern is a popular option for web applications and furthermore, already has unknowingly partially implemented by the student.
+
+There were a number of market solutions but none worked (Elaborate here)
+
+A number of state management libraries were also available.
+
+In the end, due to how far the application already was in development- and the so-far relatively small UI changes asked for by user testers, No framework or library was selected and the Observer pattern based on Event listeners was kept as the backbone of the applications UI. This was expected to likely become problematic if extensive application UI state would be needed to be managed and kept consistent. Nevertheless, the student considered it important to focus on providing value to  the user first and foremost- which meant there would unlikely be more time beyond this sprint to focus on large refactoring. Thus, the student used the remaining time in this sprint to refactor the application into an MVC structure only.
+
+The application was structured as follows:
+\begin{itemize}
+    \item View - Static Written HTML index.html
+    \item Model - The application render loop.
+\end{itemize}
