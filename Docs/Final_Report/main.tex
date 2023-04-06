@@ -4,7 +4,18 @@
 \usepackage{lipsum}
 \usepackage{csquotes}
 \usepackage{subfigure}
+\usepackage{listings}
+\usepackage{xcolor}
 \tolerance=100
+
+% https://tex.stackexchange.com/questions/53941/verbatim-environment-with-background-color-pdflatex-and-tex4ht
+\lstnewenvironment{code}{%
+  \lstset{backgroundcolor=\color{lightgray},
+  frame=single,
+  framerule=0pt,
+  basicstyle=\ttfamily,
+  columns=fullflexible}}{}
+
 
 \fancyhead{}
 
