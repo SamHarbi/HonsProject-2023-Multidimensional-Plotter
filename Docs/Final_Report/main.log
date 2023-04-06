@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  6 APR 2023 13:09
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  6 APR 2023 19:56
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -986,44 +986,35 @@ Class acmart Warning: \vspace should only be used to provide space above/below s
 
 Class acmart Warning: \vspace should only be used to provide space above/below surrounding objects on input line 92.
 
-[10.10 <./author-files/figures/oldzooms.png>]
-Overfull \hbox (14.19147pt too wide) in paragraph at lines 134--135
-[]\T1/LinuxLibertineT-TLF/m/n/9 (-20) In the end, due to how far the ap-pli-ca-tion al-ready was in development-
- []
-
-)) (./main.bbl
+[10.10 <./author-files/figures/oldzooms.png>])) (./main.bbl
 
 Package natbib Warning: Empty `thebibliography' environment on input line 40.
 
-) (./author-files/appendices.tex)
+) (./author-files/appendices.tex [11.11])
 
 Class acmart Warning: Some images may lack descriptions.
-
-
-Package balance Warning: You have called \balance in second column
-(balance)                Columns might not be balanced.
 
 (d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-pdfdoc.def
 File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
 ) (d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-utf8.def
 File: se-utf8.def 2019/11/29 v1.12 stringenc: UTF-8
-) [11.11] (./main.aux)
+) [12.12] (./main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: B7375606A5F0CBE58A6CDDF01B919246;3879.
  ) 
 Here is how much of TeX's memory you used:
- 23942 strings out of 476025
- 388505 string characters out of 5792019
+ 23944 strings out of 476025
+ 388531 string characters out of 5792019
  1877382 words of memory out of 5000000
  43338 multiletter control sequences out of 15000+600000
  639134 words of font info for 277 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
  90i,12n,131p,1087b,1113s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/newtx/txsys.pfb>
-Output written on main.pdf (11 pages, 690696 bytes).
+Output written on main.pdf (12 pages, 692641 bytes).
 PDF statistics:
- 324 PDF objects out of 1000 (max. 8388607)
- 278 compressed objects within 3 object streams
- 118 named destinations out of 1000 (max. 500000)
+ 329 PDF objects out of 1000 (max. 8388607)
+ 282 compressed objects within 3 object streams
+ 120 named destinations out of 1000 (max. 500000)
  60151 words of extra memory for PDF output out of 61914 (max. 10000000)
 

@@ -122,19 +122,26 @@ The next user story though was to look at new ways to structure the app to incre
     \item Find an overarching architecture to manage UI and Rendering code.At the moment user controls are highly coupled to rendering which is not ideal. It would be best to decouple them in some way to make adding more UI components easier.
 \end{itemize}
 
-Each of these points were researched in turn and prototyped with in turn. Although time was a very limited factor as the student considered it important to provide value to the user first and foremost.Which meant refactoring would likely not be able to continue beyond this 7 day sprint as requirements extracted from user testing would then be higher prioritized.
+Each of these points were researched in turn and prototyped with in turn. Although time was a very limited factor as the student considered it important to provide value to the user first and foremost. Which meant refactoring would likely not be able to continue beyond this 7 day sprint as requirements extracted from user testing would then be higher prioritized. First, some attempts were made to restructure the render loop into an object but it was more work than expected to port everything correctly so it was abandoned.
 
+As for state management, there were a number of techniques and pre-made solutions for managing state. React + React Context though, has been found to be a great fit for the project. React is a UI library for creating user interfaces through components and now has support for state management by sharing states between these components. Parcel also has great support for react so integration would not have been too problematic. Unfortunately, the unique circumstances of this project made the student reject integrating react into the tool stack at the current time for the following key reasons:
+\begin{itemize}
+    \item Performance cost. Although most likely negligible, there is still none the less a performance cost in using an abstraction such as react. This is particularly important as the application already was performance heavy due to 3D rendering.
+    \item Lack of time and experience. In a perfect world the library could be easily implemented with no downtime and no future issues. Unfortunately, the reality is that adding react would have heavily changed the tech stack that could cause unknown problems. This is further exemplified by the student not having any considerable experience in using react meaning any issues that did pop-up would be much more difficult to solve. There was also no time to have a prototyping phase to mitigate these concerns as there was with the current stack at the start of this project.
+    \item Minimal Value added. As previously mentioned the current system worked as needed and did not need any changes to provide further functionality to the user. As such, it would have been hard to justify work done of porting the application to react over only future concerns. PXP prioritizes doing the simplest design and not worrying about future requirements as those tend to change constantly.
+\end{itemize}
 
-From research, it was found that the MVC (Model View Controller) pattern is a popular option for web applications and furthermore, already has unknowingly partially implemented by the student.
-
-There were a number of market solutions but none worked (Elaborate here)
-
-A number of state management libraries were also available.
-
-In the end, due to how far the application already was in development- and the so-far relatively small UI changes asked for by user testers, No framework or library was selected and the Observer pattern based on Event listeners was kept as the backbone of the applications UI. This was expected to likely become problematic if extensive application UI state would be needed to be managed and kept consistent. Nevertheless, the student considered it important to focus on providing value to  the user first and foremost- which meant there would unlikely be more time beyond this sprint to focus on large refactoring. Thus, the student used the remaining time in this sprint to refactor the application into an MVC structure only.
-
+The final point, to find an overarching architecture, the student found that the application fit very well into the MVC pattern. As such, the student starting working on implementing the pattern- which went smoothly as the application had already been unknowingly made to partially fit the pattern by the student.
 The application was structured as follows:
 \begin{itemize}
     \item View - Static Written HTML index.html
-    \item Model - The application render loop.
+    \item Model - The application render loop rendering chart. The chart rendered is a result of multiple control variables which make up the model.
+    \item Controller - This was the new class created. All event listeners and control functions were moved to be managed by this class.
 \end{itemize}
+Have chart showing all this here TODO
+
+\subsubsection{Summary}
+This was an important sprint that worked to refactor the application to be easier to work with, especially when adding new UI elements.
+The 2 user stories were thus completed and the application pushed to production as Version 2 on March 4th.
+It was completed just in time as user testing has come to a close and analysis begun.
+
