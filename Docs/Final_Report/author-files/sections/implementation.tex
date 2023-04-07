@@ -145,3 +145,30 @@ This was an important sprint that worked to refactor the application to be easie
 The 2 user stories were thus completed and the application pushed to production as Version 2 on March 4th.
 It was completed just in time as user testing has come to a close and analysis begun.
 
+\subsection{Sprint 6 - Start March 05}
+\subsubsection{Plan}
+This was the 6th Sprint, and the first sprint starting work on the second version of the project. Two new FeatureSets were now available for user stories to be selected from. One composed from user testing analysis as further described in section X and A further improvements feature set created in a similar fashion as the first MVP feature set (By the student through the research phase). For this Sprint, 7 Stories were selected from both feature sets with a priority for Must. In terms of workload, a wide range were selected for a total workload of 27 Points over a 5 day sprint period.
+
+\subsubsection{Implementation}
+The first important story done was reworking how zooming worked. User testers asked for a zoom that showed labels for each level which was found to be difficult to calibrate with the zooming visual effect as mentioned in Sprint 3. So instead, the zoom was reworked to always show 10 axis lines and only change position of data points and labels on zoom- This was generally straight forward and created a robust zoom that hit the criteria, even if it didn't look as visually impressive.
+
+The next addition was to modify the renderer to allow picking / highlighting data points. To achieve this, two main techniques were identified by the student.
+\begin{itemize}
+    \item Raycasting - This works by taking the screen coordinates clicked on by the user and projecting them into the 3D scene. From this scene position a ray is then shot and a check done to get any intersections with objects.
+    \item Colour Picking - This is a technique where Object ID is encoded into the colour of an object. When a user then clicks on an object, it is possible to get what object was clicked on by picking the colour at the click position (pixel clicked on) and matching it to an object in the scene.
+\end{itemize}
+
+After analysis of the two, Colour picking was chosen over ray tracing for the following key points:
+\begin{itemize}
+    \item More Complex implementation with raycasting.
+    \item Raycasting is highly CPU dependant, Lots of Math- which isn't good with JavaScript.
+    \item Something else
+\end{itemize}
+
+To implement colour picking then, the student extended the renderer to render data points twice- The first render would render to a texture in a different buffer, this first render would also encode an ID for every Model rendered into 3 rgb Channels giving a unique colour for every model drawn (up to around 16 million). After that, render is called again but to the screen buffer instead. This means that the user only see's the the second render (Which can freely use colour) instead of the first one.
+*Have image comparison here*
+
+glGetPixel would then poll what colour pixel the user's mouse is hovering over. During the second render phase as each model is rendered, it's id is checked to see if it matches the selected id extracted from the colour of the hovered over pixel. If it does, the model is highlighted and it's data saved to be displayed.
+
+\subsubsection{Summary}
+All User stories were completed as expected and the application pushed to production on March 11. With this sprint almost all Must stories from both Feature sets making this a very productive sprint and one that set the project on good track to be completed by the end of the month.
