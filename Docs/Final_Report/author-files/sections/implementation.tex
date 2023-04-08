@@ -172,3 +172,12 @@ glGetPixel would then poll what colour pixel the user's mouse is hovering over. 
 
 \subsubsection{Summary}
 All User stories were completed as expected and the application pushed to production on March 11. With this sprint almost all Must stories from both Feature sets making this a very productive sprint and one that set the project on good track to be completed by the end of the month.
+
+\subsection{Sprint 7 - Start March 12}
+\subsubsection{Plan}
+This was the 7th Sprint. The highest priority user stories were once again selected from both feature sets. This included the last 2 Must stories and 2 Should stories. In total, the workload was 21 over a 5 day period. The main focus of this sprint was to expand the application to support one more dimension and create a new suite of user controls to view and assign data to chart axies.
+
+To add a new dimension, the student had to start looking at different ways to represent dimensions. The main options identified were Alpha/Transparency, Single Channel / Saturation component, Full Colour component and Shape component.
+Of those, Shape was dropped due to limited range (Have to have a different model to represent each possible values). Alpha was also dropped due to difficulties in how the browser handles Alpha. Finally, Saturation was chosen over colour as having all 3 channels might be confusing for users to extract values.
+
+During the following implementation- the first problem encountered was how to plot an infinite range of values between two Saturation values on a single channel. For this problem the student identified the use of a squashing function that formed an asymptote at the limits. By then also allowing the user to change those limits, any data can be effectively plotted with saturation.
