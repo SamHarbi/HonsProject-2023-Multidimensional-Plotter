@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  8 APR 2023 13:23
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  8 APR 2023 18:38
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -900,7 +900,7 @@ Overfull \hbox (5.68741pt too wide) in paragraph at lines 55--56
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
 (Font)              scaled to size 7.0pt on input line 69.
 [2.2] [3.3]) (./author-files/sections/specification.tex [4.4]
-<author-files/figures/SingleStoryPath2.png, id=174, 617.30624pt x 222.8325pt>
+<author-files/figures/SingleStoryPath2.png, id=194, 617.30624pt x 222.8325pt>
 File: author-files/figures/SingleStoryPath2.png Graphic file (type png)
 <use author-files/figures/SingleStoryPath2.png>
 Package pdftex.def Info: author-files/figures/SingleStoryPath2.png  used on input line 56.
@@ -914,7 +914,7 @@ Overfull \hbox (2.21016pt too wide) in paragraph at lines 34--35
 \T1/LinuxLibertineT-TLF/m/n/9 (-20) pile and op-ti-mize Type-Script into runnable by the browser JavaScript.
  []
 
-<author-files/figures/tri.png, id=184, 735.49782pt x 472.76625pt>
+<author-files/figures/tri.png, id=204, 735.49782pt x 472.76625pt>
 File: author-files/figures/tri.png Graphic file (type png)
 <use author-files/figures/tri.png>
 Package pdftex.def Info: author-files/figures/tri.png  used on input line 57.
@@ -923,7 +923,7 @@ Package pdftex.def Info: author-files/figures/tri.png  used on input line 57.
 Class acmart Warning: A possible image without description on input line 60.
 
 [6.6 <./author-files/figures/tri.png>]
-<author-files/figures/Monkey-Test2.png, id=206, 500.62032pt x 314.67563pt>
+<author-files/figures/Monkey-Test2.png, id=226, 500.62032pt x 314.67563pt>
 File: author-files/figures/Monkey-Test2.png Graphic file (type png)
 <use author-files/figures/Monkey-Test2.png>
 Package pdftex.def Info: author-files/figures/Monkey-Test2.png  used on input line 67.
@@ -932,7 +932,7 @@ Package pdftex.def Info: author-files/figures/Monkey-Test2.png  used on input li
 
 Class acmart Warning: A possible image without description on input line 70.
 
-<author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png, id=207, 562.1pt x 421.575pt>
+<author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png, id=227, 562.1pt x 421.575pt>
 File: author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png Graphic file (type png)
 <use author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png>
 Package pdftex.def Info: author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png  used on input line 119.
@@ -941,7 +941,7 @@ Package pdftex.def Info: author-files/figures/SetMarkerPropertiesExample_01_MATL
 Class acmart Warning: A possible image without description on input line 122.
 
 [7.7 <./author-files/figures/Monkey-Test2.PNG> <./author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png>]) (./author-files/sections/implementation.tex
-<author-files/figures/glyphset.png, id=219, 342.27875pt x 125.46875pt>
+<author-files/figures/glyphset.png, id=239, 342.27875pt x 125.46875pt>
 File: author-files/figures/glyphset.png Graphic file (type png)
 <use author-files/figures/glyphset.png>
 Package pdftex.def Info: author-files/figures/glyphset.png  used on input line 24.
@@ -951,7 +951,7 @@ Package pdftex.def Info: author-files/figures/glyphset.png  used on input line 2
 Class acmart Warning: A possible image without description on input line 27.
 
 [8.8 <./author-files/figures/glyphset.png>]
-<author-files/figures/oldzooms.png, id=230, 376.40625pt x 376.40625pt>
+<author-files/figures/oldzooms.png, id=250, 376.40625pt x 376.40625pt>
 File: author-files/figures/oldzooms.png Graphic file (type png)
 <use author-files/figures/oldzooms.png>
 Package pdftex.def Info: author-files/figures/oldzooms.png  used on input line 72.
@@ -987,7 +987,7 @@ Class acmart Warning: \vspace should only be used to provide space above/below s
 Class acmart Warning: \vspace should only be used to provide space above/below surrounding objects on input line 92.
 
 [10.10 <./author-files/figures/oldzooms.png>] [11.11]
-<author-files/figures/squashFunc.PNG, id=270, 255.95625pt x 99.37125pt>
+<author-files/figures/squashFunc.PNG, id=291, 255.95625pt x 99.37125pt>
 File: author-files/figures/squashFunc.PNG Graphic file (type png)
 <use author-files/figures/squashFunc.PNG>
 Package pdftex.def Info: author-files/figures/squashFunc.PNG  used on input line 188.
@@ -996,11 +996,11 @@ Package pdftex.def Info: author-files/figures/squashFunc.PNG  used on input line
 
 Class acmart Warning: A possible image without description on input line 191.
 
-)) (./main.bbl
+) (./author-files/sections/testing.tex [12.12 <./author-files/figures/squashFunc.PNG>]) (./author-files/sections/finalproduct.tex) (./author-files/sections/conclusion.tex)) (./main.bbl
 
 Package natbib Warning: Empty `thebibliography' environment on input line 40.
 
-) (./author-files/appendices.tex [12.12 <./author-files/figures/squashFunc.PNG>])
+) (./author-files/appendices.tex [13.13])
 
 Class acmart Warning: Some images may lack descriptions.
 
@@ -1008,23 +1008,23 @@ Class acmart Warning: Some images may lack descriptions.
 File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
 ) (d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-utf8.def
 File: se-utf8.def 2019/11/29 v1.12 stringenc: UTF-8
-) [13.13] (./main.aux)
+) [14.14] (./main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 7FB1C942AF6208241F0F1E738AD4F7B7;4542.
+(rerunfilecheck)             Checksum: C49DC126E298D820BFABF20CCAD7F1D9;5247.
  ) 
 Here is how much of TeX's memory you used:
- 23988 strings out of 476025
- 389536 string characters out of 5792019
+ 24016 strings out of 476025
+ 390200 string characters out of 5792019
  1877382 words of memory out of 5000000
- 43348 multiletter control sequences out of 15000+600000
+ 43359 multiletter control sequences out of 15000+600000
  641256 words of font info for 289 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
  90i,12n,131p,1087b,1113s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/newtx/txsys.pfb>
-Output written on main.pdf (13 pages, 704987 bytes).
+Output written on main.pdf (14 pages, 711137 bytes).
 PDF statistics:
- 362 PDF objects out of 1000 (max. 8388607)
- 311 compressed objects within 4 object streams
- 134 named destinations out of 1000 (max. 500000)
- 60180 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 389 PDF objects out of 1000 (max. 8388607)
+ 337 compressed objects within 4 object streams
+ 142 named destinations out of 1000 (max. 500000)
+ 60220 words of extra memory for PDF output out of 61914 (max. 10000000)
 
