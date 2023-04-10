@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex main"] 1680975524 "main.aux" "main.bbl" "main" 1680995528 0
+["bibtex main"] 1681144176 "main.aux" "main.bbl" "main" 1681144239 0
   "./ACM-Reference-Format.bst" 1679765874 88297 68580d41bd279ee2c59d376cb377f3d6 ""
   "./bibliography.bib" 1679765874 645 dceff1d0174781c3b007572f10a156d3 ""
-  "main.aux" 1680995526 16112 6c2855e754260bc88f0378bbd1825376 "pdflatex"
+  "main.aux" 1681144237 16359 b5bce9e33fc1d2668a523f3545f0a463 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1680995523 "c:/Users/Sam/Desktop/Main/HonsProject-2023-Multidimensional-Plotter/Docs/Final_Report/main.tex" "main.pdf" "main" 1680995528 0
+["pdflatex"] 1681144235 "c:/Users/Sam/Desktop/Main/HonsProject-2023-Multidimensional-Plotter/Docs/Final_Report/main.tex" "main.pdf" "main" 1681144239 0
   "acmart.cls" 1679765874 103409 33ab3db5699c475d5435e28b7021d6c1 ""
   "author-files/appendices.tex" 1679765874 106 1d08cd4c4de4c09a83ca317d62252461 ""
   "author-files/body.tex" 1680978862 354 8f4c178c262dc0ef2641d6502face0b6 ""
@@ -19,10 +19,10 @@
   "author-files/figures/squashFunc.PNG" 1680952878 4033 27782489c82119a1cbb57e014e0b64cb ""
   "author-files/figures/tri.png" 1679866931 10652 e853798bbb909524521054759fdd0f5a ""
   "author-files/head.tex" 1679765874 645 47b3ef8e7bf4fff14fae02673f6386a7 ""
-  "author-files/sections/background.tex" 1679766209 20170 a608b55e5b29d31a6b57dc39e1892aa3 ""
-  "author-files/sections/conclusion.tex" 1680975532 20 b50204e17c0a475d3d65191e029fdf1d ""
+  "author-files/sections/background.tex" 1681144238 20185 c76818fef66db831fc1d829b6d343a61 ""
+  "author-files/sections/conclusion.tex" 1681000180 291 e562067332db0120bb4b3f16338bcf23 ""
   "author-files/sections/design.tex" 1680720001 13109 cf7c7feffa5e991ba36722c29a1623cb ""
-  "author-files/sections/finalproduct.tex" 1680995524 1238 bcdb53a96bee0c4032bc6c0513ac870d ""
+  "author-files/sections/finalproduct.tex" 1680996158 1249 269e30564fde2c02ba20b47321d51c33 ""
   "author-files/sections/implementation.tex" 1680960652 26608 4c2226f239ee710d1b24b603e9fc920d ""
   "author-files/sections/introduction.tex" 1679765874 1508 862a6fc4d6d14cd5b627342a8c2f226c ""
   "author-files/sections/specification.tex" 1679837429 7972 9b9fc3fdd08fce683773d56ede14136e ""
@@ -217,9 +217,9 @@
   "d:/TEX/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1679513860 4662209 2dad468923ab70bb080cfa8776e90b5e ""
   "d:/TEX/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt" 1679514079 7883346 8e3429cb30b688a90aec9eb0a861a9ce ""
   "d:/TEX/texlive/2023/texmf.cnf" 1679513837 713 e69b156964470283e0530f5060668171 ""
-  "main.aux" 1680995526 16112 6c2855e754260bc88f0378bbd1825376 "pdflatex"
-  "main.bbl" 1680975525 1785 8ed37e936ba16de73718c10d329b7108 "bibtex main"
-  "main.out" 1680995526 5247 c49dc126e298d820bfabf20ccad7f1d9 "pdflatex"
+  "main.aux" 1681144237 16359 b5bce9e33fc1d2668a523f3545f0a463 "pdflatex"
+  "main.bbl" 1681144177 1785 8ed37e936ba16de73718c10d329b7108 "bibtex main"
+  "main.out" 1681144237 5573 9c4df38a0119e0e5b784434c8f33f50f "pdflatex"
   "main.tex" 1680716616 830 f3610cd330be886ffc3ba38dbf5cb2c6 ""
   (generated)
   "main.aux"
