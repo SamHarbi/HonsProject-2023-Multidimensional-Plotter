@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  10 APR 2023 21:09
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  10 APR 2023 23:45
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -936,20 +936,29 @@ Class acmart Warning: A possible image without description on input line 70.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
+<author-files/figures/proto2.png, id=221, 644.4075pt x 343.2825pt>
+File: author-files/figures/proto2.png Graphic file (type png)
+<use author-files/figures/proto2.png>
+Package pdftex.def Info: author-files/figures/proto2.png  used on input line 74.
+(pdftex.def)             Requested size: 241.14749pt x 128.46347pt.
+
+Class acmart Warning: A possible image without description on input line 77.
+
 [6.6]
-<author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png, id=240, 562.1pt x 421.575pt>
+<author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png, id=241, 562.1pt x 421.575pt>
 File: author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png Graphic file (type png)
 <use author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png>
-Package pdftex.def Info: author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png  used on input line 119.
+Package pdftex.def Info: author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png  used on input line 128.
 (pdftex.def)             Requested size: 241.14749pt x 180.86201pt.
 
 
-Class acmart Warning: A possible image without description on input line 122.
+Class acmart Warning: A possible image without description on input line 131.
 
-[7.7 <./author-files/figures/tri.png> <./author-files/figures/Monkey-Test2.PNG> <./author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png>]) (./author-files/sections/implementation.tex
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
-<author-files/figures/glyphset.png, id=253, 342.27875pt x 125.46875pt>
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[7.7 <./author-files/figures/tri.png> <./author-files/figures/Monkey-Test2.PNG> <./author-files/figures/proto2.png>]) (./author-files/sections/implementation.tex
+<author-files/figures/glyphset.png, id=254, 342.27875pt x 125.46875pt>
 File: author-files/figures/glyphset.png Graphic file (type png)
 <use author-files/figures/glyphset.png>
 Package pdftex.def Info: author-files/figures/glyphset.png  used on input line 24.
@@ -958,8 +967,11 @@ Package pdftex.def Info: author-files/figures/glyphset.png  used on input line 2
 
 Class acmart Warning: A possible image without description on input line 27.
 
-[8.8 <./author-files/figures/glyphset.png>]
-<author-files/figures/oldzooms.png, id=264, 376.40625pt x 376.40625pt>
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[8.8 <./author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png>]
+<author-files/figures/oldzooms.png, id=265, 376.40625pt x 376.40625pt>
 File: author-files/figures/oldzooms.png Graphic file (type png)
 <use author-files/figures/oldzooms.png>
 Package pdftex.def Info: author-files/figures/oldzooms.png  used on input line 72.
@@ -968,10 +980,7 @@ Package pdftex.def Info: author-files/figures/oldzooms.png  used on input line 7
 
 Class acmart Warning: A possible image without description on input line 75.
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[9.9]
+[9.9 <./author-files/figures/glyphset.png>]
 
 Class acmart Warning: \vspace should only be used to provide space above/below surrounding objects on input line 79.
 
@@ -995,11 +1004,8 @@ Class acmart Warning: \vspace should only be used to provide space above/below s
 
 Class acmart Warning: \vspace should only be used to provide space above/below surrounding objects on input line 92.
 
-[10.10{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-4.enc} <./author-files/figures/oldzooms.png>]
-Underfull \vbox (badness 3536) has occurred while \output is active []
-
- [11.11]
-<author-files/figures/squashFunc.PNG, id=305, 255.95625pt x 99.37125pt>
+[10.10{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-4.enc} <./author-files/figures/oldzooms.png>] [11.11]
+<author-files/figures/squashFunc.PNG, id=308, 255.95625pt x 99.37125pt>
 File: author-files/figures/squashFunc.PNG Graphic file (type png)
 <use author-files/figures/squashFunc.PNG>
 Package pdftex.def Info: author-files/figures/squashFunc.PNG  used on input line 188.
@@ -1008,8 +1014,11 @@ Package pdftex.def Info: author-files/figures/squashFunc.PNG  used on input line
 
 Class acmart Warning: A possible image without description on input line 191.
 
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 ) (./author-files/sections/testing.tex [12.12 <./author-files/figures/squashFunc.PNG>]
-Underfull \vbox (badness 2096) has occurred while \output is active []
+Underfull \vbox (badness 1199) has occurred while \output is active []
 
 ) (./author-files/sections/finalproduct.tex) (./author-files/sections/conclusion.tex)) (./main.bbl
 
@@ -1025,21 +1034,21 @@ File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
 File: se-utf8.def 2019/11/29 v1.12 stringenc: UTF-8
 ) [14.14] (./main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: A0EF63979C01708E58FCC407BAE022E3;5689.
+(rerunfilecheck)             Checksum: 2A9A900672B09DAE64C5CA0D0B2AAF5B;5689.
  ) 
 Here is how much of TeX's memory you used:
- 24024 strings out of 476025
- 390311 string characters out of 5792019
- 1878382 words of memory out of 5000000
- 43364 multiletter control sequences out of 15000+600000
+ 24033 strings out of 476025
+ 390572 string characters out of 5792019
+ 1877382 words of memory out of 5000000
+ 43371 multiletter control sequences out of 15000+600000
  641256 words of font info for 289 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
  90i,13n,131p,1087b,1113s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/newtx/txsys.pfb>
-Output written on main.pdf (14 pages, 712925 bytes).
+Output written on main.pdf (14 pages, 726566 bytes).
 PDF statistics:
- 405 PDF objects out of 1000 (max. 8388607)
- 353 compressed objects within 4 object streams
- 145 named destinations out of 1000 (max. 500000)
- 60244 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 408 PDF objects out of 1000 (max. 8388607)
+ 354 compressed objects within 4 object streams
+ 146 named destinations out of 1000 (max. 500000)
+ 60249 words of extra memory for PDF output out of 61914 (max. 10000000)
 
