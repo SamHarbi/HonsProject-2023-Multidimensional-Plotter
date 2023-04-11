@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{0}
+\begin{thebibliography}{1}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -36,5 +36,15 @@
 \providecommand\bibinfo[2]{#2}
 \providecommand\natexlab[1]{#1}
 \providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[\protect\citeauthoryear{Ali, Gupta, Nayak, and Lenka}{Ali et~al\mbox{.}}{2016}]%
+        {7918044}
+\bibfield{author}{\bibinfo{person}{Syed~Mohd Ali}, \bibinfo{person}{Noopur Gupta}, \bibinfo{person}{Gopal~Krishna Nayak}, {and} \bibinfo{person}{Rakesh~Kumar Lenka}.} \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{Big data visualization: Tools and challenges}. In \bibinfo{booktitle}{\emph{2016 2nd International Conference on Contemporary Computing and Informatics (IC3I)}}. \bibinfo{pages}{656--660}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1109/IC3I.2016.7918044}
+\showDOI{\tempurl}
+
 
 \end{thebibliography}

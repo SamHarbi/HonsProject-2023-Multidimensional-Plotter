@@ -1,13 +1,18 @@
 \section{Design}
-An initial design phase was undergone by the student before development started. Although it should be noted that the work done there did not constitute the final design as a waterfall methodology would require but was more akin to setting the scene for the start of development. The majority of design on how something should be coded, look and such was done on a story by story basis during sprints.
-The initial design phase itself consisted of the following key parts:
+An initial design phase was undergone by the student before development started. Although it should be noted that the work done did not constitute the final design as a waterfall methodology would require but was more akin to setting the scene for the start of development. The majority of design on how something should be coded, look and such was done on a story by story basis during sprints.
+This phase itself though consisted of the following key parts:
 
 \subsection{Technology Stack} \label{techstack}
-The student decided to settle on a technology stack during this phase. Which although would still be open to changes should they be needed, nevertheless set what the stack should be otherwise. This decision was done by comparing valid options built up from those identified during the research phase mentioned here X.
-The stack then, which was initially chosen and ended up remaining unchanged throughout the project is as follows
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\columnwidth]{author-files/figures/logo-ts-webgl.PNG}
+    \caption{TypeScript and WebGL logos}
+    \label{fig:tswebgllogo}
+\end{figure}
+The student decided to settle on a technology stack during this phase. Which although would still be open to changes should they be needed if any problems arose during prototyping (See \ref{prototype}), nevertheless set what the stack should be otherwise. This decision was done by comparing valid options built up from those identified during the research phase (See \ref{toolsntech}) The selection and justification of every element of the stack follow below:
 
 \paragraph{Client-Side run application}
-This project was not expected to require any server resources such as central database access. As such, client-side only was chosen to allow the student to focus on a single code base.
+This project was not expected to require any server resources such as central database access. As such, client-side only was chosen to allow the student to focus on a single code base. This also would simplify testing as there would be less infrastructure moving parts that could break.
 
 \paragraph{Browser Run Enviroment}
 Chosen for its greater accessibility over downloaded options and extensive support among devices without the need for any extra environment download by the user. Only a browser is needed which is usually preinstalled on most internet capable Operating Systems.
@@ -48,7 +53,7 @@ Pre-made functions for the math very commonly used in graphics development. Allo
 \paragraph{jquery-csv}
 A jquery syntax compliant .csv parser. No particular reason to select this particularly from other alternatives. Covers a lot of edge cases in parsing .csv files that would have taken a while to implement and test from scratch.
 
-\subsection{Prototyping}
+\subsection{Prototyping} \label{prototype}
 An important part of the initial design stage was creating simple prototype applications using the technology stack to give the student experience with using the stack and to identify any critical issues that may need the stack to be redesigned or tools to be changed. These were in a sense mock sprint runs to smooth out the process and prepare for when development would officially start. The prototypes created also turned out general enough that they were able to be reused for the development of the actual application, in particular prototype 2.
 
 \subsubsection {Prototype 1}
@@ -101,7 +106,7 @@ Like previously mentioned, This prototype then set the basis from which developm
         \hline
         Static chart image rendered once code written is run & Dynamically update rendered image as properties are changed \\
         \hline
-        Exploration to explore                               & Exploration possible                                        \\
+        Difficult to explore                                 & Exploration possible                                        \\
         \hline
     \end{tabular}
     \caption{Comparison of design changes to how figures are created in the application developed compared to programmatic market alternatives}
@@ -125,8 +130,15 @@ The chart type that in the end embodied these requirements best was a scatterplo
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\columnwidth]{author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png}
-    \caption{A 3D scatterplot generated through MATLAB}
+    \includegraphics[width=0.7\columnwidth]{author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png}
+    \caption{A 3D scatterplot generated through MATLAB, example of a classic cut-off figure}
+    \label{fig:MatlabPlot}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\columnwidth]{author-files/figures/worldnavblender.png}
+    \caption{Screenshot from Blender, A 3D modelling application, similar to the Unlimited Axis World view presented}
     \label{fig:MatlabPlot}
 \end{figure}
 
