@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{1}
+\begin{thebibliography}{3}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -45,6 +45,30 @@
 \urldef\tempurl%
 \url{https://doi.org/10.1109/IC3I.2016.7918044}
 \showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Ghobakhloo}{Ghobakhloo}{2020}]%
+        {GHOBAKHLOO2020119869}
+\bibfield{author}{\bibinfo{person}{Morteza Ghobakhloo}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{Industry 4.0, digitization, and opportunities for sustainability}.
+\newblock \bibinfo{journal}{\emph{Journal of Cleaner Production}}  \bibinfo{volume}{252} (\bibinfo{year}{2020}), \bibinfo{pages}{119869}.
+\newblock
+\showISSN{0959-6526}
+\urldef\tempurl%
+\url{https://doi.org/10.1016/j.jclepro.2019.119869}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Overflow}{Overflow}{2021}]%
+        {stackoverflow_2021_stack}
+\bibfield{author}{\bibinfo{person}{Stack Overflow}.} \bibinfo{year}{2021}\natexlab{}.
+\newblock \bibinfo{title}{Stack Overflow Developer Survey 2021}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://insights.stackoverflow.com/survey/2021}
+\showURL{%
+\tempurl}
 
 
 \end{thebibliography}
