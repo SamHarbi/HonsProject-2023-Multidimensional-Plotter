@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  11 APR 2023 21:23
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  12 APR 2023 01:50
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -884,8 +884,6 @@ LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
 (Font)              scaled to size 9.0pt on input line 31.
  (./author-files/body.tex (./author-files/sections/introduction.tex) (./author-files/sections/background.tex
-Underfull \vbox (badness 2073) has occurred while \output is active []
-
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
 (Font)              scaled to size 9.0pt on input line 9.
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/it' will be
@@ -904,22 +902,19 @@ File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 ) (d:/TEX/texlive/2023/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-Underfull \vbox (badness 7451) has occurred while \output is active []
+Underfull \vbox (badness 2173) has occurred while \output is active []
 
 
-Overfull \hbox (5.68741pt too wide) in paragraph at lines 55--56
+Overfull \hbox (5.68741pt too wide) in paragraph at lines 56--57
 []\T1/LinuxLibertineT-TLF/m/n/9 (-20) One spe-cific as-pect re-searched has been soft-ware plan-ning method-
  []
 
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
-(Font)              scaled to size 7.0pt on input line 66.
-[2.2] [3.3]
-Underfull \vbox (badness 2073) has occurred while \output is active []
+(Font)              scaled to size 7.0pt on input line 64.
+[2.2] [3.3]) (./author-files/sections/specification.tex [4.4]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-) (./author-files/sections/specification.tex [4.4]
-Underfull \vbox (badness 4279) has occurred while \output is active []
-
-<author-files/figures/SingleStoryPath2.png, id=213, 617.30624pt x 222.8325pt>
+<author-files/figures/SingleStoryPath2.png, id=217, 617.30624pt x 222.8325pt>
 File: author-files/figures/SingleStoryPath2.png Graphic file (type png)
 <use author-files/figures/SingleStoryPath2.png>
 Package pdftex.def Info: author-files/figures/SingleStoryPath2.png  used on input line 56.
@@ -929,7 +924,7 @@ Package pdftex.def Info: author-files/figures/SingleStoryPath2.png  used on inpu
 Class acmart Warning: A possible image without description on input line 59.
 
 [5.5 <./author-files/figures/SingleStoryPath2.png>]) (./author-files/sections/design.tex
-<author-files/figures/logo-ts-webgl.PNG, id=223, 520.19344pt x 217.5628pt>
+<author-files/figures/logo-ts-webgl.PNG, id=227, 520.19344pt x 217.5628pt>
 File: author-files/figures/logo-ts-webgl.PNG Graphic file (type png)
 <use author-files/figures/logo-ts-webgl.PNG>
 Package pdftex.def Info: author-files/figures/logo-ts-webgl.PNG  used on input line 8.
@@ -943,11 +938,8 @@ Overfull \hbox (2.21016pt too wide) in paragraph at lines 39--40
 \T1/LinuxLibertineT-TLF/m/n/9 (-20) pile and op-ti-mize Type-Script into runnable by the browser JavaScript.
  []
 
-
-Underfull \vbox (badness 1184) has occurred while \output is active []
-
- [6.6 <./author-files/figures/logo-ts-webgl.PNG>]
-<author-files/figures/tri.png, id=244, 735.49782pt x 472.76625pt>
+[6.6 <./author-files/figures/logo-ts-webgl.PNG>]
+<author-files/figures/tri.png, id=247, 735.49782pt x 472.76625pt>
 File: author-files/figures/tri.png Graphic file (type png)
 <use author-files/figures/tri.png>
 Package pdftex.def Info: author-files/figures/tri.png  used on input line 62.
@@ -956,7 +948,7 @@ Package pdftex.def Info: author-files/figures/tri.png  used on input line 62.
 
 Class acmart Warning: A possible image without description on input line 65.
 
-<author-files/figures/Monkey-Test2.png, id=245, 500.62032pt x 314.67563pt>
+<author-files/figures/Monkey-Test2.png, id=248, 500.62032pt x 314.67563pt>
 File: author-files/figures/Monkey-Test2.png Graphic file (type png)
 <use author-files/figures/Monkey-Test2.png>
 Package pdftex.def Info: author-files/figures/Monkey-Test2.png  used on input line 72.
@@ -967,7 +959,7 @@ Class acmart Warning: A possible image without description on input line 75.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<author-files/figures/proto2.png, id=246, 633.36626pt x 403.5075pt>
+<author-files/figures/proto2.png, id=249, 633.36626pt x 403.5075pt>
 File: author-files/figures/proto2.png Graphic file (type png)
 <use author-files/figures/proto2.png>
 Package pdftex.def Info: author-files/figures/proto2.png  used on input line 79.
@@ -976,7 +968,7 @@ Package pdftex.def Info: author-files/figures/proto2.png  used on input line 79.
 Class acmart Warning: A possible image without description on input line 82.
 
 [7.7 <./author-files/figures/tri.png> <./author-files/figures/Monkey-Test2.PNG> <./author-files/figures/proto2.png>]
-<author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png, id=262, 562.1pt x 421.575pt>
+<author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png, id=266, 562.1pt x 421.575pt>
 File: author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png Graphic file (type png)
 <use author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png>
 Package pdftex.def Info: author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png  used on input line 133.
@@ -985,7 +977,7 @@ Package pdftex.def Info: author-files/figures/SetMarkerPropertiesExample_01_MATL
 
 Class acmart Warning: A possible image without description on input line 136.
 
-<author-files/figures/worldnavblender.png, id=263, 419.31656pt x 359.09157pt>
+<author-files/figures/worldnavblender.png, id=267, 419.31656pt x 359.09157pt>
 File: author-files/figures/worldnavblender.png Graphic file (type png)
 <use author-files/figures/worldnavblender.png>
 Package pdftex.def Info: author-files/figures/worldnavblender.png  used on input line 140.
@@ -997,7 +989,7 @@ Class acmart Warning: A possible image without description on input line 143.
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 ) (./author-files/sections/implementation.tex [8.8 <./author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png> <./author-files/figures/worldnavblender.PNG>]
-<author-files/figures/glyphset.png, id=275, 342.27875pt x 125.46875pt>
+<author-files/figures/glyphset.png, id=279, 342.27875pt x 125.46875pt>
 File: author-files/figures/glyphset.png Graphic file (type png)
 <use author-files/figures/glyphset.png>
 Package pdftex.def Info: author-files/figures/glyphset.png  used on input line 24.
@@ -1007,7 +999,7 @@ Package pdftex.def Info: author-files/figures/glyphset.png  used on input line 2
 Class acmart Warning: A possible image without description on input line 27.
 
 [9.9 <./author-files/figures/glyphset.png>]
-<author-files/figures/oldzooms.png, id=287, 376.40625pt x 376.40625pt>
+<author-files/figures/oldzooms.png, id=291, 376.40625pt x 376.40625pt>
 File: author-files/figures/oldzooms.png Graphic file (type png)
 <use author-files/figures/oldzooms.png>
 Package pdftex.def Info: author-files/figures/oldzooms.png  used on input line 72.
@@ -1040,7 +1032,7 @@ Class acmart Warning: \vspace should only be used to provide space above/below s
 Class acmart Warning: \vspace should only be used to provide space above/below surrounding objects on input line 92.
 
 [10.10{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-4.enc} <./author-files/figures/oldzooms.png>] [11.11]
-<author-files/figures/squashFunc.PNG, id=318, 255.95625pt x 99.37125pt>
+<author-files/figures/squashFunc.PNG, id=322, 255.95625pt x 99.37125pt>
 File: author-files/figures/squashFunc.PNG Graphic file (type png)
 <use author-files/figures/squashFunc.PNG>
 Package pdftex.def Info: author-files/figures/squashFunc.PNG  used on input line 188.
@@ -1060,6 +1052,7 @@ LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
 (Font)              scaled to size 7.0pt on input line 43.
 LaTeX Info: Redefining \tempurl on input line 58.
 LaTeX Info: Redefining \tempurl on input line 69.
+LaTeX Info: Redefining \tempurl on input line 80.
 )
 
 Class acmart Warning: Some images may lack descriptions.
@@ -1080,18 +1073,18 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 477BFBC881544FC97FAEB6DAA9918A04;5578.
  ) 
 Here is how much of TeX's memory you used:
- 24188 strings out of 476025
- 394316 string characters out of 5792019
+ 24196 strings out of 476025
+ 394466 string characters out of 5792019
  1879382 words of memory out of 5000000
- 43483 multiletter control sequences out of 15000+600000
- 650431 words of font info for 314 fonts, out of 8000000 for 9000
+ 43487 multiletter control sequences out of 15000+600000
+ 650704 words of font info for 316 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
  90i,12n,131p,1087b,1113s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/newtx/txsys.pfb>
-Output written on main.pdf (14 pages, 880453 bytes).
+Output written on main.pdf (14 pages, 881368 bytes).
 PDF statistics:
- 427 PDF objects out of 1000 (max. 8388607)
- 369 compressed objects within 4 object streams
- 150 named destinations out of 1000 (max. 500000)
+ 434 PDF objects out of 1000 (max. 8388607)
+ 376 compressed objects within 4 object streams
+ 151 named destinations out of 1000 (max. 500000)
  66395 words of extra memory for PDF output out of 74296 (max. 10000000)
 
