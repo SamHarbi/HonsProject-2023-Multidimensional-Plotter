@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{8}
+\begin{thebibliography}{24}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -37,6 +37,48 @@
 \providecommand\natexlab[1]{#1}
 \providecommand\showeprint[2][]{arXiv:#2}
 
+\bibitem[\protect\citeauthoryear{StatCounter Global Stats}{des}{[n.d.]}]%
+        {desktop}
+StatCounter Global Stats \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{Desktop Browser Market Share Worldwide}}.
+\newblock StatCounter Global Stats.
+\newblock
+\urldef\tempurl%
+\url{https://gs.statcounter.com/browser-market-share/desktop/worldwide/#monthly-202110-202110-bar}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/12/2023).}
+
+
+\bibitem[\protect\citeauthoryear{v8.dev}{v8}{[n.d.]}]%
+        {v8}
+v8.dev \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{V8 JavaScript engine}}.
+\newblock v8.dev.
+\newblock
+\urldef\tempurl%
+\url{https://v8.dev/}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/12/2023).}
+
+
+\bibitem[\protect\citeauthoryear{webassembly.org}{web}{[n.d.]}]%
+        {webassembly}
+webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{WebAssembly}}.
+\newblock webassembly.org.
+\newblock
+\urldef\tempurl%
+\url{https://webassembly.org/}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/12/2023).}
+
+
 \bibitem[\protect\citeauthoryear{Agarwal and Umphress}{Agarwal and Umphress}{2008}]%
         {10.1145/1593105.1593127}
 \bibfield{author}{\bibinfo{person}{Ravikant Agarwal} {and} \bibinfo{person}{David Umphress}.} \bibinfo{year}{2008}\natexlab{}.
@@ -58,6 +100,34 @@
 \showDOI{\tempurl}
 
 
+\bibitem[\protect\citeauthoryear{Amazon}{Amazon}{[n.d.]}]%
+        {amazon_what}
+\bibfield{author}{\bibinfo{person}{Amazon}.} \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{What is Java? - Enterprise Java Beginner's Guide - AWS}}.
+\newblock Amazon Web Services, Inc.
+\newblock
+\urldef\tempurl%
+\url{https://aws.amazon.com/what-is/java/}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/12/2023).}
+
+
+\bibitem[\protect\citeauthoryear{davidbritch}{davidbritch}{[n.d.]}]%
+        {davidbritch_what}
+\bibfield{author}{\bibinfo{person}{davidbritch}.} \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{What is .NET MAUI? - .NET MAUI}}.
+\newblock learn.microsoft.com.
+\newblock
+\urldef\tempurl%
+\url{https://learn.microsoft.com/en-us/dotnet/maui/what-is-maui?view=net-maui-7.0}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/12/2023).}
+
+
 \bibitem[\protect\citeauthoryear{Ghobakhloo}{Ghobakhloo}{2020}]%
         {GHOBAKHLOO2020119869}
 \bibfield{author}{\bibinfo{person}{Morteza Ghobakhloo}.} \bibinfo{year}{2020}\natexlab{}.
@@ -68,6 +138,48 @@
 \urldef\tempurl%
 \url{https://doi.org/10.1016/j.jclepro.2019.119869}
 \showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{GrantMeStrength}{GrantMeStrength}{2021}]%
+        {grantmestrength_2021_direct3d}
+\bibfield{author}{\bibinfo{person}{GrantMeStrength}.} \bibinfo{year}{2021}\natexlab{}.
+\newblock \bibinfo{title}{Direct3D - Win32 apps}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://learn.microsoft.com/en-us/windows/win32/direct3d}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/12/2023).}
+
+
+\bibitem[\protect\citeauthoryear{Group}{Group}{2011}]%
+        {khronosgroup_2011_webgl}
+\bibfield{author}{\bibinfo{person}{Khronos Group}.} \bibinfo{year}{2011}\natexlab{}.
+\newblock \bibinfo{title}{WebGL}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://www.khronos.org/api/webgl}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/12/2023).}
+
+
+\bibitem[\protect\citeauthoryear{Group}{Group}{2016}]%
+        {khronosgroup_2016_khronos}
+\bibfield{author}{\bibinfo{person}{Khronos Group}.} \bibinfo{year}{2016}\natexlab{}.
+\newblock \bibinfo{title}{Khronos Releases Vulkan 1.0 Specification}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://www.khronos.org/news/press/khronos-releases-vulkan-1-0-specification}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/12/2023).}
 
 
 \bibitem[\protect\citeauthoryear{Humphrey}{Humphrey}{1996}]%
@@ -100,6 +212,48 @@
 \showDOI{\tempurl}
 
 
+\bibitem[\protect\citeauthoryear{Microsoft}{Microsoft}{[n.d.]}]%
+        {microsoft_what}
+\bibfield{author}{\bibinfo{person}{Microsoft}.} \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{What is .NET? An open-source developer platform.}}
+\newblock Microsoft.
+\newblock
+\urldef\tempurl%
+\url{https://dotnet.microsoft.com/en-us/learn/dotnet/what-is-dotnet}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/12/2023).}
+
+
+\bibitem[\protect\citeauthoryear{Mozilla}{Mozilla}{2019}]%
+        {mozilla_2019_webgl}
+\bibfield{author}{\bibinfo{person}{Mozilla}.} \bibinfo{year}{2019}\natexlab{}.
+\newblock \bibinfo{title}{WebGL: 2D and 3D graphics for the web}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/12/2023).}
+
+
+\bibitem[\protect\citeauthoryear{Node.js}{Node.js}{[n.d.]}]%
+        {nodejs_nodejs}
+\bibfield{author}{\bibinfo{person}{Node.js}.} \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{Node.js}}.
+\newblock Node.js.
+\newblock
+\urldef\tempurl%
+\url{https://nodejs.org/en}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/12/2023).}
+
+
 \bibitem[\protect\citeauthoryear{Olshannikova, Ometov, Koucheryavy, and Olsson}{Olshannikova et~al\mbox{.}}{2015}]%
         {olshannikova_2015_visualizing}
 \bibfield{author}{\bibinfo{person}{Ekaterina Olshannikova}, \bibinfo{person}{Aleksandr Ometov}, \bibinfo{person}{Yevgeni Koucheryavy}, {and} \bibinfo{person}{Thomas Olsson}.} \bibinfo{year}{2015}\natexlab{}.
@@ -109,6 +263,20 @@
 \urldef\tempurl%
 \url{https://doi.org/10.1186/s4053701500312}
 \showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Oracle}{Oracle}{[n.d.]}]%
+        {oracle_what}
+\bibfield{author}{\bibinfo{person}{Oracle}.} \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{What is Java technology and why do I need it?}}
+\newblock Java.com.
+\newblock
+\urldef\tempurl%
+\url{https://www.java.com/en/download/help/whatis_java.html}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/12/2023).}
 
 
 \bibitem[\protect\citeauthoryear{Overflow}{Overflow}{2021}]%
@@ -121,6 +289,62 @@
 \url{https://insights.stackoverflow.com/survey/2021}
 \showURL{%
 \tempurl}
+\newblock
+\shownote{(Accessed 4/12/2023).}
+
+
+\bibitem[\protect\citeauthoryear{Segal and Akeley}{Segal and Akeley}{2022}]%
+        {segal_2022_the}
+\bibfield{author}{\bibinfo{person}{Mark Segal} {and} \bibinfo{person}{Kurt Akeley}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \bibinfo{title}{The OpenGL® Graphics System: A Specification (Version 4.6 (Core Profile) - May 5, 2022)}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://registry.khronos.org/OpenGL/specs/gl/glspec46.core.pdf}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/12/2023).}
+
+
+\bibitem[\protect\citeauthoryear{stevewhims}{stevewhims}{2021}]%
+        {stevewhims_2021_direct3d}
+\bibfield{author}{\bibinfo{person}{stevewhims}.} \bibinfo{year}{2021}\natexlab{}.
+\newblock \bibinfo{title}{Direct3D 12 programming environment setup - Win32 apps}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://learn.microsoft.com/en-us/windows/win32/direct3d12/directx-12-programming-environment-set-up}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/12/2023).}
+
+
+\bibitem[\protect\citeauthoryear{Unterguggenberger, Kerbl, and Wimmer}{Unterguggenberger et~al\mbox{.}}{2023}]%
+        {Vulkan}
+\bibfield{author}{\bibinfo{person}{Johannes Unterguggenberger}, \bibinfo{person}{Bernhard Kerbl}, {and} \bibinfo{person}{Michael Wimmer}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \bibinfo{title}{Vulkan all the way: Transitioning to a modern low-level graphics API in academia}.
+\newblock , \bibinfo{numpages}{155-165}~pages.
+\newblock
+\showISSN{0097-8493}
+\urldef\tempurl%
+\url{https://doi.org/10.1016/j.cag.2023.02.001}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Wiki}{Wiki}{2022}]%
+        {wiki:opengl}
+\bibfield{author}{\bibinfo{person}{OpenGL Wiki}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \bibinfo{title}{History of OpenGL --- OpenGL Wiki{,}}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{http://www.khronos.org/opengl/wiki_opengl/index.php?title=History_of_OpenGL&oldid=14895}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/12/2023).}
 
 
 \end{thebibliography}
