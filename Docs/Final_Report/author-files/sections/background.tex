@@ -1,6 +1,6 @@
 \section{Background}
 
-The result of background research done for this project can be subdivided into two distinct sections being Related Work and Application. This was one of the earliest phases of the project whose results motivated the specific goals of this project- beyond just creating a Multidimensional plotting application as is required by the honours assessment that this project falls under.
+The result of background research done for this project can be subdivided into two distinct sections being 'Related Work' and 'Tools and Technologies'. This was one of the earliest phases of the project whose results motivated the specific goals of this project- beyond just creating a Multidimensional plotting application as is required by the honours assessment that this project falls under, and explore what opportunities (in terms of tooling) exist to develop them.
 
 \subsection{Related Work}
 This section highlights the wider context that affected the structure and what the application was planned to do. The research identified here acted to directly influence what kind of application was developed, for what exact purpose and for what users.
@@ -46,16 +46,16 @@ This study was done by analyzing a small subset of important, state of the art r
 
 \begin{itemize}
     \item Current visualization techniques are not capable of handling big data \cite[]{7918044}. New solutions are being created and investigated by both industry and academia. Strategies for creating new visualization systems that handle each of the troubling aspects of big data have been put forward in \cite[]{9523950}. This is a big point that this project could contribute to fixing.
-    \item No matter how good a visualization is- if it cannot be understood its value is nullified. There currently exists a gap between what computation is capable of creating and what can be easily grasped by a user. Naturally, there exists opportunity in creating solutions to close this gap. (Cannot find source, I lost the source)
-    \item
+    \item No matter how good a visualization is- if it cannot be understood its value is nullified. There currently exists a gap between what computation is capable of creating and what can be easily grasped by a user. Naturally, there exists opportunity in creating solutions to close this gap by taking into consideration human cognitive psychology. \cite{olshannikova_2015_visualizing}
+    \item Solving the problems to visualization poised by big data would require the combination of current visualization solutions merged with new technologies. \cite[]{olshannikova_2015_visualizing}
 \end{itemize}
 
 \subsubsection{Other Research}
 Another important aspect of research that was done included a more technical look into general design points that could help drive the design of the application itself and how features are developed.
 
-One specific aspect researched has been software planning methodologies. The student was aware of agile and waterfall techniques from their study but those techniques were usually applied in and made for multi-person teams, which naturally conflicted with the single-person structure of this project. Through this research, a technique called PSP [] (Personal Software Process) was discovered. This is a methodology that allows a singular developer to apply a structured, continuously improving process to how they develop software. A further inspired process was also identified called PXP [], which was a fusion of Agile XP principles adapted to a single person team inspired by PSP.
+One specific aspect researched has been software planning methodologies. The student was aware of agile and waterfall techniques from their study but those techniques were usually applied in and made for multi-person teams, which naturally conflicted with the single-person structure of this project. Through this research, a technique called PSP \cite[]{493023} (Personal Software Process) was discovered. This is a methodology that allows a singular developer to apply a structured, continuously improving process to how they develop software. A further inspired process was also identified called PXP \cite[]{10.1145/1593105.1593127}, which was a fusion of Agile XP principles adapted to a single person team inspired by PSP.
 
-Another notable finding in this phase, was an analysis of graphing and visualization techniques. In the 2.2 Market Research phase a lot of different solutions with a large variety of graphing types were seen. An analysis of the most common ones was undertaken with the hopes of identifying the most suitable graphs in terms of flexibility at higher dimensions (3+). The full analysis document can be seen here [] but in summary- It was found that Scatterplots fit these needs the most.
+Another notable finding in this phase, was an analysis of graphing and visualization techniques. In the \ref{marketresearch} Market Research phase a lot of different solutions with a large variety of graphing types were seen. An analysis of the most common ones seen, which also had some overlap with The seven basic tools of quality (A collection of seven charts that need minimal training to use \cite[]{ishikawa_1985_what} for analysis) was undertaken with the hopes of identifying the most suitable graphs in terms of flexibility at higher dimensions (3+). The full analysis document can be seen in Appendix A2 but in summary- It was found that Scatterplot's fit these needs the most while also being part of the Seven tools meaning increased accessibility in who could use the application. The other main options included the Radar chart which was suitable but not part of the Seven tools.
 
 \subsection{Tools and Technologies} \label{toolsntech}
 With the Application Context and Background set, the next step for this section is to highlight what technologies and design paradigms would be available for the development of this project followed by a comparison between them. No decisions were made during this stage of the project- The research and analysis recorded here act to justify and shortlist the final design in Section 4.
@@ -139,6 +139,14 @@ JavaScript is the natively supported programming language on the web. It is mult
 Typescript is a superset version of JavaScript developed by Microsoft that a number of features such as stricter syntax with the ability to have types. It transpiles to JavaScript which is then run as described above in 2.2.5.5.
 
 \subsection{Summary}
-The research mentioned thus sets an origin from which all further decisions are justified by. For the final selection and analysis of the tech stack chosen by the student to develop the application, see section \ref{techstack}. To see how market research affected the application design, see section \ref{uxdesign}. These are just two of the bigger sections building upon the research set here- thus, other references linking here are to be expected as different parts of the project are focused on.
+
+The background research mentioned in this section acted to ground the other-wise open-ended project to a set of goals, both mandatory and optional, to create an impactful and original project. The following paragraph then summarizes the goals previously brought up into a short, guiding statement.
+
+\begin{displayquote}
+    The purpose of this project is to create a new market entry application for the creation of visualizations. This application would focus on user accessibility first and foremost, to be an application that is usable without programming knowledge. It will allow Multidimensional data to be plotted through a Scatterplot plot and possibly more chart options. In it's creation it will not ignore the current problems poised by Big Data and will attempt to support it thorough the application of state of the art techniques to support it's visualisations or be designed in such a way as to support their future integration into the application.
+\end{displayquote}
+
+
+Otherwise the research mentioned thus far also sets an origin from which all further decisions are justified by. For the final selection and analysis of the tech stack chosen by the student to develop the application, see section \ref{techstack}. To see how market research affected the application design, see section \ref{uxdesign}. These are just two of the bigger sections building upon the research set here- thus, other references linking here are to be expected as different parts of the project are focused on.
 
 

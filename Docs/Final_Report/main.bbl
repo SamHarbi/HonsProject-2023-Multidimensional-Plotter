@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{4}
+\begin{thebibliography}{8}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -37,6 +37,17 @@
 \providecommand\natexlab[1]{#1}
 \providecommand\showeprint[2][]{arXiv:#2}
 
+\bibitem[\protect\citeauthoryear{Agarwal and Umphress}{Agarwal and Umphress}{2008}]%
+        {10.1145/1593105.1593127}
+\bibfield{author}{\bibinfo{person}{Ravikant Agarwal} {and} \bibinfo{person}{David Umphress}.} \bibinfo{year}{2008}\natexlab{}.
+\newblock \showarticletitle{Extreme Programming for a Single Person Team}. In \bibinfo{booktitle}{\emph{Proceedings of the 46th Annual Southeast Regional Conference on XX}} (Auburn, Alabama) \emph{(\bibinfo{series}{ACM-SE 46})}. \bibinfo{publisher}{Association for Computing Machinery}, \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{82–87}.
+\newblock
+\showISBNx{9781605581057}
+\urldef\tempurl%
+\url{https://doi.org/10.1145/1593105.1593127}
+\showDOI{\tempurl}
+
+
 \bibitem[\protect\citeauthoryear{Ali, Gupta, Nayak, and Lenka}{Ali et~al\mbox{.}}{2016}]%
         {7918044}
 \bibfield{author}{\bibinfo{person}{Syed~Mohd Ali}, \bibinfo{person}{Noopur Gupta}, \bibinfo{person}{Gopal~Krishna Nayak}, {and} \bibinfo{person}{Rakesh~Kumar Lenka}.} \bibinfo{year}{2016}\natexlab{}.
@@ -59,6 +70,25 @@
 \showDOI{\tempurl}
 
 
+\bibitem[\protect\citeauthoryear{Humphrey}{Humphrey}{1996}]%
+        {493023}
+\bibfield{author}{\bibinfo{person}{W.S. Humphrey}.} \bibinfo{year}{1996}\natexlab{}.
+\newblock \showarticletitle{Using a defined and measured Personal Software Process}.
+\newblock \bibinfo{journal}{\emph{IEEE Software}} \bibinfo{volume}{13}, \bibinfo{number}{3} (\bibinfo{year}{1996}), \bibinfo{pages}{77--88}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1109/52.493023}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Ishikawa}{Ishikawa}{1985}]%
+        {ishikawa_1985_what}
+\bibfield{author}{\bibinfo{person}{Kaoru Ishikawa}.} \bibinfo{year}{1985}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{What is total quality control? The Japanese way}}.
+\newblock \bibinfo{publisher}{Prentice-Hall}.
+\newblock
+
+
 \bibitem[\protect\citeauthoryear{Liang, Lu, and Liu}{Liang et~al\mbox{.}}{2020}]%
         {9523950}
 \bibfield{author}{\bibinfo{person}{Tingting Liang}, \bibinfo{person}{Shan Lu}, {and} \bibinfo{person}{Quansheng Liu}.} \bibinfo{year}{2020}\natexlab{}.
@@ -67,6 +97,17 @@
 \newblock
 \urldef\tempurl%
 \url{https://doi.org/10.1109/ICRIS52159.2020.00027}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Olshannikova, Ometov, Koucheryavy, and Olsson}{Olshannikova et~al\mbox{.}}{2015}]%
+        {olshannikova_2015_visualizing}
+\bibfield{author}{\bibinfo{person}{Ekaterina Olshannikova}, \bibinfo{person}{Aleksandr Ometov}, \bibinfo{person}{Yevgeni Koucheryavy}, {and} \bibinfo{person}{Thomas Olsson}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Visualizing Big Data with augmented and virtual reality: challenges and research agenda}.
+\newblock \bibinfo{journal}{\emph{Journal of Big Data}}  \bibinfo{volume}{2} (\bibinfo{year}{2015}), \bibinfo{pages}{22}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1186/s4053701500312}
 \showDOI{\tempurl}
 
 
