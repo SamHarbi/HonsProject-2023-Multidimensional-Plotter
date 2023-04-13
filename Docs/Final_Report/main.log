@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  13 APR 2023 14:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  13 APR 2023 20:24
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -912,20 +912,22 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
 (Font)              scaled to size 7.0pt on input line 62.
  [2.2] [3.3] [4.4]) (./author-files/sections/specification.tex
-Underfull \vbox (badness 4995) has occurred while \output is active []
+Overfull \hbox (25.64323pt too wide) in paragraph at lines 45--70
+ [][] 
+ []
 
- [5.5]
-<author-files/figures/SingleStoryPath2.png, id=295, 617.30624pt x 222.8325pt>
+[5.5]
+<author-files/figures/SingleStoryPath2.png, id=306, 617.30624pt x 222.8325pt>
 File: author-files/figures/SingleStoryPath2.png Graphic file (type png)
 <use author-files/figures/SingleStoryPath2.png>
-Package pdftex.def Info: author-files/figures/SingleStoryPath2.png  used on input line 56.
+Package pdftex.def Info: author-files/figures/SingleStoryPath2.png  used on input line 102.
 (pdftex.def)             Requested size: 241.14749pt x 87.04712pt.
 
 
-Class acmart Warning: A possible image without description on input line 59.
+Class acmart Warning: A possible image without description on input line 105.
 
 ) (./author-files/sections/design.tex
-<author-files/figures/logo-ts-webgl.PNG, id=297, 520.19344pt x 217.5628pt>
+<author-files/figures/logo-ts-webgl.PNG, id=308, 520.19344pt x 217.5628pt>
 File: author-files/figures/logo-ts-webgl.PNG Graphic file (type png)
 <use author-files/figures/logo-ts-webgl.PNG>
 Package pdftex.def Info: author-files/figures/logo-ts-webgl.PNG  used on input line 8.
@@ -934,58 +936,63 @@ Package pdftex.def Info: author-files/figures/logo-ts-webgl.PNG  used on input l
 
 Class acmart Warning: A possible image without description on input line 11.
 
-[6.6 <./author-files/figures/SingleStoryPath2.png> <./author-files/figures/logo-ts-webgl.PNG>]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[6.6 <./author-files/figures/SingleStoryPath2.png>]
 Overfull \hbox (2.21016pt too wide) in paragraph at lines 39--40
 \T1/LinuxLibertineT-TLF/m/n/9 (-20) pile and op-ti-mize Type-Script into runnable by the browser JavaScript.
  []
 
-<author-files/figures/tri.png, id=313, 735.49782pt x 472.76625pt>
+<author-files/figures/tri.png, id=321, 735.49782pt x 472.76625pt>
 File: author-files/figures/tri.png Graphic file (type png)
 <use author-files/figures/tri.png>
-Package pdftex.def Info: author-files/figures/tri.png  used on input line 62.
+Package pdftex.def Info: author-files/figures/tri.png  used on input line 65.
 (pdftex.def)             Requested size: 241.14749pt x 155.0034pt.
 
-Class acmart Warning: A possible image without description on input line 65.
+Class acmart Warning: A possible image without description on input line 68.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<author-files/figures/Monkey-Test2.png, id=314, 500.62032pt x 314.67563pt>
+[7.7 <./author-files/figures/logo-ts-webgl.PNG>]
+<author-files/figures/Monkey-Test2.png, id=342, 500.62032pt x 314.67563pt>
 File: author-files/figures/Monkey-Test2.png Graphic file (type png)
 <use author-files/figures/Monkey-Test2.png>
-Package pdftex.def Info: author-files/figures/Monkey-Test2.png  used on input line 72.
+Package pdftex.def Info: author-files/figures/Monkey-Test2.png  used on input line 75.
 (pdftex.def)             Requested size: 241.14749pt x 151.58035pt.
 
-Class acmart Warning: A possible image without description on input line 75.
 
-<author-files/figures/proto2.png, id=315, 633.36626pt x 403.5075pt>
+Class acmart Warning: A possible image without description on input line 78.
+
+<author-files/figures/proto2.png, id=343, 633.36626pt x 403.5075pt>
 File: author-files/figures/proto2.png Graphic file (type png)
 <use author-files/figures/proto2.png>
-Package pdftex.def Info: author-files/figures/proto2.png  used on input line 79.
+Package pdftex.def Info: author-files/figures/proto2.png  used on input line 82.
 (pdftex.def)             Requested size: 241.14749pt x 153.62997pt.
 
-Class acmart Warning: A possible image without description on input line 82.
+Class acmart Warning: A possible image without description on input line 85.
 
-[7.7 <./author-files/figures/tri.png> <./author-files/figures/Monkey-Test2.PNG>]
-<author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png, id=336, 562.1pt x 421.575pt>
+[8.8 <./author-files/figures/tri.png> <./author-files/figures/Monkey-Test2.PNG> <./author-files/figures/proto2.png>]
+<author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png, id=357, 562.1pt x 421.575pt>
 File: author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png Graphic file (type png)
 <use author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png>
-Package pdftex.def Info: author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png  used on input line 133.
+Package pdftex.def Info: author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png  used on input line 136.
 (pdftex.def)             Requested size: 168.8025pt x 126.60213pt.
 
 
-Class acmart Warning: A possible image without description on input line 136.
+Class acmart Warning: A possible image without description on input line 139.
 
-<author-files/figures/worldnavblender.png, id=337, 419.31656pt x 359.09157pt>
+<author-files/figures/worldnavblender.png, id=358, 419.31656pt x 359.09157pt>
 File: author-files/figures/worldnavblender.png Graphic file (type png)
 <use author-files/figures/worldnavblender.png>
-Package pdftex.def Info: author-files/figures/worldnavblender.png  used on input line 140.
+Package pdftex.def Info: author-files/figures/worldnavblender.png  used on input line 143.
 (pdftex.def)             Requested size: 168.8025pt x 144.5546pt.
 
-Class acmart Warning: A possible image without description on input line 143.
+Class acmart Warning: A possible image without description on input line 146.
 
-[8.8 <./author-files/figures/proto2.png> <./author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png> <./author-files/figures/worldnavblender.PNG>]) (./author-files/sections/implementation.tex
-<author-files/figures/glyphset.png, id=349, 342.27875pt x 125.46875pt>
+) (./author-files/sections/implementation.tex [9.9 <./author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png> <./author-files/figures/worldnavblender.PNG>]
+<author-files/figures/glyphset.png, id=370, 342.27875pt x 125.46875pt>
 File: author-files/figures/glyphset.png Graphic file (type png)
 <use author-files/figures/glyphset.png>
 Package pdftex.def Info: author-files/figures/glyphset.png  used on input line 24.
@@ -994,8 +1001,11 @@ Package pdftex.def Info: author-files/figures/glyphset.png  used on input line 2
 
 Class acmart Warning: A possible image without description on input line 27.
 
-[9.9 <./author-files/figures/glyphset.png>]
-<author-files/figures/oldzooms.png, id=360, 376.40625pt x 376.40625pt>
+
+Underfull \vbox (badness 4217) has occurred while \output is active []
+
+ [10.10 <./author-files/figures/glyphset.png>]
+<author-files/figures/oldzooms.png, id=382, 376.40625pt x 376.40625pt>
 File: author-files/figures/oldzooms.png Graphic file (type png)
 <use author-files/figures/oldzooms.png>
 Package pdftex.def Info: author-files/figures/oldzooms.png  used on input line 72.
@@ -1030,11 +1040,8 @@ Class acmart Warning: \vspace should only be used to provide space above/below s
 
 Class acmart Warning: \vspace should only be used to provide space above/below surrounding objects on input line 92.
 
-[10.10{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-4.enc}] [11.11 <./author-files/figures/oldzooms.png>]
-Underfull \vbox (badness 7981) has occurred while \output is active []
-
- [12.12]
-<author-files/figures/squashFunc.PNG, id=401, 255.95625pt x 99.37125pt>
+[11.11{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-4.enc} <./author-files/figures/oldzooms.png>] [12.12]
+<author-files/figures/squashFunc.PNG, id=412, 255.95625pt x 99.37125pt>
 File: author-files/figures/squashFunc.PNG Graphic file (type png)
 <use author-files/figures/squashFunc.PNG>
 Package pdftex.def Info: author-files/figures/squashFunc.PNG  used on input line 188.
@@ -1043,7 +1050,10 @@ Package pdftex.def Info: author-files/figures/squashFunc.PNG  used on input line
 
 Class acmart Warning: A possible image without description on input line 191.
 
-) (./author-files/sections/testing.tex [13.13 <./author-files/figures/squashFunc.PNG>]) (./author-files/sections/finalproduct.tex) (./author-files/sections/conclusion.tex)) (./main.bbl
+[13.13 <./author-files/figures/squashFunc.PNG>]) (./author-files/sections/testing.tex) (./author-files/sections/finalproduct.tex) (./author-files/sections/conclusion.tex
+Underfull \vbox (badness 3701) has occurred while \output is active []
+
+ [14.14])) (./main.bbl
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
 (Font)              scaled to size 7.0pt on input line 43.
 LaTeX Info: Redefining \tempurl on input line 61.
@@ -1059,9 +1069,11 @@ LaTeX Info: Redefining \tempurl on input line 180.
 LaTeX Info: Redefining \tempurl on input line 195.
 LaTeX Info: Redefining \tempurl on input line 206.
 LaTeX Info: Redefining \tempurl on input line 220.
+
+Underfull \vbox (badness 1565) has occurred while \output is active []
+
 LaTeX Info: Redefining \tempurl on input line 234.
 LaTeX Info: Redefining \tempurl on input line 248.
- [14.14]
 LaTeX Info: Redefining \tempurl on input line 275.
 LaTeX Info: Redefining \tempurl on input line 286.
 LaTeX Info: Redefining \tempurl on input line 300.
@@ -1093,6 +1105,10 @@ LaTeX Info: Redefining \tempurl on input line 487.
 
 Class acmart Warning: Some images may lack descriptions.
 
+
+Package balance Warning: You have called \balance in second column
+(balance)                Columns might not be balanced.
+
 (d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-pdfdoc.def
 File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
 ) (d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-utf8.def
@@ -1102,21 +1118,21 @@ File: se-utf8.def 2019/11/29 v1.12 stringenc: UTF-8
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 477BFBC881544FC97FAEB6DAA9918A04;5578.
+(rerunfilecheck)             Checksum: F6242EF43BE4077B572169EFA34E6670;5747.
  ) 
 Here is how much of TeX's memory you used:
- 24429 strings out of 476025
- 400094 string characters out of 5792019
- 1883382 words of memory out of 5000000
- 43616 multiletter control sequences out of 15000+600000
+ 24439 strings out of 476025
+ 400219 string characters out of 5792019
+ 1894382 words of memory out of 5000000
+ 43624 multiletter control sequences out of 15000+600000
  657206 words of font info for 360 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
- 90i,12n,131p,1144b,1113s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,12n,131p,1144b,1598s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/newtx/txsys.pfb>
-Output written on main.pdf (15 pages, 904355 bytes).
+Output written on main.pdf (15 pages, 906793 bytes).
 PDF statistics:
- 568 PDF objects out of 1000 (max. 8388607)
- 506 compressed objects within 6 object streams
- 183 named destinations out of 1000 (max. 500000)
- 70491 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 582 PDF objects out of 1000 (max. 8388607)
+ 520 compressed objects within 6 object streams
+ 185 named destinations out of 1000 (max. 500000)
+ 70499 words of extra memory for PDF output out of 74296 (max. 10000000)
 
