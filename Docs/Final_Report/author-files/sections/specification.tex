@@ -39,7 +39,7 @@ With this technique, a planning stage was ran and a requirements brief was creat
 
 But the main reason to have created this brief instead of just skipping to creating user stories directly was to have a consistent main source from where user stories were pulled from and were focused on meeting the goals set during the research phase (See \ref{ressummary}).
 
-With a brief set, the next step was to extract user stories (formal requirements) from the brief. Those initial user stories all formed the MVP (minimum viable product) feature set which were scheduled as further covered in section X. The specific extracted user stories and their analysis follow as so (See Table. \ref{req1})
+With a brief set, the next step was to extract user stories (formal requirements) from the brief. Those initial user stories all formed the MVP (minimum viable product) feature set which were scheduled as further covered in section \ref{scheduling}. The specific extracted user stories and their analysis follow as so (See Table. \ref{req1})
 
 \begin{table*}[t]
     \begin{tabular}{ | l | l | l | }
@@ -71,22 +71,18 @@ With a brief set, the next step was to extract user stories (formal requirements
     \label{req1}
 \end{table*}
 
-
-
 \subsection{Project Management Tools}
 A number of tools and services were employed in the process to allow the organization and techniques mentioned to be applied. Those consisted of the following:
 
 \subsubsection{Git, Version Control}
 A version control tool is an important tool for controlling and recording changes to a codebase.
-Git specifically though was chosen due to the student having previous experience, and to allow GitHub to be used within the project, See subsubsection X.
+Git specifically though was chosen due to the student having previous experience, and to allow GitHub to be used within the project for it's supporting tools (See \ref{github} and \ref{github2}).
 
-\subsubsection{GitHub, Cloud Code Repositary}
-Github is a cloud host for git repositories with additional extensive tooling to support all aspects of a software development project. The student has had extensive experience with this platform thus it was chosen for this project to minimize learning downtime. Alternatives such as Bitbucket and GitLab also exist.
+\subsubsection{GitHub, Cloud Code Repositary} \label{github}
+Github is a cloud host for git repositories with additional extensive tooling to support all aspects of a software development project. The student has had extensive experience with this platform thus it was chosen for this project to minimize learning downtime. Alternatives such as Bitbucket and GitLab also exist but did not offer any further advantages that the student considered worth the learning downtime.
 
-\subsubsection{GitHub Issues and Projects, Organizing Backlog and managing stories}
+\subsubsection{GitHub Issues and Projects, Organizing Backlog and managing stories} \label{github2}
 GitHub also has integrated issues and project views for organizing and tracking stories. An alternative would not have been as tightly integrated with the code repository.
-
-
 
 \subsection{Scheduling} \label{scheduling}
 With a backlog of user stories ready the next step was to combine similar stories into feature sets. Feature sets were then given a deadline on when all of their user stories should be completed.
@@ -95,6 +91,8 @@ This would allow then the student to pick the most urgent Feature Set to focus o
 Once a Feature set was picked, each user story and task within was analyzed and given a development time cost and importance to the project. With this, a prioritized backlog was created that was split among the maximum iterations/sprints that would fit into the Feature set's time frame with a consideration for the students iteration velocity. On the off chance that there wasn't enough time to complete all stories and tasks, the student would re-analyze what stories and tasks could be dropped due to time constraints.
 
 Having feature sets allowed the student to put into perspective what are the major additions to the application and if there was enough time to fully develop those additions.
+
+The specifics of when each feature sets deadline was set and how it changed can be seen on a sprint by sprint basis in the implementation section (See \ref{implementation}).
 
 \subsection{Development Flow} \label{devflow}
 \begin{figure}
