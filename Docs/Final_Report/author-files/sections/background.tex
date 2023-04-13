@@ -103,41 +103,41 @@ Vulkan is a cross-platform low level open standard rendering API that has supers
 Direct3D is a subset API of the proprietary DirectX family of multimedia APIs developed by Microsoft \cite[]{grantmestrength_2021_direct3d}. It is a low-level API similar to OpenGL but created exclusively for Microsoft Windows, Xbox, and some Embedded Windows versions. In terms of languages, only C++ is supported targeting an executable on one of the above-mentioned systems \cite[]{stevewhims_2021_direct3d}.
 
 \paragraph{WebGL}
-A web integrated, JavaScript only low-level API version of OpenGL. It’s developed as an open web standard and is implemented in most widely used browsers, without the need to install it in any way for the client or developer. It’s a low-level API just like OpenGL and comes in two main versions based on OpenGL, 1.0 is based on the OpenGL ES 2.0 standard while 2.0 is based on OpenGL ES 3.0 which is less supported among older devices. As of writing, WebGL remains the lowest level of abstraction for running GPU code on the web. \cite[]{mozilla_2019_webgl} \cite[]{khronosgroup_2011_webgl}
+A web integrated, JavaScript only low-level API version of OpenGL. It’s developed as an open web standard and is implemented in most widely used browsers, without the need to install it in any way for the client or developer. It’s a low-level API just like OpenGL and comes in two main versions based on OpenGL, WebGL 1.0 is based on the OpenGL ES 2.0 standard (OpenGL ES is an embedded subset version of OpenGL) while WebGL 2.0 is based on OpenGL ES 3.0 which is less supported among older devices. As of writing, WebGL remains the lowest level of abstraction for running GPU code on the web. \cite[]{mozilla_2019_webgl} \cite[]{khronosgroup_2011_webgl}
 
 \paragraph{Metal}
-Metal is a low-level rendering API designed by Apple for their devices. It has a very limited set of supported hardware and is further limited to only iOS and MacOS for the Operating System. In terms of language bindings, Objective-C and C++ are the only supported options.  It was created by apple to replace OpenGL on their hardware which was depreciated in 2018.
+Metal is a low-level rendering API designed by Apple for their devices. It has a very limited set of supported hardware and is further limited to only iOS and MacOS for the Operating System. In terms of language bindings; Objective-C, Swift and C++ are the only supported options. \cite[]{apple_metal} It was created by apple to replace OpenGL on their hardware which was depreciated in 2018. \cite[]{apple_apple}
 
 \subsubsection{Optional Abstractions for Rendering Solutions}
 The underlying rendering technologies mentioned in the last section, although usable on their own, can be offloaded to be managed by a higher-level framework or engine. Although it must be stressed that the inherit properties of the underlying rendering solution still has an effect on the application being developed.
 The main reason to bring in an abstraction would usually be to lower development complexity, and in turn time. But the drawback often results in less flexibility regarding what can be made and lower performance.
 
 \paragraph{Three.js}
-Three.js is a JavaScript library that abstracts WebGL to simplify the creation of 3D graphics. It is highly extensive and offers a wide array of useful functions and constructs to that end. It is available as a npm package and can be easily integrated into a web-based project. If comparing to WebGL though, which is already a part of the browser, three.js contributes to a much bigger application download footprint. It also suffers from the same general relationship mentioned at the start of this section, development is greatly simplified but a lot of the flexibility and performance is lost.
+Three.js is a JavaScript library that abstracts WebGL to simplify the creation of 3D graphics \cite[]{mrdoob_threejs}. It is highly extensive and offers a wide array of useful functions and constructs to that end. It is available as a npm package \cite[]{threejsorg_threejs} and can be easily integrated into a web-based project. If comparing to WebGL though, which is already a part of the browser, three.js contributes to a much bigger application download footprint. It also suffers from the same general relationship mentioned at the start of this section, development is greatly simplified but a lot of the flexibility and performance is lost.
 
 \paragraph{Unity}
-Unity, although first and foremost a game engine, can be applied to any development project where high performance graphics are needed. Unity supports DirectX, OpenGL, Vulkan and Metal- with only a few settings changes. A wide range of target devices can also then be built for. It is also possible to target WebGL as a platform in a similar fashion for web applications. Beyond this great cross-device and API support- Unity has an extensive collection of tools and APIs to streamline development. Although it should be mentioned that web applications are not as well supported, especially on mobile devices. The engine also only supports C\# as the only option.
+Unity, although first and foremost a game engine, can be applied to any development project where high performance graphics are needed. Unity supports DirectX, OpenGL, Vulkan and Metal- with only a few settings changes. A wide range of target devices can also then be built for. It is also possible to target WebGL as a platform in a similar fashion for web applications. Beyond this great cross-device and API support- Unity has an extensive collection of tools and APIs to streamline development. Although it should be mentioned that web applications are not as well supported, especially on mobile devices. The engine also only supports C\# as the only option. \cite[]{Nicoll2019} \cite[]{unitytechnologies_unity}
 
 \subsubsection{Languages}
 There are a large variety of potential languages that could be used for writing this program. The following were selected based on how extensively the languages are supported in previously mentioned Rendering solutions and Run Environment Sections. And some key exceptions that were considered to be important for consideration by the student.
 
 \paragraph{C++}
-A well know general-purpose compiled programming language most often used in performance constraint applications. It is Object-Oriented but can be used to also write functional code. It is arguably the de-facto standard for systems programming.
+A well know general-purpose compiled programming language most often used in performance critical applications. It is Object-Oriented but can be used to also write functional code. It is arguably the de-facto standard for systems programming. \cite[]{10.1145/323648.323736}
 
 \paragraph{Rust}
-Rust is a relatively new general-purpose compiled programming language often used in systems programming. It is a modern alternative to C++ that combines its high performance with a multitude of modern features such as a default package manager, and numerous safety features especially for memory (While still keeping a low performance impact).
+Rust is a relatively new general-purpose compiled programming language often used in systems programming. It is a modern alternative to C++ that combines its high performance with a multitude of modern features such as a default package manager, and numerous safety features especially for memory (While still keeping a low performance impact). \cite[]{klabnik_2023_the}
 
 \paragraph{Java}
-Java is a general-purpose, object-oriented focused programming language that compiles to Java Bytecode that can be run on any device running a JVM (Java Virtual Machine).
+Java is a general-purpose, object-oriented focused programming language that compiles to Java Bytecode that can be run on any device running a JVM (Java Virtual Machine). \cite[]{amazon_what} \cite[]{oracle_what}
 
 \paragraph{C\#}
-C\# is a general-purpose, multi-paradigm language developed by Microsoft. Although it is technically possible to compile to machine code, it is most often compiled to run on a .NET environment.
+C\# is a general-purpose, multi-paradigm language developed by Microsoft. Although it is technically possible to compile to machine code, it is most often compiled to run on a .NET environment. \cite[]{B}
 
 \paragraph{JavaScript}
-JavaScript is the natively supported programming language on the web. It is multi-paradigm and is just-in-time compiled. It requires a runtime which is often a browser or dedicated runtime environments such as Node.js
+JavaScript is the natively supported programming language on the web. It is multi-paradigm and is just-in-time compiled. It requires a runtime which is often a browser or dedicated runtime environments such as Node.js. \cite[]{mdncontributors_javascript}
 
 \paragraph{TypeScript}
-Typescript is a superset version of JavaScript developed by Microsoft that a number of features such as stricter syntax with the ability to have types. It transpiles to JavaScript which is then run as described above in 2.2.5.5.
+Typescript is a superset version of JavaScript developed by Microsoft that a number of features such as stricter syntax with the ability to have types. It transpiles to JavaScript which is then run in the same way. \cite[]{microsoft_typescript}
 
 \subsection{Summary}
 

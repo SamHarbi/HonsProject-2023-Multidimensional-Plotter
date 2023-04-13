@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{24}
+\begin{thebibliography}{35}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -114,6 +114,62 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \shownote{(Accessed 4/12/2023).}
 
 
+\bibitem[\protect\citeauthoryear{Apple}{Apple}{[n.d.]a}]%
+        {apple_apple}
+\bibfield{author}{\bibinfo{person}{Apple}.} \bibinfo{year}{[n.d.]}\natexlab{a}.
+\newblock \bibinfo{title}{Apple Developer Documentation}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://developer.apple.com/documentation/apple-silicon/porting-your-macos-apps-to-apple-silicon}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/13/2023).}
+
+
+\bibitem[\protect\citeauthoryear{Apple}{Apple}{[n.d.]b}]%
+        {apple_metal}
+\bibfield{author}{\bibinfo{person}{Apple}.} \bibinfo{year}{[n.d.]}\natexlab{b}.
+\newblock \bibinfo{title}{Metal}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://developer.apple.com/documentation/metal/}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/13/2023).}
+
+
+\bibitem[\protect\citeauthoryear{BillWagner}{BillWagner}{2022}]%
+        {B}
+\bibfield{author}{\bibinfo{person}{BillWagner}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \bibinfo{title}{A tour of C\# - Overview}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://learn.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/13/2023).}
+
+
+\bibitem[\protect\citeauthoryear{Contributors}{Contributors}{[n.d.]}]%
+        {mdncontributors_javascript}
+\bibfield{author}{\bibinfo{person}{MDN Contributors}.} \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{title}{JavaScript}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://developer.mozilla.org/en-US/docs/Web/javascript}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/13/2023).}
+
+
 \bibitem[\protect\citeauthoryear{davidbritch}{davidbritch}{[n.d.]}]%
         {davidbritch_what}
 \bibfield{author}{\bibinfo{person}{davidbritch}.} \bibinfo{year}{[n.d.]}\natexlab{}.
@@ -201,6 +257,14 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \newblock
 
 
+\bibitem[\protect\citeauthoryear{Klabnik and Nichols}{Klabnik and Nichols}{2023}]%
+        {klabnik_2023_the}
+\bibfield{author}{\bibinfo{person}{Steve Klabnik} {and} \bibinfo{person}{Carol Nichols}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{The Rust Programming Language, 2nd Edition}}.
+\newblock \bibinfo{publisher}{No Starch Press}.
+\newblock
+
+
 \bibitem[\protect\citeauthoryear{Liang, Lu, and Liu}{Liang et~al\mbox{.}}{2020}]%
         {9523950}
 \bibfield{author}{\bibinfo{person}{Tingting Liang}, \bibinfo{person}{Shan Lu}, {and} \bibinfo{person}{Quansheng Liu}.} \bibinfo{year}{2020}\natexlab{}.
@@ -212,9 +276,23 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \showDOI{\tempurl}
 
 
-\bibitem[\protect\citeauthoryear{Microsoft}{Microsoft}{[n.d.]}]%
+\bibitem[\protect\citeauthoryear{Microsoft}{Microsoft}{[n.d.]a}]%
+        {microsoft_typescript}
+\bibfield{author}{\bibinfo{person}{Microsoft}.} \bibinfo{year}{[n.d.]}\natexlab{a}.
+\newblock \bibinfo{title}{TypeScript - JavaScript that scales.}
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://www.typescriptlang.org/}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/13/2023).}
+
+
+\bibitem[\protect\citeauthoryear{Microsoft}{Microsoft}{[n.d.]b}]%
         {microsoft_what}
-\bibfield{author}{\bibinfo{person}{Microsoft}.} \bibinfo{year}{[n.d.]}\natexlab{}.
+\bibfield{author}{\bibinfo{person}{Microsoft}.} \bibinfo{year}{[n.d.]}\natexlab{b}.
 \newblock \bibinfo{booktitle}{\emph{What is .NET? An open-source developer platform.}}
 \newblock Microsoft.
 \newblock
@@ -238,6 +316,32 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \tempurl}
 \newblock
 \shownote{(Accessed 4/12/2023).}
+
+
+\bibitem[\protect\citeauthoryear{mrdoob}{mrdoob}{[n.d.]}]%
+        {mrdoob_threejs}
+\bibfield{author}{\bibinfo{person}{mrdoob}.} \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{title}{three.js}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://github.com/mrdoob/three.js/blob/dev/README.md}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/13/2023).}
+
+
+\bibitem[\protect\citeauthoryear{Nicoll and Keogh}{Nicoll and Keogh}{2019}]%
+        {Nicoll2019}
+\bibfield{author}{\bibinfo{person}{Benjamin Nicoll} {and} \bibinfo{person}{Brendan Keogh}.} \bibinfo{year}{2019}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{The Unity Game Engine and the Circuits of Cultural Software}}.
+\newblock \bibinfo{publisher}{Springer International Publishing}, \bibinfo{address}{Cham}, \bibinfo{pages}{1--21}.
+\newblock
+\showISBNx{978-3-030-25012-6}
+\urldef\tempurl%
+\url{https://doi.org/10.1007/978-3-030-25012-6_1}
+\showDOI{\tempurl}
 
 
 \bibitem[\protect\citeauthoryear{Node.js}{Node.js}{[n.d.]}]%
@@ -319,6 +423,46 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \tempurl}
 \newblock
 \shownote{(Accessed 4/12/2023).}
+
+
+\bibitem[\protect\citeauthoryear{Stroustrup}{Stroustrup}{1986}]%
+        {10.1145/323648.323736}
+\bibfield{author}{\bibinfo{person}{Bjarne Stroustrup}.} \bibinfo{year}{1986}\natexlab{}.
+\newblock \showarticletitle{An Overview of C++}.
+\newblock \bibinfo{journal}{\emph{SIGPLAN Not.}} \bibinfo{volume}{21}, \bibinfo{number}{10} (\bibinfo{date}{jun} \bibinfo{year}{1986}), \bibinfo{pages}{7–18}.
+\newblock
+\showISSN{0362-1340}
+\urldef\tempurl%
+\url{https://doi.org/10.1145/323648.323736}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Technologies}{Technologies}{[n.d.]}]%
+        {unitytechnologies_unity}
+\bibfield{author}{\bibinfo{person}{Unity Technologies}.} \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{title}{Unity - Manual: Graphics API support}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://docs.unity.cn/Manual/GraphicsAPIs.html}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/13/2023).}
+
+
+\bibitem[\protect\citeauthoryear{threejs.org}{threejs.org}{[n.d.]}]%
+        {threejsorg_threejs}
+\bibfield{author}{\bibinfo{person}{threejs.org}.} \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{title}{three.js docs}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://threejs.org/docs/index.html#manual/en/introduction/Installation}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/13/2023).}
 
 
 \bibitem[\protect\citeauthoryear{Unterguggenberger, Kerbl, and Wimmer}{Unterguggenberger et~al\mbox{.}}{2023}]%

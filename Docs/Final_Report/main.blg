@@ -32,50 +32,58 @@ Warning--empty year in webassembly
 Warning--empty publisher in 7918044
 Warning--empty address in 7918044
 Warning--empty year in amazon_what
+Warning--empty year in apple_apple
+Warning--empty year in apple_metal
+Warning--empty year in mdncontributors_javascript
 Warning--empty year in davidbritch_what
 Warning--empty address in ishikawa_1985_what
+Warning--empty address in klabnik_2023_the
+Warning--empty year in microsoft_typescript
 Warning--empty year in microsoft_what
+Warning--empty year in mrdoob_threejs
 Warning--empty year in nodejs_nodejs
 Warning--empty year in oracle_what
-You've used 24 entries,
+Warning--empty year in unitytechnologies_unity
+Warning--empty year in threejsorg_threejs
+You've used 35 entries,
             5959 wiz_defined-function locations,
-            1475 strings with 18557 characters,
-and the built_in function-call counts, 20943 in all, are:
-= -- 2355
-> -- 598
+            1534 strings with 19925 characters,
+and the built_in function-call counts, 29492 in all, are:
+= -- 3291
+> -- 850
 < -- 0
-+ -- 166
-- -- 248
-* -- 1287
-:= -- 2261
-add.period$ -- 134
-call.type$ -- 24
-change.case$ -- 129
-chr.to.int$ -- 96
-cite$ -- 62
-duplicate$ -- 1873
-empty$ -- 1328
-format.name$ -- 232
-if$ -- 4704
-int.to.chr$ -- 2
++ -- 247
+- -- 350
+* -- 1816
+:= -- 3265
+add.period$ -- 198
+call.type$ -- 35
+change.case$ -- 186
+chr.to.int$ -- 105
+cite$ -- 81
+duplicate$ -- 2626
+empty$ -- 1881
+format.name$ -- 342
+if$ -- 6607
+int.to.chr$ -- 4
 int.to.str$ -- 1
-missing$ -- 24
-newline$ -- 350
-num.names$ -- 168
-pop$ -- 735
+missing$ -- 32
+newline$ -- 494
+num.names$ -- 254
+pop$ -- 1090
 preamble$ -- 1
-purify$ -- 297
+purify$ -- 409
 quote$ -- 0
-skip$ -- 707
+skip$ -- 961
 stack$ -- 0
-substring$ -- 1421
-swap$ -- 222
+substring$ -- 1942
+swap$ -- 298
 text.length$ -- 100
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 663
-warning$ -- 26
-while$ -- 177
+type$ -- 937
+warning$ -- 34
+while$ -- 267
 width$ -- 0
-write$ -- 552
-(There were 26 warnings)
+write$ -- 788
+(There were 34 warnings)
