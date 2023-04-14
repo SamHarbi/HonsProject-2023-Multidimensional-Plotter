@@ -1,12 +1,12 @@
 \section{Design}
-An initial design phase was undergone by the student before development started. Although it should be noted that the work done did not constitute the final design as a waterfall methodology would require but was more akin to setting the scene for the start of development. The majority of design on how something should be coded, look and such was done on a story by story basis during sprints.
+An initial design phase was undergone by the student before development started. Although it should be noted that the work done did not constitute the final design as a waterfall methodology would require but was more akin to setting the scene for the start of development. The majority of design on how something should be coded, look and such was done on a story by story basis during sprints (See \ref{implementation})
 This phase itself though consisted of the following key parts:
 
 \subsection{Technology Stack} \label{techstack}
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\columnwidth]{author-files/figures/logo-ts-webgl.PNG}
-    \caption{TypeScript and WebGL logos}
+    \caption{TypeScript \cite[]{microsoft_2020_typescript} and WebGL logos \cite[]{khronosgroup_2017_the}}
     \label{fig:tswebgllogo}
 \end{figure}
 The student decided to settle on a technology stack during this phase. Which although would still be open to changes should they be needed if any problems arose during prototyping (See \ref{prototype}), nevertheless set what the stack should be otherwise. This decision was done by comparing valid options built up from those identified during the research phase (See \ref{toolsntech}) The selection and justification of every element of the stack follow below:
@@ -30,19 +30,19 @@ With the browser set as the environment, the choice was limited to JavaScript, T
 After the Technology Stack was identified, the next step was to identify the development tools for that stack. The following were selected for the project:
 
 \paragraph{IDE or Code Editor}
-Visual Studio Code (VScode) was selected for all writing tasks (Both for code and written information). This decision came down to what the student was comfortable with using through previous experience but also had a practical factor for it's selection. With that mainly being a great selection of packages to help with development and great integration with GitHub.
+Visual Studio Code (VScode) was selected for all writing tasks (Both for code and writing latex). This decision came down to what the student was comfortable with using through previous experience but also had a practical factor for it's selection. With that mainly being a great selection of packages to help with development and great integration with GitHub.
 
 \paragraph{Development Server}
-Node.js was used as a development and build server due to it's straightforward ability to download and manage npm packages while also running development tools such as parcel, which in addition to it's usage below, also acted as a development server with hot reloading.
+Node.js was used as a development and build server due to it's straightforward ability to download and manage npm packages while also running development tools such as parcel, which in addition to it's usage below, also acted as a development server providing developer tools such as hot reloading on changes and helpful error screens.
 
 \paragraph{Compiler and Build Tool}
-As a compiler, Parcel was used to compile and optimize TypeScript into runnable by the browser JavaScript. As a build tool, parcel build all npm packages and the usage of some node.js only features into a handful of static client-side only files that could be hosted. This was crucial and allowed some code designs to be implemented that otherwise would not have been possible (See somewhere).
+As a compiler, Parcel was used to compile and optimize TypeScript into runnable by the browser JavaScript. As a build tool, parcel build all npm packages and the usage of some node.js only features into a handful of static client-side only files that could be hosted. This was crucial and allowed some code designs to be implemented that otherwise would not have been possible (See Model loading in \ref{prototype2}).
 
 \paragraph{Hosting Provider}
-Digital Ocean's App Platform was used to host and build the application from the production branch of the code repository. It was chosen due to the student having previous experience hosting resources on the platform, simple setup with minimal networking on the students part, support for building on a node.js environment (The same as the development environment) and the availability of free credits to do all this. The site hosted here allowed user testers to access the application from anywhere at their own time.
+Digital Ocean's App Platform was used to host and build the application from the production branch of the code repository. It was chosen due to the student having previous experience hosting resources on the platform, simple setup with minimal networking on the students part, integration with Github, support for building on a node.js environment (The same as the development environment, allowing for continuous integration from the production branch) and the availability of free credits to do all this. The site hosted here allowed user testers to access the application from anywhere at their own time.
 
 \subsubsection{Additional Libraries}
-Some of the mentioned npm packages used are recorded here and the reason for their use.
+The other mentioned npm packages used are recorded here and the reason for their use.
 
 \paragraph{Pico.css}
 Simple CSS framework to do the heavy lifting for styling the application UI. This allowed the student to focus more on rendering work.
@@ -54,7 +54,7 @@ Pre-made functions for the math very commonly used in graphics development. Allo
 A jquery syntax compliant .csv parser. No particular reason to select this particularly from other alternatives. Covers a lot of edge cases in parsing .csv files that would have taken a while to implement and test from scratch.
 
 \subsection{Automated Testing} \label{automatedtests}
-Automated testing is used in software development to run a set of pre-configured tests repeatedly, usually every time before code is committed to a repository. Once tests are setup and written, it is an easy way to quickly test all cases including edge cases that would otherwise be tedious or take too long. As per PXP and XP, Which focus on test-driven development- The student looked at a number of possible options for implementing automated testing. Those consisted of a whole suite of tools and processes to achieve this.
+Automated testing is used in software development to run a set of pre-configured tests repeatedly, usually every time before code is committed to a repository. Once tests are setup and written, it is an easy way to quickly test all cases including edge cases that would otherwise be tedious or take too long to do manually. As per PXP, Which focus on test-driven development- The student looked at a number of possible options for implementing automated testing.
 
 \subsection{Prototyping} \label{prototype}
 An important part of the initial design stage was creating simple prototype applications using the technology stack to give the student experience with using the stack and to identify any critical issues that may need the stack to be redesigned or tools to be changed. These were in a sense mock sprint runs to smooth out the process and prepare for when development would officially start. The prototypes created also turned out general enough that they were able to be reused for the development of the actual application, in particular prototype 2.
@@ -69,7 +69,7 @@ An important part of the initial design stage was creating simple prototype appl
 
 This was an important milestone in proving the validity of the development process identified. All of the tools and technologies mentioned thus far were setup and used to create a valid WebGL context and render a triangle. It was found that this process was well defined and no changes were done.
 
-\subsubsection {Prototype 2}
+\subsubsection {Prototype 2} \label{prototype2}
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\columnwidth]{author-files/figures/Monkey-Test2.png}

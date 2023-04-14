@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{35}
+\begin{thebibliography}{38}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -238,6 +238,20 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \shownote{(Accessed 4/12/2023).}
 
 
+\bibitem[\protect\citeauthoryear{Group}{Group}{2017}]%
+        {khronosgroup_2017_the}
+\bibfield{author}{\bibinfo{person}{™/®Khronos Group}.} \bibinfo{year}{2017}\natexlab{}.
+\newblock \bibinfo{title}{The Official WebGL Logo}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://commons.wikimedia.org/wiki/File:WebGL_Logo.svg}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/13/2023).}
+
+
 \bibitem[\protect\citeauthoryear{Humphrey}{Humphrey}{1996}]%
         {493023}
 \bibfield{author}{\bibinfo{person}{W.S. Humphrey}.} \bibinfo{year}{1996}\natexlab{}.
@@ -411,6 +425,20 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \shownote{(Accessed 4/12/2023).}
 
 
+\bibitem[\protect\citeauthoryear{SmartBear}{SmartBear}{[n.d.]}]%
+        {smartbear_testcomplete}
+\bibfield{author}{\bibinfo{person}{SmartBear}.} \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{title}{TestComplete | SmartBear Software}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://smartbear.com/product/testcomplete/}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/13/2023).}
+
+
 \bibitem[\protect\citeauthoryear{stevewhims}{stevewhims}{2021}]%
         {stevewhims_2021_direct3d}
 \bibfield{author}{\bibinfo{person}{stevewhims}.} \bibinfo{year}{2021}\natexlab{}.
@@ -489,6 +517,20 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \tempurl}
 \newblock
 \shownote{(Accessed 4/12/2023).}
+
+
+\bibitem[\protect\citeauthoryear{™/®Microsoft}{™/®Microsoft}{2020}]%
+        {microsoft_2020_typescript}
+\bibfield{author}{\bibinfo{person}{™/®Microsoft}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \bibinfo{title}{Typescript logo 2020}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://commons.wikimedia.org/wiki/File:WebGL_Logo.svg}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/13/2023).}
 
 
 \end{thebibliography}
