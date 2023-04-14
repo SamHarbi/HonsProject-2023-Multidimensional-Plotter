@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{38}
+\begin{thebibliography}{41}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -182,6 +182,20 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \tempurl}
 \newblock
 \shownote{(Accessed 4/12/2023).}
+
+
+\bibitem[\protect\citeauthoryear{Framework}{Framework}{[n.d.]}]%
+        {robotframework_robot}
+\bibfield{author}{\bibinfo{person}{Robot Framework}.} \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{title}{Robot Framework}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://robotframework.org/}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/14/2023).}
 
 
 \bibitem[\protect\citeauthoryear{Ghobakhloo}{Ghobakhloo}{2020}]%
@@ -425,6 +439,20 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \shownote{(Accessed 4/12/2023).}
 
 
+\bibitem[\protect\citeauthoryear{Selenium}{Selenium}{[n.d.]}]%
+        {selenium_the}
+\bibfield{author}{\bibinfo{person}{Selenium}.} \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{title}{The Selenium Browser Automation Project}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://www.selenium.dev/documentation/}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/14/2023).}
+
+
 \bibitem[\protect\citeauthoryear{SmartBear}{SmartBear}{[n.d.]}]%
         {smartbear_testcomplete}
 \bibfield{author}{\bibinfo{person}{SmartBear}.} \bibinfo{year}{[n.d.]}\natexlab{}.
@@ -437,6 +465,20 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \tempurl}
 \newblock
 \shownote{(Accessed 4/13/2023).}
+
+
+\bibitem[\protect\citeauthoryear{Smartbear}{Smartbear}{[n.d.]}]%
+        {smartbear_pricing}
+\bibfield{author}{\bibinfo{person}{Smartbear}.} \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{title}{TestComplete Pricing | Automated Software Testing Tool}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://smartbear.com/product/testcomplete/pricing/}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/14/2023).}
 
 
 \bibitem[\protect\citeauthoryear{stevewhims}{stevewhims}{2021}]%

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  14 APR 2023 02:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  14 APR 2023 20:48
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -916,7 +916,7 @@ Overfull \hbox (25.64323pt too wide) in paragraph at lines 45--70
  [][] 
  []
 
-<author-files/figures/SingleStoryPath2.png, id=313, 617.30624pt x 222.8325pt>
+<author-files/figures/SingleStoryPath2.png, id=322, 617.30624pt x 222.8325pt>
 File: author-files/figures/SingleStoryPath2.png Graphic file (type png)
 <use author-files/figures/SingleStoryPath2.png>
 Package pdftex.def Info: author-files/figures/SingleStoryPath2.png  used on input line 100.
@@ -924,11 +924,8 @@ Package pdftex.def Info: author-files/figures/SingleStoryPath2.png  used on inpu
 
 Class acmart Warning: A possible image without description on input line 103.
 
-
-Underfull \vbox (badness 4096) has occurred while \output is active []
-
 ) (./author-files/sections/design.tex
-<author-files/figures/logo-ts-webgl.PNG, id=316, 520.19344pt x 217.5628pt>
+<author-files/figures/logo-ts-webgl.PNG, id=325, 520.19344pt x 217.5628pt>
 File: author-files/figures/logo-ts-webgl.PNG Graphic file (type png)
 <use author-files/figures/logo-ts-webgl.PNG>
 Package pdftex.def Info: author-files/figures/logo-ts-webgl.PNG  used on input line 8.
@@ -937,13 +934,16 @@ Package pdftex.def Info: author-files/figures/logo-ts-webgl.PNG  used on input l
 
 Class acmart Warning: A possible image without description on input line 11.
 
-[6.6 <./author-files/figures/SingleStoryPath2.png> <./author-files/figures/logo-ts-webgl.PNG>]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[6.6 <./author-files/figures/SingleStoryPath2.png>]
 Overfull \hbox (2.21016pt too wide) in paragraph at lines 39--40
 \T1/LinuxLibertineT-TLF/m/n/9 (-20) pile and op-ti-mize Type-Script into runnable by the browser JavaScript.
  []
 
-[7.7]
-<author-files/figures/tri.png, id=357, 735.49782pt x 472.76625pt>
+[7.7 <./author-files/figures/logo-ts-webgl.PNG>]
+<author-files/figures/tri.png, id=364, 735.49782pt x 472.76625pt>
 File: author-files/figures/tri.png Graphic file (type png)
 <use author-files/figures/tri.png>
 Package pdftex.def Info: author-files/figures/tri.png  used on input line 65.
@@ -952,7 +952,7 @@ Package pdftex.def Info: author-files/figures/tri.png  used on input line 65.
 
 Class acmart Warning: A possible image without description on input line 68.
 
-<author-files/figures/Monkey-Test2.png, id=358, 500.62032pt x 314.67563pt>
+<author-files/figures/Monkey-Test2.png, id=365, 500.62032pt x 314.67563pt>
 File: author-files/figures/Monkey-Test2.png Graphic file (type png)
 <use author-files/figures/Monkey-Test2.png>
 Package pdftex.def Info: author-files/figures/Monkey-Test2.png  used on input line 75.
@@ -963,7 +963,7 @@ Class acmart Warning: A possible image without description on input line 78.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<author-files/figures/proto2.png, id=359, 633.36626pt x 403.5075pt>
+<author-files/figures/proto2.png, id=366, 633.36626pt x 403.5075pt>
 File: author-files/figures/proto2.png Graphic file (type png)
 <use author-files/figures/proto2.png>
 Package pdftex.def Info: author-files/figures/proto2.png  used on input line 82.
@@ -972,7 +972,7 @@ Package pdftex.def Info: author-files/figures/proto2.png  used on input line 82.
 Class acmart Warning: A possible image without description on input line 85.
 
 [8.8 <./author-files/figures/tri.png> <./author-files/figures/Monkey-Test2.PNG> <./author-files/figures/proto2.png>]
-<author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png, id=372, 562.1pt x 421.575pt>
+<author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png, id=381, 562.1pt x 421.575pt>
 File: author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png Graphic file (type png)
 <use author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png>
 Package pdftex.def Info: author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png  used on input line 136.
@@ -981,7 +981,7 @@ Package pdftex.def Info: author-files/figures/SetMarkerPropertiesExample_01_MATL
 
 Class acmart Warning: A possible image without description on input line 139.
 
-<author-files/figures/worldnavblender.png, id=373, 419.31656pt x 359.09157pt>
+<author-files/figures/worldnavblender.png, id=382, 419.31656pt x 359.09157pt>
 File: author-files/figures/worldnavblender.png Graphic file (type png)
 <use author-files/figures/worldnavblender.png>
 Package pdftex.def Info: author-files/figures/worldnavblender.png  used on input line 143.
@@ -993,7 +993,7 @@ Class acmart Warning: A possible image without description on input line 146.
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 ) (./author-files/sections/implementation.tex [9.9 <./author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png> <./author-files/figures/worldnavblender.PNG>]
-<author-files/figures/glyphset.png, id=384, 342.27875pt x 125.46875pt>
+<author-files/figures/glyphset.png, id=393, 342.27875pt x 125.46875pt>
 File: author-files/figures/glyphset.png Graphic file (type png)
 <use author-files/figures/glyphset.png>
 Package pdftex.def Info: author-files/figures/glyphset.png  used on input line 24.
@@ -1003,7 +1003,7 @@ Package pdftex.def Info: author-files/figures/glyphset.png  used on input line 2
 Class acmart Warning: A possible image without description on input line 27.
 
 [10.10 <./author-files/figures/glyphset.png>]
-<author-files/figures/oldzooms.png, id=397, 376.40625pt x 376.40625pt>
+<author-files/figures/oldzooms.png, id=405, 376.40625pt x 376.40625pt>
 File: author-files/figures/oldzooms.png Graphic file (type png)
 <use author-files/figures/oldzooms.png>
 Package pdftex.def Info: author-files/figures/oldzooms.png  used on input line 72.
@@ -1036,7 +1036,7 @@ Class acmart Warning: \vspace should only be used to provide space above/below s
 Class acmart Warning: \vspace should only be used to provide space above/below surrounding objects on input line 92.
 
 [11.11{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-4.enc} <./author-files/figures/oldzooms.png>] [12.12]
-<author-files/figures/squashFunc.PNG, id=427, 255.95625pt x 99.37125pt>
+<author-files/figures/squashFunc.PNG, id=436, 255.95625pt x 99.37125pt>
 File: author-files/figures/squashFunc.PNG Graphic file (type png)
 <use author-files/figures/squashFunc.PNG>
 Package pdftex.def Info: author-files/figures/squashFunc.PNG  used on input line 188.
@@ -1048,10 +1048,10 @@ Class acmart Warning: A possible image without description on input line 191.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[13.13]) (./author-files/sections/testing.tex
-Underfull \vbox (badness 1199) has occurred while \output is active []
+[13.13]) (./author-files/sections/testing.tex [14.14 <./author-files/figures/squashFunc.PNG>]) (./author-files/sections/finalproduct.tex) (./author-files/sections/conclusion.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [14.14 <./author-files/figures/squashFunc.PNG>]) (./author-files/sections/finalproduct.tex) (./author-files/sections/conclusion.tex)) (./main.bbl
+)) (./main.bbl
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
 (Font)              scaled to size 7.0pt on input line 43.
 LaTeX Info: Redefining \tempurl on input line 61.
@@ -1064,42 +1064,45 @@ LaTeX Info: Redefining \tempurl on input line 138.
 LaTeX Info: Redefining \tempurl on input line 152.
 LaTeX Info: Redefining \tempurl on input line 166.
 LaTeX Info: Redefining \tempurl on input line 180.
-LaTeX Info: Redefining \tempurl on input line 195.
-LaTeX Info: Redefining \tempurl on input line 206.
+LaTeX Info: Redefining \tempurl on input line 194.
+LaTeX Info: Redefining \tempurl on input line 209.
 LaTeX Info: Redefining \tempurl on input line 220.
 LaTeX Info: Redefining \tempurl on input line 234.
-LaTeX Font Info:    Trying to load font information for TS1+LinuxLibertineT-TLF on input line 243.
+LaTeX Info: Redefining \tempurl on input line 248.
+LaTeX Font Info:    Trying to load font information for TS1+LinuxLibertineT-TLF on input line 257.
  (d:/TEX/texlive/2023/texmf-dist/tex/latex/libertine/TS1LinuxLibertineT-TLF.fd
 File: TS1LinuxLibertineT-TLF.fd 2017/03/20 (autoinst) Font definitions for TS1/LinuxLibertineT-TLF.
 )
 LaTeX Font Info:    Font shape `TS1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 7.0pt on input line 243.
+(Font)              scaled to size 7.0pt on input line 257.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `LinuxLibertineT-TLF' (encoding: TS1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-LaTeX Info: Redefining \tempurl on input line 248.
 LaTeX Info: Redefining \tempurl on input line 262.
-LaTeX Info: Redefining \tempurl on input line 289.
-LaTeX Info: Redefining \tempurl on input line 300.
+LaTeX Info: Redefining \tempurl on input line 276.
+LaTeX Info: Redefining \tempurl on input line 303.
 LaTeX Info: Redefining \tempurl on input line 314.
 LaTeX Info: Redefining \tempurl on input line 328.
 LaTeX Info: Redefining \tempurl on input line 342.
-LaTeX Info: Redefining \tempurl on input line 357.
-LaTeX Info: Redefining \tempurl on input line 368.
+LaTeX Info: Redefining \tempurl on input line 356.
+LaTeX Info: Redefining \tempurl on input line 371.
 LaTeX Info: Redefining \tempurl on input line 382.
-LaTeX Info: Redefining \tempurl on input line 393.
+LaTeX Info: Redefining \tempurl on input line 396.
+ [15.15{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/libertine/lbtn_naooyc.enc}]
 LaTeX Info: Redefining \tempurl on input line 407.
 LaTeX Info: Redefining \tempurl on input line 421.
 LaTeX Info: Redefining \tempurl on input line 435.
 LaTeX Info: Redefining \tempurl on input line 449.
-LaTeX Info: Redefining \tempurl on input line 464.
-LaTeX Info: Redefining \tempurl on input line 475.
-LaTeX Info: Redefining \tempurl on input line 489.
- [15.15{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/libertine/lbtn_naooyc.enc}]
-LaTeX Info: Redefining \tempurl on input line 504.
-LaTeX Info: Redefining \tempurl on input line 515.
-LaTeX Info: Redefining \tempurl on input line 529.
+LaTeX Info: Redefining \tempurl on input line 463.
+LaTeX Info: Redefining \tempurl on input line 477.
+LaTeX Info: Redefining \tempurl on input line 491.
+LaTeX Info: Redefining \tempurl on input line 506.
+LaTeX Info: Redefining \tempurl on input line 517.
+LaTeX Info: Redefining \tempurl on input line 531.
+LaTeX Info: Redefining \tempurl on input line 546.
+LaTeX Info: Redefining \tempurl on input line 557.
+LaTeX Info: Redefining \tempurl on input line 571.
 )
 
 Class acmart Warning: Some images may lack descriptions.
@@ -1116,21 +1119,21 @@ File: se-utf8.def 2019/11/29 v1.12 stringenc: UTF-8
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 0C750FD502EEF11CCB2D68164B261E36;5747.
+(rerunfilecheck)             Checksum: 64F89ED917EE9BD56454DD649EFF5448;5747.
  ) 
 Here is how much of TeX's memory you used:
- 24456 strings out of 476025
- 400618 string characters out of 5792019
- 1896382 words of memory out of 5000000
- 43637 multiletter control sequences out of 15000+600000
- 656872 words of font info for 359 fonts, out of 8000000 for 9000
+ 24473 strings out of 476025
+ 400998 string characters out of 5792019
+ 1890382 words of memory out of 5000000
+ 43646 multiletter control sequences out of 15000+600000
+ 657243 words of font info for 361 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
  90i,12n,131p,1144b,1113s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/newtx/txsys.pfb>
-Output written on main.pdf (16 pages, 910608 bytes).
+Output written on main.pdf (16 pages, 912154 bytes).
 PDF statistics:
- 609 PDF objects out of 1000 (max. 8388607)
- 544 compressed objects within 6 object streams
- 191 named destinations out of 1000 (max. 500000)
+ 623 PDF objects out of 1000 (max. 8388607)
+ 558 compressed objects within 6 object streams
+ 196 named destinations out of 1000 (max. 500000)
  70499 words of extra memory for PDF output out of 74296 (max. 10000000)
 

@@ -36,6 +36,7 @@ Warning--empty year in apple_apple
 Warning--empty year in apple_metal
 Warning--empty year in mdncontributors_javascript
 Warning--empty year in davidbritch_what
+Warning--empty year in robotframework_robot
 Warning--empty address in ishikawa_1985_what
 Warning--empty address in klabnik_2023_the
 Warning--empty year in microsoft_typescript
@@ -43,48 +44,50 @@ Warning--empty year in microsoft_what
 Warning--empty year in mrdoob_threejs
 Warning--empty year in nodejs_nodejs
 Warning--empty year in oracle_what
+Warning--empty year in selenium_the
 Warning--empty year in smartbear_testcomplete
+Warning--empty year in smartbear_pricing
 Warning--empty year in unitytechnologies_unity
 Warning--empty year in threejsorg_threejs
-You've used 38 entries,
+You've used 41 entries,
             5959 wiz_defined-function locations,
-            1549 strings with 20253 characters,
-and the built_in function-call counts, 31715 in all, are:
-= -- 3529
-> -- 910
+            1563 strings with 20595 characters,
+and the built_in function-call counts, 33798 in all, are:
+= -- 3733
+> -- 970
 < -- 0
-+ -- 264
-- -- 374
-* -- 1941
-:= -- 3523
-add.period$ -- 216
-call.type$ -- 38
-change.case$ -- 201
-chr.to.int$ -- 108
-cite$ -- 85
-duplicate$ -- 2830
-empty$ -- 2031
-format.name$ -- 366
-if$ -- 7084
++ -- 281
+- -- 398
+* -- 2064
+:= -- 3781
+add.period$ -- 234
+call.type$ -- 41
+change.case$ -- 216
+chr.to.int$ -- 111
+cite$ -- 91
+duplicate$ -- 3010
+empty$ -- 2169
+format.name$ -- 390
+if$ -- 7537
 int.to.chr$ -- 4
 int.to.str$ -- 1
 missing$ -- 32
-newline$ -- 536
-num.names$ -- 278
-pop$ -- 1168
+newline$ -- 578
+num.names$ -- 302
+pop$ -- 1276
 preamble$ -- 1
-purify$ -- 445
+purify$ -- 469
 quote$ -- 0
-skip$ -- 1038
+skip$ -- 1095
 stack$ -- 0
-substring$ -- 2092
-swap$ -- 313
+substring$ -- 2196
+swap$ -- 328
 text.length$ -- 100
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 1027
-warning$ -- 35
-while$ -- 291
+type$ -- 1117
+warning$ -- 38
+while$ -- 315
 width$ -- 0
-write$ -- 854
-(There were 35 warnings)
+write$ -- 920
+(There were 38 warnings)
