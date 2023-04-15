@@ -98,18 +98,19 @@ To be more specific, the features implemented by this engine were the following:
     \item Rendering labels with HTML and positioning them approximately at some relative to WebGL scene coordinates.
 \end{itemize}
 
-One bottleneck though was indemnified during this development, which was to do with Automated testing. See \ref{automatedtests} for the details.
+One bottleneck though was identified during this development, which was to do with Automated testing. See \ref{automatedtests} for the details.
 Like previously mentioned, This prototype then set the basis from which development was started.
 
-\subsection{Automated Testing} \label{automatedtests}
-Test Driven development is an important aspect of the PXP process when developing software. But, during the creation of prototype 2 (See \ref{prototype2}) the student encountered a number of critical issues that contributed to the decision to not implement automated testing until further notice. Those issues were:
+\subsection{Testing Methodology} \label{automatedtests}
+Test Driven development is an important aspect of the PXP process when developing software. This is most often done with automated testing for the best time efficiency and accuracy. But, during the creation of prototype 2 (See \ref{prototype2}) the student encountered a number of critical issues that contributed to the decision to not implement automated testing, subject to possible further consideration later on. Those issues were:
 
 \begin{itemize}
-    \item Graphics Development was found to be difficult to write tests for due to it's visual nature. This on it's own was not a problem as a solution using WatchUI was identified (See \ref{testframe}). What ended up being complex though was how rapidly the visuals changed during development, this made making tests useless as they could not be reused since they depended on comparing what the application rendered to reference images. This was thought to be most likely the result of the project being in it's early stages though. But the project never really reached a stage where this was feasible, almost every new feature would have required tests to be remade.
-    \item Minimal UI to test, Automated testing on the web is particularly well suited to testing UI. Unfortunately, there wasn't any UI to test. This was once again thought to be the result of the project still being in it's early phase. But the project for the majority of development time had very minimal UI. Only in the last few sprints was there enough UI that manual testing couldn't be done in a few seconds. But, by that time the Student considered it too late to introduce automated testing.
+    \item Graphics Development was found to be difficult to write tests for due to it's visual nature. This on it's own was not a problem as a solution using WatchUI was identified (See \ref{testframe}). What ended up being complex though was how rapidly the visuals changed during development, this made making tests useless as they could not be reused since they depended on comparing what the application rendered to reference images.
+    \item Minimal UI to test, Automated testing on the web is particularly well suited to testing UI. Unfortunately, there wasn't any UI to test.
 \end{itemize}
 
-The combination of the two above points made the time investment to setup tests not worth it over manually testing. This was expected to change as further development continued past the prototyping stage but this only started happening in the last few sprints. By then, there was not enough time to properly integrate automated testing as the focus was more on completing as many user stories as would be feasible.
+This points were expected to become less true as the application developed. Nevertheless, the student considered it unwise to setup tests for the start of development. Another process had to be identified in the meantime to allow the student to focus on bringing value to the project (completing user stories). This was the application of manual testing during the refactoring branch as per the specified development flow (See \ref{devflow}).
+
 
 \begin{table*}[t]
     \begin{tabular}{ | l | l | }
@@ -124,23 +125,15 @@ The combination of the two above points made the time investment to setup tests 
         \hline
     \end{tabular}
     \caption{Comparison of design changes to how figures are created in the application developed compared to programmatic market alternatives}
-    \label{}
+    \label{compare}
 \end{table*}
 
 \subsection{UX Design} \label{uxdesign}
 
 As mentioned in the research phase- Ease of use and accessibility for non-programmers was a priority for this project. One that had to also dictate design decisions around how a user would interact with the application and how that application would communicate with the user. Those key decisions are mentioned here.
 
-%mention 7 basic tools of quality charts 
-\subsubsection{Visualisation Design}
-"How should data be plotted and shown to the user?" as a question encapsulates a range of design problems that apply to this section. Specifically, any chart component for this application must embody the following properties to be suitable for completing the application goals:
-\begin{itemize}
-    \item Must be a common chart type that doesn't require specialist knowledge to understand nor is limited to very specific types of data.
-    \item Must be suitable for 3D data and preferably extendable to beyond three dimensions. The more the better.
-    \item Chart can be rendered with 3D graphics and preferably that provides some value to the visualizations with the chart type.
-\end{itemize}
-
-The chart type that in the end embodied these requirements best was a scatterplot chart. It is a chart that is commonly implemented in 3D by other plotting applications looked at. A scatterplot also naturally fits very well in a 3D rendered environment as it's relatively straight forward to encode plotted data into world coordinates that can be extensively navigated in a 3D environment. Further dimensions can also be encoded by modifying each data point further through colour, saturation, shape of data points, opacity and more.
+\subsubsection{Visualisation Design} \label{visdesign}
+One of the project's goals (See \ref{ressummary}) was to use a Scatter plot. To achieve that, two suitable rendering techniques were identified by the Student. Those are the following:
 
 \begin{figure}[h]
     \centering
@@ -156,14 +149,15 @@ The chart type that in the end embodied these requirements best was a scatterplo
     \label{fig:MatlabPlot}
 \end{figure}
 
-To render the scatterplot, two main ideas were identified.
 \begin{itemize}
-    \item Unlimited Axis Values, World View. The scatterplot would be rendered into a 3D world by directly translating data values into world coordinates. The resultant graph could then be navigated by the user akin to 3D modelling software or a video game (first-person camera). Axis lines would be part of that world and would extend to infinity from origin. This is a very easy to implement design but might be difficult to navigate for an inexperienced user.
-    \item Classic cut-off figure. This is directly inspired by the way the majority of applications seen implement scatterplot. As a user of those systems, you would load in some data and set aspects such as the position, view angle and zoom programmatically which would generate an  image as seen in Figure \ref*{fig:MatlabPlot}. This kind of view is not much harder to render but is much more concise as all data can be made to fit in a predefined visual space. This also allows greater control on how the graph is rendered allowing for a more consistent user experience to be tailored. But, this option has a severe disadvantage- where unlike the previous option, it is not commonly navigated but generated for specific parameters- making exploration not an obvious feature to implement.
+    \item Unlimited Axis Values, World View. The scatterplot would be rendered into a 3D world by directly translating data values into world coordinates. The resultant graph could then be navigated by the user akin to 3D modelling software or a video game (first-person camera). Axis lines would be part of that world and would extend to infinity from origin. This is a very easy to implement design but might be difficult to navigate for an inexperienced user and to appropriately combine together with UI.
+    \item Classic cut-off figure. This is directly inspired by the way the majority of applications seen implement scatterplots. As a user of those systems, you would load in some data and set aspects such as the position, view angle and zoom programmatically which would generate an  image as seen in Figure \ref*{fig:MatlabPlot}. This kind of view is not much harder to render but is much more concise as all data can be made to fit in a predefined visual space. This also allows greater control on how the graph is rendered allowing for a more consistent user experience to be tailored. But, this option has a severe disadvantage- where unlike the previous option, it is not commonly navigated but generated for specific parameters- making exploration not an obvious feature to implement.
 \end{itemize}
 
-In the end, the student decided to go with a modified option two. That modification was to replace the programmatic controls that have been seen to be used to compose / generate the chart in applications such as MATLAB with instead similar, although limited UI controls. In a sense, the design that the student came up with abstracts the programming into user controls instead, which are much easier to use (which is the guiding goal for this project) even if they are more limited in their capability.
+In the end, the student decided to go with a modified option two. That modification was to replace the programmatic controls that have been seen to be used to compose / generate the chart in applications such as MATLAB with instead similar, although limited UI controls. In a sense, the design that the student came up with abstracts the programming into user controls instead, which are much easier to use (which is the guiding goal for this project) even if they are more limited in their capability. On input, the chart can be regenerated allowing exploration to be done in a similar sense, instead of moving the camera the chart is modified to show subsections of the data (See Table \ref{compare})
 
 \subsubsection{User Controls}
-The design created by the student in the last section requires a robust design of user controls. With an agile approach, those controls were looked at as the rendering solution improved and opened up possibility for modification.
+The design created by the student in the last section (\ref{visdesign}) requires a robust design of user controls. The design and implementation for UI then followed an agile approach, where UI was designed and implemented as the need arose and the rendering counterpart could support it.
 
+\subsection{Summary}
+This design stage was critical in finalizing the last big questions that needed to be answered before development. With the application of the prototype phase (See \ref{prototype}), the student gained experience and confidence in working with the tools selected, meaning development could proceed much more smoothly.
