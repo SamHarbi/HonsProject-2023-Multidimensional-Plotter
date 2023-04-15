@@ -1,6 +1,6 @@
 \section{Design}
 An initial design phase was undergone by the student before development started. Although it should be noted that the work done did not constitute the final design as a waterfall methodology would require but was more akin to setting the scene for the start of development. The majority of design on how something should be coded, look and such was done on a story by story basis during sprints (See \ref{implementation})
-This phase itself though consisted of the following key parts:
+This phase itself though consisted of the following key sections.
 
 \subsection{Technology Stack} \label{techstack}
 \begin{figure}[h]
@@ -41,6 +41,9 @@ As a compiler, Parcel was used to compile and optimize TypeScript into runnable 
 \paragraph{Hosting Provider}
 Digital Ocean's App Platform was used to host and build the application from the production branch of the code repository. It was chosen due to the student having previous experience hosting resources on the platform, simple setup with minimal networking on the students part, integration with Github, support for building on a node.js environment (The same as the development environment, allowing for continuous integration from the production branch) and the availability of free credits to do all this. The site hosted here allowed user testers to access the application from anywhere at their own time.
 
+\paragraph{Testing Framework} \label{testframe}
+With this project set to run in a browser as per the rest of the technology stack (See \ref{techstack}). It was decided that Robot Framework would be the ideal choice for handling testing- This was expected to be done using WatchUI, a library for Robot Testing that runs selenium under the hood. This was done to make testing more flexible and less time consuming thanks to the wide selection of other helping libraries available with Robot Framework. Unfortunately, during prototyping (See \ref{prototype2}) a number of issues cropped up that ultimately left user testing to be set aside. For further details see \ref{automatedtests}.
+
 \subsubsection{Additional Libraries}
 The other mentioned npm packages used are recorded here and the reason for their use.
 
@@ -52,9 +55,6 @@ Pre-made functions for the math very commonly used in graphics development. Allo
 
 \paragraph{jquery-csv}
 A jquery syntax compliant .csv parser. No particular reason to select this particularly from other alternatives. Covers a lot of edge cases in parsing .csv files that would have taken a while to implement and test from scratch.
-
-\subsection{Automated Testing} \label{automatedtests}
-Automated testing is used in software development to run a set of pre-configured tests repeatedly, usually every time before code is committed to a repository. Once tests are setup and written, it is an easy way to quickly test all cases including edge cases that would otherwise be tedious or take too long to do manually. As per PXP, Which focus on test-driven development- The student looked at a number of possible options for implementing automated testing.
 
 \subsection{Prototyping} \label{prototype}
 An important part of the initial design stage was creating simple prototype applications using the technology stack to give the student experience with using the stack and to identify any critical issues that may need the stack to be redesigned or tools to be changed. These were in a sense mock sprint runs to smooth out the process and prepare for when development would officially start. The prototypes created also turned out general enough that they were able to be reused for the development of the actual application, in particular prototype 2.
@@ -98,7 +98,18 @@ To be more specific, the features implemented by this engine were the following:
     \item Rendering labels with HTML and positioning them approximately at some relative to WebGL scene coordinates.
 \end{itemize}
 
+One bottleneck though was indemnified during this development, which was to do with Automated testing. See \ref{automatedtests} for the details.
 Like previously mentioned, This prototype then set the basis from which development was started.
+
+\subsection{Automated Testing} \label{automatedtests}
+Test Driven development is an important aspect of the PXP process when developing software. But, during the creation of prototype 2 (See \ref{prototype2}) the student encountered a number of critical issues that contributed to the decision to not implement automated testing until further notice. Those issues were:
+
+\begin{itemize}
+    \item Graphics Development was found to be difficult to write tests for due to it's visual nature. This on it's own was not a problem as a solution using WatchUI was identified (See \ref{testframe}). What ended up being complex though was how rapidly the visuals changed during development, this made making tests useless as they could not be reused since they depended on comparing what the application rendered to reference images. This was thought to be most likely the result of the project being in it's early stages though. But the project never really reached a stage where this was feasible, almost every new feature would have required tests to be remade.
+    \item Minimal UI to test, Automated testing on the web is particularly well suited to testing UI. Unfortunately, there wasn't any UI to test. This was once again thought to be the result of the project still being in it's early phase. But the project for the majority of development time had very minimal UI. Only in the last few sprints was there enough UI that manual testing couldn't be done in a few seconds. But, by that time the Student considered it too late to introduce automated testing.
+\end{itemize}
+
+The combination of the two above points made the time investment to setup tests not worth it over manually testing. This was expected to change as further development continued past the prototyping stage but this only started happening in the last few sprints. By then, there was not enough time to properly integrate automated testing as the focus was more on completing as many user stories as would be feasible.
 
 \begin{table*}[t]
     \begin{tabular}{ | l | l | }
