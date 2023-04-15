@@ -1,0 +1,24 @@
+<mxfile host="app.diagrams.net" modified="2023-04-15T19:06:49.585Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0" etag="kVgjlnrcHBCybZl7qbbw" version="21.1.5" type="device">
+  <diagram name="Page-1" id="ZCh4eOpNN5HlndO_Ab4H">
+    <mxGraphModel dx="683" dy="372" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="tP46osO5o7aPi-4pix70-1" value="Font" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="90" y="40" width="390" height="330" as="geometry">
+            <mxRectangle x="230" y="140" width="160" height="26" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tP46osO5o7aPi-4pix70-3" value="    font_pointers;&#xa;    font_data_pointers;&#xa;    textureID: WebGLTexture;&#xa;    textureBuffer: WebGLBuffer;&#xa;    textureCord: number[];&#xa;    image: HTMLImageElement;&#xa;              gl: WebGLRenderingContext;&#xa;font_option: number;&#xa;        &#xa;        &#xa;          " style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="tP46osO5o7aPi-4pix70-1">
+          <mxGeometry y="26" width="390" height="126" as="geometry" />
+        </mxCell>
+        <mxCell id="tP46osO5o7aPi-4pix70-8" value="" style="line;html=1;strokeWidth=1;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=1;labelPosition=right;points=[];portConstraint=eastwest;movable=1;resizable=1;deletable=1;editable=1;connectable=1;" vertex="1" parent="tP46osO5o7aPi-4pix70-1">
+          <mxGeometry y="152" width="390" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="tP46osO5o7aPi-4pix70-9" value="constructor(set_font_option: number, set_gl: WebGLRenderingContext)&#xa;init(char: string)&#xa;getTextureCords()&#xa;getImage()" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" vertex="1" parent="tP46osO5o7aPi-4pix70-1">
+          <mxGeometry y="160" width="390" height="170" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
