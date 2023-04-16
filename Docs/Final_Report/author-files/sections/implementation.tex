@@ -8,7 +8,7 @@ This project was developed over 8 sprints between 7-10 days each. The first one 
     \item Summary - Have all user stories been completed? What went wrong? Anything learned and moved to next sprint?
 \end{itemize}
 
-\subsection{Sprint 1 - Start 26th December}
+\subsection{Sprint 1 - Start 26th December} \label{sprint1}
 \subsubsection{Plan}
 This was the first sprint undertaken for the project and so the focus was to test everything out and ensure that the process was right for the student. The initial MVP feature set was chosen for development and two user stories were planned for (See stories on Table \ref{sprint1}). Those being user stories 3 and 11 with a total workload estimate of 6 over a 7 day sprint. The main goal for this sprint was to create a labelled scatterplot graph with some pre-set test data.
 
@@ -38,6 +38,7 @@ With bitmap fonts decided upon, the student started work on adapting the applica
     \item It should be possible to apply textures to models- This was done by adapting the Model class to take-in, store and apply texture data on render
     \item There had to be some way to abstract which letter was rendered, manually slicing the bitmap texture to get each glyph would quickly become too tedious and time consuming for anything beyond a few glyphs- A State-Machine based Font Class was created that generated font texture data for an input letter that could be fed into a Model Object. See Figure \ref{fig:fontprocess}.
     \item An Glyph set image and accompanying .JSON file for glyph data was embedded into the application. It's this data that allows the Font Class to function. See Figure \ref{fig:fontprocess} for more details.
+    \item A new set of vertex and fragment shaders were created for just text. This was to allow texture data to be applied in the fragment shader.
 \end{itemize}
 
 \begin{figure}[h]
@@ -54,28 +55,45 @@ With bitmap fonts decided upon, the student started work on adapting the applica
     \label{fig:fontprocess}
 \end{figure}
 
+The implementation of the Font Abstraction makes it very easy to have multiple different fonts (As in style) in the application. As long as font data is embedded in the application- It is trivial to change the font by simply changing a variable. With this, two fonts options were added- Arial and a bold variation of Arial.
+
 \subsubsection{Summary}
 The new technique for rendering text ended up fixing the accuracy issues caused by the previous label system, all user stories managed to be completed as expected and the application was pushed to production on january 1st, 2023. This was a slow start but the student expected that more user stories would be able to be tackled as the project progressed.
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{author-files/figures/Pretest1progress.png}
+    \caption{The application at the end of Sprint 2}
+    \label{fig:sprint2end}
+\end{figure*}
 
 \subsection{Sprint 2 - Start 4th January}
 \subsubsection{Plan}
 This was the second sprint and the plan was to start adding user controls to allow a user to modify what was being rendered. This included not only the ability to upload custom data but also rotate the resultant graph. The MVP feature set was again the developed feature set from which 4 user stories were selected (See table \ref{sprint2}), with a total work load estimate of 16 over a longer 11 day sprint. This was originally a 7 day sprint but an extension was deemed necessary to have an atomic conclusion to the sprint. In total, 16 Units of work were completed for an average of 8 per week.
 
 \subsubsection{Implementation}
-Loader was once again expanded to handle .csv loading which was done using jquery-csv, which sped up development considerably and covered a lot of edge cases in possible file uploads. For user controls, the use of modern UI frameworks was considered but at this moment in time- there wasn't much UI requirement for the application. Instead, as per PXP, the student focused on hitting user stories as fast as possible. Thus, an observer like structure was implemented using Event listeners connected to overlaid HTML Elements on the page (In a similar way to how the old label system worked, See Sprint 1) which ran functions that modified the state of the application. With this design, 6 buttons were made to rotate each axis of the chart individually. Another button was added to upload a file that was handed to Loader.
+Loader was expanded to handle .csv loading which was done using jquery-csv, which sped up development considerably and covered a lot of edge cases in possible file uploads. For user controls, the use of modern UI frameworks was considered but at this moment in time- there wasn't much UI requirement for the application. Instead, as per PXP, the student focused on hitting user stories as fast as possible. Thus, an observer like structure was implemented using Event listeners connected to overlaid HTML Elements on the page (In a similar way to how the old label system worked, See label rendering in \ref{prototype2}) which ran functions that modified the state of the application. With this design, 6 buttons were made to rotate each axis of the chart individually. Another button was added to upload a file that was handed to Loader. See below for an example Event Listener:
 
-During this time, when implementing rotation- which consisted of applying a rotating model matrix component to the entire scene. An expected issue cropped up of having to rotate glyphs to always face the camera even when the scene rotates. This consisted a task that needed a billboarding shader to be written that was used when text is rendered in the application.
+\begin{code}
+    // Event Listener for a rotate x axis button
+    (<HTMLElement>document.getElementById("right"))
+    .addEventListener("click", function () {
+            x_rotation += 0.1;
+        });
+\end{code}
+
+During this time, when implementing rotation- which consisted of applying a rotating model matrix component to the entire scene. An expected issue cropped up of having to rotate glyphs to always face the camera even when the scene rotates. This was solved by writing a custom shader to be used when rendering text glyphs, implementing billboarding.
 
 \subsubsection{Summary}
-This was almost a double sprint. This was mainly due to lower work hours done by the student during the winter vacation. Nevertheless, All user stories were completed and the application was pushed to production on January 29th. This delay was due to the previously mentioned lower hours and semester start travel. At this point, a technically functional plotter was created, though still very limited in functionality.
+This was almost a double sprint. This was mainly due to lower work hours done by the student during the winter vacation. Nevertheless, All user stories were completed and the application was pushed to production on January 29th. This delay was due to the previously mentioned lower hours and semester start travel. At this point, a technically functional plotter was created, though still very limited in functionality. See Figure \ref{fig:sprint2end}
 
 \subsection{Sprint 3 - Start 29th January}
 \subsection{Plan}
-This was the third sprint and first sprint undertaken during semester 2. The plan was to tackle some of the biggest requirements from the MVP feature set- in turn making the application more capable. A total of 6 User stories were selected with one of them, story 6 alone being ranked at a workload of 10. In total, the sprint consisted of 25 work load points over a period of 12 days. This was the biggest sprint undertaken to date but the student was confident in rising up to the challenge. Some of the sprints assigned to this sprint were tackled in previous sprints but were not developed to a suitable standard of quality to qualify to be committed.
+This was the third sprint and first sprint undertaken during semester 2. The plan was to tackle some of the biggest requirements from the MVP feature set- in turn making the application more capable. A total of 5 User stories were selected (See table ref{sprint3}) with one of them, story 6 alone being ranked at a workload of 10. In total, the sprint consisted of 24 work load points over a period of 12 days. This was the biggest sprint undertaken to date but the student was confident in rising up to the challenge.
 
 \subsubsection{Implementation}
 
-One of the user stories was to implement the ability to change what slice the graph showed / what the axis values are. This is the beginning of adding dynamic navigation to the data that was mentioned in the design. During this sprint, this idea of navigation was distilled down into 2 essential parts. With that being:
+One of the user stories was to implement the ability to change what slice the graph showed / what the axis values are (See \ref{uxdesign}). This was the beginning of adding dynamic navigation to the data that was mentioned in the design. During this sprint, this idea of navigation was distilled down into 2 essential parts. With that being:
 \begin{itemize}
     \item Moving the chart "slice" in each axis. An example would be if a 1-10 on each axis chart is moved +1 in the y direction the chart x, z axis would still show 1-10 but the y axis will now show 2-11.
     \item Zooming. This can be considered as increasing the size of the slice shown by a chart. If a 1-10 on each axis slice chart is scaled to a factor of 2x it would now show 1-20 on each axis.
@@ -83,15 +101,17 @@ One of the user stories was to implement the ability to change what slice the gr
 
 Before any of these could be implemented though, glyph rendering had to be reworked to allow values consisting of more than one digit to be shown at each labelled line of the chart. This was a relatively straight-forward addition where instead of a single glyph being rendered at each line, an array of glyphs was rendered instead. With each digit of a number being a single glyph in order stored in the array.
 
-Moving the chart was then started to be implemented. This was done by adding new movement buttons (2 for each axis that either moved the axis ahead by 1 by back by 1) then using event listeners getting the modification value and applying it calculate the range of axis vales that needed to be rendered (This was at most 10 values). These values were then applied in order for each labelled line on the chart. This was a relatively straight forward addition.
+This did not take full advantage of the Model class prototype abstraction pattern, Technically it would have been possible to just store the unique texture data of each glyph in a number and repeatedly apply it to a single model then rendering each glyph in turn, which would have meant less repeating of data through multiple Model objects- but this would have a greater performance impact as the one model would need to be re-initialized for every glyph every frame before rendering.
+
+Moving the chart was next to be implemented. This was done by adding new movement buttons (2 for each axis that either moved the axis ahead by 1 or back by 1) then using event listeners getting the modification value and applying it calculate the range of axis vales that needed to be rendered (This was at most 10 values). These values were then applied in order for each labelled line on the chart. This was a relatively straight forward addition.
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\columnwidth]{author-files/figures/oldzooms.png}
-    \caption{Zooming effect formed by Axis Lines (Zooming Out)}
+    \caption{Zooming effect formed by Axis Lines (Zooming Out left to right, top to bottom)}
     \label{fig:oldzoom}
 \end{figure}
 
-Zooming was one of the most challenging features of this project to implement. The implementation at this time attempted to create a visually pleasing effect where axis lines would move out to give the illusion that the camera was moving closer without actually changing camera position nor size of the viewing graph cube. This was an easy enough effect to achieve and one that could correctly sync up with the position of data cubes too.
+Zooming was one of the most challenging features of this project to implement. The implementation at this time attempted to create a visually pleasing effect (See Figure \ref{fig:oldzoom}) where axis lines would move out to give the illusion that the camera was moving closer without actually changing the camera position nor size of the viewing graph cube. This was an easy enough effect to achieve and one that could correctly sync up with the position of data cubes too.
 
 \begin{code}
     glmath.mat4.translate(
@@ -112,7 +132,7 @@ The problem then, was correctly labelling axis lines at every possible state of 
 With this, the application could now zoom up to a maximum of 5x showing values from 0 to 50 and a minimum of 1 to 10 at 1x. In between those two maximum and minimum levels (including those levels) there were 10 pre-set zoom values that could be scrolled through.
 
 \subsubsection{Summary}
-This was one of the most important sprints undertaken in terms of extending chart capabilities. All mentioned user stories were completed and the application was pushed to production on February 9th. At the end of this sprint the application was starting to become ready for user testing and could technically handle most data- Further information on user testing is mentioned in section X.
+This was one of the most important sprints undertaken in terms of extending chart capabilities. All mentioned user stories were completed and the application was pushed to production on February 9th. At the end of this sprint the application was starting to become ready for user testing and could technically handle most data- Further information on user testing is mentioned in section \ref{usertest1}
 
 \subsection{Sprint 4 - Start February 10th}
 \subsubsection{Plan}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  15 APR 2023 21:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  16 APR 2023 20:27
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -691,6 +691,9 @@ LaTeX Warning: Label `fig:MatlabPlot' multiply defined.
 
 LaTeX Warning: Label `fig:arial' multiply defined.
 
+
+LaTeX Warning: Label `sprint1' multiply defined.
+
 )
 \openout1 = `main.aux'.
 
@@ -1017,77 +1020,106 @@ Class acmart Warning: A possible image without description on input line 32.
 <author-files/figures/Fontv1.png, id=428, 393.47pt x 335.2525pt>
 File: author-files/figures/Fontv1.png Graphic file (type png)
 <use author-files/figures/Fontv1.png>
-Package pdftex.def Info: author-files/figures/Fontv1.png  used on input line 45.
+Package pdftex.def Info: author-files/figures/Fontv1.png  used on input line 46.
 (pdftex.def)             Requested size: 192.91872pt x 164.37234pt.
 
 
-Class acmart Warning: A possible image without description on input line 48.
+Class acmart Warning: A possible image without description on input line 49.
 
 <author-files/figures/fontprocess.png, id=429, 462.72874pt x 368.37625pt>
 File: author-files/figures/fontprocess.png Graphic file (type png)
 <use author-files/figures/fontprocess.png>
-Package pdftex.def Info: author-files/figures/fontprocess.png  used on input line 52.
+Package pdftex.def Info: author-files/figures/fontprocess.png  used on input line 53.
 (pdftex.def)             Requested size: 192.91872pt x 153.58153pt.
 
-Class acmart Warning: A possible image without description on input line 55.
-
-[11.11 <./author-files/figures/Fontv1.png> <./author-files/figures/fontprocess.png>]
-<author-files/figures/oldzooms.png, id=445, 376.40625pt x 376.40625pt>
-File: author-files/figures/oldzooms.png Graphic file (type png)
-<use author-files/figures/oldzooms.png>
-Package pdftex.def Info: author-files/figures/oldzooms.png  used on input line 89.
-(pdftex.def)             Requested size: 241.14749pt x 241.15189pt.
+Class acmart Warning: A possible image without description on input line 56.
 
 
-Class acmart Warning: A possible image without description on input line 92.
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<author-files/figures/Pretest1progress.png, id=430, 1428.08531pt x 705.38531pt>
+File: author-files/figures/Pretest1progress.png Graphic file (type png)
+<use author-files/figures/Pretest1progress.png>
+Package pdftex.def Info: author-files/figures/Pretest1progress.png  used on input line 65.
+(pdftex.def)             Requested size: 506.295pt x 250.0745pt.
+
+Class acmart Warning: A possible image without description on input line 68.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-Class acmart Warning: \vspace should only be used to provide space above/below surrounding objects on input line 96.
+Class acmart Warning: \vspace should only be used to provide space above/below surrounding objects on input line 77.
 
-LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 96.
+LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 77.
 (d:/TEX/texlive/2023/texmf-dist/tex/latex/inconsolata/t1zi4.fd
 File: t1zi4.fd 2018/01/14 T1/zi4 (Inconsolata)
 )
 LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 9.0pt on input line 96.
+(Font)              scaled to size 9.0pt on input line 77.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `zi4' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 
 
-Class acmart Warning: \vspace should only be used to provide space above/below surrounding objects on input line 101.
+Class acmart Warning: \vspace should only be used to provide space above/below surrounding objects on input line 83.
+
+[11.11{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-4.enc} <./author-files/figures/Fontv1.png> <./author-files/figures/fontprocess.png>]
+<author-files/figures/oldzooms.png, id=456, 376.40625pt x 376.40625pt>
+File: author-files/figures/oldzooms.png Graphic file (type png)
+<use author-files/figures/oldzooms.png>
+Package pdftex.def Info: author-files/figures/oldzooms.png  used on input line 109.
+(pdftex.def)             Requested size: 241.14749pt x 241.15189pt.
 
 
-Class acmart Warning: \vspace should only be used to provide space above/below surrounding objects on input line 104.
+Class acmart Warning: A possible image without description on input line 112.
 
 
-Class acmart Warning: \vspace should only be used to provide space above/below surrounding objects on input line 109.
+LaTeX Warning: `h' float specifier changed to `ht'.
 
-[12.12{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-4.enc} <./author-files/figures/oldzooms.png>] [13.13]
-<author-files/figures/squashFunc.PNG, id=477, 255.95625pt x 99.37125pt>
+
+Class acmart Warning: \vspace should only be used to provide space above/below surrounding objects on input line 116.
+
+[12.12 <./author-files/figures/Pretest1progress.PNG>]
+
+Class acmart Warning: \vspace should only be used to provide space above/below surrounding objects on input line 121.
+
+
+Class acmart Warning: \vspace should only be used to provide space above/below surrounding objects on input line 124.
+
+
+Class acmart Warning: \vspace should only be used to provide space above/below surrounding objects on input line 129.
+
+[13.13 <./author-files/figures/oldzooms.png>] [14.14]
+<author-files/figures/squashFunc.PNG, id=496, 255.95625pt x 99.37125pt>
 File: author-files/figures/squashFunc.PNG Graphic file (type png)
 <use author-files/figures/squashFunc.PNG>
-Package pdftex.def Info: author-files/figures/squashFunc.PNG  used on input line 205.
+Package pdftex.def Info: author-files/figures/squashFunc.PNG  used on input line 225.
 (pdftex.def)             Requested size: 120.57375pt x 46.81062pt.
 
 
-Class acmart Warning: A possible image without description on input line 208.
+Class acmart Warning: A possible image without description on input line 228.
 
-[14.14 <./author-files/figures/squashFunc.PNG>]) (./author-files/sections/impTables.tex
+) (./author-files/sections/impTables.tex
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
+Overfull \hbox (25.64323pt too wide) in paragraph at lines 36--51
+ [][] 
+ []
+
+
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-) (./author-files/sections/testing.tex
-Underfull \vbox (badness 5245) has occurred while \output is active []
+) (./author-files/sections/testing.tex [15.15 <./author-files/figures/squashFunc.PNG>]
+Underfull \vbox (badness 1789) has occurred while \output is active []
 
-) (./author-files/sections/finalproduct.tex) (./author-files/sections/conclusion.tex [15.15])) (./main.bbl
+) (./author-files/sections/finalproduct.tex) (./author-files/sections/conclusion.tex [16.16])) (./main.bbl
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
 (Font)              scaled to size 7.0pt on input line 43.
 LaTeX Info: Redefining \tempurl on input line 61.
@@ -1100,12 +1132,12 @@ LaTeX Info: Redefining \tempurl on input line 138.
 LaTeX Info: Redefining \tempurl on input line 152.
 LaTeX Info: Redefining \tempurl on input line 166.
 LaTeX Info: Redefining \tempurl on input line 180.
-
-Underfull \vbox (badness 1199) has occurred while \output is active []
-
 LaTeX Info: Redefining \tempurl on input line 194.
 LaTeX Info: Redefining \tempurl on input line 209.
 LaTeX Info: Redefining \tempurl on input line 220.
+
+Underfull \vbox (badness 1565) has occurred while \output is active []
+
 LaTeX Info: Redefining \tempurl on input line 234.
 LaTeX Info: Redefining \tempurl on input line 248.
 LaTeX Font Info:    Trying to load font information for TS1+LinuxLibertineT-TLF on input line 257.
@@ -1135,10 +1167,6 @@ LaTeX Info: Redefining \tempurl on input line 449.
 LaTeX Info: Redefining \tempurl on input line 463.
 LaTeX Info: Redefining \tempurl on input line 477.
 LaTeX Info: Redefining \tempurl on input line 491.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [16.16{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/libertine/lbtn_naooyc.enc}]
 LaTeX Info: Redefining \tempurl on input line 506.
 LaTeX Info: Redefining \tempurl on input line 517.
 LaTeX Info: Redefining \tempurl on input line 531.
@@ -1149,30 +1177,34 @@ LaTeX Info: Redefining \tempurl on input line 571.
 
 Class acmart Warning: Some images may lack descriptions.
 
+
+Package balance Warning: You have called \balance in second column
+(balance)                Columns might not be balanced.
+
 (d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-pdfdoc.def
 File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
 ) (d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-utf8.def
 File: se-utf8.def 2019/11/29 v1.12 stringenc: UTF-8
-) [17.17] (./main.aux)
+) [17.17{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/libertine/lbtn_naooyc.enc}] (./main.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: E425DA99900CDFFE489E35FC81A35775;5873.
+(rerunfilecheck)             Checksum: 7915494F915F1A11641CE7C8204F763E;5873.
  ) 
 Here is how much of TeX's memory you used:
- 24513 strings out of 476025
- 402094 string characters out of 5792019
- 1896382 words of memory out of 5000000
- 43673 multiletter control sequences out of 15000+600000
- 657132 words of font info for 360 fonts, out of 8000000 for 9000
+ 24529 strings out of 476025
+ 402487 string characters out of 5792019
+ 1899382 words of memory out of 5000000
+ 43683 multiletter control sequences out of 15000+600000
+ 656734 words of font info for 358 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
- 90i,12n,131p,1195b,1113s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,13n,131p,1195b,2113s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/newtx/txsys.pfb>
-Output written on main.pdf (17 pages, 940021 bytes).
+Output written on main.pdf (17 pages, 1126437 bytes).
 PDF statistics:
- 661 PDF objects out of 1000 (max. 8388607)
- 589 compressed objects within 6 object streams
- 204 named destinations out of 1000 (max. 500000)
- 70522 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 679 PDF objects out of 1000 (max. 8388607)
+ 604 compressed objects within 7 object streams
+ 212 named destinations out of 1000 (max. 500000)
+ 70527 words of extra memory for PDF output out of 74296 (max. 10000000)
 

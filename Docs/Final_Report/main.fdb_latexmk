@@ -1,17 +1,18 @@
 # Fdb version 4
-["bibtex main"] 1681591301 "main.aux" "main.bbl" "main" 1681591413 0
+["bibtex main"] 1681673259 "main.aux" "main.bbl" "main" 1681673265 0
   "./ACM-Reference-Format.bst" 1679765874 88297 68580d41bd279ee2c59d376cb377f3d6 ""
   "./bibliography.bib" 1681501071 19715 aeb9e2b55fe04e475648e5472e8e454a ""
-  "main.aux" 1681591411 25569 20ddc0bd520f33af145c2c358bf50f9f "pdflatex"
+  "main.aux" 1681673263 26275 7abd45e742a7ea9a564f983442810c4d "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1681591408 "c:/Users/Sam/Desktop/Main/HonsProject-2023-Multidimensional-Plotter/Docs/Final_Report/main.tex" "main.pdf" "main" 1681591413 0
+["pdflatex"] 1681673260 "c:/Users/Sam/Desktop/Main/HonsProject-2023-Multidimensional-Plotter/Docs/Final_Report/main.tex" "main.pdf" "main" 1681673265 0
   "acmart.cls" 1679765874 103409 33ab3db5699c475d5435e28b7021d6c1 ""
   "author-files/body.tex" 1681582385 399 a612dbe117458c472cddd20d1756fbb7 ""
   "author-files/figures/Fontv1.png" 1681585656 16128 fadc8ceb149565cb8fc144e9c12558fa ""
   "author-files/figures/Monkey-Test2.PNG" 1680257056 26125 785bd2750aad62bdb586f6f85e952f25 ""
+  "author-files/figures/Pretest1progress.PNG" 1681672724 193924 80fc72fc04db1c4d047cffe2f7d43431 ""
   "author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png" 1680541429 14538 60e6d84a74d6dcccfcf58c38658a0f0b ""
   "author-files/figures/SingleStoryPath2.png" 1679775027 14406 37ae27cb52a50b74e6a4855cae1395b2 ""
   "author-files/figures/fontprocess.png" 1681586793 55535 a1b3dbde3f5457a573d95926e6c5cff1 ""
@@ -28,11 +29,11 @@
   "author-files/sections/conclusion.tex" 1681000180 291 e562067332db0120bb4b3f16338bcf23 ""
   "author-files/sections/design.tex" 1681569578 16223 74443871725729517e9c637a4f864045 ""
   "author-files/sections/finalproduct.tex" 1680996158 1249 269e30564fde2c02ba20b47321d51c33 ""
-  "author-files/sections/impTables.tex" 1681591409 1659 7f0acc930fce3729d2f0cd3039a7053d ""
-  "author-files/sections/implementation.tex" 1681591400 27592 dd39af0747d0a0ef1fb032db6210901b ""
+  "author-files/sections/impTables.tex" 1681596654 2855 046c9a6be644df69ed0f1cde0c1348f1 ""
+  "author-files/sections/implementation.tex" 1681673255 29040 a33933175ca603a528d05ceaf48e6548 ""
   "author-files/sections/introduction.tex" 1681313240 2057 36236d2ed0c3c78c4cae00cd331a7f2e ""
   "author-files/sections/specification.tex" 1681564438 11697 dba2400f456ccd0fc0012118f4c8f9f1 ""
-  "author-files/sections/testing.tex" 1680975328 4996 c4a201b1bf8f6e711509147b2a249f5f ""
+  "author-files/sections/testing.tex" 1681672691 5014 15906ddc1e1a1c691396707fedf3dcd1 ""
   "c:/Users/Sam/Desktop/Main/HonsProject-2023-Multidimensional-Plotter/Docs/Final_Report/main.tex" 1681327580 867 fa8ff35ac2288fce54f64493389fd555 ""
   "d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-4.enc" 1679510704 7693 0f2dce6d313c82989ec3a67fc24df2a0 ""
   "d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/libertine/lbtn_25tcsq.enc" 1679511099 2921 8ca0eb0831f9bc5da080d3697cfe67bf ""
@@ -229,9 +230,9 @@
   "d:/TEX/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1679513860 4662209 2dad468923ab70bb080cfa8776e90b5e ""
   "d:/TEX/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt" 1679514079 7883346 8e3429cb30b688a90aec9eb0a861a9ce ""
   "d:/TEX/texlive/2023/texmf.cnf" 1679513837 713 e69b156964470283e0530f5060668171 ""
-  "main.aux" 1681591411 25569 20ddc0bd520f33af145c2c358bf50f9f "pdflatex"
-  "main.bbl" 1681591302 19781 650243bb2ed9c791bca2dd1b4d7640fc "bibtex main"
-  "main.out" 1681591411 5873 e425da99900cdffe489e35fc81a35775 "pdflatex"
+  "main.aux" 1681673263 26275 7abd45e742a7ea9a564f983442810c4d "pdflatex"
+  "main.bbl" 1681673260 19781 650243bb2ed9c791bca2dd1b4d7640fc "bibtex main"
+  "main.out" 1681673264 5873 7915494f915f1a11641ce7c8204f763e "pdflatex"
   "main.tex" 1681327580 867 fa8ff35ac2288fce54f64493389fd555 ""
   (generated)
   "main.aux"
