@@ -1,16 +1,17 @@
 # Fdb version 4
-["bibtex main"] 1681673259 "main.aux" "main.bbl" "main" 1681673265 0
+["bibtex main"] 1681677646 "main.aux" "main.bbl" "main" 1681677711 0
   "./ACM-Reference-Format.bst" 1679765874 88297 68580d41bd279ee2c59d376cb377f3d6 ""
   "./bibliography.bib" 1681501071 19715 aeb9e2b55fe04e475648e5472e8e454a ""
-  "main.aux" 1681673263 26275 7abd45e742a7ea9a564f983442810c4d "pdflatex"
+  "main.aux" 1681677709 27357 796f0d90961ec649f8332effd71ee738 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1681673260 "c:/Users/Sam/Desktop/Main/HonsProject-2023-Multidimensional-Plotter/Docs/Final_Report/main.tex" "main.pdf" "main" 1681673265 0
+["pdflatex"] 1681677705 "c:/Users/Sam/Desktop/Main/HonsProject-2023-Multidimensional-Plotter/Docs/Final_Report/main.tex" "main.pdf" "main" 1681677711 0
   "acmart.cls" 1679765874 103409 33ab3db5699c475d5435e28b7021d6c1 ""
   "author-files/body.tex" 1681582385 399 a612dbe117458c472cddd20d1756fbb7 ""
   "author-files/figures/Fontv1.png" 1681585656 16128 fadc8ceb149565cb8fc144e9c12558fa ""
+  "author-files/figures/MVC.png" 1681676425 35057 73b5866bcb61bb132dbb3839bbcad701 ""
   "author-files/figures/Monkey-Test2.PNG" 1680257056 26125 785bd2750aad62bdb586f6f85e952f25 ""
   "author-files/figures/Pretest1progress.PNG" 1681672724 193924 80fc72fc04db1c4d047cffe2f7d43431 ""
   "author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png" 1680541429 14538 60e6d84a74d6dcccfcf58c38658a0f0b ""
@@ -20,6 +21,7 @@
   "author-files/figures/glyphstruct.png" 1681586188 10215 ecb2dd464142d745c00aaa3829509970 ""
   "author-files/figures/logo-ts-webgl.PNG" 1681214449 25175 95c374ee2ee13941a4937ed4ac8d3f6d ""
   "author-files/figures/oldzooms.png" 1680719641 174962 31c5f4671d31f9cbb9ebe43d6a704791 ""
+  "author-files/figures/pretestScreenshot.PNG" 1681674880 175396 ad240dda01b3c469f52b5a7fc05797ef ""
   "author-files/figures/proto2.png" 1681211953 47505 4f49d1b6f4c607f414f135b1101ab79e ""
   "author-files/figures/squashFunc.PNG" 1680952878 4033 27782489c82119a1cbb57e014e0b64cb ""
   "author-files/figures/tri.png" 1679866931 10652 e853798bbb909524521054759fdd0f5a ""
@@ -29,8 +31,8 @@
   "author-files/sections/conclusion.tex" 1681000180 291 e562067332db0120bb4b3f16338bcf23 ""
   "author-files/sections/design.tex" 1681569578 16223 74443871725729517e9c637a4f864045 ""
   "author-files/sections/finalproduct.tex" 1680996158 1249 269e30564fde2c02ba20b47321d51c33 ""
-  "author-files/sections/impTables.tex" 1681596654 2855 046c9a6be644df69ed0f1cde0c1348f1 ""
-  "author-files/sections/implementation.tex" 1681673255 29040 a33933175ca603a528d05ceaf48e6548 ""
+  "author-files/sections/impTables.tex" 1681677639 4405 196336bb1565c550da582ffec0cb5236 ""
+  "author-files/sections/implementation.tex" 1681677704 29744 85a51dd1bf3f73907217f8ede532ffb9 ""
   "author-files/sections/introduction.tex" 1681313240 2057 36236d2ed0c3c78c4cae00cd331a7f2e ""
   "author-files/sections/specification.tex" 1681564438 11697 dba2400f456ccd0fc0012118f4c8f9f1 ""
   "author-files/sections/testing.tex" 1681672691 5014 15906ddc1e1a1c691396707fedf3dcd1 ""
@@ -230,9 +232,9 @@
   "d:/TEX/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1679513860 4662209 2dad468923ab70bb080cfa8776e90b5e ""
   "d:/TEX/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt" 1679514079 7883346 8e3429cb30b688a90aec9eb0a861a9ce ""
   "d:/TEX/texlive/2023/texmf.cnf" 1679513837 713 e69b156964470283e0530f5060668171 ""
-  "main.aux" 1681673263 26275 7abd45e742a7ea9a564f983442810c4d "pdflatex"
-  "main.bbl" 1681673260 19781 650243bb2ed9c791bca2dd1b4d7640fc "bibtex main"
-  "main.out" 1681673264 5873 7915494f915f1a11641ce7c8204f763e "pdflatex"
+  "main.aux" 1681677709 27357 796f0d90961ec649f8332effd71ee738 "pdflatex"
+  "main.bbl" 1681677647 19781 650243bb2ed9c791bca2dd1b4d7640fc "bibtex main"
+  "main.out" 1681677709 5873 821374f09deeb5094e742381ea9c2c02 "pdflatex"
   "main.tex" 1681327580 867 fa8ff35ac2288fce54f64493389fd555 ""
   (generated)
   "main.aux"

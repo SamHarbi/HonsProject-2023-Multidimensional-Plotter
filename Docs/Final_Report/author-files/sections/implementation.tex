@@ -89,7 +89,7 @@ This was almost a double sprint. This was mainly due to lower work hours done by
 
 \subsection{Sprint 3 - Start 29th January}
 \subsection{Plan}
-This was the third sprint and first sprint undertaken during semester 2. The plan was to tackle some of the biggest requirements from the MVP feature set- in turn making the application more capable. A total of 5 User stories were selected (See table ref{sprint3}) with one of them, story 6 alone being ranked at a workload of 10. In total, the sprint consisted of 24 work load points over a period of 12 days. This was the biggest sprint undertaken to date but the student was confident in rising up to the challenge.
+This was the third sprint and first sprint undertaken during semester 2. The plan was to tackle some of the biggest requirements from the MVP feature set- in turn making the application more capable. A total of 5 User stories were selected (See table \ref{sprint3}) with one of them, story 6 alone being ranked at a workload of 10. In total, the sprint consisted of 24 work load points over a period of 12 days. This was the biggest sprint undertaken to date but the student was confident in rising up to the challenge.
 
 \subsubsection{Implementation}
 
@@ -104,6 +104,14 @@ Before any of these could be implemented though, glyph rendering had to be rewor
 This did not take full advantage of the Model class prototype abstraction pattern, Technically it would have been possible to just store the unique texture data of each glyph in a number and repeatedly apply it to a single model then rendering each glyph in turn, which would have meant less repeating of data through multiple Model objects- but this would have a greater performance impact as the one model would need to be re-initialized for every glyph every frame before rendering.
 
 Moving the chart was next to be implemented. This was done by adding new movement buttons (2 for each axis that either moved the axis ahead by 1 or back by 1) then using event listeners getting the modification value and applying it calculate the range of axis vales that needed to be rendered (This was at most 10 values). These values were then applied in order for each labelled line on the chart. This was a relatively straight forward addition.
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{author-files/figures/pretestScreenshot.png}
+    \caption{The Application at the end of sprint 4)}
+    \label{fig:oldzoom}
+\end{figure*}
+
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\columnwidth]{author-files/figures/oldzooms.png}
@@ -128,6 +136,7 @@ For cubes the effect could be applied simply as:
         [x * zoom, y * zoom, z * zoom]);
 \end{code}
 
+
 The problem then, was correctly labelling axis lines at every possible state of zoom level. In other words, Even though positionally the cubes and axis lines were correctly placed at all zoom levels- figuring out what the exact values of each line were was very challenging., this was further exacerbated by the ability "move" the graphed slice to show different values. After extensive tinkering, labels were turned off when the application was in an uncertain state- As a temporary solution, a hardcoded zoom modifier was set for maximum and minimum zoom values (These were the only levels at which the zoom mod values could be confirmed as correct) allowing accurate labels to be shown at those two levels.
 With this, the application could now zoom up to a maximum of 5x showing values from 0 to 50 and a minimum of 1 to 10 at 1x. In between those two maximum and minimum levels (including those levels) there were 10 pre-set zoom values that could be scrolled through.
 
@@ -136,18 +145,19 @@ This was one of the most important sprints undertaken in terms of extending char
 
 \subsection{Sprint 4 - Start February 10th}
 \subsubsection{Plan}
-This was the fourth sprint. The main driving factor during this sprint was to prepare the application for user testers. To that end, 4 user stories were selected with a total workload of 10. These all focused on critical UI accessibility problems that would likely otherwise dominate user feedback. The sprint was planned to run for 6 days.
+This was the fourth sprint. The main driving factor during this sprint was to prepare the application for user testers. To that end, 4 user stories were selected (See table \ref{sprint4}) with a total workload of 10. These all focused on critical UI accessibility problems that would likely otherwise dominate user feedback. The sprint was planned to run for 6 days.
 
 \subsubsection{Implementation}
-This was a relatively straight forward sprint. No major systems or additions were added and most work used the UI Observer pattern using Event listeners as previously defined for UI needs. Although it was starting to become noticeable that adding more controls was starting to affect code quality and maintainability. A refactoring task was added to the backlog to look at opportunities to restructure the app.
+This was a relatively straight forward sprint. No major systems or additions were added and most work used the UI Observer pattern using Event listeners as previously defined for UI needs. Although it was starting to become noticeable that adding more controls was starting to affect code quality and maintainability- There were also issues with how to organize controls as they could no longer easily fit on one page, a new design was created using the FlexBox layout model. A refactoring task was added to the backlog to look at opportunities to restructure the app.
 
 \subsubsection{Summary}
 The sprint was completed in record time. All user stories were implemented and the app was pushed to production on Feb 12, two days after the sprint started. The remaining time was instead reallocated to plan for user testing. At this point, the application could not only render most data but had reasonable ability to display that data correctly and provide basic user controls to that end. It would now be important to get user feedback to drive the application forward beyond it's most basic state.
 
+
 \subsection{Sprint 5 - Start February 19th}
 \subsubsection{Plan}
 This was the fifth sprint. User testing 1 has already started at this point in time and the student was waiting results to finish come in before analysis could start.
-In this relative downtime. A 7 day sprint was planned with 2 user stories for a workload of 9 points. These were task based stories that arose during development in previous sprints, and the student thought they would be important additions to have.
+In this relative downtime. A 7 day sprint was planned with 2 user stories (See Table \ref{sprint5}) for a workload of 9 points. These were task based stories that arose during development in previous sprints, and the student thought they would be important additions to have.
 
 \subsubsection{Implementation}
 The first story was to display names for each axis taken from the first row of the dataset. This was pretty straight forward thanks to the Font + Model Abstraction and was promptly implemented.
@@ -168,14 +178,20 @@ As for state management, there were a number of techniques and pre-made solution
     \item Minimal Value added. As previously mentioned the current system worked as needed and did not need any changes to provide further functionality to the user. As such, it would have been hard to justify work done of porting the application to react over only future concerns. PXP prioritizes doing the simplest design and not worrying about future requirements as those tend to change constantly.
 \end{itemize}
 
-The final point, to find an overarching architecture, the student found that the application fit very well into the MVC pattern. As such, the student starting working on implementing the pattern- which went smoothly as the application had already been unknowingly made to partially fit the pattern by the student.
+The final point, to find an overarching architecture, the student found that the application fit very well into the MVC pattern (See Figure \ref{fig:mvc} for completed Application architecture). As such, the student starting working on implementing the pattern- which went smoothly as the application had already been unknowingly made to partially fit the pattern by the student.
 The application was structured as follows:
 \begin{itemize}
     \item View - Static Written HTML index.html
     \item Model - The application render loop rendering chart. The chart rendered is a result of multiple control variables which make up the model.
     \item Controller - This was the new class created. All event listeners and control functions were moved to be managed by this class.
 \end{itemize}
-Have chart showing all this here TODO
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\columnwidth]{author-files/figures/MVC.png}
+    \caption{Model-View-Controller Architecture Created (Scripts are grey, Classes are purple)}
+    \label{fig:mvc}
+\end{figure}
 
 \subsubsection{Summary}
 This was an important sprint that worked to refactor the application to be easier to work with, especially when adding new UI elements.
