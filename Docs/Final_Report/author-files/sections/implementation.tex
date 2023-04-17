@@ -200,7 +200,7 @@ It was completed just in time as user testing has come to a close and analysis b
 
 \subsection{Sprint 6 - Start March 05}
 \subsubsection{Plan}
-This was the 6th Sprint, and the first sprint starting work on the second version of the project. Two new FeatureSets were now available for user stories to be selected from. One composed from user testing analysis as further described in section \ref{usertest1} and A further improvements feature set created in a similar fashion as the first MVP feature set (By the student through the research phase). For this Sprint, 6 Stories were selected (See Table \ref{sprint6}) from both feature sets with a priority for Must. In terms of workload, a wide range were selected for a total workload of 22 Points over a 5 day sprint period.
+This was the 6th Sprint, and the first sprint starting work on the second version of the project. Two new FeatureSets were now available for user stories to be selected from. One composed from user testing analysis as further described in section \ref{usertest1} and A further improvements feature set created in a similar fashion as the first MVP feature set (By the student through the research phase). For this Sprint, 6 Stories were selected (See Table \ref{sprint6}) from both feature sets with a priority for Must. In terms of workload, a wide range were selected for a total workload of 22 points over a 5 day sprint period.
 
 \subsubsection{Implementation}
 The first important story done was reworking how zooming worked. User testers asked for a zoom that showed labels for each level which was found to be difficult to calibrate with the zooming visual effect as mentioned in Sprint 3. So instead, the zoom was reworked to always show 10 axis lines and only change position of data points and labels on zoom- This was generally straight forward and created a robust zoom that hit the criteria, even if it didn't look as visually impressive.
@@ -243,18 +243,18 @@ All User stories were completed as expected and the application pushed to produc
 
 \subsection{Sprint 7 - Start March 12}
 \subsubsection{Plan}
-This was the 7th Sprint. The highest priority user stories were once again selected from both feature sets. This included the last 2 Must stories and 2 Should stories. In total, the workload was 21 over a 5 day period. The main focus of this sprint was to expand the application to support one more dimension and create a new suite of user controls to view and assign data to chart axies.
+This was the 7th Sprint. The highest priority user stories were once again selected from both feature sets. This included the last 2 Must stories and 2 Should stories (See table \ref{sprint7}). In total, the workload was 21 points over a 5 day period. The main focus of this sprint was to expand the application to support one more dimension and create a new suite of user controls to view and assign data to chart axies.
 
 \subsubsection{Implementation}
 To add a new dimension, the student had to start looking at different ways to represent dimensions. The main options identified were Alpha/Transparency, Single Channel / Saturation component, Full Colour component and Shape component.
-Of those, Shape was dropped due to limited range (Have to have a different model to represent each possible values). Alpha was also dropped due to difficulties in how the browser handles Alpha. Finally, Saturation was chosen over colour as having all 3 channels might be confusing for users to extract values.
+Of those, Shape was dropped due to limited range (Have to have a different model to represent each possible values). Alpha was also dropped due to limitations in how the browser handles Alpha. Finally, Saturation was chosen over colour as having all 3 channels might be confusing for users to extract values.
 
 During the following implementation- the first problem encountered was how to plot an infinite range of values between two Saturation values on a single channel. For this problem the student identified the use of a squashing function that formed an asymptote at the limits. By then also allowing the user to change those limits, any data can be effectively plotted with saturation.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.5\columnwidth]{author-files/figures/squashFunc.PNG}
-    \caption{Squashing Function, where mod is based changed by the user while value is the value of the data point plotted}
+    \includegraphics[width=0.7\columnwidth]{author-files/figures/squashFunc.PNG}
+    \caption{Squashing Function, where mod affects the range of values to divide the limited saturation range over while value is the value of the data point plotted}
     \label{fig:function}
 \end{figure}
 
@@ -266,17 +266,21 @@ The next main addition worked on was to create a new section of user controls. T
     \item Help tab - This is a FAQ based help section, Answers to common (or expected to be) questions.
 \end{itemize}
 
-This was also relatively straight forward to implement, although with the data management tab- the UI system was pushed to it's limit in terms of state management. The student had to design the UI in such a way as to minimize UI elements depending on each other for state. Although there still are nevertheless some less than ideal control implementations. *Have example here*. Any considerable future UI work will preferably need to bring on some helping tool to minimize development time and complexity.
+This was also relatively straight forward to implement, although with the data management tab- the UI system was pushed to it's limit in terms of state management and component composition. The student had to design the UI in such a way as to minimize UI elements depending on each other for state. Although there still are nevertheless some less than ideal control implementations.
+
+One example would be how column name labels in the graph view had to depend on a variable that told it when to update the text- this variable had to be manually set each time anything changed in the UI that prompted the column names to update such as a file upload. This is fine for a single variable but with more similar controls it would become very difficult to cover all edge cases and keep everything up to date. A state machine abstraction as discussed in Sprint 5 to manage states would be ideal.
+
+Any considerable future UI work will preferably need to bring on some helping tool to minimize development time and complexity.
 
 \subsubsection{Summary}
-All user stories were completed as expected and the application was pushed to production on March 18th. The usability of the application took a considerable upgrade this sprint- with the application itself being almost fully completing both feature sets.
+All user stories were completed as expected and the application was pushed to production on March 18th. The usability of the application took a considerable upgrade this sprint- with the application itself being almost fully completing both feature sets User Testing 1 and Further Improvements.
 
 \subsection{Sprint 8 - Start March 19}
 \subsubsection{Plan}
-This was the 8th sprint and expected to be the last sprint before user testing 2 could start. Only 2 user stories were selected for development with a total workload of 3 points over a 5 days span.Most of the time this sprint was dedicated to preparing for user testing over development. Nevertheless this was still an important sprint that covered some of the last few to be implemented Should stories.
+This was the 8th sprint and expected to be the last sprint before user testing 2 could start. Only 2 user stories were selected (See Table \ref{sprint8}) for development with a total workload of 3 points over a 5 days span. Most of the time this sprint was dedicated to preparing for user testing over development. Nevertheless this was still an important sprint that covered some of the last few to be implemented Should stories.
 
 \subsubsection{Implementation}
-Implementation went as expected. The stories mainly needed some minor UI additions.
+Implementation went as expected. The stories mainly consisted of some minor UI additions to improve usability.
 
 \subsubsection{Summary}
 All stories were completed and the application was pushed to production on March 29th. With this sprint, the application was ready to be user tested again.

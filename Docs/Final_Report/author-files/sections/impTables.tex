@@ -3,7 +3,7 @@
 
 
 \begin{table*}[h]
-    \begin{tabular}{ | l | l | l | }
+    \begin{tabularx}{\textwidth}{ | X | X | X | }
         \hline
         ID & Title                                                                                               & Estimate (Relative) \\
         \hline
@@ -11,13 +11,13 @@
         \hline
         11 & As a User, I want all interactive parts of the Application to be visible at all times               & 1                   \\
         \hline
-    \end{tabular}
+    \end{tabularx}
     \caption{MVP Feature Set, Sprint 1}
     \label{sprint1}
 \end{table*}
 
 \begin{table*}[h]
-    \begin{tabular}{ | l | l | l | }
+    \begin{tabularx}{\textwidth}{ | X | X | X | }
         \hline
         ID & Title                                                                                                          & Estimate (Relative) \\
         \hline
@@ -29,13 +29,13 @@
         \hline
         7  & As a User, I want to be able to rotate the 3D Scatterplot around all 3D axis individually                      & 5                   \\
         \hline
-    \end{tabular}
+    \end{tabularx}
     \caption{MVP Feature Set, Sprint 2}
     \label{sprint2}
 \end{table*}
 
 \begin{table*}[h]
-    \begin{tabular}{ | l | l | l | }
+    \begin{tabularx}{\textwidth}{ | X | X | X | }
         \hline
         ID & Title                                                                                                               & Estimate (Relative) \\
         \hline
@@ -49,13 +49,13 @@
         \hline
         24 & UI doesn't scale very well and not all controls visible                                                             & 3                   \\
         \hline
-    \end{tabular}
+    \end{tabularx}
     \caption{MVP Feature Set, Sprint 3}
     \label{sprint3}
 \end{table*}
 
 \begin{table*}[h]
-    \begin{tabular}{ | l | l | l | }
+    \begin{tabularx}{\textwidth}{ | X | X | X | }
         \hline
         ID & Title                                                                                                  & Estimate (Relative) \\
         \hline
@@ -67,13 +67,13 @@
         \hline
         30 & There should be a visible way to identify negative axis values                                         & 3                   \\
         \hline
-    \end{tabular}
+    \end{tabularx}
     \caption{MVP Feature Set, Sprint 4}
     \label{sprint4}
 \end{table*}
 
 \begin{table*}[hbt!]
-    \begin{tabular}{ | l | l | l | }
+    \begin{tabularx}{\textwidth}{ | X | X | X | }
         \hline
         ID & Title                                                                               & Estimate (Relative) \\
         \hline
@@ -81,29 +81,61 @@
         \hline
         41 & Each Axis should be named / display a name based on the column names in the dataset & 4                   \\
         \hline
-    \end{tabular}
+    \end{tabularx}
     \caption{Backlog Tasks, Sprint 5}
     \label{sprint5}
 \end{table*}
 
 \begin{table*}[hbt!]
-    \begin{tabular}{ | l | l | l | l | l | }
+    \begin{tabularx}{\textwidth}{ | X | X | X | X | X | }
         \hline
-        ID & Title                                                                                                                                                  & Estimate (Relative) & M    & FS  \\
+        ID & Title                                                                                                                                         & Estimate (Relative) & MoSCoW & Feature Set          \\
         \hline
-        42 & Create a more robust zoom not limited to only 2 levels                                                                                                 & 7                   & Must & FI  \\
+        42 & Create a more robust zoom not limited to only 2 levels                                                                                        & 7                   & Must   & Further improvements \\
         \hline
-        52 & As a Tester, I want data labels to be always visible even when zooming                                                                                 & 2                   & Must & UT1 \\
+        52 & As a Tester, I want data labels to be always visible even when zooming                                                                        & 2                   & Must   & User Testing 1       \\
         \hline
-        54 & Mentioned by Testers, If the slice viewed is not at origin, \newline then using the data zoom should not result in data points moving out of the graph & 5                   & Must & UT1 \\
+        54 & Mentioned by Testers, If the slice viewed is not at origin, then using the data zoom should not result in data points moving out of the graph & 5                   & Must   & User Testing 1       \\
         \hline
-        53 & As a Tester, I want to be able to click on a data point and have the value of that point be displayed                                                  & 8                   & Must & UT1 \\
+        53 & As a Tester, I want to be able to click on a data point and have the value of that point be displayed                                         & 8                   & Must   & User Testing 1       \\
         \hline
-        57 & As a Tester, Graph fully doesn't render in rare cases                                                                                                  & 1                   & Must & UT1 \\
+        57 & As a Tester, Graph fully doesn't render in rare cases                                                                                         & 1                   & Must   & User Testing 1       \\
         \hline
-        70 & Have a Favicon                                                                                                                                         & 1                   & Must & FI  \\
+        70 & Have a Favicon                                                                                                                                & 1                   & Must   & Further improvements \\
         \hline
-    \end{tabular}
+    \end{tabularx}
     \caption{Backlog Tasks, Sprint 6}
     \label{sprint6}
+\end{table*}
+
+\begin{table*}[hbt!]
+    \begin{tabularx}{\textwidth}{ | X | X | X | X | X | }
+        \hline
+        ID & Title                                                                                         & Estimate (Relative) & MoSCoW & Feature Set          \\
+        \hline
+        58 & As a Tester, I want to be able to return the graph to it's starting point with a button click & 1                   & Must   & User Testing 1       \\
+        \hline
+        63 & The application should be able to use color as an extra dimension                             & 6                   & Must   & Further improvements \\
+        \hline
+        64 & The application should have an option to apply columns to different dimensions                & 9                   & Should & Further improvements \\
+        \hline
+        74 & The application should have a view where the data table can be viewed                         & 5                   & Should & Further improvements \\
+        \hline
+    \end{tabularx}
+    \caption{Backlog Tasks, Sprint 7}
+    \label{sprint7}
+\end{table*}
+
+\begin{table*}[hbt!]
+    \begin{tabularx}{\textwidth}{ | X | X | X | X | X | }
+        \hline
+        ID & Title                                                                                                                    & Estimate (Relative) & MoSCoW & Feature Set    \\
+        \hline
+        47 & As a Tester, I want to be able to zoom in and out of the graph using the scroll wheel                                    & 1                   & Should & User Testing 1 \\
+        \hline
+        48 & As a Tester, I want to be able to focus on a single axis through the click of a button- i.e View the graph from one side & 2                   & Should & User Testing 1 \\
+        \hline
+    \end{tabularx}
+    \caption{Backlog Tasks, Sprint 8}
+    \label{sprint8}
 \end{table*}
