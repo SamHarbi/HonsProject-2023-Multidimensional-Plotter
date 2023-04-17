@@ -156,7 +156,7 @@ The sprint was completed in record time. All user stories were implemented and t
 
 \subsection{Sprint 5 - Start February 19th}
 \subsubsection{Plan}
-This was the fifth sprint. User testing 1 has already started at this point in time and the student was waiting results to finish come in before analysis could start.
+This was the fifth sprint. User testing 1 has already started at this point in time and the student was waiting for results to finish coming in before analysis could start.
 In this relative downtime. A 7 day sprint was planned with 2 user stories (See Table \ref{sprint5}) for a workload of 9 points. These were task based stories that arose during development in previous sprints, and the student thought they would be important additions to have.
 
 \subsubsection{Implementation}
@@ -200,7 +200,7 @@ It was completed just in time as user testing has come to a close and analysis b
 
 \subsection{Sprint 6 - Start March 05}
 \subsubsection{Plan}
-This was the 6th Sprint, and the first sprint starting work on the second version of the project. Two new FeatureSets were now available for user stories to be selected from. One composed from user testing analysis as further described in section X and A further improvements feature set created in a similar fashion as the first MVP feature set (By the student through the research phase). For this Sprint, 7 Stories were selected from both feature sets with a priority for Must. In terms of workload, a wide range were selected for a total workload of 27 Points over a 5 day sprint period.
+This was the 6th Sprint, and the first sprint starting work on the second version of the project. Two new FeatureSets were now available for user stories to be selected from. One composed from user testing analysis as further described in section \ref{usertest1} and A further improvements feature set created in a similar fashion as the first MVP feature set (By the student through the research phase). For this Sprint, 6 Stories were selected (See Table \ref{sprint6}) from both feature sets with a priority for Must. In terms of workload, a wide range were selected for a total workload of 22 Points over a 5 day sprint period.
 
 \subsubsection{Implementation}
 The first important story done was reworking how zooming worked. User testers asked for a zoom that showed labels for each level which was found to be difficult to calibrate with the zooming visual effect as mentioned in Sprint 3. So instead, the zoom was reworked to always show 10 axis lines and only change position of data points and labels on zoom- This was generally straight forward and created a robust zoom that hit the criteria, even if it didn't look as visually impressive.
@@ -214,17 +214,32 @@ The next addition was to modify the renderer to allow picking / highlighting dat
 After analysis of the two, Colour picking was chosen over ray tracing for the following key points:
 \begin{itemize}
     \item More Complex implementation with raycasting.
-    \item Raycasting is highly CPU dependant, Lots of Math- which isn't good with JavaScript.
-    \item Something else
+    \item Raycasting is highly CPU dependant, which is not ideal when running javascript.
+    \item More flexible, it is possible to have hover over effects without having to constantly raycast which would have made the application unusable performance wise.
 \end{itemize}
 
 To implement colour picking then, the student extended the renderer to render data points twice- The first render would render to a texture in a different buffer, this first render would also encode an ID for every Model rendered into 3 rgb Channels giving a unique colour for every model drawn (up to around 16 million). After that, render is called again but to the screen buffer instead. This means that the user only see's the the second render (Which can freely use colour) instead of the first one.
-*Have image comparison here*
+glGetPixel would then poll what colour pixel the user's mouse is hovering over. During the second render phase as each model is rendered, it's id is checked to see if it matches the selected id extracted from the colour of the hovered over pixel. If it does, the model is highlighted and it's data saved to be displayed. See Figure \ref{fig:colpick} and fig \ref{fig:nocolpick} for a visual representation of what is rendered off-screen vs on screen for colour picking to work
 
-glGetPixel would then poll what colour pixel the user's mouse is hovering over. During the second render phase as each model is rendered, it's id is checked to see if it matches the selected id extracted from the colour of the hovered over pixel. If it does, the model is highlighted and it's data saved to be displayed.
+\begin{figure}[hbt!]
+    \centering
+    \begin{subfigure}
+        \centering
+        \includegraphics[width=1\columnwidth]{author-files/figures/colourPickrender.PNG}
+        \caption{What is rendered to off-screen texture buffer for colour picking, used to identify what model is selected at mouse position based on colour}
+        \label{fig:colpick}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}
+        \centering
+        \includegraphics[width=1\columnwidth]{author-files/figures/nopicking colourpass.PNG}
+        \caption{What the user see's on screen (Only points are being rendered here for clarity, usually the chart will also be rendered)}
+        \label{fig:nocolpick}
+    \end{subfigure}
+\end{figure}
 
 \subsubsection{Summary}
-All User stories were completed as expected and the application pushed to production on March 11. With this sprint almost all Must stories from both Feature sets making this a very productive sprint and one that set the project on good track to be completed by the end of the month.
+All User stories were completed as expected and the application pushed to production on March 11. With this sprint almost all Must stories from both Feature sets were completed making this a very productive sprint and one that set the project on good track to be completed by the end of the month.
 
 \subsection{Sprint 7 - Start March 12}
 \subsubsection{Plan}

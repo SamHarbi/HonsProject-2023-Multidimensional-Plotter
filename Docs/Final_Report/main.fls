@@ -1076,6 +1076,18 @@ INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/caption/subcaption.sty
 INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/caption/subcaption.sty
 INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/caption/caption.sty
 INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/graphics/graphicx.sty
+INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/graphics/lscape.sty
+INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/graphics/lscape.sty
+INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/graphics/lscape.sty
+INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/graphics/lscape.sty
+INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/graphics/lscape.sty
+INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/graphics/lscape.sty
+INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/graphics/lscape.sty
+INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/graphics/lscape.sty
+INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/graphics/lscape.sty
+INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/graphics/lscape.sty
+INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/graphics/lscape.sty
+INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/graphics/graphics.sty
 INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/preprint/balance.sty
 INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/preprint/balance.sty
 INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/preprint/balance.sty
@@ -1393,6 +1405,16 @@ INPUT ./author-files/figures/MVC.png
 INPUT author-files/figures/MVC.png
 INPUT ./author-files/figures/MVC.png
 INPUT ./author-files/figures/MVC.png
+INPUT ./author-files/figures/colourPickrender.PNG
+INPUT ./author-files/figures/colourPickrender.PNG
+INPUT author-files/figures/colourPickrender.PNG
+INPUT ./author-files/figures/colourPickrender.PNG
+INPUT ./author-files/figures/colourPickrender.PNG
+INPUT ./author-files/figures/nopicking colourpass.PNG
+INPUT ./author-files/figures/nopicking colourpass.PNG
+INPUT author-files/figures/nopicking colourpass.PNG
+INPUT ./author-files/figures/nopicking colourpass.PNG
+INPUT ./author-files/figures/nopicking colourpass.PNG
 INPUT ./author-files/figures/squashFunc.PNG
 INPUT ./author-files/figures/squashFunc.PNG
 INPUT author-files/figures/squashFunc.PNG
@@ -1419,6 +1441,10 @@ INPUT main.bbl
 INPUT ./main.bbl
 INPUT main.bbl
 INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinLibertineTI-tlf-t1.tfm
+INPUT d:/TEX/texlive/2023/texmf-dist/fonts/vf/public/libertine/LinLibertineT-tlf-t1.vf
+INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinLibertineT-tlf-t1--base.tfm
+INPUT d:/TEX/texlive/2023/texmf-dist/fonts/vf/public/libertine/LinLibertineTI-tlf-t1.vf
+INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinLibertineTI-tlf-t1--base.tfm
 INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/libertine/TS1LinuxLibertineT-TLF.fd
 INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/libertine/TS1LinuxLibertineT-TLF.fd
 INPUT d:/TEX/texlive/2023/texmf-dist/tex/latex/libertine/TS1LinuxLibertineT-TLF.fd
@@ -1436,10 +1462,6 @@ INPUT d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-utf8.def
 INPUT d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-utf8.def
 INPUT d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-utf8.def
 INPUT d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-utf8.def
-INPUT d:/TEX/texlive/2023/texmf-dist/fonts/vf/public/libertine/LinLibertineT-tlf-t1.vf
-INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinLibertineT-tlf-t1--base.tfm
-INPUT d:/TEX/texlive/2023/texmf-dist/fonts/vf/public/libertine/LinLibertineTI-tlf-t1.vf
-INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinLibertineTI-tlf-t1--base.tfm
 INPUT d:/TEX/texlive/2023/texmf-dist/fonts/vf/public/libertine/LinLibertineT-tlf-ts1.vf
 INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinLibertineT-tlf-ts1--base.tfm
 INPUT d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/libertine/lbtn_naooyc.enc
