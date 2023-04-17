@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  17 APR 2023 23:30
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  18 APR 2023 00:45
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1188,7 +1188,42 @@ Underfull \hbox (badness 1348) in paragraph at lines 210--210
 
 ) [17.17] [18.18] [19.19] [20.20] (./author-files/sections/testing.tex [21.21
 
-]) (./author-files/sections/finalproduct.tex) (./author-files/sections/conclusion.tex)) (./main.bbl
+]) (./author-files/sections/finalproduct.tex
+<author-files/figures/Graph-Fin.PNG, id=590, 1446.15282pt x 714.41907pt>
+File: author-files/figures/Graph-Fin.PNG Graphic file (type png)
+<use author-files/figures/Graph-Fin.PNG>
+Package pdftex.def Info: author-files/figures/Graph-Fin.PNG  used on input line 3.
+(pdftex.def)             Requested size: 241.14749pt x 119.12769pt.
+
+
+Class acmart Warning: A possible image without description on input line 6.
+
+<author-files/figures/data-fin.PNG, id=591, 1443.89438pt x 709.90219pt>
+File: author-files/figures/data-fin.PNG Graphic file (type png)
+<use author-files/figures/data-fin.PNG>
+Package pdftex.def Info: author-files/figures/data-fin.PNG  used on input line 9.
+(pdftex.def)             Requested size: 241.14749pt x 118.55865pt.
+
+Class acmart Warning: A possible image without description on input line 12.
+
+<author-files/figures/help-fin.PNG, id=592, 1444.64719pt x 712.91344pt>
+File: author-files/figures/help-fin.PNG Graphic file (type png)
+<use author-files/figures/help-fin.PNG>
+Package pdftex.def Info: author-files/figures/help-fin.PNG  used on input line 15.
+(pdftex.def)             Requested size: 241.14749pt x 118.99629pt.
+
+Class acmart Warning: A possible image without description on input line 18.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) (./author-files/sections/conclusion.tex [22.22 <./author-files/figures/Graph-Fin.PNG> <./author-files/figures/data-fin.PNG> <./author-files/figures/help-fin.PNG>])) (./main.bbl
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
 (Font)              scaled to size 7.0pt on input line 43.
 LaTeX Info: Redefining \tempurl on input line 61.
@@ -1231,10 +1266,6 @@ LaTeX Info: Redefining \tempurl on input line 421.
 LaTeX Info: Redefining \tempurl on input line 435.
 LaTeX Info: Redefining \tempurl on input line 449.
 LaTeX Info: Redefining \tempurl on input line 463.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [22.22{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/libertine/lbtn_naooyc.enc}]
 LaTeX Info: Redefining \tempurl on input line 477.
 LaTeX Info: Redefining \tempurl on input line 492.
 LaTeX Info: Redefining \tempurl on input line 503.
@@ -1246,30 +1277,34 @@ LaTeX Info: Redefining \tempurl on input line 557.
 
 Class acmart Warning: Some images may lack descriptions.
 
+
+Package balance Warning: You have called \balance in second column
+(balance)                Columns might not be balanced.
+
 (d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-pdfdoc.def
 File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
 ) (d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-utf8.def
 File: se-utf8.def 2019/11/29 v1.12 stringenc: UTF-8
-) [23.23] (./main.aux)
+) [23.23{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/libertine/lbtn_naooyc.enc}] (./main.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: E6BF81768AE5705F3880678BD818D3D7;6123.
+(rerunfilecheck)             Checksum: E49D52BD8A369282C5AFD53E2DB84F50;6123.
  ) 
 Here is how much of TeX's memory you used:
- 24774 strings out of 476025
- 407531 string characters out of 5792019
+ 24802 strings out of 476025
+ 408360 string characters out of 5792019
  1894382 words of memory out of 5000000
- 43893 multiletter control sequences out of 15000+600000
+ 43915 multiletter control sequences out of 15000+600000
  656572 words of font info for 357 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
  90i,13n,131p,1195b,2113s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/newtx/txsys.pfb>
-Output written on main.pdf (23 pages, 1871244 bytes).
+Output written on main.pdf (23 pages, 2153576 bytes).
 PDF statistics:
- 755 PDF objects out of 1000 (max. 8388607)
- 666 compressed objects within 7 object streams
- 232 named destinations out of 1000 (max. 500000)
- 70555 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 773 PDF objects out of 1000 (max. 8388607)
+ 678 compressed objects within 7 object streams
+ 235 named destinations out of 1000 (max. 500000)
+ 70570 words of extra memory for PDF output out of 74296 (max. 10000000)
 
