@@ -32,7 +32,6 @@ Warning--empty year in webassembly
 Warning--empty publisher in 7918044
 Warning--empty address in 7918044
 Warning--empty year in amazon_what
-Warning--empty year in apple_apple
 Warning--empty year in apple_metal
 Warning--empty year in mdncontributors_javascript
 Warning--empty year in davidbritch_what
@@ -49,45 +48,45 @@ Warning--empty year in smartbear_testcomplete
 Warning--empty year in smartbear_pricing
 Warning--empty year in unitytechnologies_unity
 Warning--empty year in threejsorg_threejs
-You've used 41 entries,
+You've used 40 entries,
             5959 wiz_defined-function locations,
-            1563 strings with 20595 characters,
-and the built_in function-call counts, 33798 in all, are:
-= -- 3733
-> -- 970
+            1560 strings with 20469 characters,
+and the built_in function-call counts, 33162 in all, are:
+= -- 3672
+> -- 952
 < -- 0
-+ -- 281
-- -- 398
-* -- 2064
-:= -- 3781
-add.period$ -- 234
-call.type$ -- 41
-change.case$ -- 216
++ -- 275
+- -- 391
+* -- 2025
+:= -- 3700
+add.period$ -- 228
+call.type$ -- 40
+change.case$ -- 211
 chr.to.int$ -- 111
-cite$ -- 91
-duplicate$ -- 3010
-empty$ -- 2169
-format.name$ -- 390
-if$ -- 7537
-int.to.chr$ -- 4
+cite$ -- 89
+duplicate$ -- 2955
+empty$ -- 2126
+format.name$ -- 383
+if$ -- 7399
+int.to.chr$ -- 3
 int.to.str$ -- 1
 missing$ -- 32
-newline$ -- 578
-num.names$ -- 302
-pop$ -- 1276
+newline$ -- 564
+num.names$ -- 295
+pop$ -- 1243
 preamble$ -- 1
-purify$ -- 469
+purify$ -- 462
 quote$ -- 0
-skip$ -- 1095
+skip$ -- 1080
 stack$ -- 0
-substring$ -- 2196
-swap$ -- 328
+substring$ -- 2165
+swap$ -- 323
 text.length$ -- 100
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 1117
-warning$ -- 38
-while$ -- 315
+type$ -- 1093
+warning$ -- 37
+while$ -- 308
 width$ -- 0
-write$ -- 920
-(There were 38 warnings)
+write$ -- 898
+(There were 37 warnings)

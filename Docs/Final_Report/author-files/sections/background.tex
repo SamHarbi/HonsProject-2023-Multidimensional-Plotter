@@ -90,7 +90,7 @@ JRE, is a runtime environment that allows an application to be cross compatible 
 \paragraph{Compiled Program (OS only environment)}
 Compiled Program, One of the most flexible options on the list. Languages such as C++ and C compile to machine code which are run directly on a user’s device. No inherit cross platform support and a need to recompile for each OS. Usually, higher performance due to lower abstraction. But a lower abstraction means more functionality needs to be managed by the programmer.
 
-\subsubsection{Rendering Solution}
+\subsubsection{Rendering Solution} \label{rendersol}
 Being a project with visual requirements naturally meant that some rendering technology would be needed. Like with all other technologies mentioned thus far- there is a wide range of options that each have their own distinct design and ability. This section then aims to segment the available options by two factors at the minimum- One, the rendering solution must support 3D graphics in some capacity, and two, the solution must run and integrate with an application targeting one of the above-mentioned run environments. With those key requirements in mind, these were the identified options:
 
 \paragraph{OpenGL}
@@ -106,7 +106,7 @@ Direct3D is a subset API of the proprietary DirectX family of multimedia APIs de
 A web integrated, JavaScript only low-level API version of OpenGL. It’s developed as an open web standard and is implemented in most widely used browsers, without the need to install it in any way for the client or developer. It’s a low-level API just like OpenGL and comes in two main versions based on OpenGL, WebGL 1.0 is based on the OpenGL ES 2.0 standard (OpenGL ES is an embedded subset version of OpenGL) while WebGL 2.0 is based on OpenGL ES 3.0 which is less supported among older devices. As of writing, WebGL remains the lowest level of abstraction for running GPU code on the web. \cite[]{mozilla_2019_webgl} \cite[]{khronosgroup_2011_webgl}
 
 \paragraph{Metal}
-Metal is a low-level rendering API designed by Apple for their devices. It has a very limited set of supported hardware and is further limited to only iOS and MacOS for the Operating System. In terms of language bindings; Objective-C, Swift and C++ are the only supported options. \cite[]{apple_metal} It was created by apple to replace OpenGL on their hardware which was depreciated in 2018. \cite[]{apple_apple}
+Metal is a low-level rendering API designed by Apple for their devices. It has a very limited set of supported hardware and is further limited to only iOS and MacOS for the Operating System. In terms of language bindings; Objective-C, Swift and C++ are the only supported options. \cite[]{apple_metal} It was created by apple to replace OpenGL on their hardware which was depreciated in 2018.
 
 \subsubsection{Optional Abstractions for Rendering Solutions}
 The underlying rendering technologies mentioned in the last section, although usable on their own, can be offloaded to be managed by a higher-level framework or engine. Although it must be stressed that the inherit properties of the underlying rendering solution still has an effect on the application being developed.
