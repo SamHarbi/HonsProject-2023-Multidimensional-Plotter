@@ -37,9 +37,12 @@ Warning--empty year in mdncontributors_javascript
 Warning--empty year in davidbritch_what
 Warning--empty year in robotframework_robot
 Warning--empty address in ishikawa_1985_what
+Warning--empty publisher in 6612229
+Warning--empty address in 6612229
 Warning--empty address in klabnik_2023_the
 Warning--empty year in microsoft_typescript
 Warning--empty year in microsoft_what
+Warning--empty year in mozilla_webgpu
 Warning--empty year in mrdoob_threejs
 Warning--empty year in nodejs_nodejs
 Warning--empty year in oracle_what
@@ -48,45 +51,45 @@ Warning--empty year in smartbear_testcomplete
 Warning--empty year in smartbear_pricing
 Warning--empty year in unitytechnologies_unity
 Warning--empty year in threejsorg_threejs
-You've used 40 entries,
+You've used 43 entries,
             5959 wiz_defined-function locations,
-            1560 strings with 20469 characters,
-and the built_in function-call counts, 33162 in all, are:
-= -- 3672
-> -- 952
+            1577 strings with 20868 characters,
+and the built_in function-call counts, 35863 in all, are:
+= -- 3955
+> -- 1033
 < -- 0
-+ -- 275
-- -- 391
-* -- 2025
-:= -- 3700
-add.period$ -- 228
-call.type$ -- 40
-change.case$ -- 211
-chr.to.int$ -- 111
-cite$ -- 89
-duplicate$ -- 2955
-empty$ -- 2126
-format.name$ -- 383
-if$ -- 7399
++ -- 298
+- -- 419
+* -- 2192
+:= -- 3992
+add.period$ -- 243
+call.type$ -- 43
+change.case$ -- 228
+chr.to.int$ -- 114
+cite$ -- 95
+duplicate$ -- 3213
+empty$ -- 2310
+format.name$ -- 415
+if$ -- 8013
 int.to.chr$ -- 3
 int.to.str$ -- 1
-missing$ -- 32
-newline$ -- 564
-num.names$ -- 295
-pop$ -- 1243
+missing$ -- 37
+newline$ -- 598
+num.names$ -- 319
+pop$ -- 1354
 preamble$ -- 1
-purify$ -- 462
+purify$ -- 500
 quote$ -- 0
-skip$ -- 1080
+skip$ -- 1176
 stack$ -- 0
-substring$ -- 2165
-swap$ -- 323
+substring$ -- 2354
+swap$ -- 347
 text.length$ -- 100
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 1093
-warning$ -- 37
-while$ -- 308
+type$ -- 1183
+warning$ -- 40
+while$ -- 330
 width$ -- 0
-write$ -- 898
-(There were 37 warnings)
+write$ -- 957
+(There were 40 warnings)

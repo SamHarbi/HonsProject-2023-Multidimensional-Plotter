@@ -1,10 +1,36 @@
-\section{Conclusion}
+\section{Conclusions}
 
 \subsection{Appraisal}
+The final application created is believed by the student to have successfully hit the initial goals set forth (See \ref{ressummary}). The application created is a viable market entry that simplifies the creation of scatterplots and offers a wide range of controls. The only major shortcoming according to the initial goals would be the lower focus on Big Data capability and support. The Student believes that this was nevertheless a correct decision, focusing on the basic visualization and accessibility has lead to the creation of a usable application that is in a good position to be further developed to fully support Big Data- Something that would have been much more complex to do from the start. Even at the current state of the application there is some support for 2 properties \cite[]{6612229} of Big Data:
+\begin{itemize}
+    \item Size - The application is capable of rendering large datasets and the slice view design allows a smaller subset of data to be rendered at a time to avoid resource strain.
+    \item Complexity -  Up to 4 dimensions can be viewed and relationships compared, the student believes that this is helpful to addressing some complexity of data, but further design and research opportunities exist to address other complexity aspects. \cite[]{6612229}
+\end{itemize}
+
+Another minor shortcoming would be that no other graph type was implemented- It would have been nice to allow the user to view the data through different graph types but it wouldn't have been possible to provide as many controls as for a single-focused charting application. Though with the abstractions in place created for scatter plots, future addition of new graphs would be much simpler and faster.
+
+In terms of preparation, Prototyping was key for this project and allowed the student to practice using unfamiliar tools and debug the majority of setup issues before development started- which allowed the student to start development focusing on user stories instead of debugging issues. The creation of prototype 2 also greatly sped up development by getting basic rendering functionality done further allowing greater focus on user stories. (See \ref{prototype} for more details)
+
+PXP also set a good base agile methodology (See \ref{devmet} for more details) that the student could restructure to fit the project. Those changes all helped the student to work more efficiently and greatly helped with tracking project progress. Though the inability to apply automated testing to rendering was a definite limitation. For a future project, it would be great to allocate some time for a prototype to figure out a Selenium based or otherwise technique to create general purpose tests that would ideally need as little change as possible on running. (See \ref{testframe} for more details)
+
+As for the process of creating the application, The student believes that the tech stack selected was a good choice even if there were some limitations.
+\begin{itemize}
+    \item WebGL was a good choice for a rendering API- It was highly performant and it's flexibility gave greater freedom to explore novel techniques and rendering designs. It's only downsides would be no support by Apple devices \cite[]{apple_metal} which limited the applications device accessibility.
+    \item Using plain HTML for writing the view was not the best choice. Though in the context of this project it made sense to not bring in a UI framework, The student was already using many tools they haven't worked with before so it helped keep things simple- The agile approach also contributed to uncertainty on how useful a framework would be due to limited design done before development started. If performance is not key, The Student would recommend future projects to consider options such as svelte or react to simplify UI development and simplify UI state bugs.
+\end{itemize}
 
 
 \subsection{Future Work}
-The application as is has a great potential for future development. At the very minimum the following would be the most important modification to make:
+The application as is has potential for future development. Both in improving upon what the current application is already capable of doing and preparing it for further additions and expansions. The User testing 2 feature set in particular (See \ref{UT2}) is a great place to start for debugging and polishing up the current functionality. Beyond that, there are also a number of 'Under the hood' issues that would be helpful to address for future development
 \begin{itemize}
-    \item Optimize rendering
+    \item Optimize rendering- There remain a lot of opportunities to optimize shaders and rendering in general. For instance, changing the default cube model to something with less geometry could considerably speed up rendering. There is also opportunity to rework some aspects such as labels to focus more on saving memory vs cpu performance based on how Font + Model is made to interact. (See \ref{spr2}) There may also be opportunity to refactor the application to use WebGPU, which is yet unreleased high-performance low-level graphics standard for the web inspired by Vulkan which should help increase performance even further. \cite{w3c_2023_webgpu} \cite{mozilla_webgpu}
+    \item Refactor UI rendering- Although the current MVC pattern and event listener pattern is suitable for the application. It would not be able to handle large UI additions efficiently. Any future UI work will benefit greatly from integrating a UI framework to handle components and state in particular. The Students recommendation would be React due to it's leading popularity among developers at the time being. \cite[]{stackoverflow_2021_stack}
+    \item There is currently a limitation on what kind of controls can be done with the data. When data is uploaded, it is stored in memory as a variable. This will cause performance issues with some controls that may want to search for a point in the data or the like. Performance issues in general though will be caused as more data is uploaded, this is probably at the moment the biggest hurdle holding back further big data support. A high-performance database would be ideal, either embedded into the application or as a server side component- with the server-side option providing better potential performance due to an independence from what the users hardware can handle.
+\end{itemize}
+
+Addressing these limitations would open up opportunities to effectively develop further additions for the project, some ideas by the student are as follows:
+
+\begin{itemize}
+    \item Address Velocity property of big data \cite{7918044} This will likely involve creating an API interface for the Application to connect to sensors or a rapidly changing database and optimizing the application to render as updates come in.
+    \item Study further design techniques to reduce cognitive complexity of Multidimensional data. It's easy to add and render more dimensions but it's difficult to make understandable enough to easily extract patterns.
 \end{itemize}

@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{40}
+\begin{thebibliography}{43}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -271,6 +271,16 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \newblock
 
 
+\bibitem[\protect\citeauthoryear{Katal, Wazid, and Goudar}{Katal et~al\mbox{.}}{2013}]%
+        {6612229}
+\bibfield{author}{\bibinfo{person}{Avita Katal}, \bibinfo{person}{Mohammad Wazid}, {and} \bibinfo{person}{R.~H. Goudar}.} \bibinfo{year}{2013}\natexlab{}.
+\newblock \showarticletitle{Big data: Issues, challenges, tools and Good practices}. In \bibinfo{booktitle}{\emph{2013 Sixth International Conference on Contemporary Computing (IC3)}}. \bibinfo{pages}{404--409}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1109/IC3.2013.6612229}
+\showDOI{\tempurl}
+
+
 \bibitem[\protect\citeauthoryear{Klabnik and Nichols}{Klabnik and Nichols}{2023}]%
         {klabnik_2023_the}
 \bibfield{author}{\bibinfo{person}{Steve Klabnik} {and} \bibinfo{person}{Carol Nichols}.} \bibinfo{year}{2023}\natexlab{}.
@@ -316,6 +326,18 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \tempurl}
 \newblock
 \shownote{(Accessed 4/12/2023).}
+
+
+\bibitem[\protect\citeauthoryear{Mozilla}{Mozilla}{[n.d.]}]%
+        {mozilla_webgpu}
+\bibfield{author}{\bibinfo{person}{Mozilla}.} \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{title}{WebGPU API - Web APIs | MDN}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API}
+\showURL{%
+\tempurl}
 
 
 \bibitem[\protect\citeauthoryear{Mozilla}{Mozilla}{2019}]%
@@ -531,6 +553,18 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \urldef\tempurl%
 \url{https://doi.org/10.1016/j.cag.2023.02.001}
 \showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{W3C}{W3C}{2023}]%
+        {w3c_2023_webgpu}
+\bibfield{author}{\bibinfo{person}{W3C}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \bibinfo{title}{WebGPU}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://www.w3.org/TR/webgpu/}
+\showURL{%
+\tempurl}
 
 
 \bibitem[\protect\citeauthoryear{Wiki}{Wiki}{2022}]%
