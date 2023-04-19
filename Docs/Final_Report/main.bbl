@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{43}
+\begin{thebibliography}{44}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -114,9 +114,23 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \shownote{(Accessed 4/12/2023).}
 
 
-\bibitem[\protect\citeauthoryear{Apple}{Apple}{[n.d.]}]%
+\bibitem[\protect\citeauthoryear{Apple}{Apple}{[n.d.]a}]%
+        {apple_apple}
+\bibfield{author}{\bibinfo{person}{Apple}.} \bibinfo{year}{[n.d.]}\natexlab{a}.
+\newblock \bibinfo{title}{Apple Developer Documentation}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://developer.apple.com/documentation/apple-silicon/porting-your-macos-apps-to-apple-silicon}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/13/2023).}
+
+
+\bibitem[\protect\citeauthoryear{Apple}{Apple}{[n.d.]b}]%
         {apple_metal}
-\bibfield{author}{\bibinfo{person}{Apple}.} \bibinfo{year}{[n.d.]}\natexlab{}.
+\bibfield{author}{\bibinfo{person}{Apple}.} \bibinfo{year}{[n.d.]}\natexlab{b}.
 \newblock \bibinfo{title}{Metal}.
 \newblock
 \newblock

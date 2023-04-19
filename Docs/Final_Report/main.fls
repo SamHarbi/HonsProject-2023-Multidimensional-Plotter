@@ -1490,6 +1490,10 @@ INPUT ./author-files/sections/conclusion.tex
 INPUT author-files/sections/conclusion.tex
 INPUT ./author-files/sections/conclusion.tex
 INPUT author-files/sections/conclusion.tex
+INPUT ./author-files/sections/appendices.tex
+INPUT author-files/sections/appendices.tex
+INPUT ./author-files/sections/appendices.tex
+INPUT author-files/sections/appendices.tex
 INPUT ./main.bbl
 INPUT main.bbl
 INPUT ./main.bbl
