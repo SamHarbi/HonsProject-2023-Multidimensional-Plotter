@@ -1,14 +1,14 @@
 \section{Evaluation}
-An important driving factor for this project and the application developed was a system of evaluation at all levels of development and planning. To that end, the student employed a
+An important driving factor for this project and the application developed was a system of evaluation at all levels of development. To that end, the student employed a
 number of techniques and phases to convert feedback into actionable input that would then influence how the project progressed. Each of those techniques is covered in detail in the following subsections.
 
 \subsection{Development Testing Process} \label{devtest}
 Under PXP, the refactor branch was adapted to also serve as a final testing stop before the student pushed code to production (See \ref{devflow}). Automated testing was considered as mentioned in the Design section (See \ref{automatedtests}) but was found to not be suitable for this project.
 
-Instead, refactoring was done manually on the refactoring branch based on visual inspection for rendering artifacts. To help with this process, a python command line tool was written to generate a wide range of datasets for edge case testing. The datasets are all attached in appendix X but some notable ones are as follows:
+Instead, refactoring was done manually on the refactoring branch based on visual inspection for rendering artifacts. To help with this process, a python command line tool was written to generate a wide range of datasets for edge case testing. The datasets are all attached in appendix \ref{A4} but some notable ones are as follows:
 
 \begin{itemize}
-    \item DataCube - This is a data set that creates a 10x10x10 Cube of data points. If the application renders correctly, this dataset would fill every visible space at the initial zoom and slice position.
+    \item DataCube - This is a data set that creates a 10x10x10 Cube of data points. If the application renders correctly, this dataset would fill every visible space (with a grid pattern) at the initial zoom and slice position.
     \item Terrain Data - This is a Stress test dataset consisting of perlin noise generated terrain coordinates in a 30x30x30 sized chunk of 27000 points. It is a test for not only performance but also ability to handle data points with decimal values.
 \end{itemize}
 
@@ -30,16 +30,16 @@ These datasets also served to provide a wide range of example data for user test
 User testing was an important step in gathering requirements and paving the way for further development beyond the most basic, fundamental requirements. In total, 2 User testing phases were ran. The first one after the completion of the MVP feature set post Sprint 5 and the second one after the completion of the further additions feature set and user testing 1 feature set post sprint 8.
 
 The process for these two phases revolved around an anonymous questionnaire with data collected as per the prepared ethics documentation for honours students.
-To support the testing process, the student created a simple static webpage to act as a central source for all links to the application, the questionnaire, testing data and ethics documentation that guided a tester through the entire process. Having this page really simplified testing as the student would only need to share a single link which self-contained everything needed. The page itself and HTML source is available to view in the appendix X.
+To support the testing process, the student created a simple static webpage to act as a central source for all links to the application, the questionnaire, testing data and ethics documentation that guided a tester through the entire process. Having this page really simplified testing as the student would only need to share a single link which self-contained everything needed. The page itself and HTML source is available to view in the appendix \ref{A5}.
 
-The questionnaires themselves (See appendix X) asked a tester to download a specific dataset and use the application to identify some factor or knowledge placed in the data by the student. The datasets were also designed in such a way that the questions could best be solved if the tester used some specific controls, or understood some aspect of the graph that the test focused on. This was also followed by the testers personal thoughts on a variety of questions concerning usability and how they went about solving the problems set out.
+The questionnaires themselves asked a tester to download a specific dataset and use the application to identify some factor or knowledge placed in the data by the student. The datasets were also designed in such a way that the questions could best be solved if the tester used some specific controls, or understood some aspect of the graph that the test focused on. This was also followed by the testers personal thoughts on a variety of questions concerning usability and how they went about solving the problems set out.
 
-This allowed the student to construct a critical understanding of how real users used the application to solve typical problems the application was designed in mind with. Were users able to get the correct answer? What controls did they use? Did they use the controls as the student expected? Though it should be mentioned that the results likely aren't fully representative of the demographic tested due to the limited number of testers. Of which, a majority were computing students. This likely shifted results for usability specifically.
+This allowed the student to construct a critical understanding of how real users used the application to solve typical problems the application was designed in mind with. Were users able to get the correct answer? What controls did they use? Did they use the controls as the student expected? Though it should be mentioned that the results likely aren't fully representative of the demographic tested due to the limited number of testers. Of which, a majority were computing students. This likely shifted results for usability specifically. Though Ideally, testing tried to represent college students who are likely to work with data and all Adults in general.
 
-The responses collected were then analyzed and turned into user stories to be developed, with the two testing phases each forming the User Testing 1 feature set and User Testing 2 Feature set respectively. The following give specific detail of each phase and the analysis performed on user stories.
+The responses collected were then analyzed and turned into user stories to be developed, with the two testing phases each forming the User Testing 1 feature set and User Testing 2 Feature set respectively. The following give specific detail of each phase and the analysis performed on user stories. All questionnaire questions and responses are available for viewing at Appendix \ref{A6}.
 
 \subsubsection{User Testing 1 - Starting February 17th}
-This was setup and ran right after sprint 5 was complete. The focus for this testing phase was to identify what non-obvious controls are still missing to help users do real work using the application. The questionnaire was created to that end and user testing began. The user testing was then concluded a week later with 5 total responses, the answers given formed user stories (And tasks) which were analyzed and prioritized using MoSCoW and the Workload Estimate system previously used for the MVP feature set. All of theses stories formed the User Testing 1 feature set which was given a 1 month total development time. The feature set was then divided among 4 sprints as follows:
+This was setup and ran right after sprint 5 was complete. The focus for this testing phase was to identify what controls were still missing to help users do real work using the application. The questionnaire was created to that end and user testing began. The user testing was then concluded a week later with 5 total responses, the answers given formed user stories (And tasks) which were analyzed and prioritized using MoSCoW and the Workload Estimate system previously used for the MVP feature set. All of theses stories formed the User Testing 1 feature set which was given a 1 month total development time. The feature set was then divided among 4 sprints as follows:
 
 \begin{itemize}
     \item Sprint 5 - See Stories on Table \ref{sprint5}
@@ -49,14 +49,15 @@ This was setup and ran right after sprint 5 was complete. The focus for this tes
     \item Some User Stories though, were chosen to not be developed, they are mentioned here (See Table \ref{UT1})
 \end{itemize}
 
+
+
 Some notable analysis notes on user stories and general feedback follows:
 
 \begin{itemize}
     \item Story 57 (See Table \ref{UT1}) was pinpointed to Apple Devices, which would not render the chart correctly. This is almost certainly the result of depreciated OpenGL and by extension WebGL support by Apple (See 'Metal' in 2.2.3).
     \item Story 56 (See Table \ref{UT1}) was created after one tester mentioned poor performance using the Opera browser. Nothing specific towards this claim was found so this may have been a problem on the testers device.
     \item Story 50 (See Table \ref{UT1}) was created on popular demand to have automatically rendering trendlines. This would have required a math library to generate a best fit line for the data which would be rendered. This task was not assigned to a sprint due to limited time but could be a good future addition.
-    \item Story 51 (See Table \ref{UT1}) had a similar use case to picking which was done in favor of this as it was more popular (and helpful in the Students opinion).
-    \item Might be better to move all this to appendix as there is a lot more analysis
+    \item Story 51 (See Table \ref{UT1}) was proposed to solve the same point identification as picking which was done in favor of this as it was more popular (and helpful in the Students opinion).
 \end{itemize}
 
 In summary, this user test identified a number of UI problems and opportunities to expand how users can better interact and view the data.
