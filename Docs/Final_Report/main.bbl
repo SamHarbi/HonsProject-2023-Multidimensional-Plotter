@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{44}
+\begin{thebibliography}{46}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -184,6 +184,18 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \shownote{(Accessed 4/12/2023).}
 
 
+\bibitem[\protect\citeauthoryear{Foundation}{Foundation}{2019}]%
+        {blenderfoundation_2019_blenderorg}
+\bibfield{author}{\bibinfo{person}{Blender Foundation}.} \bibinfo{year}{2019}\natexlab{}.
+\newblock \bibinfo{title}{blender.org - Home of the Blender project - Free and Open 3D Creation Software}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://www.blender.org/}
+\showURL{%
+\tempurl}
+
+
 \bibitem[\protect\citeauthoryear{Framework}{Framework}{[n.d.]}]%
         {robotframework_robot}
 \bibfield{author}{\bibinfo{person}{Robot Framework}.} \bibinfo{year}{[n.d.]}\natexlab{}.
@@ -312,6 +324,18 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \urldef\tempurl%
 \url{https://doi.org/10.1109/ICRIS52159.2020.00027}
 \showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{MathWorks}{MathWorks}{[n.d.]}]%
+        {mathworks_3d}
+\bibfield{author}{\bibinfo{person}{MathWorks}.} \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{title}{3-D scatter plot - MATLAB scatter3}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://www.mathworks.com/help/matlab/ref/scatter3.html}
+\showURL{%
+\tempurl}
 
 
 \bibitem[\protect\citeauthoryear{Microsoft}{Microsoft}{[n.d.]a}]%

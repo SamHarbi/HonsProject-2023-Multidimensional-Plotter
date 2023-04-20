@@ -36,7 +36,7 @@ Visual Studio Code (VScode) was selected for all writing tasks (Both for code an
 Node.js was used as a development and build server due to it's straightforward ability to download and manage npm packages while also running development tools such as parcel, which in addition to it's usage below, also acted as a development server providing developer tools such as hot reloading on changes and helpful error screens.
 
 \paragraph{Compiler and Build Tool}
-As a compiler, Parcel was used to compile and optimize TypeScript into runnable by the browser JavaScript. As a build tool, parcel build all npm packages and the usage of some node.js only features into a handful of static client-side only files that could be hosted. This was crucial and allowed some code designs to be implemented that otherwise would not have been possible (See Model loading in \ref{prototype2}).
+As a compiler, Parcel was used to compile and optimize TypeScript into runnable by the browser JavaScript. As a build tool, parcel build all npm packages (including the usage of some node.js only features) into a handful of static client-side only files that could be hosted. This was crucial and allowed some code designs to be implemented that otherwise would not have been possible (See Model loading in \ref{prototype2}).
 
 \paragraph{Hosting Provider}
 Digital Ocean's App Platform was used to host and build the application from the production branch of the code repository. It was chosen due to the student having previous experience hosting resources on the platform, simple setup with minimal networking on the students part, integration with Github, support for building on a node.js environment (The same as the development environment, allowing for continuous integration from the production branch) and the availability of free credits to do all this. The site hosted here allowed user testers to access the application from anywhere at their own time.
@@ -67,7 +67,7 @@ An important part of the initial design stage was creating simple prototype appl
     \label{fig:prototype1}
 \end{figure}
 
-This was an important milestone in proving the validity of the development process identified. All of the tools and technologies mentioned thus far were setup and used to create a valid WebGL context and render a triangle. It was found that this process was well defined and no changes were done.
+This was an important milestone in proving the validity of the development process identified. All of the tools and technologies mentioned thus far were setup and used to create a valid WebGL context and render a triangle (See Figure \ref{fig:prototype1}). It was found that this process was well defined and no changes were done.
 
 \subsubsection {Prototype 2} \label{prototype2}
 \begin{figure}[h]
@@ -90,16 +90,15 @@ WebGL is a low level API and considerable work needs to be done just to render a
 
 To be more specific, the features implemented by this engine were the following:
 \begin{itemize}
-    \item 3D Mathematics and View, Projection and model system for rendering
+    \item 3D Mathematics with View, Projection and model system for rendering
     \item Multiple Models Rendered at the same time
     \item Model Object Abstraction for storing and rendering a 3D model. Implements a prototype pattern where one object can be rendered multiple times. This is particularly useful as a memory saving measure for rendering lot's of models. Something that was considered a very likely scenario for a plotting application with likely many data points.
     \item Simple Flat Shading based on a preset light direction.
-    \item Loader Object for loading and organizing data that is passed to Model. Allows .OBJ models to be loaded into the renderer to be displayed.
+    \item Loader Object for loading and organizing data that is passed to Model. Allows .OBJ models to be loaded into the renderer to be displayed. This used the node emulation feature provided by parcel to translate the written file system code to run in a browser, this meant files like .OBJ models and .glsl shader files could be kept separate from the renderer code and only combined when the application was built.
     \item Rendering labels with HTML and positioning them approximately at some relative to WebGL scene coordinates.
 \end{itemize}
 
 One bottleneck though was identified during this development, which was to do with Automated testing. See \ref{automatedtests} for the details.
-Like previously mentioned, This prototype then set the basis from which development was started.
 
 \subsection{Testing Methodology} \label{automatedtests}
 Test Driven development is an important aspect of the PXP process when developing software. This is most often done with automated testing for the best time efficiency and accuracy. But, during the creation of prototype 2 (See \ref{prototype2}) the student encountered a number of critical issues that contributed to the decision to not implement automated testing, subject to possible further consideration later on. Those issues were:
@@ -109,7 +108,7 @@ Test Driven development is an important aspect of the PXP process when developin
     \item Minimal UI to test, Automated testing on the web is particularly well suited to testing UI. Unfortunately, there wasn't any UI to test at the starting stages of development.
 \end{itemize}
 
-This points were expected to become less true as the application developed. Nevertheless, the student considered it unwise to setup tests for the start of development. Another process had to be identified in the meantime to allow the student to focus on bringing value to the project (completing user stories). This was the application of manual testing during the refactoring branch as per the specified development flow (See \ref{devflow}).
+This points were expected to become less true as the application developed. Nevertheless, the student considered it unwise to setup tests for the start of development. Another process had to be identified in the meantime to allow the student to focus on bringing value to the project (completing user stories). This was the application of manual, visual inspection testing during the refactoring branch as per the specified development flow (See \ref{devflow}).
 
 
 \begin{table*}[t]
@@ -117,7 +116,7 @@ This points were expected to become less true as the application developed. Neve
         \hline
         Original                                             & Modified                                                    \\
         \hline
-        Write chart properties programmatically              & change properties through UI controls                       \\
+        Write chart properties programmatically              & Change properties through UI controls                       \\
         \hline
         Static chart image rendered once code written is run & Dynamically update rendered image as properties are changed \\
         \hline
@@ -138,23 +137,34 @@ One of the project's goals (See \ref{ressummary}) was to use a Scatter plot. To 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.7\columnwidth]{author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png}
-    \caption{A 3D scatterplot generated through MATLAB, example of a classic cut-off figure}
+    \caption{A 3D scatterplot generated through MATLAB, example of a classic cut-off figure \cite{mathworks_3d}}
     \label{fig:MatlabPlot}
 \end{figure}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.7\columnwidth]{author-files/figures/worldnavblender.png}
-    \caption{Screenshot from Blender, A 3D modelling application, similar to the Unlimited Axis World view presented}
-    \label{fig:MatlabPlot}
+    \caption{Screenshot from Blender \cite{blenderfoundation_2019_blenderorg}, A 3D modelling application, similar to the Unlimited Axis World view presented}
+    \label{fig:blender}
 \end{figure}
 
 \begin{itemize}
-    \item Unlimited Axis Values, World View. The scatterplot would be rendered into a 3D world by directly translating data values into world coordinates. The resultant graph could then be navigated by the user akin to 3D modelling software or a video game (first-person camera). Axis lines would be part of that world and would extend to infinity from origin. This is a very easy to implement design but might be difficult to navigate for an inexperienced user and to appropriately combine together with UI.
-    \item Classic cut-off figure. This is directly inspired by the way the majority of applications seen implement scatterplots. As a user of those systems, you would load in some data and set aspects such as the position, view angle and zoom programmatically which would generate an  image as seen in Figure \ref*{fig:MatlabPlot}. This kind of view is not much harder to render but is much more concise as all data can be made to fit in a predefined visual space. This also allows greater control on how the graph is rendered allowing for a more consistent user experience to be tailored. But, this option has a severe disadvantage- where unlike the previous option, it is not commonly navigated but generated for specific parameters- making exploration not an obvious feature to implement.
+    \item Unlimited Axis Values, World View. The scatterplot would be rendered into a 3D world by directly translating data values into world coordinates. The resultant graph could then be navigated by the user akin to 3D modelling software or a video game (first-person camera). Axis lines would be part of that world and would extend to infinity from origin. (See Figure \ref{fig:blender} for a visual example) This is a very easy to implement design but might be difficult to navigate for an inexperienced user and to appropriately combine together with UI across different screen sizes.
+    \item Classic cut-off figure. This is directly inspired by the way the majority of applications seen implement scatterplots. As a user of those systems, you would load in some data and set aspects such as the position, view angle and zoom programmatically which would generate an image as seen in Figure \ref{fig:MatlabPlot}. This kind of view is not much harder to render but is much more concise as all data can be made to fit in a predefined visual space. This also allows greater control on how the graph is rendered allowing for a more consistent user experience to be tailored. But, this option has a severe disadvantage- where unlike the previous option, it is not commonly navigated but generated for specific parameters- making exploration not an obvious feature to implement.
 \end{itemize}
 
-In the end, the student decided to go with a modified option two. That modification was to replace the programmatic controls that have been seen to be used to compose / generate the chart in applications such as MATLAB with instead similar, although limited UI controls. In a sense, the design that the student came up with abstracts the programming into user controls instead, which are much easier to use (which is the guiding goal for this project) even if they are more limited in their capability. On input, the chart can be regenerated allowing exploration to be done in a similar sense, instead of moving the camera the chart is modified to show subsections of the data (See Table \ref{compare})
+In the end, the student decided to go with a modified option two. That modification was to replace the programmatic controls that have been seen to be used to compose / generate the chart in applications such as MATLAB (See Figure \ref{fig:MatlabPlot}) with instead corresponding UI controls. In a sense, the design that the student came up with abstracts the programming to user controls instead, which are much easier to use (which is the guiding goal for this project) even if they may be more limited in their capability. On input, the chart can be regenerated allowing exploration to be done in a similar sense, instead of moving the camera the chart is modified to show subsections of the data (See Table \ref{compare})
+
+This would mean, as an example, instead of changing the view values in the code below and running the code again to look at the chart from a different angle: (Using code written in MATLAB \cite[]{mathworks_3d} to generate figure \ref{fig:MatlabPlot})
+\begin{code}
+    z = linspace(0,4*pi,250);
+    x = 2*cos(z) + rand(1,250);
+    y = 2*sin(z) + rand(1,250);
+
+    scatter3(x,y,z,'filled')
+    view(-30,10)
+\end{code}
+The user would be able to just click a button or drag their mouse to move the camera.
 
 \subsubsection{User Controls}
 The design created by the student in the last section (\ref{visdesign}) requires a robust design of user controls. The design and implementation for UI then followed an agile approach, where UI was designed and implemented as the need arose and the rendering counterpart could support it.

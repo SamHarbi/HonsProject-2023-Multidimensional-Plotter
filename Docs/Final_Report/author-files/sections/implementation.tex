@@ -1,7 +1,7 @@
 \definecolor{verbgrey}{gray}{0.85}
 
 \section{Implementation} \label{implementation}
-This project was developed over 8 sprints between 7-10 days each. The first one started on the 26th of December, 2022 and the last one stared on March 19, 2023. What follows is a detailed summary of the work done during those sprints divided into three subsections per sprint:
+This project was developed over 8 sprints between 7-10 days each. The first one started on the 26th of December, 2022 and the last one ended on March 19, 2023. What follows is a detailed summary of the work done during those sprints divided into three subsections per sprint:
 \begin{itemize}
     \item Plan - Highlights what user stories were chosen to be implemented during the sprint and how long that sprint was.
     \item Implementation - How the features were implemented, any design decisions and any issues
@@ -12,8 +12,8 @@ This project was developed over 8 sprints between 7-10 days each. The first one 
 \subsubsection{Plan}
 This was the first sprint undertaken for the project and so the focus was to test everything out and ensure that the process was right for the student. The initial MVP feature set was chosen for development and two user stories were planned for (See stories on Table \ref{sprint1}). Those being user stories 3 and 11 with a total workload estimate of 6 over a 7 day sprint. The main goal for this sprint was to create a labelled scatterplot graph with some pre-set test data.
 
-\subsubsection{Implementation}
-Prototype 2 ( See \ref{prototype2}) was chosen to be extended into the application being developed. It was copied into the development branch and work was started on implementing the user stories mentioned. A 3D Cube with axis lines was created as the chart and an origin position was set from which data points would be rendered. This was not as difficult as expected as the model matrix used could be copied and modified by each data point to ensure that they were always at a correct position relative to the cube and axis lines.
+\subsubsection{Implementation} \label{sprint1-imp}
+Prototype 2 (See \ref{prototype2}) was chosen to be extended into the application being developed. It was copied into the development branch and work was started on implementing the user stories mentioned. A 3D Cube with axis lines was created as the chart and an origin position was set from which data points would be rendered. This was not as difficult as expected as the model matrix used could be copied and modified by each data point to ensure that they were always at a correct position relative to the cube and axis lines.
 
 The next step was to label the axis lines (also relative to the chart using it's model matrix). This caused some difficulty as test labels would not align properly even if they were supposed to based on their coordinates. This was particularly troublesome with perspective lines that had a considerable z change in position. This was found to be a result of inaccurate placement by the browser (browsers tend to favor flexibility over screen sizes instead of rigid pixel-perfect placement) and not fully correct world to screen coordinate calculation. Instead, it was decided that text should be rendered within the WebGL scene to ensure accuracy- To that end, a bitmap font technique was adopted.
 
@@ -37,7 +37,7 @@ With bitmap fonts decided upon, the student started work on adapting the applica
 \begin{itemize}
     \item It should be possible to apply textures to models- This was done by adapting the Model class to take-in, store and apply texture data on render
     \item There had to be some way to abstract which letter was rendered, manually slicing the bitmap texture to get each glyph would quickly become too tedious and time consuming for anything beyond a few glyphs- A State-Machine based Font Class was created that generated font texture data for an input letter that could be fed into a Model Object. See Figure \ref{fig:fontprocess}.
-    \item An Glyph set image and accompanying .JSON file for glyph data was embedded into the application. It's this data that allows the Font Class to function. See Figure \ref{fig:fontprocess} for more details.
+    \item A Glyph set image and accompanying .JSON file for glyph data was embedded into the application. It's this data that allows the Font Class to function. See Figure \ref{fig:fontprocess} for more details.
     \item A new set of vertex and fragment shaders were created for just text. This was to allow texture data to be applied in the fragment shader.
 \end{itemize}
 
@@ -62,7 +62,7 @@ The new technique for rendering text ended up fixing the accuracy issues caused 
 
 \begin{figure*}[h]
     \centering
-    \includegraphics[width=1\textwidth]{author-files/figures/Pretest1progress.png}
+    \includegraphics[width=0.7\textwidth]{author-files/figures/Pretest1progress.png}
     \caption{The application at the end of Sprint 2}
     \label{fig:sprint2end}
 \end{figure*}
@@ -82,7 +82,7 @@ Loader was expanded to handle .csv loading which was done using jquery-csv, whic
         });
 \end{code}
 
-During this time, when implementing rotation- which consisted of applying a rotating model matrix component to the entire scene. An expected issue cropped up of having to rotate glyphs to always face the camera even when the scene rotates. This was solved by writing a custom shader to be used when rendering text glyphs, implementing billboarding.
+During this time, when implementing rotation- which consisted of applying a rotating model matrix component to the entire scene. An expected issue cropped up of having to rotate glyphs to always face the camera even when the scene rotates. This was solved by writing a custom shader, to be used when rendering text glyphs, implementing billboarding.
 
 \subsubsection{Summary}
 This was almost a double sprint. This was mainly due to lower work hours done by the student during the winter vacation. Nevertheless, All user stories were completed and the application was pushed to production on January 29th. This delay was due to the previously mentioned lower hours and semester start travel. At this point, a technically functional plotter was created, though still very limited in functionality. See Figure \ref{fig:sprint2end}
@@ -101,43 +101,26 @@ One of the user stories was to implement the ability to change what slice the gr
 
 Before any of these could be implemented though, glyph rendering had to be reworked to allow values consisting of more than one digit to be shown at each labelled line of the chart. This was a relatively straight-forward addition where instead of a single glyph being rendered at each line, an array of glyphs was rendered instead. With each digit of a number being a single glyph in order stored in the array.
 
-This did not take full advantage of the Model class prototype abstraction pattern, Technically it would have been possible to just store the unique texture data of each glyph in a number and repeatedly apply it to a single model then rendering each glyph in turn, which would have meant less repeating of data through multiple Model objects- but this would have a greater performance impact as the one model would need to be re-initialized for every glyph every frame before rendering.
+This did not take full advantage of the Model class prototype abstraction pattern, Technically it would have been possible to just store the unique texture data of each glyph making up a value and repeatedly apply it to a single model then rendering each glyph in turn, which would have meant less repeating of data through multiple Model objects- but this would have a greater performance impact as the one model would need to be re-initialized for every glyph every frame before rendering.
 
 Moving the chart was next to be implemented. This was done by adding new movement buttons (2 for each axis that either moved the axis ahead by 1 or back by 1) then using event listeners getting the modification value and applying it calculate the range of axis vales that needed to be rendered (This was at most 10 values). These values were then applied in order for each labelled line on the chart. This was a relatively straight forward addition.
 
 \begin{figure*}[h]
     \centering
-    \includegraphics[width=1\textwidth]{author-files/figures/pretestScreenshot.png}
+    \includegraphics[width=0.7\textwidth]{author-files/figures/pretestScreenshot.png}
     \caption{The Application at the end of sprint 4)}
     \label{fig:oldzoom}
 \end{figure*}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\columnwidth]{author-files/figures/oldzooms.png}
+    \includegraphics[width=0.8\columnwidth]{author-files/figures/oldzooms.png}
     \caption{Zooming effect formed by Axis Lines (Zooming Out left to right, top to bottom)}
     \label{fig:oldzoom}
 \end{figure}
 
 Zooming was one of the most challenging features of this project to implement. The implementation at this time attempted to create a visually pleasing effect (See Figure \ref{fig:oldzoom}) where axis lines would move out to give the illusion that the camera was moving closer without actually changing the camera position nor size of the viewing graph cube. This was an easy enough effect to achieve and one that could correctly sync up with the position of data cubes too.
-
-\begin{code}
-    glmath.mat4.translate(
-    Axismodel, // Model Matrix in var
-    Axismodel, // Resultant Matrix var
-        [0.5, 0, (i / (10 * zoom))]);
-\end{code}
-
-For cubes the effect could be applied simply as:
-\begin{code}
-    glmath.mat4.translate(
-    point_model, // Model Matrix in var
-    point_model, // Resultant Matrix var
-        [x * zoom, y * zoom, z * zoom]);
-\end{code}
-
-
-The problem then, was correctly labelling axis lines at every possible state of zoom level. In other words, Even though positionally the cubes and axis lines were correctly placed at all zoom levels- figuring out what the exact values of each line were was very challenging., this was further exacerbated by the ability "move" the graphed slice to show different values. After extensive tinkering, labels were turned off when the application was in an uncertain state- As a temporary solution, a hardcoded zoom modifier was set for maximum and minimum zoom values (These were the only levels at which the zoom mod values could be confirmed as correct) allowing accurate labels to be shown at those two levels.
+The problem then, was correctly labelling axis lines at every possible state of zoom level. In other words, Even though positionally the cubes and axis lines were correctly placed at all zoom levels- figuring out what the exact values of each line were was very challenging, this was further exacerbated by the ability "move" the graphed slice to show different values. After extensive tinkering, labels were turned off when the application was in an uncertain state- As a temporary solution, a hardcoded zoom modifier was set for maximum and minimum zoom values (These were the only levels at which the zoom mod values could be confirmed as correct) allowing accurate labels to be shown at those two levels.
 With this, the application could now zoom up to a maximum of 5x showing values from 0 to 50 and a minimum of 1 to 10 at 1x. In between those two maximum and minimum levels (including those levels) there were 10 pre-set zoom values that could be scrolled through.
 
 \subsubsection{Summary}
@@ -156,7 +139,7 @@ The sprint was completed in record time. All user stories were implemented and t
 This sprint was also important in the sense that it completed all User stories from the MVP feature set.
 
 
-\subsection{Sprint 5 - Start February 19th}
+\subsection{Sprint 5 - Start February 19th} \label{s5}
 \subsubsection{Plan}
 This was the fifth sprint. User testing 1 has already started at this point in time and the student was waiting for results to finish coming in before analysis could start.
 In this relative downtime. A 7 day sprint was planned with 2 user stories (See Table \ref{sprint5}) for a workload of 9 points. These were task based stories that arose during development in previous sprints, and the student thought they would be important additions to have.
@@ -171,7 +154,7 @@ The next user story though was to look at new ways to structure the app to incre
     \item Find an overarching architecture to manage UI and Rendering code.At the moment user controls are highly coupled to rendering which is not ideal. It would be best to decouple them in some way to make adding more UI components easier.
 \end{itemize}
 
-Each of these points were researched in turn and prototyped with in turn. Although time was a very limited factor as the student considered it important to provide value to the user first and foremost. Which meant refactoring would likely not be able to continue beyond this 7 day sprint as requirements extracted from user testing would then be higher prioritized. First, some attempts were made to restructure the render loop into an object but it was more work than expected to port everything correctly so it was abandoned.
+Each of these points were researched in turn and prototyped with in turn. Although time was a very limited factor as the student considered it important to provide value to the user first and foremost. Which meant refactoring would likely not be able to continue beyond this 7 day sprint as requirements extracted from user testing would then be higher prioritized. With that in mind, first, some attempts were made to restructure the render loop into an object but it was more work than expected to port everything correctly so it was abandoned.
 
 As for state management, there were a number of techniques and pre-made solutions for managing state. React + React Context though, has been found to be a great fit for the project. React is a UI library for creating user interfaces through components and now has support for state management by sharing states between these components. Parcel also has great support for react so integration would not have been too problematic. Unfortunately, the unique circumstances of this project made the student reject integrating react into the tool stack at the current time for the following key reasons:
 \begin{itemize}
@@ -184,7 +167,7 @@ The final point, to find an overarching architecture, the student found that the
 The application was structured as follows:
 \begin{itemize}
     \item View - Static Written HTML index.html
-    \item Model - The application render loop rendering chart. The chart rendered is a result of multiple control variables which make up the model.
+    \item Model - The application render loop rendering chart. The chart rendered is a result of multiple control variables which make up the model (Model as in MVC not Class Model)
     \item Controller - This was the new class created. All event listeners and control functions were moved to be managed by this class.
 \end{itemize}
 
@@ -198,7 +181,7 @@ The application was structured as follows:
 \subsubsection{Summary}
 This was an important sprint that worked to refactor the application to be easier to work with, especially when adding new UI elements.
 The 2 user stories were thus completed and the application pushed to production as Version 2 on March 4th.
-It was completed just in time as user testing has come to a close and analysis begun.
+It was completed just in time as user testing had come to a close and analysis begun.
 
 \subsection{Sprint 6 - Start March 05}
 \subsubsection{Plan}
@@ -216,12 +199,12 @@ The next addition was to modify the renderer to allow picking / highlighting dat
 After analysis of the two, Colour picking was chosen over ray tracing for the following key points:
 \begin{itemize}
     \item More Complex implementation with raycasting.
-    \item Raycasting is highly CPU dependant, which is not ideal when running javascript.
+    \item Raycasting is highly CPU dependant, which is not ideal for a single treaded application with UI requirements, it would be preferable to offload as much computation as possible to a GPU and leave the CPU free for a responsive UI experience.
     \item More flexible, it is possible to have hover over effects without having to constantly raycast which would have made the application unusable performance wise.
 \end{itemize}
 
 To implement colour picking then, the student extended the renderer to render data points twice- The first render would render to a texture in a different buffer, this first render would also encode an ID for every Model rendered into 3 rgb Channels giving a unique colour for every model drawn (up to around 16 million). After that, render is called again but to the screen buffer instead. This means that the user only see's the the second render (Which can freely use colour) instead of the first one.
-glGetPixel would then poll what colour pixel the user's mouse is hovering over. During the second render phase as each model is rendered, it's id is checked to see if it matches the selected id extracted from the colour of the hovered over pixel. If it does, the model is highlighted and it's data saved to be displayed. See Figure \ref{fig:colpick} and fig \ref{fig:nocolpick} for a visual representation of what is rendered off-screen vs on screen for colour picking to work
+glGetPixel would then poll what colour pixel the user's mouse is hovering over from the texture. During the next frame as each model is rendered, it's id is checked to see if it matches the selected id extracted from the colour of the hovered over pixel. If it does, the model is highlighted and it's data saved to be displayed. See Figure \ref{fig:colpick} and fig \ref{fig:nocolpick} for a visual representation of what is rendered off-screen vs on screen for colour picking to work
 
 \begin{figure}[hbt!]
     \centering
@@ -245,37 +228,45 @@ All User stories were completed as expected and the application pushed to produc
 
 \subsection{Sprint 7 - Start March 12}
 \subsubsection{Plan}
-This was the 7th Sprint. The highest priority user stories were once again selected from both feature sets. This included the last 2 Must stories and 2 Should stories (See table \ref{sprint7} and \ref{sprint7-2}). In total, the workload was 21 points over a 5 day period. The main focus of this sprint was to expand the application to support one more dimension and create a new suite of user controls to view and assign data to chart axies.
+This was the 7th Sprint. The highest priority user stories were once again selected from both feature sets. This included the last 2 Must stories and 2 Should stories (See table \ref{sprint7} and \ref{sprint7-2}). In total, the workload was 21 points over a 5 day period. The main focus of this sprint was to expand the application to support one more dimension and create a new suite of user controls to view and assign data to chart axes.
 
 \subsubsection{Implementation}
 To add a new dimension, the student had to start looking at different ways to represent dimensions. The main options identified were Alpha/Transparency, Single Channel / Saturation component, Full Colour component and Shape component.
-Of those, Shape was dropped due to limited range (Have to have a different model to represent each possible values). Alpha was also dropped due to limitations in how the browser handles Alpha. Finally, Saturation was chosen over colour as having all 3 channels might be confusing for users to extract values.
+Of those, Shape was dropped due to limited range (Have to have a different model to represent each possible values). Alpha was also dropped due to limitations in how the browser handles transparency. Finally, Saturation was chosen over colour as having all 3 channels might be confusing for users to extract values.
 
-During the following implementation- the first problem encountered was how to plot an infinite range of values between two Saturation values on a single channel. For this problem the student identified the use of a squashing function that formed an asymptote at the limits. By then also allowing the user to change those limits, any data can be effectively plotted with saturation.
+During the following implementation- the first problem encountered was how to plot an infinite range of values between the minimum and  maximum Saturation values on a single colour channel. For this problem the student identified the use of a squashing function that formed an asymptote at the limits. By then also allowing the user to change those limits, any data can be effectively plotted with saturation. See Figure \ref{fig:satur} for a plot using saturation.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.7\columnwidth]{author-files/figures/squashFunc.PNG}
+    \includegraphics[width=0.5\columnwidth]{author-files/figures/squashFunc.PNG}
     \caption{Squashing Function, where mod affects the range of values to divide the limited saturation range over while value is the value of the data point plotted}
     \label{fig:function}
 \end{figure}
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\columnwidth]{author-files/figures/saturation.PNG}
+    \caption{DataCube Dataset (More on dataset in \ref{devtest}), where y is set as both the y component and saturation c component. Making points with lower y value darker}
+    \label{fig:satur}
+\end{figure}
+
 Once the mathematical basis was solved, the implementation was relatively straight forward.
 The next main addition worked on was to create a new section of user controls. To that end, a tabular design was adopted for aspects of the application that demanded large screen real estate and focus from the user. This consisted of three total tab sections as follows:
+
 \begin{itemize}
     \item Graph View - This is what has been shown so far, the rendered graph.
-    \item Data Management - This will be a new tab. Here, the data uploaded is displayed in a table fashion with data point IDs for cross reference with the graph. Additionally, a set of selectors were created on the page that allowed the user to select which column from the table would apply to which axis to be graphed (or to saturation).
+    \item Data Management - This will be a new tab. Here, the data uploaded is displayed in a tabular fashion with data point IDs for cross reference with the graph. Additionally, a set of selectors were created on the page that allowed the user to select which column from the table would apply to which axis to be graphed (or to saturation).
     \item Help tab - This is a FAQ based help section, Answers to common (or expected to be) questions.
 \end{itemize}
 
 This was also relatively straight forward to implement, although with the data management tab- the UI system was pushed to it's limit in terms of state management and component composition. The student had to design the UI in such a way as to minimize UI elements depending on each other for state. Although there still are nevertheless some less than ideal control implementations.
 
-One example would be how column name labels in the graph view had to depend on a variable that told it when to update the text- this variable had to be manually set each time anything changed in the UI that prompted the column names to update such as a file upload. This is fine for a single variable but with more similar controls it would become very difficult to cover all edge cases and keep everything up to date. A state machine abstraction as discussed in Sprint 5 to manage states would be ideal.
+One example would be how column name labels in the graph view had to depend on a variable that told it when to update the text- this variable had to be manually set each time anything changed in the UI that prompted the column names to update such as a file upload. This is fine for a single variable but with more similar controls it would become very difficult to cover all edge cases and keep everything up to date. A state machine abstraction as discussed in \ref{s5} to manage states would be ideal.
 
 Any considerable future UI work will preferably need to bring on some helping tool to minimize development time and complexity.
 
 \subsubsection{Summary}
-All user stories were completed as expected and the application was pushed to production on March 18th. The usability of the application took a considerable upgrade this sprint- with the application itself being almost fully completing both feature sets User Testing 1 and Further Improvements.
+All user stories were completed as expected and the application was pushed to production on March 18th. The usability of the application took a considerable upgrade this sprint- with the application itself almost fully completing both feature sets User Testing 1 and Further Improvements.
 
 \subsection{Sprint 8 - Start March 19}
 \subsubsection{Plan}
