@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  20 APR 2023 21:36
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  20 APR 2023 22:14
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1199,10 +1199,7 @@ Underfull \hbox (badness 1348) in paragraph at lines 216--216
 \T1/LinuxLibertineT-TLF/m/n/9 (+20) ture Finder" that zooms into
  []
 
-) [17.17] [18.18] [19.19] [20.20] (./author-files/sections/testing.tex
-Underfull \vbox (badness 2173) has occurred while \output is active []
-
- [21.21
+) [17.17] [18.18] [19.19] [20.20] (./author-files/sections/testing.tex [21.21
 
 ]) (./author-files/sections/finalproduct.tex
 <author-files/figures/Graph-Fin.PNG, id=633, 1446.15282pt x 714.41907pt>
@@ -1251,10 +1248,13 @@ Class acmart Warning: A possible image without description on input line 31.
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 ) (./author-files/sections/conclusion.tex [22.22]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 4713) has occurred while \output is active []
 
  [23.23 <./author-files/figures/Graph-Fin.PNG> <./author-files/figures/data-fin.PNG> <./author-files/figures/help-fin.PNG>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 1635) has occurred while \output is active []
+
+
+Underfull \vbox (badness 1769) has occurred while \output is active []
 
  [24.24 <./author-files/figures/UML_All_fin.drawio.png>]) (./author-files/sections/appendices.tex
 Overfull \hbox (25.70879pt too wide) in paragraph at lines 17--20
@@ -1315,11 +1315,11 @@ LaTeX Info: Redefining \tempurl on input line 495.
 LaTeX Info: Redefining \tempurl on input line 509.
 LaTeX Info: Redefining \tempurl on input line 523.
 LaTeX Info: Redefining \tempurl on input line 537.
+ [25.25{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/libertine/lbtn_naooyc.enc}]
 LaTeX Info: Redefining \tempurl on input line 552.
 LaTeX Info: Redefining \tempurl on input line 563.
 LaTeX Info: Redefining \tempurl on input line 577.
 LaTeX Info: Redefining \tempurl on input line 592.
- [25.25{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/libertine/lbtn_naooyc.enc}]
 LaTeX Info: Redefining \tempurl on input line 603.
 LaTeX Info: Redefining \tempurl on input line 615.
 LaTeX Info: Redefining \tempurl on input line 629.
@@ -1327,7 +1327,10 @@ LaTeX Info: Redefining \tempurl on input line 629.
 
 Class acmart Warning: Some images may lack descriptions.
 
-(d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-pdfdoc.def
+
+Overfull \vbox (1.152pt too high) has occurred while \output is active []
+
+ (d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-pdfdoc.def
 File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
 ) (d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-utf8.def
 File: se-utf8.def 2019/11/29 v1.12 stringenc: UTF-8
@@ -1341,16 +1344,16 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 Here is how much of TeX's memory you used:
  24905 strings out of 476025
  410689 string characters out of 5792019
- 1901382 words of memory out of 5000000
+ 1899382 words of memory out of 5000000
  43979 multiletter control sequences out of 15000+600000
  657926 words of font info for 366 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
- 90i,13n,131p,1195b,1368s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,12n,131p,1195b,1368s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/newtx/txsys.pfb>
-Output written on main.pdf (26 pages, 2292612 bytes).
+Output written on main.pdf (26 pages, 2293245 bytes).
 PDF statistics:
- 866 PDF objects out of 1000 (max. 8388607)
- 759 compressed objects within 8 object streams
+ 867 PDF objects out of 1000 (max. 8388607)
+ 760 compressed objects within 8 object streams
  252 named destinations out of 1000 (max. 500000)
  71116 words of extra memory for PDF output out of 74296 (max. 10000000)
 
