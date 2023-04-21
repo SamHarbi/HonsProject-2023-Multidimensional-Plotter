@@ -5,7 +5,7 @@ number of techniques and phases to convert feedback into actionable input that w
 \subsection{Development Testing Process} \label{devtest}
 Under PXP, the refactor branch was adapted to also serve as a final testing stop before the student pushed code to production (See \ref{devflow}). Automated testing was considered as mentioned in the Design section (See \ref{automatedtests}) but was found to not be suitable for this project.
 
-Instead, refactoring was done manually on the refactoring branch based on visual inspection for rendering artifacts. To help with this process, a python command line tool was written to generate a wide range of datasets for edge case testing. The datasets are all attached in appendix \ref{A4} but some notable ones are as follows:
+Instead, refactoring was done manually on the refactoring branch based on visual inspection for rendering artifacts. To help with this process, a python command line tool was written to generate a wide range of datasets for edge case testing. The datasets and python tool are all attached in appendix \ref{A4} but some notable datasets are as follows:
 
 \begin{itemize}
     \item DataCube - This is a data set that creates a 10x10x10 Cube of data points. If the application renders correctly, this dataset would fill every visible space (with a grid pattern) at the initial zoom and slice position.
@@ -38,12 +38,12 @@ This allowed the student to construct a critical understanding of how real users
 
 The responses collected were then analyzed and turned into user stories to be developed, with the two testing phases each forming the User Testing 1 feature set and User Testing 2 Feature set respectively. The following give specific detail of each phase and the analysis performed on user stories. All questionnaire questions and responses are available for viewing at Appendix \ref{A6}.
 
-\subsubsection{User Testing 1 - Starting February 17th}
+\subsubsection{User Testing 1 - Starting February 17th} \label{usertestanalysis}
 This was setup and ran right after sprint 5 was complete. The focus for this testing phase was to identify what controls were still missing to help users do real work using the application. The questionnaire was created to that end and user testing began. The user testing was then concluded a week later with 5 total responses. In general responses were positive, though there were some trending limitations and gripes across testers:
 
 \begin{itemize}
     \item Controls were good but a bit bare-bones. Most suggestions recorded were quality of life additions to the UI.
-    \item Identifying specific node values was the least popular task across testers. With the overall NPS (Net Promoter Score) being at a -25, the lowest recorded in the test.
+    \item Identifying specific node values was the least popular task across testers. With the overall NPS (Net Promoter Score) being at a -25, the lowest recorded value in the test.
 \end{itemize}
 
 These points were interesting because otherwise, most testers rated ease of control usability quite high- At a NPS score of +40. The overall feel was that the user controls that were there were good but not enough to fully explore the data as was asked.
@@ -65,13 +65,38 @@ Some notable analysis notes on user stories follows:
     \item Story 56 (See Table \ref{UT1}) was created after one tester mentioned poor performance using the Opera browser. Nothing specific towards this claim was found so this may have been a problem on the testers device.
     \item Story 50 (See Table \ref{UT1}) was created on popular demand to have automatically rendering trendlines. This would have required a math library to generate a best fit line for the data which would be rendered. This task was not assigned to a sprint due to limited time but could be a good future addition.
     \item Story 51 (See Table \ref{UT1}) was proposed to solve the same point identification as picking which was done in favor of this as it was more popular (and helpful in the Students opinion).
+    \item Story 49 (See Table \ref{UT1}) was created after a tester asked if they could search thorough the data. This is an interesting use case that implies the suitability of having a database backend for running queries on data as a possibly useful feature. See Databases in Future work, \ref{futurework}
+    \item Story 55 (See Table \ref{UT1}) was created when a tester asked for data points to not intersect. This was found to be too difficult to cover edge cases for as a balance between visibility and non-interaction had to be found for any possible values of points- This story was abandoned in favor of keeping the user themselves in control of sizing
 \end{itemize}
 
 In summary, this user test identified a number of UI problems and opportunities to expand how users can better interact and view the data.
 
 \subsubsection{User Testing 2 - Starting March 30th}
-This was setup and ran right after sprint 8 was complete. The focus for this testing phase was to see if the new controls made tasks easier to do and what users thought of the new 4th dimension representation. The questionnaire was once again created and the testing concluded on the 21st of April with 8 responses. The answers were once again analyzed and prioritized using MoSCoW and the Workload Estimate system previously used. All of theses stories formed the User Testing 2 feature set which would make a good start for future development.
+This was setup and ran right after sprint 8 was complete. The focus for this testing phase was to see if the new controls made tasks easier to do and what users thought of the new 4th dimension representation. The questionnaire was once again created and the testing concluded on the 21st of April with 8 responses. In general, responses were positive and general and seemed to trend towards being more positive- previous testers (The questionnaire asked to answer some questions if they previously tested, See \ref{A6}) rated the application as much better with an overall NPS score of +100. Further key points were as follows:
+
+\begin{itemize}
+    \item Identifying specific node values rose from an overall NPS of -25 to +57, with multiple testers mentioning that they used the new hover system to identify points. This implies that the new picking system for selecting points successfully solved the arguably biggest issue identified during the last user test (See Identifying specific node values in \ref{usertestanalysis}).
+    \item The new zoom was unanimously favored over the old one by repeating testers- and positively viewed by new testers.
+    \item The Data Management had a positive impact on user experience. Most testers used it in their tasks and found it as a helpful addition to the overall graph view. Though many testers mentioned bugs in how the table was presented and with some selectors. This was found to be likely a result of state bugs specifically and a cause of uncovered edge cases.
+    \item The Help tab was much less popular than the other tabs but still was rated as useful by the few testers that used it.
+    \item Clarity of data points was the biggest issue mentioned by multiple people. Bad clarity was mentioned in general with specific descriptions being "grittiness", "flickering" and "dots on numbers".
+    \item The 4th dimension had mixed results, most testers did not understood it's use and opted to use only the 3D graphing functionality. Those that did use it mentioned further difficultly with how to use it.
+\end{itemize}
+
+The overall consensus was positive. Usability and design has improved dramatically over the first user testing phase and most issues mentioned dealt with bugs rather than problems with using the application. As for the 4th dimension, it's addition to the application had not been done very well. Further design and modification will be required to better communicate it's use and simplify operation for users.
+
+These answers given were once again analyzed and prioritized using MoSCoW and the Workload Estimate system previously used. All of theses stories formed the User Testing 2 feature set which would make a good start for future development.
 The user stories are all compiled here (See Table \ref{UT2})
+
+Some notable analysis notes on user stories are as follows:
+\begin{itemize}
+    \item Story 87 was been pinpointed to be a performance issue when labels are updated, such as when the graph slice is moved using the movement controls (See \ref{spr3} for more details) This conforms that the decision done to prepare all labels before rendering was the right way to go as otherwise labels would flicker constantly every frame (See glyph rendering rework in \ref{spr3}). Though the performance is still not suitable, the model class would have to be looked at for opportunities to increase performance.
+    \item Story 88 refers to user tester mentioning dotted dots on numbers. The student believes that this may be some issue with how the fragment shader for text clips the texture. Further optimization and research is needed though.
+    \item Story 85 mentions inaccuracy in picking. This could be caused by the off-screen buffer texture somehow becoming out of tune with the size of the actual screen (Resizing browser tab) but further research is needed to identify any other edge cases.
+    \item Story 83 may be a repeated issue with the Opera browser but is likely also the result of more demanding datasets given to be tested (See Secret Structure Data in \ref{devtest})
+\end{itemize}
+
+In summary, this testing phase has made a number of important points very clear for the application. The functionality that is there is very successful and fixes almost all problems previously faced by by testers during the first test phase. Except for the 4th dimension functionality, the application implements all needed controls and functionality to be a successful analysis tools for the questions poised to testers. The main drawbacks though are a number of bugs within the UI and within the renderer. The bugs within the UI almost all stem from incorrect management of state edge cases and is the first time a precedent is set to justify bringing in outside tools for the direct sake of the user experience quality. Otherwise, when this problem was last visited this important precedent was missing (See the refactoring discussion during sprint 5, \ref{s5}).
 
 \subsection{Further Improvements Feature Set}
 The further improvement feature sets were feature sets created using the same technique used by the student for the MVP feature set (See \ref{reqgat}) These were created to further drive the capability of the application beyond just user tester suggestions. In total, 2 sets were created titled V2 and V3. Each being created at the same time as the two respective user test feature sets (See \ref{usertest1}). Unlike, The MVP and user test sets though, these two focused on tasks rather than a combination of both- as these were focused on improving the application directly rather than providing specific value to some users.
