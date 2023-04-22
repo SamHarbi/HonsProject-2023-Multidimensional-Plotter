@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{47}
+\begin{thebibliography}{48}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -340,6 +340,14 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \urldef\tempurl%
 \url{https://doi.org/10.1109/ICRIS52159.2020.00027}
 \showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Lowe and Matthee}{Lowe and Matthee}{2020}]%
+        {10.1007/978-3-030-44999-5_39}
+\bibfield{author}{\bibinfo{person}{Joy Lowe} {and} \bibinfo{person}{Machdel Matthee}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{Requirements of Data Visualisation Tools to Analyse Big Data: A Structured Literature Review}. In \bibinfo{booktitle}{\emph{Responsible Design, Implementation and Use of Information and Communication Technology}}, \bibfield{editor}{\bibinfo{person}{Mari{\'e} Hattingh}, \bibinfo{person}{Machdel Matthee}, \bibinfo{person}{Hanlie Smuts}, \bibinfo{person}{Ilias Pappas}, \bibinfo{person}{Yogesh~K. Dwivedi}, {and} \bibinfo{person}{Matti M{\"a}ntym{\"a}ki}} (Eds.). \bibinfo{publisher}{Springer International Publishing}, \bibinfo{address}{Cham}, \bibinfo{pages}{469--480}.
+\newblock
+\showISBNx{978-3-030-44999-5}
 
 
 \bibitem[\protect\citeauthoryear{MathWorks}{MathWorks}{[n.d.]}]%
