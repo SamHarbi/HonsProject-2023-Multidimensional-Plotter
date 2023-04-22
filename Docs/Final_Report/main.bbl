@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{46}
+\begin{thebibliography}{47}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -194,6 +194,8 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \url{https://www.blender.org/}
 \showURL{%
 \tempurl}
+\newblock
+\shownote{(Accessed 4/22/2023).}
 
 
 \bibitem[\protect\citeauthoryear{Framework}{Framework}{[n.d.]}]%
@@ -262,6 +264,20 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \tempurl}
 \newblock
 \shownote{(Accessed 4/12/2023).}
+
+
+\bibitem[\protect\citeauthoryear{Group}{Group}{2022}]%
+        {khronosgroup_2022_webgl}
+\bibfield{author}{\bibinfo{person}{Khronos Group}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \bibinfo{title}{WebGL 2.0 Achieves Pervasive Support from all Major Web Browsers}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://www.khronos.org/blog/webgl-2-achieves-pervasive-support-from-all-major-web-browsers}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/22/2023).}
 
 
 \bibitem[\protect\citeauthoryear{Group}{Group}{2017}]%
@@ -336,6 +352,8 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \url{https://www.mathworks.com/help/matlab/ref/scatter3.html}
 \showURL{%
 \tempurl}
+\newblock
+\shownote{(Accessed 4/22/2023).}
 
 
 \bibitem[\protect\citeauthoryear{Microsoft}{Microsoft}{[n.d.]a}]%
@@ -376,6 +394,8 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \url{https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API}
 \showURL{%
 \tempurl}
+\newblock
+\shownote{(Accessed 4/22/2023).}
 
 
 \bibitem[\protect\citeauthoryear{Mozilla}{Mozilla}{2019}]%
@@ -603,6 +623,8 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \url{https://www.w3.org/TR/webgpu/}
 \showURL{%
 \tempurl}
+\newblock
+\shownote{(Accessed 4/22/2023).}
 
 
 \bibitem[\protect\citeauthoryear{Wiki}{Wiki}{2022}]%
