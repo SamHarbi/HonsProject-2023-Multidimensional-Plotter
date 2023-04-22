@@ -1269,7 +1269,6 @@ INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinLibertineT-tl
 INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinLibertineT-tlf-t1.tfm
 INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinLibertineTB-tlf-t1.tfm
 INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinLibertineTB-tlf-t1.tfm
-INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinLibertineTI-tlf-t1.tfm
 INPUT ./author-files/body.tex
 INPUT ./author-files/body.tex
 INPUT ./author-files/body.tex
@@ -1309,11 +1308,6 @@ INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinLibertineTB-t
 INPUT d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/libertine/lbtn_nh77jq.enc
 INPUT d:/TEX/texlive/2023/texmf-dist/fonts/vf/public/libertine/LinLibertineT-tlf-t1.vf
 INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinLibertineT-tlf-t1--base.tfm
-INPUT d:/TEX/texlive/2023/texmf-dist/fonts/vf/public/libertine/LinLibertineTB-tlf-t1.vf
-INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinLibertineTB-tlf-t1--base.tfm
-INPUT d:/TEX/texlive/2023/texmf-dist/fonts/vf/public/libertine/LinLibertineTI-tlf-t1.vf
-INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinLibertineTI-tlf-t1--base.tfm
-INPUT d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/libertine/lbtn_7grukw.enc
 INPUT d:/TEX/texlive/2023/texmf-dist/fonts/vf/public/libertine/LinBiolinumTI-tlf-t1.vf
 INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinBiolinumTI-tlf-t1--base.tfm
 INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinLibertineT-tlf-ot1.tfm
@@ -1340,6 +1334,10 @@ INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinBiolinumT-tlf
 INPUT d:/TEX/texlive/2023/texmf-dist/fonts/vf/public/newtx/ntxsy.vf
 INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/newtx/txsys.tfm
 INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/newtx/txex-bar.tfm
+INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinLibertineTI-tlf-t1.tfm
+INPUT d:/TEX/texlive/2023/texmf-dist/fonts/vf/public/libertine/LinLibertineTI-tlf-t1.vf
+INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinLibertineTI-tlf-t1--base.tfm
+INPUT d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/libertine/lbtn_7grukw.enc
 INPUT ./author-files/sections/specification.tex
 INPUT ./author-files/sections/specification.tex
 INPUT ./author-files/sections/specification.tex
@@ -1359,6 +1357,8 @@ INPUT author-files/sections/design.tex
 INPUT ./author-files/sections/design.tex
 INPUT ./author-files/sections/design.tex
 INPUT author-files/sections/design.tex
+INPUT d:/TEX/texlive/2023/texmf-dist/fonts/vf/public/libertine/LinLibertineTB-tlf-t1.vf
+INPUT d:/TEX/texlive/2023/texmf-dist/fonts/tfm/public/libertine/LinLibertineTB-tlf-t1--base.tfm
 INPUT ./author-files/figures/logo-ts-webgl.PNG
 INPUT ./author-files/figures/logo-ts-webgl.PNG
 INPUT author-files/figures/logo-ts-webgl.PNG
