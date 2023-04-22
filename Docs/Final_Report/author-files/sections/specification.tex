@@ -1,5 +1,5 @@
 \section{Specification}
-This section considers the formal project plan that was created for the development of this projects, and the decisions on how it was structured. This phase of the project came after the specific project goals were identified during research (See \ref{ressummary}) and act's to create a development plan based on achieving these goals.
+This section considers the formal project plan that was created for the development of this project, and the decisions on how it was structured. This phase of the project came after the specific project goals were identified during research (See \ref{ressummary}) and act's to create a development plan based on achieving these goals.
 
 Each of the subsections then focus on one particular aspect of that planning.
 
@@ -9,21 +9,23 @@ As is a fundamental principle of agile this methodology was adapted to the proje
 \begin{itemize}
     \item Allow refactoring to be raised at any point, also allow grouping of similar user stories to be refactored together. Allow fixing problems before they became too big and interlinked.
     \item MoSCoW and Cost factors agile ceremonies were applied to the project’s user stories. Allowed better planning and time management.
-    \item Instead of tasks created from user stories, user stories themselves are treated like tasks with any non-user story work labelled as tasks instead and treated the same as stories. Done to lower duplication of information.
-    \item No automated testing. This was a decision that was retroactively added here after prototyping during the design phase (See \ref{automatedtests}). The justification for this controversial change is covered there but in summary, It was found that Graphics development is fairly tricky to automate the testing of as the large majority of testing is completely visual and subject to changes.
+    \item Instead of tasks created from user stories, user stories themselves were treated like tasks with any non-user story work labelled as tasks instead and treated the same as stories. Done to lower duplication of information and to fit better into GitHub Issues (See \ref{projectmanage})
+    \item No automated testing. This was a decision that was retroactively added here after prototyping during the design phase (See \ref{automatedtests}). The justification for this change is covered there but in summary, It was found that Graphics development is fairly tricky to automate the testing of as the large majority of testing is completely visual and subject to changes.
     \item Reworked development process in general to better fit the students workflow. See \ref{scheduling} and \ref{devflow} for specific details
 \end{itemize}
+
+Feature sets were also adopted into the project. Where they played an important role in organizing tasks and user stories into logical sets based on source (User tester's suggestions, etc.) that could be prioritized and scheduled as part of a big picture overview. This big picture overview based on feature sets allowed the student to better manage their time by planning further ahead while still remaining flexible with development.
 
 To see the resultant development flow with these changes in action see Section \ref{implementation}.
 
 \subsection{Requirements Gathering} \label{reqgat}
-With the goals that the developed application needs to achieve set as per the research phase (See \ref{ressummary})- The next step was to create a concrete plan on what exact requirements / features would contribute towards achieving those goals. To do that, two main ideas were identified by the student.
+With the goals that the developed application needs to achieve set as per the research phase (See \ref{ressummary})- It was considered important to then take these goals and create a concrete plan on what exact requirements would contribute towards achieving those goals. To do that, two main ideas were identified by the student.
 
-The first idea was to conduct Interviews with individuals who commonly use visualization tools or do general data science work. This would provide key insight into what real users of visualization technology think is key for a successful application to have. These requirements would constitute the first phase of the project and set a strong start to either a waterfall type methodology or an agile project.
+The first idea was to conduct interviews with individuals who commonly use visualization tools or do general data science work. This would provide key insight into what real users of visualization technology think is key for a successful application to have. These requirements would constitute the first phase of the project and set a strong start to either a waterfall type methodology or an agile project.
 But there were a couple of downsides that cancelled out this idea at that time:
 \begin{itemize}
     \item With no initial product to focus insight into actionable requirements- the interview process is more likely to return conflicting or infeasible requirements.
-    \item It might be difficult to offer insight that is not generic for the same reasons. Application should plot data vs Application should do it like this instead of like this. With the latter insight being much more valued.
+    \item It might be difficult to offer insight that is not generic for the same reasons. "Application should plot data" vs "Application should do it like this instead of like that". With the latter insight being much more valued.
     \item Time and access to experts is very valuable and needs extensive preparation. It is important to make the most of it, which the student didn’t feel like they could do at that time as per the points mentioned so far.
 \end{itemize}
 
@@ -35,11 +37,11 @@ The next idea to identify requirements was one which was inspired by the develop
     \item With the "Client" also being the developer it is possible to keep stories focused and ensure they are not conflicting.
 \end{itemize}
 
-With this technique, a planning stage was ran and a requirements brief was created. This brief can be read in full in Appendix \ref{A3} but in short, creates a written source document describing the minimum simplest application that would need to be created. It was considered that only a minimal version of the application should be planned at the beginning with further requirements created in a more agile way through user testing and analysis by the student based on how the project is progressing.
+With this technique, a planning stage was ran and a requirements brief was created. This brief can be read in full in Appendix \ref{A3} but in short, creates a written source document describing the minimum simplest application that would need to be created. It was considered that only a minimal version of the application should be planned at the beginning with further requirements created in a more agile way through user testing and analysis by the student based on how the project was progressing.
 
-But the main reason to have created this brief instead of just skipping to creating user stories directly was to have a consistent main source from where user stories were pulled from and were focused on meeting the goals set during the research phase (See \ref{ressummary}).
+But the main reason to have created this brief instead of just skipping to creating user stories directly was to have a consistent main source from where user stories were pulled from initially that was focused on meeting the goals set during the research phase (See \ref{ressummary}).
 
-With a brief set, the next step was to extract user stories (formal requirements) from the brief. Those initial user stories all formed the MVP (minimum viable product) feature set which was scheduled as further covered in section \ref{scheduling}. The specific extracted user stories and their analysis follow as so (See Table. \ref{req1})
+The stories (formal requirements) extracted from the brief formed the MVP (minimum viable product) feature set which was scheduled as further covered in section \ref{scheduling} to be completed on the 16th of January. The specific extracted user stories and their analysis follow as per Table. \ref{req1}
 
 It should be noted that MoSCoW analysis was skipped for these stories as they all were by virtue of their creation considered a "Must" for the application.
 
@@ -69,30 +71,25 @@ It should be noted that MoSCoW analysis was skipped for these stories as they al
         11 & As a User, I want all interactable parts of the Application to be visible at all times                              & 1                   \\
         \hline
     \end{tabular}
-    \caption{Requirements Gathering \#1 User Stories, MVP Feature Set}
+    \caption{Requirements Gathering \#1 User Stories, MVP Feature Set, To be completed by January 16th}
     \label{req1}
 \end{table*}
 
-\subsection{Project Management Tools}
-A number of tools and services were employed in the process to allow the organization and techniques mentioned to be applied. Those consisted of the following:
+\subsection{Project Management Tools} \label{projectmanage}
+A number of tools and services were employed in the development process to allow the organization and techniques mentioned to be applied. Those consisted of the following:
 
 \subsubsection{Git, Version Control}
 A version control tool is an important tool for controlling and recording changes to a codebase.
 Git specifically though was chosen due to the student having previous experience, and to allow GitHub to be used within the project for it's supporting tools (See \ref{github} and \ref{github2}).
 
 \subsubsection{GitHub, Cloud Code Repositary} \label{github}
-Github is a cloud host for git repositories with additional extensive tooling to support all aspects of a software development project. The student has had extensive experience with this platform thus it was chosen for this project to minimize learning downtime. Alternatives such as Bitbucket and GitLab also exist but did not offer any further advantages that the student considered worth the learning downtime.
+Github is a cloud host for git repositories with additional extensive tooling to support all aspects of a software development project. The student has had extensive experience with this platform thus it was chosen for this project to minimize learning downtime. Alternatives such as Bitbucket and GitLab also existed but did not offer any further advantages that the student considered worth the learning downtime.
 
 \subsubsection{GitHub Issues and Projects, Organizing Backlog and managing stories} \label{github2}
 GitHub also has integrated issues and project views for organizing and tracking stories. An alternative would not have been as tightly integrated with the code repository.
 
 \subsection{Scheduling} \label{scheduling}
-With a backlog of user stories ready the next step was to combine similar stories into feature sets. Feature sets were then given a deadline on when all of their user stories should be completed.
-This would allow then the student to pick the most urgent Feature Set to focus on.
-
-Once a Feature set was picked, each user story and task within was analyzed and given a development time cost and importance to the project. With this, a prioritized backlog was created that was split among the maximum iterations/sprints that would fit into the Feature set's time frame with a consideration for the students iteration velocity. On the off chance that there wasn't enough time to complete all stories and tasks, the student would re-analyze what stories and tasks could be dropped due to time constraints.
-
-Having feature sets allowed the student to put into perspective what are the major additions to the application and if there was enough time to fully develop those additions.
+When a backlog of user stories is ready the next step is to combine similar stories into feature sets with a set deadline for their completion (As mentioned in \ref{reqgat}). Then each user story and task within is analyzed and given a development time cost and importance to the project. With this, a prioritized backlog is created that is split among the maximum iterations/sprints that fit into the feature set's time frame with a consideration for the students iteration velocity. On the off chance that there wasn't enough time to complete all stories and tasks, the student would re-analyze what stories and tasks could be dropped due to time constraints.
 
 The specifics of when each feature sets deadline was set and how it changed can be seen on a sprint by sprint basis in the implementation section (See \ref{implementation}).
 
