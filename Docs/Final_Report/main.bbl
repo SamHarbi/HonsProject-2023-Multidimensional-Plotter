@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{49}
+\begin{thebibliography}{56}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -51,6 +51,20 @@ StatCounter Global Stats \bibinfo{year}{[n.d.]}\natexlab{}.
 \shownote{(Accessed 4/12/2023).}
 
 
+\bibitem[\protect\citeauthoryear{www.opengl-tutorial.org}{ope}{[n.d.]}]%
+        {openglhome}
+ \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{title}{Home}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{http://www.opengl-tutorial.org/}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/23/2023).}
+
+
 \bibitem[\protect\citeauthoryear{v8.dev}{v8}{[n.d.]}]%
         {v8}
 v8.dev \bibinfo{year}{[n.d.]}\natexlab{}.
@@ -65,9 +79,9 @@ v8.dev \bibinfo{year}{[n.d.]}\natexlab{}.
 \shownote{(Accessed 4/12/2023).}
 
 
-\bibitem[\protect\citeauthoryear{webassembly.org}{web}{[n.d.]}]%
+\bibitem[\protect\citeauthoryear{webassembly.org}{web}{[n.d.]a}]%
         {webassembly}
-webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
+webassembly.org \bibinfo{year}{[n.d.]}\natexlab{a}.
 \newblock \bibinfo{booktitle}{\emph{WebAssembly}}.
 \newblock webassembly.org.
 \newblock
@@ -77,6 +91,20 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \tempurl}
 \newblock
 \shownote{(Accessed 4/12/2023).}
+
+
+\bibitem[\protect\citeauthoryear{webglfundamentals.org}{web}{[n.d.]b}]%
+        {webgl}
+ \bibinfo{year}{[n.d.]}\natexlab{b}.
+\newblock \bibinfo{title}{WebGL Fundamentals}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://webglfundamentals.org/}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/23/2023).}
 
 
 \bibitem[\protect\citeauthoryear{Agarwal and Umphress}{Agarwal and Umphress}{2008}]%
@@ -182,6 +210,20 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \tempurl}
 \newblock
 \shownote{(Accessed 4/12/2023).}
+
+
+\bibitem[\protect\citeauthoryear{De~Vries}{De~Vries}{2019}]%
+        {devries_2019_learn}
+\bibfield{author}{\bibinfo{person}{Joey De~Vries}.} \bibinfo{year}{2019}\natexlab{}.
+\newblock \bibinfo{title}{Learn OpenGL, extensive tutorial resource for learning Modern OpenGL}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://learnopengl.com/}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/23/2023).}
 
 
 \bibitem[\protect\citeauthoryear{Foundation}{Foundation}{2019}]%
@@ -350,6 +392,20 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \showISBNx{978-3-030-44999-5}
 
 
+\bibitem[\protect\citeauthoryear{Ltd}{Ltd}{[n.d.]}]%
+        {jgraphltd_diagram}
+\bibfield{author}{\bibinfo{person}{JGraph Ltd}.} \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{title}{Diagram Software and Flowchart Maker}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://www.diagrams.net/}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/23/2023).}
+
+
 \bibitem[\protect\citeauthoryear{MathWorks}{MathWorks}{[n.d.]}]%
         {mathworks_3d}
 \bibfield{author}{\bibinfo{person}{MathWorks}.} \bibinfo{year}{[n.d.]}\natexlab{}.
@@ -406,9 +462,23 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \shownote{(Accessed 4/22/2023).}
 
 
-\bibitem[\protect\citeauthoryear{Mozilla}{Mozilla}{2019}]%
+\bibitem[\protect\citeauthoryear{Mozilla}{Mozilla}{2019a}]%
+        {mozilla_2019_mdn}
+\bibfield{author}{\bibinfo{person}{Mozilla}.} \bibinfo{year}{2019}\natexlab{a}.
+\newblock \bibinfo{title}{MDN Web Docs}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://developer.mozilla.org/en-US/}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/23/2023).}
+
+
+\bibitem[\protect\citeauthoryear{Mozilla}{Mozilla}{2019b}]%
         {mozilla_2019_webgl}
-\bibfield{author}{\bibinfo{person}{Mozilla}.} \bibinfo{year}{2019}\natexlab{}.
+\bibfield{author}{\bibinfo{person}{Mozilla}.} \bibinfo{year}{2019}\natexlab{b}.
 \newblock \bibinfo{title}{WebGL: 2D and 3D graphics for the web}.
 \newblock
 \newblock
@@ -432,6 +502,20 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \tempurl}
 \newblock
 \shownote{(Accessed 4/13/2023).}
+
+
+\bibitem[\protect\citeauthoryear{MyBib}{MyBib}{2018}]%
+        {mybib_2018_mybib}
+\bibfield{author}{\bibinfo{person}{MyBib}.} \bibinfo{year}{2018}\natexlab{}.
+\newblock \bibinfo{title}{MyBib – A New FREE APA, MLA, Harvard Bibliography Generator}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://www.mybib.com}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/23/2023).}
 
 
 \bibitem[\protect\citeauthoryear{Nicoll and Keogh}{Nicoll and Keogh}{2019}]%
@@ -497,6 +581,20 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \tempurl}
 \newblock
 \shownote{(Accessed 4/12/2023).}
+
+
+\bibitem[\protect\citeauthoryear{Overleaf}{Overleaf}{2019}]%
+        {overleaftheonlinelatexeditor_2019_overleaf}
+\bibfield{author}{\bibinfo{person}{the Online LaTeX~Editor Overleaf}.} \bibinfo{year}{2019}\natexlab{}.
+\newblock \bibinfo{title}{Overleaf, Online LaTeX Editor}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://www.overleaf.com/}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/23/2023).}
 
 
 \bibitem[\protect\citeauthoryear{Segal and Akeley}{Segal and Akeley}{2022}]%
