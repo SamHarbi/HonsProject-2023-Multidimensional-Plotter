@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<head>
+    <title>Web Plotter</title>
+    <link rel="stylesheet" href="pico.min.css">
+</head>
+
+<body>
+    <main class="container">
+        <h1>Hello! 👋</h1>
+        <h1>Thank you for accepting to user test my Honors Project</h1>
+
+        <p>My name is Sameer and I am making a Web-Based Tool for visualising / creating charts of multi-dimensional data in a 3D scene. 
+            Visualising data is often an important first step in data analysis and can help indentify important patterns in data. 
+            Consider the following table below as an example:</p>
+
+            <blockquote>
+            <h4>Nutritional Information of Popular Cereals (Single Serving) (Not Real Data)</h4>
+            <div style="overflow: auto; height: 200px;">
+            <table>
+                <thead>
+                    <th> Protein amount (g)</th>
+                    <th> Sugar Content (g) </th>
+                    <th> Calories (kcal) </th>
+                </thead>
+                <thead>
+                    <th> 5 </th>
+                    <th> 2 </th>
+                    <th> 11 </th>
+                </thead>
+                <thead>
+                    <th> 6 </th>
+                    <th> 9 </th>
+                    <th> 33 </th>
+                </thead>
+                <thead>
+                    <th> 3 </th>
+                    <th> 2 </th>
+                    <th> 9 </th>
+                </thead>
+                <thead>
+                    <th> 1 </th>
+                    <th> 2 </th>
+                    <th> 7 </th>
+                </thead>
+                <thead>
+                    <th> 6 </th>
+                    <th> 9 </th>
+                    <th> 33 </th>
+                </thead>
+                <thead>
+                    <th> 3 </th>
+                    <th> 1 </th>
+                    <th> 6 </th>
+                </thead>
+                <thead>
+                    <th> 5 </th>
+                    <th> 2 </th>
+                    <th> 11 </th>
+                </thead>
+                <thead>
+                    <th> 2 </th>
+                    <th> 5 </th>
+                    <th> 17 </th>
+                </thead>
+                <thead>
+                    <th> 1 </th>
+                    <th> 5 </th>
+                    <th> 16 </th>
+                </thead>
+                <thead>
+                    <th> 0 </th>
+                    <th> 5 </th>
+                    <th> 15 </th>
+                </thead>
+                <thead>
+                    <th> 6 </th>
+                    <th> 1 </th>
+                    <th> 9 </th>
+                </thead>
+                <thead>
+                    <th> 3 </th>
+                    <th> 2 </th>
+                    <th> 9 </th>
+                </thead>
+                <thead>
+                    <th> 5 </th>
+                    <th> 2 </th>
+                    <th> 11 </th>
+                </thead>
+                <thead>
+                    <th> 1 </th>
+                    <th> 9 </th>
+                    <th> 28 </th>
+                </thead>
+                <thead>
+                    <th> 8 </th>
+                    <th> 2 </th>
+                    <th> 14 </th>
+                </thead>
+            </table>
+            <i> 84 More Entries... </i>
+        </div>
+        </blockquote>
+        <p>That's a <strong>LOT</strong> of data isn't it? Finding a pattern manually would be a difficult and long process. Even more so for bigger datasets. 
+        but what if we tried charting the data in a 3D graph instead? </p>
+        
+        <div class="grid">
+            <div>
+                <p>Considering that x, y, z correlate to the Protein, Sugar and Calories Amount- It is instantly obvious that there is a linear relationship in the data. Larger calories 
+                    per serving correlate with larger sugar content, with protein amounts not affecting the outcome too much. Needless to say, this chart saved us a lot of time </p>
+            </div>
+            <div> 
+                <img src="example_plot.PNG" height="80%">
+            </div>
+        </div>
+        
+        <h1>My Project aim's to make it easy to explore and chart this kind of data</h1>
+
+        <p>As part of a project like this it is important to have it iteratively tested by others to identify any shortcomings or confusing aspects from the user's side.
+            This tool is designed to be usuable with any specialist knowledge beyond an understanding of how charts work mathematically. 
+        </p>
+
+        <h1> How to Test the Application </h1>
+
+        <article>
+            <h1>Step 1</h1>
+            <p>Please read through the Participant Information Sheet that describes how and what submitted data would be used for and the general guidance to be aware of, if you agree; Please
+                download, sign and email the consent form to <a>szalharbi@dundee.ac.uk</a> Please also email if you need help or are unable to sign the consent electronically. 
+            </p>
+            <li><a href="Participant_Info.pdf" download> Participant Information Sheet </a></li>
+            <li><a href="Informed-Consent-Form.docx" download> Consent Form </a></li>
+            <li><a href="Informed-Consent-Form.pdf" download> Alternative PDF Consent Form </a></li>
+        </article>
+
+        <article>
+            <h1>Step 2</h1>
+
+            <p> Please open the following questionaire and follow the instruction there: <a href="https://forms.office.com/e/CeHEJpQZu5"> https://forms.office.com/e/CeHEJpQZu5 </a> </p>
+            <p> Please also concurrently access the Application here: <a href="https://web-plotter-app-ajqwh.ondigitalocean.app/"> https://web-plotter-app-ajqwh.ondigitalocean.app/ </a></p> 
+            <p>You can find the data shown here and more test data to download below: </p>
+            <ul>
+                <li><a href="minimalTestData.csv" download> Minimal Test Data - Example Data - 1 Point </a></li>
+                <li><a href="DataCube.csv" download> DataCube - Example Data - 900 Points </a></li>
+                <li><a href="NegativeData.csv" download> NegativeData - Example Data - 100 Points </a></li>
+                <li><a href="HiddenData.csv" download> Hidden Data - Example Data - 1 point</a></li>
+
+                <li><a href="CoffeeTestData.csv" download> Coffee Effect on Programming - Example Data - 5 Points </a></li>
+                <li><a href="CerealData-Small.csv" download> Nutritional Information of Popular Cereals (Single Serving) - Example Data - 100 Points </a></li>
+                <li><a href="TerrainData.csv" download> Generated Terrain Data - Example Data - 27,000 Points </a></li>
+            </ul>
+        </article>
+        
+        <article>
+            <h1>Step 3</h1>
+            <p> Once you submit the questionaire you're done with testing, Thank you once again! Your help is vital for driving this project forward. </p>
+        </article>
+        
+    </main>
+</body>
