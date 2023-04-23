@@ -4,8 +4,6 @@
 
 //Imports will give errors if not using parcel
 // @ts-ignore
-import { Console } from "console";
-// @ts-ignore
 import fs from "fs";
 // @ts-ignore
 import path from "path";
@@ -94,7 +92,6 @@ export async function load_OBJ(model: string) {
     Combined[1] = Combined[1].concat(Indicies);
     Combined[2] = Combined[2].concat(Normals);
     Combined[3] = Combined[3].concat(Textures);
-    console.log(Combined);
 
     return Combined;
 
@@ -117,7 +114,7 @@ export async function read_CSV() {
                 try {
                     DATASET = csv.toObjects(reader.result); //Save to Object
                 } catch (error) {
-                    alert("Wrong file format, Please Uplaod a .csv file");
+                    alert("Wrong file format, Please Upload a .csv file");
                 }
             });
             reader.readAsText(file);
@@ -139,7 +136,6 @@ export function InstantReadCSV() {
         reader.addEventListener("load", () => {
             try {
                 DATASET = csv.toObjects(reader.result); //Save to Object
-                console.log(DATASET);
             } catch (error) {
                 alert("Wrong file format, Please Upload a .csv file");
             }
