@@ -12,7 +12,7 @@ This phase itself though consisted of the following key sections.
 The student decided to settle on a technology stack during this phase. Which although would still be open to changes should they be needed if any problems arose during prototyping (See \ref{prototype}), nevertheless set what the stack should be otherwise. This decision was done by comparing valid options built up from those identified during the research phase (See \ref{toolsntech}) The selection and justification of every element of the stack follow below:
 
 \paragraph{Client-Side run application}
-This project was not expected to require any server resources such as central database access. As such, client-side only was chosen to allow the student to focus on a single code base. This also would simplify testing as there would be less infrastructure moving parts that could break.
+This project was not expected to require any server resources such as central database access. As such, client-side only was chosen to allow the student to focus on a single code base. This also would simplify testing as there would be less infrastructure moving parts that could break and simplified data security considerations (See \ref{datasecurity}).
 
 \paragraph{Browser Run Enviroment}
 Chosen for its greater accessibility over downloaded options and extensive support among devices without the need for any extra environment download by the user. Only a browser is needed which is usually preinstalled on most internet capable Operating Systems.
@@ -168,6 +168,20 @@ The user would be able to just click a button or drag their mouse to move the ca
 
 \subsubsection{User Controls}
 The design created by the student in the last section (\ref{visdesign}) requires a robust design of user controls. The design and implementation for UI then followed an agile approach, where UI was designed and implemented as the need arose and the rendering counterpart could support it.
+
+\subsection{Data Security} \label{datasecurity}
+This being a project that will end up processing data, there were legal and ethical considerations that needed to be addressed. Under the UK Data Protection Act 2018 \cite{govuk_2018_data} there are strict rules and regulations that control how personal information is used. It was not expected that the application created would need to process any personal data specifically, though the ability to upload any file did mean that the application might be used with personal data. Thus, it would have been important to ensure that the Application did not violate data protection regulations regardless of what data was used. To that end, each principle was analyzed in the context of the application being developed.
+
+\begin{itemize}
+    \item "Information is used fairly, lawfully and transparently" \cite{govuk_2018_data} The Application should be transparent in what is done with data. This is important in the context of the following points.
+    \item "Information is used for specific, explicit purposes" \cite{govuk_2018_data} Any data uploaded should only be used for the purpose specified, in this case, plotting on a graph.
+    \item "Information is used in a way that is adequate, relevant and limited to only what is necessary" \cite{govuk_2018_data} For this application, this would mean not using data beyond what the user has been told the data will be used for.
+    \item "Information is accurate and, where necessary, kept up to date" \cite{govuk_2018_data} This is not fully relevant as the application is not expected to store data. Though there may be features added to the application that will require compliance in the future (See Databases in \ref{futurework}). Though even without those additions data should not be misrepresented by the application, it should be graphed with accuracy.
+    \item "Information is kept for no longer than is necessary" \cite{govuk_2018_data} This is also expected to not be a problem unless some additions as above change this (See Databases in \ref{futurework}).
+    \item "Information is handled in a way that ensures appropriate security, including protection against unlawful or unauthorized processing, access, loss, destruction or damage" \cite{govuk_2018_data} The Application should generally ensure that the data is safe.
+\end{itemize}
+
+Compliance with these points was relatively straight forward. Having decided on no server (to off-load processing) nor permanent storage component (Database, etc.) minimized most risks when working with data (See \ref{techstack} for more details). Though these points will have to be kept in mind and revisited for future development (See \ref{futurework} in particular).
 
 \subsection{Summary}
 This design stage was critical in finalizing the last big questions that needed to be answered before development. With the application of the prototype phase (See \ref{prototype}), the student gained experience and confidence in working with the tools selected, meaning development could proceed much more smoothly.

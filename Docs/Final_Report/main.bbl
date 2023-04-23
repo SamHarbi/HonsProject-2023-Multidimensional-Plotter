@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{48}
+\begin{thebibliography}{49}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -607,6 +607,20 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{}.
 \tempurl}
 \newblock
 \shownote{(Accessed 4/13/2023).}
+
+
+\bibitem[\protect\citeauthoryear{UK}{UK}{2018}]%
+        {govuk_2018_data}
+\bibfield{author}{\bibinfo{person}{GOV UK}.} \bibinfo{year}{2018}\natexlab{}.
+\newblock \bibinfo{title}{Data Protection Act}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://www.gov.uk/data-protection}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{(Accessed 4/23/2023).}
 
 
 \bibitem[\protect\citeauthoryear{Unterguggenberger, Kerbl, and Wimmer}{Unterguggenberger et~al\mbox{.}}{2023}]%
