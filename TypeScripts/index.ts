@@ -442,6 +442,7 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
     let moveAxis = C.getMoveAxis(); // 0:x y:1 z:2
     glmath.mat4.translate(global_point_model, global_point_model, [0 - 2 * moveAxis[2], 0 - 2 * moveAxis[1], 0 - 2 * moveAxis[0]]);
 
+    // For every point to render in dataset 
     for (let i = 0; i < DATASET.length; i++) {
 
         let indexVals = C.getIndexValues(); // 0:x 1:y 2:z 3:c 4:a
@@ -462,6 +463,7 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
             continue;
         }
 
+        // Set sizing and position
         let point_model = glmath.mat4.create();
         glmath.mat4.copy(point_model, global_point_model);
         glmath.mat4.translate(point_model, point_model, [z, y, x]);
@@ -469,19 +471,20 @@ function RenderData(global_model: glmath.mat4, pickingPass: boolean) {
         let scaledSize = C.getPointSize() / C.getCombinedZoom();
         glmath.mat4.scale(point_model, point_model, [scaledSize, scaledSize, scaledSize]);
 
-
+        // Encode colour as id / i if picking pass
         if (pickingPass == true) {
             gl.uniform3fv(idUniformID, [(i & 0x000000FF) >> 0, (i & 0x0000FF00) >> 8, (i & 0x00FF0000) >> 16]);
         } else {
             gl.uniform3fv(idUniformID, [-1, -1, -1]);
         }
 
+        // If selected change how point looks
         if (selectedPointID == i && pickingPass == false) {
             gl.uniform1i(lightToggleUniformID[0], 1);
             gl.uniform3f(colourUniformID[0], 0, 0, 0);
             glmath.mat4.scale(point_model, point_model, [1.2, 1.2, 1.2]);
         }
-        else if (!Number.isNaN(a) && pickingPass == false) {
+        else if (!Number.isNaN(a) && pickingPass == false) { // Apply 4th dimension if available into colour uniform 
             gl.uniform1i(lightToggleUniformID[0], 0); // Don't Use Light
             gl.uniform3f(colourUniformID[0], Math.abs(SquashNumber(a)), Math.abs(SquashNumber(a)), Math.abs(SquashNumber(a)));
         } else if (pickingPass == false) {
@@ -506,7 +509,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     // _____________
 
     /* Really simple way to scale the axis values automatically, needs to re-init axis values though
-    This will need to be revisted to implement correctly 
+    This will need to be revisted to implement in a better way
     if(DATASET[0] != undefined)
     {
         let max_x = String(Object.values(DATASET[0])[0]);
@@ -545,6 +548,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     glmath.mat4.scale(global_model, global_model, [1.8, 1.8, 1.8]);
     glmath.mat4.translate(global_model, global_model, [-0.55, -0.55, -0.55]);
 
+    // First axis label
     let LetterModel = glmath.mat4.create();
     glmath.mat4.copy(LetterModel, global_model);
     glmath.mat4.scale(LetterModel, LetterModel, [0.03, 0.03, 1]);
@@ -553,6 +557,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     AxisLabels[0].render();
 
+    // Setup and Render axis names 
     if (AxisNames[0][0] != undefined) {
 
         let AxisNameModel = glmath.mat4.create();
@@ -579,7 +584,11 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
     glmath.mat4.translate(singleAxisModel, singleAxisModel, [0, 0.6, 0]);
 
     /*
-        This affects how many glyphs are rendered based on the zoom level
+        There is a little bit of code repetition here which is not ideal. But what the following does is as follows
+
+        1 - render axis label (X, Y or Z)
+        2 - render 10 line values and apply any modification
+        repeat for 2 axes
     */
 
     for (let i = 1; i < 10; i++) {
@@ -602,7 +611,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         }
     }
 
-
+    // Second axis label
     glmath.mat4.translate(LetterModel, LetterModel, [-40, 40, 0]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     gl.uniform3f(colourUniformID[1], altColour[0], altColour[1], altColour[2]);
@@ -653,7 +662,7 @@ function RenderAxisText(global_model: glmath.mat4, view: glmath.mat4) {
         }
     }
 
-
+    //third axis label
     glmath.mat4.translate(LetterModel, LetterModel, [-5, -45, 1]);
     gl.uniformMatrix4fv(modelUniformID[1], false, LetterModel);
     gl.uniform3f(colourUniformID[1], altColour[0], altColour[1], altColour[2]);
@@ -762,7 +771,7 @@ function RenderStructure(global_model: glmath.mat4) {
     glmath.mat4.translate(glyphModel, glyphModel, [-0.55, -0.55, -0.55]);
 
 
-    // Create a local and global model to split transformations applied to Axis Lines
+    // Create a local model to split transformations applied to Axis Lines
     let Axismodel = glmath.mat4.create();
 
     for (let i = 0; i < 11; i++) {

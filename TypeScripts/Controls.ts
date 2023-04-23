@@ -67,6 +67,7 @@ export class Controls {
     updateAxisNamesFunc: Function; // FUnction to run when names need to be updated 
     getPixelsFunc: Function; // On mouse click, get pixel data from screen 
 
+    // Init everything to default values
     Controls(functionToRunOnAxisUpdate: Function, functionToRunOnAxisNamesUpdate: Function, functionToRunOnMouseClick: Function) {
         this.x_rotation = 0;
         this.y_rotation = 0;
@@ -162,7 +163,6 @@ export class Controls {
         if (DATASET[0] != undefined && this.updateNames == true) {
             this.updateAxisNamesFunc(); // Init Axis Names
             this.updateNames = false;
-            console.log(this.cSelect.value);
             if (Object.keys(DATASET[0]).length > 3 || this.cSelect.value != "None") {
                 this.ShowColourControls(true);
             } else {
@@ -269,8 +269,6 @@ export class Controls {
                 //this.xSelect.innerHTML = this.xSelect.innerHTML + "<option value='" + names[i] + "'>" + names[i] + "</option>";
                 this.dimensionOptions[i] = names[i];
             }
-
-            console.log(this.dimensionOptions);
 
             this.table = this.table + "</tr></thead><tbody>";
 
