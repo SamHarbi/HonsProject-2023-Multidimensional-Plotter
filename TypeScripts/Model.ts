@@ -2,9 +2,8 @@
     This is a class definition for a Model Object, Which act's as a store and renderer for a 3D object
 */
 
-import Arial from '../fonts/Atlas/Arial.json' //Needs refactoring for sure
 // @ts-ignore
-import Arial_Atlas from "../fonts/Atlas/no_texture.png"
+import NoTexture from "../fonts/Atlas/no_texture.png"
 
 export class Model {
 
@@ -22,6 +21,9 @@ export class Model {
     gl: WebGLRenderingContext;
     drawmode: number;
 
+    /*
+        Set Attributes on creation
+    */
     constructor(newPositionAttributeID: GLint, newNormalAttributeID: GLint, newTextureAttributeID: GLint, newDrawMode: number) {
         this.positionAttributeID = newPositionAttributeID;
         this.normalAttributeID = newNormalAttributeID;
@@ -30,6 +32,13 @@ export class Model {
         this.drawmode = newDrawMode;
     }
 
+    /*
+        Initializes model with rendering data
+        Based on and copies some comments for clarity from: 
+        https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html
+        https://webglfundamentals.org/webgl/lessons/webgl-indexed-vertices.html
+        https://webglfundamentals.org/webgl/lessons/webgl-3d-textures.html
+    */
     init(vertexData: number[], indexData: number[], normalData: number[], textureCord: number[], glRef: WebGLRenderingContext, texImageURL?: string) {
 
         this.gl = glRef;
@@ -90,7 +99,7 @@ export class Model {
             this.image.src = texImageURL; //Refactor
         }
         else {
-            this.image.src = Arial_Atlas;
+            this.image.src = NoTexture;
         }
         this.image.addEventListener('load', this.textureLoaded.bind(null, this.gl, this.image, this.texture), false);
 
@@ -136,6 +145,13 @@ export class Model {
         //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     }
 
+    /*
+        renders model as per data assigned with init with rendering data
+        Based on and copies some comments for clarity from: 
+        https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html
+        https://webglfundamentals.org/webgl/lessons/webgl-indexed-vertices.html
+        https://webglfundamentals.org/webgl/lessons/webgl-3d-textures.html
+    */
     render() {
 
         // Bind the position buffer.

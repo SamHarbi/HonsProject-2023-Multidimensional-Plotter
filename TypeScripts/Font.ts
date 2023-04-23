@@ -31,6 +31,7 @@ export class Font {
     short_glyph: number[][];
     thin_glyph: number[][];
 
+    // Initialize everything including which font to use
     constructor(set_font_option: number, set_gl: WebGLRenderingContext, loadedGlyph: number[][]) {
         this.font_pointers = [Arial_Atlas, ArialBold_Atlas];
         this.font_data_pointers = [Arial, Arial_Bold];
