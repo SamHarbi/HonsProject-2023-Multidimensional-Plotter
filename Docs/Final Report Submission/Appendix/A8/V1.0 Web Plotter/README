@@ -1,4 +1,9 @@
 # V1 Application
 
-Ready for User testing phase 1
+Ready for User testing phase 1, To run:
+1- Install dependencies with ' npm install '
+2- To build a static version that can be hosted, run ' npx parcel build index.html '
+3- To run locally as a development server, run ' npx parcel index.html '
+
+The application files can then be found in the dist folder
 
