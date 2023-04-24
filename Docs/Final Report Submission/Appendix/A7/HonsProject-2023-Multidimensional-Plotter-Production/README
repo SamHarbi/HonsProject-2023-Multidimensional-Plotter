@@ -1,6 +1,6 @@
 # Production Branch
 
-This is a copy of the live hosted application. To run it, do the following:
+This is a copy of the latest live hosted application. To run it, do the following:
 
 1- Install dependencies with ' npm install '
 2- To build a static version that can be hosted, run ' npx parcel build index.html '
