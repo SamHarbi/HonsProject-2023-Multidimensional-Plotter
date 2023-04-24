@@ -1,0 +1,10 @@
+This is a test to setup a lot of the basic functionality any 3D WebGL Project might need such as:
+
+ 1- Model Importing 
+ 2- Basic Flat Shading 
+ 3- 3D Mathematics and View, Projection and model system for rendering 
+ 4- Multiple Object rendering 
+ 5- Movement of Objects 
+ 6- General WebGL Code Structure 
+
+Download TypeScript and Parcel dependencies with ' npm install ' then run with ``` npx parcel index.html ```
