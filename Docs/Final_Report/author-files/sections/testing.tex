@@ -49,14 +49,41 @@ These datasets also served to provide a wide range of example data for user test
 \subsection{User Testing} \label{usertest1}
 User testing was an important step in gathering requirements and paving the way for further development beyond the most basic, fundamental requirements. In total, 2 User testing phases were ran. The first one after the completion of the MVP feature set post Sprint 5 and the second one after the completion of the further additions feature set and user testing 1 feature set post sprint 8.
 
-The process for these two phases revolved around an anonymous questionnaire with data collected as per the prepared ethics documentation for honours students.
-To support the testing process, the student created a simple static webpage to act as a central source for all links to the application, the questionnaire, testing data and ethics documentation that guided a tester through the entire process. Having this page really simplified testing as the student would only need to share a single link which self-contained everything needed. The page itself and HTML source is available to view in the appendix \ref{A5}.
+The process for these two phases revolved around an anonymous questionnaire with data collected as per the prepared ethics documentation for honours students (See all ethics documentation at Appendix \ref{A13}). To support the testing process, the student created a simple static webpage to act as a central source for all links to the application, the questionnaire, testing data and ethics documentation that guided a tester through the entire process. Having this page really simplified testing as the student would only need to share a single link which self-contained everything needed. The page itself and HTML source is available to view in the appendix \ref{A5}.
 
-The questionnaires themselves asked a tester to download a specific dataset and use the application to identify some factor or knowledge placed in the data by the student. The datasets were also designed in such a way that the questions could best be solved if the tester used some specific controls, or understood some aspect of the graph that the test focused on. This was also followed by the testers personal thoughts on a variety of questions concerning usability and how they went about solving the problems set out.
+The questionnaires themselves asked a tester to download a specific dataset and use the application to identify some factor or knowledge placed in the data by the student. The datasets were also designed in such a way that the questions could best be solved if the tester used some specific controls, or understood some aspect of the graph that the test focused on. This was then followed by the testers personal thoughts on a variety of questions concerning usability and how they went about solving the problems set out. An example task is as follows:
 
-This allowed the student to construct a critical understanding of how real users used the application to solve typical problems the application was designed in mind with. Were users able to get the correct answer? What controls did they use? Did they use the controls as the student expected? Though it should be mentioned that the results likely aren't fully representative of the demographic tested due to the limited number of testers. Of which, a majority were computing students. This likely shifted results for usability specifically. Though ideally, testing tried to represent college students who were likely to work with data and all Adults in general.
+\begin{displayquote}
+    How large is the slice of terrain shown in terms of length in the x and z axis? Also alternatively, what is the highest point shown? Or the lowest. This is in the Terrain dataset. (User Testing Phase 1, Question 9)
+\end{displayquote}
 
-The responses collected were then analyzed and turned into user stories to be developed, with the two testing phases each forming the User Testing 1 feature set and User Testing 2 Feature set respectively. The following give specific detail of each phase and the analysis performed on user stories. All questionnaire questions and responses are available for viewing at Appendix \ref{A6}.
+The full list of questions from both testing phases can be viewed in appendix \ref{A6}.
+
+This questions gave the testers a real task to do which helped focus responses and allowed the student to construct a critical understanding of how real users used the application to solve typical problems the application was designed in mind with. Were users able to get the correct answer? What controls did they use? Did they use the controls as the student expected? Though it should be mentioned that the results likely aren't fully representative of the demographic tested due to the limited number of testers. Of which, a majority were computing students. This likely shifted results for usability specifically. Though ideally, testing tried to represent college students who were likely to work with data and all Adults in general.
+
+The responses collected were then analyzed and turned into user stories to be developed, with the two testing phases each forming the User Testing 1 feature set and User Testing 2 Feature set respectively. The following give specific detail of each phase and the analysis performed on user stories. But in general, analysis followed a process where a users answer to a question or suggestion such as:
+
+\begin{displayquote}
+    "Highest point - 6 Had trouble finding the lowest point Z-10 X-12" (Anonymous Tester 3, User Testing Phase 1, Question 9)
+\end{displayquote}
+
+Would then imply that there may be opportunities to make point identification easier, the student then would research ways to solve this problem- possibly taking inspiration from other user answers such as:
+
+\begin{displayquote}
+    "If you add the ability to highlight a data point you could also have the values highlight with them aswell" (Anonymous Tester 4, User Testing Phase 1, Question 21)
+\end{displayquote}
+
+To then create a user story:
+
+\begin{displayquote}
+    As a Tester, I want to be able to
+    click on a data point and have
+    the value of that point be displayed (Story 53, See Table \ref{sprint6})
+\end{displayquote}
+
+Once the story is made, the student would consider the story's priority values as per section \ref{scheduling} with MoSCoW being based on how critical the issue that this story would solve is and how many testers mentioned issues that could be solved by the implementation of this story.
+
+The process as above was applied to every response to generate stories. The following sections then give a high level overview of the resultant stories that arose from this analysis done in each of the phases. All questionnaire questions and responses are also available to view at Appendix \ref{A6}.
 
 \subsubsection{User Testing 1 - Starting February 17th} \label{usertestanalysis}
 This was setup and ran right after sprint 5 was complete. The focus for this testing phase was to identify what controls were still missing to help users do real work using the application. The questionnaire was created to that end and user testing began. The user testing was then concluded a week later with 5 total responses. In general responses were positive, though there were some trending limitations and gripes across testers:
@@ -118,7 +145,7 @@ Some notable analysis notes on user stories are as follows:
 
 In summary, this testing phase has made a number of important points very clear for the application. The functionality that is there is very successful and fixes almost all problems previously faced by by testers during the first test phase. Except for the 4th dimension functionality, the application implements all needed controls and functionality to be a successful analysis tools for the questions poised to testers. The main drawbacks though are a number of bugs within the UI and within the renderer. The bugs within the UI almost all stem from incorrect management of state edge cases and is the first time a precedent is set to justify bringing in outside tools for the direct sake of the user experience quality. Otherwise, when this problem was last visited this important precedent was missing (See the refactoring discussion during sprint 5, \ref{s5}).
 
-\subsection{Further Improvements Feature Set}
+\subsection{Further Improvements Feature Set} \label{furtherimprov}
 The further improvement feature sets were created to encompass all created tasks that did not directly link back to a suggestion or issue mentioned by testers. These tasks instead focused on what the student thought would be valuable additions based on their research (Similar to how the MVP feature set was created, see \ref{reqgat}) and analysis of user testing trends. 2 of these feature sets were created in total with each being in tandem with the creation of the User testing feature sets (See \ref{usertest1}). These feature sets were considered by the student as an important part of overall evaluation and acted as a culmination of further gathered requirements in the context of user testing.
 
 Further Improvements Feature Set 1 tasks were allocated across the 4 sprints after sprint 4, to be completed in 1 month (On the 1st of April). The set consisted of 6 total tasks and focused on general ideas that the student had to improve the application. Those can be seen per sprint as follows:

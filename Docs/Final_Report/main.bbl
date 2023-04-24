@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{56}
+\begin{thebibliography}{57}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -362,6 +362,17 @@ webassembly.org \bibinfo{year}{[n.d.]}\natexlab{a}.
 \newblock
 \urldef\tempurl%
 \url{https://doi.org/10.1109/IC3.2013.6612229}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Khan, Rehman, Khan, Khan, and Rashid}{Khan et~al\mbox{.}}{2015}]%
+        {articleMoscow}
+\bibfield{author}{\bibinfo{person}{Javed Khan}, \bibinfo{person}{Izaz Rehman}, \bibinfo{person}{Yawar Khan}, \bibinfo{person}{Iftikhar Khan}, {and} \bibinfo{person}{Salman Rashid}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Comparison of Requirement Prioritization Techniques to Find Best Prioritization Technique}.
+\newblock \bibinfo{journal}{\emph{International Journal of Modern Education and Computer Science}}  \bibinfo{volume}{7} (\bibinfo{date}{11} \bibinfo{year}{2015}), \bibinfo{pages}{53--59}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.5815/ijmecs.2015.11.06}
 \showDOI{\tempurl}
 
 
