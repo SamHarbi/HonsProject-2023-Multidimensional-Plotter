@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  24 APR 2023 22:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.22)  25 APR 2023 10:27
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -941,15 +941,12 @@ LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
 [2.2]
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
 (Font)              scaled to size 9.0pt on input line 69.
- [3.3{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/libertine/lbtn_7grukw.enc}] [4.4]) (./author-files/sections/specification.tex
-Underfull \vbox (badness 2837) has occurred while \output is active []
-
- [5.5]
+ [3.3{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/libertine/lbtn_7grukw.enc}] [4.4]) (./author-files/sections/specification.tex [5.5]
 Overfull \hbox (27.24321pt too wide) in paragraph at lines 47--72
  [][] 
  []
 
-<author-files/figures/SingleStoryPath2.png, id=368, 617.30624pt x 222.8325pt>
+<author-files/figures/SingleStoryPath2.png, id=369, 617.30624pt x 222.8325pt>
 File: author-files/figures/SingleStoryPath2.png Graphic file (type png)
 <use author-files/figures/SingleStoryPath2.png>
 Package pdftex.def Info: author-files/figures/SingleStoryPath2.png  used on input line 104.
@@ -957,11 +954,8 @@ Package pdftex.def Info: author-files/figures/SingleStoryPath2.png  used on inpu
 
 Class acmart Warning: A possible image without description on input line 107.
 
-
-Underfull \vbox (badness 1558) has occurred while \output is active []
-
- [6.6 <./author-files/figures/SingleStoryPath2.png>]) (./author-files/sections/design.tex
-<author-files/figures/logo-ts-webgl.PNG, id=383, 520.19344pt x 217.5628pt>
+[6.6 <./author-files/figures/SingleStoryPath2.png>]) (./author-files/sections/design.tex
+<author-files/figures/logo-ts-webgl.PNG, id=384, 520.19344pt x 217.5628pt>
 File: author-files/figures/logo-ts-webgl.PNG Graphic file (type png)
 <use author-files/figures/logo-ts-webgl.PNG>
 Package pdftex.def Info: author-files/figures/logo-ts-webgl.PNG  used on input line 8.
@@ -971,14 +965,17 @@ Package pdftex.def Info: author-files/figures/logo-ts-webgl.PNG  used on input l
 Class acmart Warning: A possible image without description on input line 11.
 
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+Underfull \vbox (badness 1173) has occurred while \output is active []
 
-[7.7 <./author-files/figures/logo-ts-webgl.PNG>]
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [7.7 <./author-files/figures/logo-ts-webgl.PNG>]
 Overfull \hbox (2.21016pt too wide) in paragraph at lines 39--40
 \T1/LinuxLibertineT-TLF/m/n/9 (-20) pile and op-ti-mize Type-Script into runnable by the browser JavaScript.
  []
 
-<author-files/figures/tri.png, id=410, 735.49782pt x 472.76625pt>
+<author-files/figures/tri.png, id=411, 735.49782pt x 472.76625pt>
 File: author-files/figures/tri.png Graphic file (type png)
 <use author-files/figures/tri.png>
 Package pdftex.def Info: author-files/figures/tri.png  used on input line 65.
@@ -986,7 +983,7 @@ Package pdftex.def Info: author-files/figures/tri.png  used on input line 65.
 
 Class acmart Warning: A possible image without description on input line 68.
 
-<author-files/figures/Monkey-Test2.png, id=412, 500.62032pt x 314.67563pt>
+<author-files/figures/Monkey-Test2.png, id=413, 500.62032pt x 314.67563pt>
 File: author-files/figures/Monkey-Test2.png Graphic file (type png)
 <use author-files/figures/Monkey-Test2.png>
 Package pdftex.def Info: author-files/figures/Monkey-Test2.png  used on input line 75.
@@ -997,7 +994,7 @@ Class acmart Warning: A possible image without description on input line 78.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<author-files/figures/UML_Prototype2fin.png, id=413, 944.52875pt x 565.11125pt>
+<author-files/figures/UML_Prototype2fin.png, id=414, 944.52875pt x 565.11125pt>
 File: author-files/figures/UML_Prototype2fin.png Graphic file (type png)
 <use author-files/figures/UML_Prototype2fin.png>
 Package pdftex.def Info: author-files/figures/UML_Prototype2fin.png  used on input line 82.
@@ -1006,7 +1003,7 @@ Package pdftex.def Info: author-files/figures/UML_Prototype2fin.png  used on inp
 Class acmart Warning: A possible image without description on input line 85.
 
 [8.8 <./author-files/figures/tri.png>]
-<author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png, id=436, 562.1pt x 421.575pt>
+<author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png, id=437, 562.1pt x 421.575pt>
 File: author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png Graphic file (type png)
 <use author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png>
 Package pdftex.def Info: author-files/figures/SetMarkerPropertiesExample_01_MATLAB.png  used on input line 139.
@@ -1015,7 +1012,7 @@ Package pdftex.def Info: author-files/figures/SetMarkerPropertiesExample_01_MATL
 
 Class acmart Warning: A possible image without description on input line 142.
 
-<author-files/figures/worldnavblender.png, id=439, 419.31656pt x 359.09157pt>
+<author-files/figures/worldnavblender.png, id=440, 419.31656pt x 359.09157pt>
 File: author-files/figures/worldnavblender.png Graphic file (type png)
 <use author-files/figures/worldnavblender.png>
 Package pdftex.def Info: author-files/figures/worldnavblender.png  used on input line 146.
@@ -1055,7 +1052,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 Class acmart Warning: \vspace should only be used to provide space above/below surrounding objects on input line 166.
 
 [10.10{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-4.enc}{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc} <./author-files/figures/worldnavblender.PNG>]) (./author-files/sections/implementation.tex
-<author-files/figures/glyphset.png, id=496, 342.27875pt x 125.46875pt>
+<author-files/figures/glyphset.png, id=498, 342.27875pt x 125.46875pt>
 File: author-files/figures/glyphset.png Graphic file (type png)
 <use author-files/figures/glyphset.png>
 Package pdftex.def Info: author-files/figures/glyphset.png  used on input line 24.
@@ -1064,7 +1061,7 @@ Package pdftex.def Info: author-files/figures/glyphset.png  used on input line 2
 
 Class acmart Warning: A possible image without description on input line 27.
 
-<author-files/figures/glyphstruct.png, id=497, 282.05376pt x 112.42pt>
+<author-files/figures/glyphstruct.png, id=499, 282.05376pt x 112.42pt>
 File: author-files/figures/glyphstruct.png Graphic file (type png)
 <use author-files/figures/glyphstruct.png>
 Package pdftex.def Info: author-files/figures/glyphstruct.png  used on input line 31.
@@ -1073,7 +1070,7 @@ Package pdftex.def Info: author-files/figures/glyphstruct.png  used on input lin
 Class acmart Warning: A possible image without description on input line 34.
 
 [11.11 <./author-files/figures/glyphset.png> <./author-files/figures/glyphstruct.png>]
-<author-files/figures/Fontv1.png, id=513, 393.47pt x 335.2525pt>
+<author-files/figures/Fontv1.png, id=515, 393.47pt x 335.2525pt>
 File: author-files/figures/Fontv1.png Graphic file (type png)
 <use author-files/figures/Fontv1.png>
 Package pdftex.def Info: author-files/figures/Fontv1.png  used on input line 48.
@@ -1082,7 +1079,7 @@ Package pdftex.def Info: author-files/figures/Fontv1.png  used on input line 48.
 
 Class acmart Warning: A possible image without description on input line 51.
 
-<author-files/figures/fontprocess.png, id=514, 462.72874pt x 368.37625pt>
+<author-files/figures/fontprocess.png, id=516, 462.72874pt x 368.37625pt>
 File: author-files/figures/fontprocess.png Graphic file (type png)
 <use author-files/figures/fontprocess.png>
 Package pdftex.def Info: author-files/figures/fontprocess.png  used on input line 55.
@@ -1090,7 +1087,7 @@ Package pdftex.def Info: author-files/figures/fontprocess.png  used on input lin
 
 Class acmart Warning: A possible image without description on input line 58.
 
-<author-files/figures/Pretest1progress.png, id=515, 1428.08531pt x 705.38531pt>
+<author-files/figures/Pretest1progress.png, id=517, 1428.08531pt x 705.38531pt>
 File: author-files/figures/Pretest1progress.png Graphic file (type png)
 <use author-files/figures/Pretest1progress.png>
 Package pdftex.def Info: author-files/figures/Pretest1progress.png  used on input line 67.
@@ -1111,7 +1108,7 @@ Class acmart Warning: \vspace should only be used to provide space above/below s
 Underfull \vbox (badness 1077) has occurred while \output is active []
 
  [12.12 <./author-files/figures/Fontv1.png> <./author-files/figures/fontprocess.png>]
-<author-files/figures/pretestScreenshot.png, id=541, 1439.3775pt x 710.655pt>
+<author-files/figures/pretestScreenshot.png, id=543, 1439.3775pt x 710.655pt>
 File: author-files/figures/pretestScreenshot.png Graphic file (type png)
 <use author-files/figures/pretestScreenshot.png>
 Package pdftex.def Info: author-files/figures/pretestScreenshot.png  used on input line 113.
@@ -1123,7 +1120,7 @@ Class acmart Warning: A possible image without description on input line 116.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<author-files/figures/oldzooms.png, id=542, 376.40625pt x 376.40625pt>
+<author-files/figures/oldzooms.png, id=544, 376.40625pt x 376.40625pt>
 File: author-files/figures/oldzooms.png Graphic file (type png)
 <use author-files/figures/oldzooms.png>
 Package pdftex.def Info: author-files/figures/oldzooms.png  used on input line 120.
@@ -1137,7 +1134,7 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 [13.13 <./author-files/figures/Pretest1progress.PNG>] [14.14 <./author-files/figures/pretestScreenshot.PNG> <./author-files/figures/oldzooms.png>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-<author-files/figures/MVC.png, id=573, 487.8225pt x 443.6575pt>
+<author-files/figures/MVC.png, id=575, 487.8225pt x 443.6575pt>
 File: author-files/figures/MVC.png Graphic file (type png)
 <use author-files/figures/MVC.png>
 Package pdftex.def Info: author-files/figures/MVC.png  used on input line 179.
@@ -1151,12 +1148,12 @@ Underfull \hbox (badness 1817) in paragraph at lines 180--180
 Class acmart Warning: A possible image without description on input line 182.
 
 [15.15 <./author-files/figures/MVC.png>]
-<author-files/figures/colourPickrender.PNG, id=587, 893.58844pt x 447.92343pt>
+<author-files/figures/colourPickrender.PNG, id=590, 893.58844pt x 447.92343pt>
 File: author-files/figures/colourPickrender.PNG Graphic file (type png)
 <use author-files/figures/colourPickrender.PNG>
 Package pdftex.def Info: author-files/figures/colourPickrender.PNG  used on input line 216.
 (pdftex.def)             Requested size: 241.14749pt x 120.87943pt.
-<author-files/figures/nopicking colourpass.PNG, id=588, 893.58844pt x 430.60875pt>
+<author-files/figures/nopicking colourpass.PNG, id=591, 893.58844pt x 430.60875pt>
 File: author-files/figures/nopicking colourpass.PNG Graphic file (type png)
 <use author-files/figures/nopicking colourpass.PNG>
 Package pdftex.def Info: author-files/figures/nopicking colourpass.PNG  used on input line 223.
@@ -1165,7 +1162,7 @@ Package pdftex.def Info: author-files/figures/nopicking colourpass.PNG  used on 
 
 Class acmart Warning: A possible image without description on input line 227.
 
-<author-files/figures/squashFunc.PNG, id=592, 255.95625pt x 99.37125pt>
+<author-files/figures/squashFunc.PNG, id=595, 255.95625pt x 99.37125pt>
 File: author-files/figures/squashFunc.PNG Graphic file (type png)
 <use author-files/figures/squashFunc.PNG>
 Package pdftex.def Info: author-files/figures/squashFunc.PNG  used on input line 244.
@@ -1174,7 +1171,7 @@ Package pdftex.def Info: author-files/figures/squashFunc.PNG  used on input line
 Class acmart Warning: A possible image without description on input line 247.
 
 [16.16 <./author-files/figures/colourPickrender.PNG> <./author-files/figures/nopicking colourpass.PNG>]
-<author-files/figures/saturation.PNG, id=611, 522.45187pt x 428.35031pt>
+<author-files/figures/saturation.PNG, id=613, 522.45187pt x 428.35031pt>
 File: author-files/figures/saturation.PNG Graphic file (type png)
 <use author-files/figures/saturation.PNG>
 Package pdftex.def Info: author-files/figures/saturation.PNG  used on input line 251.
@@ -1184,7 +1181,7 @@ Package pdftex.def Info: author-files/figures/saturation.PNG  used on input line
 Class acmart Warning: A possible image without description on input line 254.
 
 ) [17.17 <./author-files/figures/squashFunc.PNG> <./author-files/figures/saturation.PNG>] (./author-files/sections/impTables.tex
-<author-files/figures/UML_All_fin.drawio.png, id=642, 1867.97874pt x 904.37875pt>
+<author-files/figures/UML_All_fin.drawio.png, id=647, 1867.97874pt x 904.37875pt>
 File: author-files/figures/UML_All_fin.drawio.png Graphic file (type png)
 <use author-files/figures/UML_All_fin.drawio.png>
 Package pdftex.def Info: author-files/figures/UML_All_fin.drawio.png  used on input line 5.
@@ -1196,6 +1193,14 @@ Class acmart Warning: A possible image without description on input line 8.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
+<author-files/figures/velocity chart.PNG, id=648, 841.64438pt x 568.37344pt>
+File: author-files/figures/velocity chart.PNG Graphic file (type png)
+<use author-files/figures/velocity chart.PNG>
+Package pdftex.def Info: author-files/figures/velocity chart.PNG  used on input line 12.
+(pdftex.def)             Requested size: 241.14749pt x 162.84671pt.
+
+Class acmart Warning: A possible image without description on input line 15.
+
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
@@ -1209,17 +1214,20 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-Underfull \hbox (badness 1348) in paragraph at lines 219--219
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Underfull \hbox (badness 1348) in paragraph at lines 226--226
 \T1/LinuxLibertineT-TLF/m/n/9 (+20) ture Finder" that zooms into
  []
 
-) [18.18 <./author-files/figures/UML_All_fin.drawio.png>] [19.19] [20.20] [21.21] [22.22] [23.23] (./author-files/sections/testing.tex
-<author-files/figures/pyramid.PNG, id=679, 542.025pt x 408.77719pt>
+) [18.18 <./author-files/figures/UML_All_fin.drawio.png> <./author-files/figures/velocity chart.PNG>] [19.19] [20.20] [21.21] [22.22] [23.23] (./author-files/sections/testing.tex
+<author-files/figures/pyramid.PNG, id=688, 542.025pt x 408.77719pt>
 File: author-files/figures/pyramid.PNG Graphic file (type png)
 <use author-files/figures/pyramid.PNG>
 Package pdftex.def Info: author-files/figures/pyramid.PNG  used on input line 36.
 (pdftex.def)             Requested size: 241.14749pt x 181.86473pt.
-<author-files/figures/cerealdata.PNG, id=680, 522.45187pt x 426.09187pt>
+<author-files/figures/cerealdata.PNG, id=689, 522.45187pt x 426.09187pt>
 File: author-files/figures/cerealdata.PNG Graphic file (type png)
 <use author-files/figures/cerealdata.PNG>
 Package pdftex.def Info: author-files/figures/cerealdata.PNG  used on input line 43.
@@ -1233,8 +1241,11 @@ Underfull \vbox (badness 1960) has occurred while \output is active []
 
  [24.24
 
- <./author-files/figures/pyramid.PNG> <./author-files/figures/cerealdata.PNG>] [25.25] [26.26]) (./author-files/sections/finalproduct.tex
-<author-files/figures/Graph-Fin.PNG, id=738, 1446.15282pt x 714.41907pt>
+ <./author-files/figures/pyramid.PNG> <./author-files/figures/cerealdata.PNG>] [25.25]
+Underfull \vbox (badness 1009) has occurred while \output is active []
+
+ [26.26]) (./author-files/sections/finalproduct.tex
+<author-files/figures/Graph-Fin.PNG, id=747, 1446.15282pt x 714.41907pt>
 File: author-files/figures/Graph-Fin.PNG Graphic file (type png)
 <use author-files/figures/Graph-Fin.PNG>
 Package pdftex.def Info: author-files/figures/Graph-Fin.PNG  used on input line 3.
@@ -1243,7 +1254,7 @@ Package pdftex.def Info: author-files/figures/Graph-Fin.PNG  used on input line 
 
 Class acmart Warning: A possible image without description on input line 6.
 
-<author-files/figures/data-fin.PNG, id=739, 1443.89438pt x 709.90219pt>
+<author-files/figures/data-fin.PNG, id=748, 1443.89438pt x 709.90219pt>
 File: author-files/figures/data-fin.PNG Graphic file (type png)
 <use author-files/figures/data-fin.PNG>
 Package pdftex.def Info: author-files/figures/data-fin.PNG  used on input line 9.
@@ -1251,7 +1262,7 @@ Package pdftex.def Info: author-files/figures/data-fin.PNG  used on input line 9
 
 Class acmart Warning: A possible image without description on input line 12.
 
-<author-files/figures/help-fin.PNG, id=740, 1444.64719pt x 712.91344pt>
+<author-files/figures/help-fin.PNG, id=749, 1444.64719pt x 712.91344pt>
 File: author-files/figures/help-fin.PNG Graphic file (type png)
 <use author-files/figures/help-fin.PNG>
 Package pdftex.def Info: author-files/figures/help-fin.PNG  used on input line 15.
@@ -1274,7 +1285,7 @@ Overfull \hbox (4.91995pt too wide) in paragraph at lines 7--8
  []
 
 
-Underfull \vbox (badness 2213) has occurred while \output is active []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [27.27] [28.28 <./author-files/figures/Graph-Fin.PNG> <./author-files/figures/data-fin.PNG> <./author-files/figures/help-fin.PNG>]) (./author-files/sections/appendices.tex [29.29])) (./main.bbl
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/it' will be
@@ -1338,23 +1349,20 @@ LaTeX Info: Redefining \tempurl on input line 689.
 LaTeX Info: Redefining \tempurl on input line 700.
 LaTeX Info: Redefining \tempurl on input line 714.
 LaTeX Info: Redefining \tempurl on input line 728.
-LaTeX Info: Redefining \tempurl on input line 743.
-LaTeX Info: Redefining \tempurl on input line 754.
-LaTeX Info: Redefining \tempurl on input line 768.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [30.30{d:/TEX/texlive/2023/texmf-dist/fonts/enc/dvips/libertine/lbtn_naooyc.enc}]
+LaTeX Info: Redefining \tempurl on input line 743.
+LaTeX Info: Redefining \tempurl on input line 754.
+LaTeX Info: Redefining \tempurl on input line 768.
 LaTeX Info: Redefining \tempurl on input line 782.
 )
 
 Class acmart Warning: Some images may lack descriptions.
 
 
-Overfull \vbox (5.5pt too high) has occurred while \output is active []
-
-
-Overfull \vbox (6.91399pt too high) has occurred while \output is active []
+Overfull \vbox (1.152pt too high) has occurred while \output is active []
 
  (d:/TEX/texlive/2023/texmf-dist/tex/generic/stringenc/se-pdfdoc.def
 File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
@@ -1365,21 +1373,21 @@ File: se-utf8.def 2019/11/29 v1.12 stringenc: UTF-8
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 2D35ED815033EA1C845F4018584383E0;7093.
+(rerunfilecheck)             Checksum: 3780124BD053509EF63FADC3507513B5;7093.
  ) 
 Here is how much of TeX's memory you used:
- 25026 strings out of 476025
- 413239 string characters out of 5792019
- 1910382 words of memory out of 5000000
- 44051 multiletter control sequences out of 15000+600000
- 659116 words of font info for 374 fonts, out of 8000000 for 9000
+ 25036 strings out of 476025
+ 413558 string characters out of 5792019
+ 1908382 words of memory out of 5000000
+ 44059 multiletter control sequences out of 15000+600000
+ 659010 words of font info for 374 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
- 90i,13n,131p,1195b,1368s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,12n,131p,1195b,1368s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinBiolinumTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineT.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTB.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/libertine/LinLibertineTI.pfb><d:/TEX/texlive/2023/texmf-dist/fonts/type1/public/newtx/txsys.pfb>
-Output written on main.pdf (31 pages, 2494268 bytes).
+Output written on main.pdf (31 pages, 2514261 bytes).
 PDF statistics:
- 1017 PDF objects out of 1200 (max. 8388607)
- 900 compressed objects within 9 object streams
- 287 named destinations out of 1000 (max. 500000)
- 71150 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 1027 PDF objects out of 1200 (max. 8388607)
+ 906 compressed objects within 10 object streams
+ 288 named destinations out of 1000 (max. 500000)
+ 71155 words of extra memory for PDF output out of 74296 (max. 10000000)
 

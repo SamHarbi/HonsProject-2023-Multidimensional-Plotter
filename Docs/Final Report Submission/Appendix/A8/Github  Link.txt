@@ -1,0 +1,7 @@
+The data in this folder is a copy of the v1.0-Web-Plotter branch as available on the students github repository:
+https://github.com/SamHarbi/HonsProject-2023-Multidimensional-Plotter
+
+This version is also still available to be accessed at:
+https://web-plotter-app-ajqwh.ondigitalocean.app/
+
+Otherwise refer to the user manual further attached in the appendices
