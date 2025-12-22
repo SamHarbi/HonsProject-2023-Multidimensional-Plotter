@@ -32,6 +32,10 @@ export class Model {
         this.drawmode = newDrawMode;
     }
 
+    isPowerOf2(value: number) {
+        return (value & (value - 1)) === 0;
+    }
+
     /*
         Initializes model with rendering data
         Based on and copies some comments for clarity from: 
@@ -89,19 +93,23 @@ export class Model {
 
         // Temp data while waiting for image to load 
         this.gl.texImage2D(
-            this.gl.TEXTURE_2D, 0, this.gl.RGBA, 0,
+            this.gl.TEXTURE_2D, 0, this.gl.RGBA, 1,
             1, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE,
             new Uint8Array([0, 0, 255, 255]
             ));
 
         this.image = new Image(341, 145);
+        this.image.onload = () => {
+            this.textureLoaded(this.gl, this.image, this.texture)
+        }
+
         if (texImageURL !== undefined) {
-            this.image.src = texImageURL; //Refactor
+            console.log(texImageURL);
+            this.image.src = new URL(texImageURL, import.meta.url); //Refactor
         }
         else {
-            this.image.src = NoTexture;
+            this.image.src = new URL(NoTexture, import.meta.url);;
         }
-        this.image.addEventListener('load', this.textureLoaded.bind(null, this.gl, this.image, this.texture), false);
 
         // Create a texture buffer and ensure it is valid 
         var temp_textureBuffer = this.gl.createBuffer();
@@ -139,9 +147,20 @@ export class Model {
         gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, (image as TexImageSource));
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        
+        // WebGL1 has different requirements for power of 2 images
+        // vs. non power of 2 images so check if the image is a
+        // power of 2 in both dimensions.
+        if (this.isPowerOf2(image.width) && this.isPowerOf2(image.height)) {
+            // Yes, it's a power of 2. Generate mips.
+            gl.generateMipmap(gl.TEXTURE_2D);
+        } else {
+            // No, it's not a power of 2. Turn off mips and set
+            // wrapping to clamp to edge
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        }
         //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     }
 
