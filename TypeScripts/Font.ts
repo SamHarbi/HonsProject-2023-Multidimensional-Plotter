@@ -10,11 +10,6 @@
 import Arial from '../fonts/Atlas/Arial.json'
 import Arial_Bold from '../fonts/Atlas/Arial-Bold.json'
 
-// @ts-ignore
-import Arial_Atlas from "../fonts/Atlas/Arial.png"
-// @ts-ignore
-import ArialBold_Atlas from "../fonts/Atlas/Arial-Bold.png"
-
 
 export class Font {
 
@@ -31,10 +26,13 @@ export class Font {
     short_glyph: number[][];
     thin_glyph: number[][];
 
+    Arial_Atlas: string = new URL('../fonts/Atlas/Arial.png', import.meta.url);
+    ArialBold_Atlas: string = new URL('../fonts/Atlas/Arial-Bold.png', import.meta.url);
+
     // Initialize everything including which font to use
     constructor(set_font_option: number, set_gl: WebGLRenderingContext, loadedGlyph: number[][]) {
-        this.font_pointers = [Arial_Atlas, ArialBold_Atlas];
-        this.font_data_pointers = [Arial, Arial_Bold];
+        this.font_pointers = [this.Arial_Atlas];
+        this.font_data_pointers = [Arial];
         this.font_option = set_font_option;
         this.gl = set_gl;
         this.textureCord = [];
