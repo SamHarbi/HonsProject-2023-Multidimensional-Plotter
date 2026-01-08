@@ -82,8 +82,9 @@ let altColour = [0.9, 0.9, 0.9];
 */
 async function main() {
 
-    // gl has already been checked so cannot be undefined- safe to cast
-    gl = <WebGLRenderingContext>init();
+    // All error states are done by init
+    const tryInitGL = init();
+    if (tryInitGL) gl = tryInitGL;
 
     // Create Controller class and pass control functions (these will be called by control on user input)
     C = new Controls();
@@ -837,16 +838,16 @@ function RenderStructure(global_model: glmath.mat4) {
 /*
     Initialise WebGL Context and setups WebGL before render loop
 */
-function init() {
+function init(): WebGLRenderingContext | null {
 
     //Get canvas and initalise it 
     canvas = <HTMLCanvasElement>document.querySelector("#glCanvas");
-    const temp_gl = canvas.getContext("webgl", { stencil: false, preserveDrawingBuffer: true });
+    const temp_gl = canvas.getContext("webgl2", { stencil: false, preserveDrawingBuffer: true });
 
     // Only continue if WebGL is available and working
     if (temp_gl === null) {
         alert("Unable to initialize WebGL. Your browser or machine may not support it.");
-        return;
+        return null;
     }
 
     //@ts-ignore 
@@ -871,6 +872,11 @@ function init() {
         positionAttributeID[i] = temp_gl.getAttribLocation(programs[i], "a_position");
         normalAttributeID[i] = temp_gl.getAttribLocation(programs[i], "a_normal");
         textureAttributeID[i] = temp_gl.getAttribLocation(programs[i], "a_texture");
+
+        // Really weird issue and terrible hacky way to fix, need to further look into this
+        if(normalAttributeID[i] == -1) {
+            normalAttributeID[i] = 1;
+        }
     }
 
     return temp_gl;
